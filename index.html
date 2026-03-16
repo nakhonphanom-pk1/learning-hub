@@ -29,53 +29,52 @@
   .progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-light));border-radius:99px;transition:width .6s;width:0%;}
   .progress-count{font-size:13px;font-weight:600;color:var(--gold-light);}
   .page{display:none;}.page.active{display:block;}
-
-  /* AUTH */
   .auth-wrap{min-height:calc(100vh - 76px);display:flex;align-items:center;justify-content:center;padding:48px 20px;}
   .auth-card{background:var(--white);border-radius:20px;box-shadow:0 8px 40px rgba(26,39,68,.16);padding:44px 40px;width:100%;max-width:500px;border:1px solid var(--border);}
   .auth-tabs{display:flex;margin-bottom:28px;border:1.5px solid var(--border);border-radius:10px;overflow:hidden;}
-  .auth-tab{flex:1;padding:10px;text-align:center;font-size:14px;font-weight:600;cursor:pointer;background:var(--cream);color:var(--text-muted);border:none;font-family:'Sarabun',sans-serif;}
+  .auth-tab{flex:1;padding:10px;text-align:center;font-size:13px;font-weight:600;cursor:pointer;background:var(--cream);color:var(--text-muted);border:none;font-family:'Sarabun',sans-serif;}
   .auth-tab.active{background:var(--navy);color:var(--gold-light);}
   .auth-badge{display:inline-block;background:var(--gold-pale);color:var(--gold);font-size:12px;font-weight:600;padding:4px 14px;border-radius:99px;margin-bottom:12px;}
   .auth-card h2{font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:var(--navy);margin-bottom:6px;}
   .subtitle{font-size:13px;color:var(--text-muted);margin-bottom:24px;line-height:1.7;}
   .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-  .form-row-3{display:grid;grid-template-columns:140px 1fr 1fr;gap:14px;}
+  .form-row-3{display:grid;grid-template-columns:130px 1fr 1fr;gap:14px;}
   .form-group{margin-bottom:16px;}
   .form-group label{display:block;font-size:13px;font-weight:600;color:var(--navy);margin-bottom:5px;}
   .form-group label span{color:#e53935;margin-left:2px;}
   .form-group input,.form-group select{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'Sarabun',sans-serif;font-size:14px;color:var(--text);background:var(--cream);outline:none;transition:border-color .2s;}
   .form-group input:focus,.form-group select:focus{border-color:var(--navy);background:var(--white);}
-  .form-group input.error{border-color:#e53935;}
   .btn-auth{width:100%;padding:13px;background:var(--navy);color:var(--gold-light);font-family:'Sarabun',sans-serif;font-size:15px;font-weight:600;border:none;border-radius:12px;cursor:pointer;margin-top:6px;}
   .btn-auth:hover{background:var(--navy-light);}
   .btn-text{background:none;border:none;color:var(--navy);font-family:'Sarabun',sans-serif;font-size:13px;cursor:pointer;text-decoration:underline;padding:0;}
-  .btn-text:hover{color:var(--gold);}
   .auth-error{background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:10px 14px;font-size:13px;color:#b91c1c;margin-bottom:14px;display:none;}
   .auth-error.show{display:block;}
   .auth-success{background:var(--success-bg);border:1px solid var(--success);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--success);margin-bottom:14px;display:none;}
   .auth-success.show{display:block;}
-  .forgot-link{text-align:right;margin-top:-8px;margin-bottom:14px;}
   .divider{border:none;border-top:1px solid var(--border);margin:18px 0;}
-
-  /* TRAINING */
   .training-layout{max-width:1100px;margin:0 auto;padding:32px 24px;display:grid;grid-template-columns:1fr 320px;gap:28px;}
   @media(max-width:860px){.training-layout{grid-template-columns:1fr;}}
   .video-label{font-size:12px;font-weight:600;color:var(--gold);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;}
   .video-title{font-family:'Noto Serif Thai',serif;font-size:20px;font-weight:700;color:var(--navy);margin-bottom:16px;line-height:1.5;}
   .video-wrapper{position:relative;padding-bottom:56.25%;background:#0f1726;border-radius:16px;overflow:hidden;box-shadow:0 8px 40px rgba(26,39,68,.16);border:1px solid var(--border);}
   .video-wrapper iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;}
-  .video-overlay{position:absolute;inset:0;background:rgba(15,23,38,.75);display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;text-align:center;padding:24px;z-index:5;cursor:pointer;}
+  .video-overlay{position:absolute;inset:0;background:rgba(15,23,38,.82);display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;text-align:center;padding:24px;z-index:5;cursor:pointer;transition:opacity .3s;}
   .video-overlay.hidden{opacity:0;pointer-events:none;}
-  .overlay-icon{font-size:48px;margin-bottom:12px;}
+  .overlay-icon{font-size:52px;margin-bottom:12px;}
   .overlay-text{font-size:16px;font-weight:500;line-height:1.6;}
   .overlay-sub{font-size:13px;color:rgba(255,255,255,.6);margin-top:6px;}
-  .tab-warning{display:none;background:#fff3cd;border:1px solid #ffc107;border-radius:10px;padding:10px 14px;margin-top:10px;font-size:13px;color:#856404;}
-  .tab-warning.show{display:block;}
+  .paused-overlay{position:absolute;inset:0;background:rgba(10,14,30,.88);display:none;flex-direction:column;align-items:center;justify-content:center;color:white;text-align:center;padding:24px;z-index:6;}
+  .paused-overlay.show{display:flex;}
+  .paused-icon{font-size:52px;margin-bottom:14px;}
+  .paused-title{font-size:18px;font-weight:600;margin-bottom:8px;}
+  .paused-sub{font-size:14px;color:rgba(255,255,255,.65);line-height:1.7;}
+  .btn-resume{margin-top:20px;padding:11px 32px;background:var(--gold);color:var(--navy);font-family:'Sarabun',sans-serif;font-size:15px;font-weight:700;border:none;border-radius:10px;cursor:pointer;}
+  .btn-resume:hover{background:var(--gold-light);}
   .video-status-bar{display:flex;align-items:center;gap:10px;margin-top:14px;padding:12px 16px;background:var(--white);border-radius:12px;border:1px solid var(--border);}
   .status-dot{width:10px;height:10px;border-radius:50%;background:#ccc;flex-shrink:0;}
   .status-dot.watching{background:#f59e0b;box-shadow:0 0 0 3px rgba(245,158,11,.2);animation:pulse 1.5s infinite;}
   .status-dot.done{background:var(--success);box-shadow:0 0 0 3px rgba(46,125,94,.2);}
+  .status-dot.paused{background:#ef4444;box-shadow:0 0 0 3px rgba(239,68,68,.2);}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
   .status-text{font-size:13px;color:var(--text-muted);flex:1;}
   .status-timer{font-size:13px;font-weight:600;color:var(--navy);font-variant-numeric:tabular-nums;}
@@ -98,8 +97,6 @@
   .badge-locked{background:var(--cream);color:var(--text-muted);}
   .sidebar-info-box{background:var(--gold-pale);border:1px solid var(--gold);border-radius:12px;padding:14px;margin-top:20px;}
   .sidebar-info-box p{font-size:13px;color:#7a5c1e;line-height:1.7;}
-
-  /* CERT */
   .cert-page-wrap{min-height:calc(100vh - 76px);display:flex;flex-direction:column;align-items:center;padding:40px 20px 60px;}
   .cert-congrats{text-align:center;margin-bottom:32px;}
   .cert-congrats .emoji{font-size:48px;margin-bottom:12px;}
@@ -178,9 +175,7 @@
         <div class="form-group"><label>Username <span>*</span></label><input type="text" id="loginUsername" placeholder="username ที่ตั้งไว้"></div>
         <div class="form-group"><label>รหัสผ่าน <span>*</span></label><input type="password" id="loginPassword" placeholder="รหัสผ่าน"></div>
         <button class="btn-auth" onclick="doLogin()">เข้าสู่ระบบ →</button>
-        <div style="text-align:center;margin-top:12px;">
-          <button class="btn-text" onclick="switchTab('forgot')">ลืมรหัสผ่าน?</button>
-        </div>
+        <div style="text-align:center;margin-top:12px;"><button class="btn-text" onclick="switchTab('forgot')">ลืมรหัสผ่าน?</button></div>
       </div>
 
       <!-- REGISTER -->
@@ -189,34 +184,22 @@
         <h2>สมัครเข้าอบรม</h2>
         <p class="subtitle">กรอกข้อมูลให้ครบถ้วน เพื่อใช้ออกเกียรติบัตร</p>
         <div class="auth-error" id="registerError"></div>
-
         <div class="form-row-3">
-          <div class="form-group">
-            <label>คำนำหน้า <span>*</span></label>
-            <select id="regPrefix">
-              <option value="">--</option>
-              <option>นาย</option>
-              <option>นาง</option>
-              <option>นางสาว</option>
-              <option>เด็กชาย</option>
-              <option>เด็กหญิง</option>
-              <option>ดร.</option>
-              <option>ว่าที่ร้อยตรี</option>
-            </select>
+          <div class="form-group"><label>คำนำหน้า <span>*</span></label>
+            <select id="regPrefix"><option value="">--</option><option>นาย</option><option>นาง</option><option>นางสาว</option><option>เด็กชาย</option><option>เด็กหญิง</option><option>ดร.</option><option>ว่าที่ร้อยตรี</option></select>
           </div>
           <div class="form-group"><label>ชื่อ <span>*</span></label><input type="text" id="regFirstName" placeholder="ชื่อ"></div>
           <div class="form-group"><label>นามสกุล <span>*</span></label><input type="text" id="regLastName" placeholder="นามสกุล"></div>
         </div>
-
         <div class="form-group"><label>ตำแหน่ง <span>*</span></label>
           <select id="regPosition"><option value="">-- เลือกตำแหน่ง --</option><option>ครู</option><option>ครูชำนาญการ</option><option>ครูชำนาญการพิเศษ</option><option>รองผู้อำนวยการโรงเรียน</option><option>ผู้อำนวยการโรงเรียน</option><option>ศึกษานิเทศก์</option><option>นักวิชาการศึกษา</option><option>บุคลากรทางการศึกษาอื่น</option></select>
         </div>
         <div class="form-group"><label>โรงเรียน / หน่วยงาน <span>*</span></label><input type="text" id="regSchool" placeholder="เช่น โรงเรียนบ้านนาคอกควาย"></div>
         <div class="divider"></div>
-        <div class="form-group"><label>Username <span>*</span></label><input type="text" id="regUsername" placeholder="ตั้ง username (ภาษาอังกฤษ/ตัวเลข ไม่มีช่องว่าง)"></div>
+        <div class="form-group"><label>Username <span>*</span></label><input type="text" id="regUsername" placeholder="ภาษาอังกฤษ/ตัวเลข ไม่มีช่องว่าง"></div>
         <div class="form-row">
           <div class="form-group"><label>รหัสผ่าน <span>*</span></label><input type="password" id="regPassword" placeholder="อย่างน้อย 6 ตัวอักษร"></div>
-          <div class="form-group"><label>ยืนยันรหัสผ่าน <span>*</span></label><input type="password" id="regPassword2" placeholder="กรอกรหัสผ่านอีกครั้ง"></div>
+          <div class="form-group"><label>ยืนยันรหัสผ่าน <span>*</span></label><input type="password" id="regPassword2" placeholder="กรอกซ้ำอีกครั้ง"></div>
         </div>
         <button class="btn-auth" onclick="doRegister()">สมัครและเริ่มอบรม →</button>
       </div>
@@ -237,7 +220,7 @@
         </div>
         <div id="forgotStep2" style="display:none">
           <div class="form-group"><label>รหัสผ่านใหม่ <span>*</span></label><input type="password" id="newPassword" placeholder="อย่างน้อย 6 ตัวอักษร"></div>
-          <div class="form-group"><label>ยืนยันรหัสผ่านใหม่ <span>*</span></label><input type="password" id="newPassword2" placeholder="กรอกรหัสผ่านอีกครั้ง"></div>
+          <div class="form-group"><label>ยืนยันรหัสผ่านใหม่ <span>*</span></label><input type="password" id="newPassword2" placeholder="กรอกซ้ำอีกครั้ง"></div>
           <button class="btn-auth" onclick="doResetPassword()">ตั้งรหัสผ่านใหม่ →</button>
         </div>
       </div>
@@ -253,13 +236,20 @@
       <div class="video-title" id="videoTitle">กำลังโหลด...</div>
       <div class="video-wrapper">
         <iframe id="ytPlayer" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        <!-- Overlay เริ่มต้น -->
         <div class="video-overlay" id="videoOverlay">
           <div class="overlay-icon">▶️</div>
           <div class="overlay-text">กดที่นี่ แล้วกด Play ในวิดีโอเพื่อเริ่มนับเวลา</div>
-          <div class="overlay-sub">ห้ามสลับแท็บหรือออกจากหน้า ระบบจะหยุดนับทันที</div>
+          <div class="overlay-sub">ห้ามสลับแท็บหรือออกจากหน้า คลิปจะหยุดและหยุดนับทันที</div>
+        </div>
+        <!-- Overlay หยุดชั่วคราว -->
+        <div class="paused-overlay" id="pausedOverlay">
+          <div class="paused-icon">⏸</div>
+          <div class="paused-title">วิดีโอถูกหยุดชั่วคราว</div>
+          <div class="paused-sub">ตรวจพบการออกจากหน้านี้<br>คลิปถูกหยุดและหยุดนับเวลาแล้ว<br>กดปุ่มด้านล่างเพื่อดูต่อ</div>
+          <button class="btn-resume" onclick="resumeVideo()">▶ กดเพื่อดูต่อ</button>
         </div>
       </div>
-      <div class="tab-warning" id="tabWarning">⚠️ ตรวจพบการออกจากหน้านี้ — การนับเวลาถูกหยุดแล้ว กรุณากลับมาดูต่อครับ</div>
       <div class="video-status-bar">
         <div class="status-dot" id="statusDot"></div>
         <div class="status-text" id="statusText">คลิกที่วิดีโอ แล้วกด ▶ เพื่อเริ่มนับเวลา</div>
@@ -272,7 +262,7 @@
       <div id="playlistEl"></div>
       <div class="sidebar-info-box">
         <p>🔒 ต้องชมแต่ละตอน<strong>ครบตามเวลา</strong>ที่กำหนด<br><br>
-        ⏸ สลับแท็บหรือออกจากหน้า = หยุดนับทันที<br><br>
+        ⏸ สลับแท็บหรือออกจากหน้า = <strong>คลิปหยุดทันที</strong><br><br>
         💾 ความคืบหน้า<strong>บันทึกอัตโนมัติ</strong> กลับมาดูต่อได้</p>
       </div>
     </div>
@@ -323,7 +313,7 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updatePassword } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc, updateDoc, query, collection, where, getDocs } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -354,30 +344,57 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-let currentUser = null, userData = {}, currentIdx = 0;
-let completed = new Set(), watchedSec = 0;
-let timer = null, isWatching = false;
-let forgotUserRef = null; // เก็บ ref ของ user ที่กำลัง reset password
+let currentUser=null, userData={}, currentIdx=0;
+let completed=new Set(), watchedSec=0;
+let timer=null, isWatching=false;
+let forgotUid=null, forgotUsername=null;
 
-// ── ป้องกันลักไก่ ──
-document.addEventListener('visibilitychange', () => {
-  if (document.hidden && isWatching) pauseTimer('⏸ หยุดนับเวลา — กรุณากลับมาดูต่อ');
-  if (!document.hidden) document.getElementById('tabWarning').classList.remove('show');
-});
-window.addEventListener('blur', () => { if (isWatching) pauseTimer('⏸ หยุดนับเวลา — คลิกที่วิดีโอเพื่อดูต่อ'); });
-
-function pauseTimer(msg) {
-  isWatching = false; clearInterval(timer);
-  document.getElementById('statusDot').className = 'status-dot';
-  document.getElementById('statusText').textContent = msg;
-  document.getElementById('tabWarning').classList.add('show');
+// ══════════════════════════════════════
+// YOUTUBE PAUSE via postMessage
+// ══════════════════════════════════════
+function pauseYouTube() {
+  const iframe = document.getElementById('ytPlayer');
+  if (iframe && iframe.contentWindow) {
+    iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+  }
 }
 
-// ── Auth state ──
+// ══════════════════════════════════════
+// ป้องกันลักไก่ — pause คลิป + หยุดนับ
+// ══════════════════════════════════════
+function handleLeave() {
+  if (!isWatching) return;
+  isWatching = false;
+  clearInterval(timer);
+  pauseYouTube();
+  document.getElementById('statusDot').className = 'status-dot paused';
+  document.getElementById('statusText').textContent = '⏸ วิดีโอถูกหยุด — กดปุ่มในวิดีโอเพื่อดูต่อ';
+  document.getElementById('pausedOverlay').classList.add('show');
+}
+
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) handleLeave();
+});
+window.addEventListener('blur', () => { handleLeave(); });
+
+window.resumeVideo = () => {
+  document.getElementById('pausedOverlay').classList.remove('show');
+  document.getElementById('statusDot').className = 'status-dot';
+  document.getElementById('statusText').textContent = 'กด ▶ ในวิดีโอเพื่อดูต่อ และนับเวลาต่อ';
+  // รอให้ user กด play เองใน iframe แล้วคลิกที่ overlay เพื่อเริ่มนับใหม่
+  const ov = document.getElementById('videoOverlay');
+  ov.innerHTML = `<div class="overlay-icon">▶️</div><div class="overlay-text">กดที่นี่เพื่อเริ่มนับเวลาต่อ</div><div class="overlay-sub">แล้วกด Play ในวิดีโอด้วยครับ</div>`;
+  ov.classList.remove('hidden');
+  ov.onclick = () => { ov.classList.add('hidden'); startTimer(); };
+};
+
+// ══════════════════════════════════════
+// AUTH STATE
+// ══════════════════════════════════════
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     currentUser = user; showLoading(true);
-    const snap = await getDoc(doc(db, 'users', user.uid));
+    const snap = await getDoc(doc(db,'users',user.uid));
     if (snap.exists()) {
       userData = snap.data();
       completed = new Set((userData.completedVideos||[]).map(Number));
@@ -387,86 +404,113 @@ onAuthStateChanged(auth, async (user) => {
       if (completed.size >= CONFIG.videos.length) { showCert(); }
       else {
         let resume = 0;
-        for (let i = 0; i < CONFIG.videos.length; i++) { if (!completed.has(i)) { resume = i; break; } }
+        for (let i=0;i<CONFIG.videos.length;i++) { if (!completed.has(i)){resume=i;break;} }
         showPage('pageTraining'); loadVideo(resume); renderPlaylist();
       }
     }
     showLoading(false);
   } else {
-    currentUser = null; userData = {};
-    document.getElementById('headerRight').style.display = 'none';
+    currentUser=null; userData={};
+    document.getElementById('headerRight').style.display='none';
     showPage('pageAuth'); showLoading(false);
   }
 });
 
-// ── Tab switch ──
+// ══════════════════════════════════════
+// TAB SWITCH
+// ══════════════════════════════════════
 window.switchTab = (tab) => {
-  ['Login','Register','Forgot'].forEach(t => {
-    document.getElementById('tab'+t).classList.toggle('active', t.toLowerCase()===tab);
-    document.getElementById('form'+t).style.display = t.toLowerCase()===tab?'block':'none';
+  ['Login','Register','Forgot'].forEach(t=>{
+    document.getElementById('tab'+t).classList.toggle('active',t.toLowerCase()===tab);
+    document.getElementById('form'+t).style.display=t.toLowerCase()===tab?'block':'none';
   });
-  // reset forgot steps
   if (tab==='forgot') {
     document.getElementById('forgotStep1').style.display='block';
     document.getElementById('forgotStep2').style.display='none';
     document.getElementById('forgotError').classList.remove('show');
     document.getElementById('forgotSuccess').classList.remove('show');
-    forgotUserRef = null;
+    forgotUid=null; forgotUsername=null;
   }
 };
 
-// ── Login (username → email สร้างจาก username@training.local) ──
+// ══════════════════════════════════════
+// LOGIN
+// ══════════════════════════════════════
 window.doLogin = async () => {
   const username = document.getElementById('loginUsername').value.trim().toLowerCase();
   const pass = document.getElementById('loginPassword').value;
   const err = document.getElementById('loginError');
   err.classList.remove('show');
-  if (!username||!pass) { err.textContent='กรุณากรอกข้อมูลให้ครบ'; err.classList.add('show'); return; }
+  if (!username||!pass){err.textContent='กรุณากรอกข้อมูลให้ครบ';err.classList.add('show');return;}
   showLoading(true);
-  try {
-    await signInWithEmailAndPassword(auth, username+'@training-npk1.local', pass);
-  } catch(e) {
-    showLoading(false);
-    err.textContent = 'Username หรือรหัสผ่านไม่ถูกต้อง';
-    err.classList.add('show');
-  }
+  try { await signInWithEmailAndPassword(auth, username+'@training-npk1.local', pass); }
+  catch(e){ showLoading(false); err.textContent='Username หรือรหัสผ่านไม่ถูกต้อง'; err.classList.add('show'); }
 };
 
-// ── Register ──
+// ══════════════════════════════════════
+// REGISTER — ตรวจ username + ชื่อ-นามสกุลซ้ำ
+// ══════════════════════════════════════
 window.doRegister = async () => {
-  const prefix = document.getElementById('regPrefix').value;
-  const fn = document.getElementById('regFirstName').value.trim();
-  const ln = document.getElementById('regLastName').value.trim();
-  const pos = document.getElementById('regPosition').value;
-  const sch = document.getElementById('regSchool').value.trim();
-  const username = document.getElementById('regUsername').value.trim().toLowerCase();
-  const pass = document.getElementById('regPassword').value;
-  const pass2 = document.getElementById('regPassword2').value;
-  const err = document.getElementById('registerError');
+  const prefix  = document.getElementById('regPrefix').value;
+  const fn      = document.getElementById('regFirstName').value.trim();
+  const ln      = document.getElementById('regLastName').value.trim();
+  const pos     = document.getElementById('regPosition').value;
+  const sch     = document.getElementById('regSchool').value.trim();
+  const username= document.getElementById('regUsername').value.trim().toLowerCase();
+  const pass    = document.getElementById('regPassword').value;
+  const pass2   = document.getElementById('regPassword2').value;
+  const err     = document.getElementById('registerError');
   err.classList.remove('show');
-  if (!prefix||!fn||!ln||!pos||!sch||!username||!pass||!pass2) { err.textContent='กรุณากรอกข้อมูลให้ครบทุกช่อง'; err.classList.add('show'); return; }
-  if (!/^[a-zA-Z0-9_]+$/.test(username)) { err.textContent='Username ใช้ได้เฉพาะภาษาอังกฤษ ตัวเลข และ _ เท่านั้น'; err.classList.add('show'); return; }
-  if (pass.length<6) { err.textContent='รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร'; err.classList.add('show'); return; }
-  if (pass!==pass2) { err.textContent='รหัสผ่านไม่ตรงกัน กรุณากรอกใหม่'; err.classList.add('show'); return; }
+
+  // ตรวจข้อมูลพื้นฐาน
+  if (!prefix||!fn||!ln||!pos||!sch||!username||!pass||!pass2){
+    err.textContent='กรุณากรอกข้อมูลให้ครบทุกช่อง'; err.classList.add('show'); return;
+  }
+  if (!/^[a-zA-Z0-9_]+$/.test(username)){
+    err.textContent='Username ใช้ได้เฉพาะภาษาอังกฤษ ตัวเลข และ _ เท่านั้น'; err.classList.add('show'); return;
+  }
+  if (pass.length<6){err.textContent='รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร'; err.classList.add('show'); return;}
+  if (pass!==pass2){err.textContent='รหัสผ่านไม่ตรงกัน กรุณากรอกใหม่'; err.classList.add('show'); return;}
+
   showLoading(true);
+
   // ตรวจ username ซ้ำ
-  const q = query(collection(db,'users'), where('username','==',username));
-  const existing = await getDocs(q);
-  if (!existing.empty) { showLoading(false); err.textContent='Username นี้ถูกใช้แล้ว กรุณาเปลี่ยน username'; err.classList.add('show'); return; }
+  const qUser = query(collection(db,'users'), where('username','==',username));
+  const snapUser = await getDocs(qUser);
+  if (!snapUser.empty){
+    showLoading(false);
+    err.textContent='Username นี้ถูกใช้แล้ว กรุณาเปลี่ยน Username';
+    err.classList.add('show'); return;
+  }
+
+  // ตรวจ ชื่อ+นามสกุล ซ้ำ
+  const qName = query(collection(db,'users'),
+    where('firstName','==',fn),
+    where('lastName','==',ln)
+  );
+  const snapName = await getDocs(qName);
+  if (!snapName.empty){
+    showLoading(false);
+    err.textContent=`"${fn} ${ln}" ลงทะเบียนในระบบแล้ว ถ้าลืมรหัสผ่านกรุณาใช้เมนู "ลืมรหัสผ่าน"`;
+    err.classList.add('show'); return;
+  }
+
   try {
     const cred = await createUserWithEmailAndPassword(auth, username+'@training-npk1.local', pass);
     await setDoc(doc(db,'users',cred.user.uid),{
       prefix, firstName:fn, lastName:ln, position:pos, school:sch, username,
       completedVideos:[], registeredAt:new Date().toISOString()
     });
-  } catch(e) {
+  } catch(e){
     showLoading(false);
     err.textContent = e.code==='auth/email-already-in-use'?'Username นี้ถูกใช้แล้ว':'เกิดข้อผิดพลาด: '+e.message;
     err.classList.add('show');
   }
 };
 
-// ── Forgot password: verify identity ──
+// ══════════════════════════════════════
+// FORGOT — ยืนยันตัวตนด้วย ชื่อ+นามสกุล+โรงเรียน
+// ══════════════════════════════════════
 window.doForgotVerify = async () => {
   const username = document.getElementById('forgotUsername').value.trim().toLowerCase();
   const fn = document.getElementById('forgotFirstName').value.trim();
@@ -474,72 +518,70 @@ window.doForgotVerify = async () => {
   const sch = document.getElementById('forgotSchool').value.trim();
   const err = document.getElementById('forgotError');
   err.classList.remove('show');
-  if (!username||!fn||!ln||!sch) { err.textContent='กรุณากรอกข้อมูลให้ครบ'; err.classList.add('show'); return; }
+  if (!username||!fn||!ln||!sch){err.textContent='กรุณากรอกข้อมูลให้ครบ';err.classList.add('show');return;}
   showLoading(true);
   const q = query(collection(db,'users'), where('username','==',username));
   const snap = await getDocs(q);
   showLoading(false);
-  if (snap.empty) { err.textContent='ไม่พบ Username นี้ในระบบ'; err.classList.add('show'); return; }
-  const userDoc = snap.docs[0].data();
-  const fnMatch = userDoc.firstName.trim().toLowerCase() === fn.toLowerCase();
-  const lnMatch = userDoc.lastName.trim().toLowerCase() === ln.toLowerCase();
-  const schMatch = userDoc.school.trim().toLowerCase() === sch.toLowerCase();
-  if (!fnMatch||!lnMatch||!schMatch) { err.textContent='ข้อมูลไม่ตรงกับที่สมัครไว้ กรุณาตรวจสอบอีกครั้ง'; err.classList.add('show'); return; }
-  // ยืนยันสำเร็จ → login เพื่อให้ reset ได้
-  forgotUserRef = { username, uid: snap.docs[0].id };
+  if (snap.empty){err.textContent='ไม่พบ Username นี้ในระบบ';err.classList.add('show');return;}
+  const d = snap.docs[0].data();
+  const ok = d.firstName.trim().toLowerCase()===fn.toLowerCase()
+          && d.lastName.trim().toLowerCase()===ln.toLowerCase()
+          && d.school.trim().toLowerCase()===sch.toLowerCase();
+  if (!ok){err.textContent='ข้อมูลไม่ตรงกับที่สมัครไว้ กรุณาตรวจสอบอีกครั้ง';err.classList.add('show');return;}
+  forgotUid = snap.docs[0].id;
+  forgotUsername = username;
   document.getElementById('forgotStep1').style.display='none';
   document.getElementById('forgotStep2').style.display='block';
 };
 
-// ── Reset password ──
 window.doResetPassword = async () => {
   const newPass = document.getElementById('newPassword').value;
   const newPass2 = document.getElementById('newPassword2').value;
   const err = document.getElementById('forgotError');
   const suc = document.getElementById('forgotSuccess');
   err.classList.remove('show'); suc.classList.remove('show');
-  if (!newPass||!newPass2) { err.textContent='กรุณากรอกรหัสผ่านใหม่'; err.classList.add('show'); return; }
-  if (newPass.length<6) { err.textContent='รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร'; err.classList.add('show'); return; }
-  if (newPass!==newPass2) { err.textContent='รหัสผ่านไม่ตรงกัน'; err.classList.add('show'); return; }
+  if (!newPass||!newPass2){err.textContent='กรุณากรอกรหัสผ่านใหม่';err.classList.add('show');return;}
+  if (newPass.length<6){err.textContent='รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร';err.classList.add('show');return;}
+  if (newPass!==newPass2){err.textContent='รหัสผ่านไม่ตรงกัน';err.classList.add('show');return;}
   showLoading(true);
   try {
-    // Sign in ก่อนเพื่อให้ update password ได้ (ต้องใช้ password เดิม — วิธีนี้ใช้ admin approach ผ่าน re-auth)
-    // เนื่องจากเป็น client-only เราจะ update ผ่าน Firestore โดยเก็บ hash ไว้แทน
-    // แต่เพื่อความปลอดภัยที่ดีกว่า เราจะ sign in ด้วย username แล้ว update password
-    await updateDoc(doc(db,'users',forgotUserRef.uid),{ pendingPasswordReset: newPass });
+    // บันทึก pending reset ไว้ใน Firestore ให้ admin ดำเนินการ
+    await updateDoc(doc(db,'users',forgotUid),{
+      pendingPasswordReset: newPass,
+      pendingResetAt: new Date().toISOString()
+    });
     showLoading(false);
-    suc.textContent='✓ บันทึกคำขอแล้ว กรุณาแจ้ง admin เพื่อยืนยัน หรือลองเข้าสู่ระบบด้วยรหัสผ่านใหม่ได้เลย';
-    suc.classList.add('show');
-    // Try direct password update via sign-in
-    showLoading(true);
-    const cred = await signInWithEmailAndPassword(auth, forgotUserRef.username+'@training-npk1.local', newPass);
-    // ถ้า login ด้วยรหัสใหม่ได้ = รหัสเดิมตรงกับรหัสใหม่
-    showLoading(false);
-  } catch(e) {
-    // รหัสใหม่ไม่ตรง = ต้องให้ admin reset
-    showLoading(false);
-    suc.textContent='✓ ส่งคำขอรีเซ็ตแล้ว กรุณาติดต่อผู้ดูแลระบบเพื่อรีเซ็ตรหัสผ่านให้ครับ';
+    suc.textContent='✓ ส่งคำขอรีเซ็ตรหัสผ่านแล้ว กรุณาติดต่อผู้ดูแลระบบเพื่อยืนยันครับ';
     suc.classList.add('show');
     document.getElementById('forgotStep2').style.display='none';
+  } catch(e){
+    showLoading(false);
+    err.textContent='เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง';
+    err.classList.add('show');
   }
 };
 
 window.doLogout = async () => { clearInterval(timer); isWatching=false; await signOut(auth); };
 
-// ── Video ──
+// ══════════════════════════════════════
+// VIDEO FUNCTIONS
+// ══════════════════════════════════════
 function loadVideo(idx) {
   currentIdx=idx; watchedSec=0; isWatching=false; clearInterval(timer);
   const v=CONFIG.videos[idx];
   document.getElementById('videoLabel').textContent=`คลิปที่ ${idx+1} จาก ${CONFIG.videos.length}`;
   document.getElementById('videoTitle').textContent=v.title;
-  document.getElementById('ytPlayer').src=`https://www.youtube.com/embed/${v.youtubeId}?rel=0&modestbranding=1`;
+  // enablejsapi=1 ทำให้ postMessage pause ได้
+  document.getElementById('ytPlayer').src=`https://www.youtube.com/embed/${v.youtubeId}?rel=0&modestbranding=1&enablejsapi=1`;
   const ov=document.getElementById('videoOverlay');
+  ov.innerHTML=`<div class="overlay-icon">▶️</div><div class="overlay-text">กดที่นี่ แล้วกด Play ในวิดีโอเพื่อเริ่มนับเวลา</div><div class="overlay-sub">ห้ามสลับแท็บหรือออกจากหน้า คลิปจะหยุดและหยุดนับทันที</div>`;
   ov.classList.remove('hidden');
   ov.onclick=()=>{ ov.classList.add('hidden'); startTimer(); };
+  document.getElementById('pausedOverlay').classList.remove('show');
   document.getElementById('statusDot').className='status-dot';
   document.getElementById('statusText').textContent='คลิกที่วิดีโอ แล้วกด ▶ เพื่อเริ่มนับเวลา';
   document.getElementById('statusTimer').textContent='';
-  document.getElementById('tabWarning').classList.remove('show');
   updateNextBtn();
 }
 
@@ -554,7 +596,7 @@ function startTimer() {
     watchedSec++;
     const rem=Math.max(0,v.minSeconds-watchedSec);
     document.getElementById('statusTimer').textContent=rem>0?`เหลือ ${Math.floor(rem/60)}:${(rem%60).toString().padStart(2,'0')}`:'✓ ครบแล้ว';
-    if (watchedSec>=v.minSeconds&&!completed.has(currentIdx)) {
+    if (watchedSec>=v.minSeconds&&!completed.has(currentIdx)){
       completed.add(currentIdx); saveProgress();
       document.getElementById('statusDot').className='status-dot done';
       document.getElementById('statusText').textContent='✓ ชมครบตามเวลาที่กำหนดแล้ว';
@@ -565,22 +607,24 @@ function startTimer() {
   },1000);
 }
 
-async function saveProgress() {
+async function saveProgress(){
   if (!currentUser) return;
   try { await updateDoc(doc(db,'users',currentUser.uid),{completedVideos:[...completed].map(Number),lastUpdated:new Date().toISOString()}); }
   catch(e){console.error(e);}
 }
 
-window.nextVideo=()=>{ if(currentIdx<CONFIG.videos.length-1){clearInterval(timer);isWatching=false;loadVideo(currentIdx+1);renderPlaylist();} };
+window.nextVideo=()=>{
+  if (currentIdx<CONFIG.videos.length-1){clearInterval(timer);isWatching=false;loadVideo(currentIdx+1);renderPlaylist();}
+};
 
-function updateNextBtn() {
+function updateNextBtn(){
   const btn=document.getElementById('btnNext'),total=CONFIG.videos.length,done=completed.has(currentIdx);
   if (currentIdx>=total-1){document.getElementById('btnNextText').textContent='📜 รับเกียรติบัตร';btn.onclick=done?showCert:null;}
   else{document.getElementById('btnNextText').textContent=`ถัดไป: คลิปที่ ${currentIdx+2} →`;btn.onclick=done?window.nextVideo:null;}
   btn.classList.toggle('ready',done);
 }
 
-function renderPlaylist() {
+function renderPlaylist(){
   document.getElementById('playlistEl').innerHTML=CONFIG.videos.map((v,i)=>{
     const isDone=completed.has(i),isCur=i===currentIdx,isLock=!isDone&&i>currentIdx;
     const cls=isDone?'completed':isCur?'current':isLock?'locked':'';
@@ -589,12 +633,12 @@ function renderPlaylist() {
   }).join('');
 }
 
-function updateProgress() {
+function updateProgress(){
   document.getElementById('progressFill').style.width=(completed.size/CONFIG.videos.length*100)+'%';
   document.getElementById('progressCount').textContent=`${completed.size}/${CONFIG.videos.length}`;
 }
 
-function showCert() {
+function showCert(){
   clearInterval(timer);
   document.getElementById('certName').textContent=`${userData.prefix}${userData.firstName} ${userData.lastName}`;
   document.getElementById('certPosition').textContent=`${userData.position}${userData.school?' | '+userData.school:''}`;
