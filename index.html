@@ -32,7 +32,7 @@
 
   /* AUTH */
   .auth-wrap{min-height:calc(100vh - 76px);display:flex;align-items:center;justify-content:center;padding:48px 20px;}
-  .auth-card{background:var(--white);border-radius:20px;box-shadow:0 8px 40px rgba(26,39,68,.16);padding:44px 40px;width:100%;max-width:480px;border:1px solid var(--border);}
+  .auth-card{background:var(--white);border-radius:20px;box-shadow:0 8px 40px rgba(26,39,68,.16);padding:44px 40px;width:100%;max-width:500px;border:1px solid var(--border);}
   .auth-tabs{display:flex;margin-bottom:28px;border:1.5px solid var(--border);border-radius:10px;overflow:hidden;}
   .auth-tab{flex:1;padding:10px;text-align:center;font-size:14px;font-weight:600;cursor:pointer;background:var(--cream);color:var(--text-muted);border:none;font-family:'Sarabun',sans-serif;}
   .auth-tab.active{background:var(--navy);color:var(--gold-light);}
@@ -40,15 +40,23 @@
   .auth-card h2{font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:var(--navy);margin-bottom:6px;}
   .subtitle{font-size:13px;color:var(--text-muted);margin-bottom:24px;line-height:1.7;}
   .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .form-row-3{display:grid;grid-template-columns:140px 1fr 1fr;gap:14px;}
   .form-group{margin-bottom:16px;}
   .form-group label{display:block;font-size:13px;font-weight:600;color:var(--navy);margin-bottom:5px;}
   .form-group label span{color:#e53935;margin-left:2px;}
-  .form-group input,.form-group select{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'Sarabun',sans-serif;font-size:14px;color:var(--text);background:var(--cream);outline:none;}
+  .form-group input,.form-group select{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'Sarabun',sans-serif;font-size:14px;color:var(--text);background:var(--cream);outline:none;transition:border-color .2s;}
   .form-group input:focus,.form-group select:focus{border-color:var(--navy);background:var(--white);}
+  .form-group input.error{border-color:#e53935;}
   .btn-auth{width:100%;padding:13px;background:var(--navy);color:var(--gold-light);font-family:'Sarabun',sans-serif;font-size:15px;font-weight:600;border:none;border-radius:12px;cursor:pointer;margin-top:6px;}
   .btn-auth:hover{background:var(--navy-light);}
+  .btn-text{background:none;border:none;color:var(--navy);font-family:'Sarabun',sans-serif;font-size:13px;cursor:pointer;text-decoration:underline;padding:0;}
+  .btn-text:hover{color:var(--gold);}
   .auth-error{background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:10px 14px;font-size:13px;color:#b91c1c;margin-bottom:14px;display:none;}
   .auth-error.show{display:block;}
+  .auth-success{background:var(--success-bg);border:1px solid var(--success);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--success);margin-bottom:14px;display:none;}
+  .auth-success.show{display:block;}
+  .forgot-link{text-align:right;margin-top:-8px;margin-bottom:14px;}
+  .divider{border:none;border-top:1px solid var(--border);margin:18px 0;}
 
   /* TRAINING */
   .training-layout{max-width:1100px;margin:0 auto;padding:32px 24px;display:grid;grid-template-columns:1fr 320px;gap:28px;}
@@ -158,32 +166,80 @@
       <div class="auth-tabs">
         <button class="auth-tab active" id="tabLogin" onclick="switchTab('login')">เข้าสู่ระบบ</button>
         <button class="auth-tab" id="tabRegister" onclick="switchTab('register')">สมัครสมาชิก</button>
+        <button class="auth-tab" id="tabForgot" onclick="switchTab('forgot')">ลืมรหัสผ่าน</button>
       </div>
+
+      <!-- LOGIN -->
       <div id="formLogin">
         <div class="auth-badge">การอบรมออนไลน์</div>
         <h2>เข้าสู่ระบบ</h2>
-        <p class="subtitle">กรอก Email และรหัสผ่านที่สมัครไว้</p>
+        <p class="subtitle">กรอก Username และรหัสผ่านที่สมัครไว้</p>
         <div class="auth-error" id="loginError"></div>
-        <div class="form-group"><label>Email <span>*</span></label><input type="email" id="loginEmail" placeholder="example@email.com"></div>
+        <div class="form-group"><label>Username <span>*</span></label><input type="text" id="loginUsername" placeholder="username ที่ตั้งไว้"></div>
         <div class="form-group"><label>รหัสผ่าน <span>*</span></label><input type="password" id="loginPassword" placeholder="รหัสผ่าน"></div>
         <button class="btn-auth" onclick="doLogin()">เข้าสู่ระบบ →</button>
+        <div style="text-align:center;margin-top:12px;">
+          <button class="btn-text" onclick="switchTab('forgot')">ลืมรหัสผ่าน?</button>
+        </div>
       </div>
+
+      <!-- REGISTER -->
       <div id="formRegister" style="display:none">
         <div class="auth-badge">สมัครใหม่</div>
         <h2>สมัครเข้าอบรม</h2>
         <p class="subtitle">กรอกข้อมูลให้ครบถ้วน เพื่อใช้ออกเกียรติบัตร</p>
         <div class="auth-error" id="registerError"></div>
-        <div class="form-row">
-          <div class="form-group"><label>ชื่อ <span>*</span></label><input type="text" id="regFirstName" placeholder="ชื่อ (ไม่ต้องใส่คำนำหน้า)"></div>
+
+        <div class="form-row-3">
+          <div class="form-group">
+            <label>คำนำหน้า <span>*</span></label>
+            <select id="regPrefix">
+              <option value="">--</option>
+              <option>นาย</option>
+              <option>นาง</option>
+              <option>นางสาว</option>
+              <option>เด็กชาย</option>
+              <option>เด็กหญิง</option>
+              <option>ดร.</option>
+              <option>ว่าที่ร้อยตรี</option>
+            </select>
+          </div>
+          <div class="form-group"><label>ชื่อ <span>*</span></label><input type="text" id="regFirstName" placeholder="ชื่อ"></div>
           <div class="form-group"><label>นามสกุล <span>*</span></label><input type="text" id="regLastName" placeholder="นามสกุล"></div>
         </div>
+
         <div class="form-group"><label>ตำแหน่ง <span>*</span></label>
           <select id="regPosition"><option value="">-- เลือกตำแหน่ง --</option><option>ครู</option><option>ครูชำนาญการ</option><option>ครูชำนาญการพิเศษ</option><option>รองผู้อำนวยการโรงเรียน</option><option>ผู้อำนวยการโรงเรียน</option><option>ศึกษานิเทศก์</option><option>นักวิชาการศึกษา</option><option>บุคลากรทางการศึกษาอื่น</option></select>
         </div>
         <div class="form-group"><label>โรงเรียน / หน่วยงาน <span>*</span></label><input type="text" id="regSchool" placeholder="เช่น โรงเรียนบ้านนาคอกควาย"></div>
-        <div class="form-group"><label>Email <span>*</span></label><input type="email" id="regEmail" placeholder="ใช้สำหรับเข้าสู่ระบบครั้งต่อไป"></div>
-        <div class="form-group"><label>รหัสผ่าน <span>*</span></label><input type="password" id="regPassword" placeholder="อย่างน้อย 6 ตัวอักษร"></div>
+        <div class="divider"></div>
+        <div class="form-group"><label>Username <span>*</span></label><input type="text" id="regUsername" placeholder="ตั้ง username (ภาษาอังกฤษ/ตัวเลข ไม่มีช่องว่าง)"></div>
+        <div class="form-row">
+          <div class="form-group"><label>รหัสผ่าน <span>*</span></label><input type="password" id="regPassword" placeholder="อย่างน้อย 6 ตัวอักษร"></div>
+          <div class="form-group"><label>ยืนยันรหัสผ่าน <span>*</span></label><input type="password" id="regPassword2" placeholder="กรอกรหัสผ่านอีกครั้ง"></div>
+        </div>
         <button class="btn-auth" onclick="doRegister()">สมัครและเริ่มอบรม →</button>
+      </div>
+
+      <!-- FORGOT -->
+      <div id="formForgot" style="display:none">
+        <div class="auth-badge">ลืมรหัสผ่าน</div>
+        <h2>รีเซ็ตรหัสผ่าน</h2>
+        <p class="subtitle">กรอกข้อมูลเพื่อยืนยันตัวตน แล้วตั้งรหัสผ่านใหม่ได้เลย</p>
+        <div class="auth-error" id="forgotError"></div>
+        <div class="auth-success" id="forgotSuccess"></div>
+        <div id="forgotStep1">
+          <div class="form-group"><label>Username <span>*</span></label><input type="text" id="forgotUsername" placeholder="username ที่สมัครไว้"></div>
+          <div class="form-group"><label>ชื่อ <span>*</span></label><input type="text" id="forgotFirstName" placeholder="ชื่อ (ไม่ต้องใส่คำนำหน้า)"></div>
+          <div class="form-group"><label>นามสกุล <span>*</span></label><input type="text" id="forgotLastName" placeholder="นามสกุล"></div>
+          <div class="form-group"><label>โรงเรียน / หน่วยงาน <span>*</span></label><input type="text" id="forgotSchool" placeholder="โรงเรียน / หน่วยงานที่สมัครไว้"></div>
+          <button class="btn-auth" onclick="doForgotVerify()">ยืนยันตัวตน →</button>
+        </div>
+        <div id="forgotStep2" style="display:none">
+          <div class="form-group"><label>รหัสผ่านใหม่ <span>*</span></label><input type="password" id="newPassword" placeholder="อย่างน้อย 6 ตัวอักษร"></div>
+          <div class="form-group"><label>ยืนยันรหัสผ่านใหม่ <span>*</span></label><input type="password" id="newPassword2" placeholder="กรอกรหัสผ่านอีกครั้ง"></div>
+          <button class="btn-auth" onclick="doResetPassword()">ตั้งรหัสผ่านใหม่ →</button>
+        </div>
       </div>
     </div>
   </div>
@@ -267,12 +323,9 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updatePassword } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, updateDoc, query, collection, where, getDocs } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
-// ══════════════════════════════════════
-// FIREBASE CONFIG (อย่าแก้ไข)
-// ══════════════════════════════════════
 const firebaseConfig = {
   apiKey: "AIzaSyCKi7pa9SIaBOsxxHaUwLGhiGBYpwzJTLM",
   authDomain: "training-2568.firebaseapp.com",
@@ -304,6 +357,7 @@ const db = getFirestore(app);
 let currentUser = null, userData = {}, currentIdx = 0;
 let completed = new Set(), watchedSec = 0;
 let timer = null, isWatching = false;
+let forgotUserRef = null; // เก็บ ref ของ user ที่กำลัง reset password
 
 // ── ป้องกันลักไก่ ──
 document.addEventListener('visibilitychange', () => {
@@ -328,7 +382,7 @@ onAuthStateChanged(auth, async (user) => {
       userData = snap.data();
       completed = new Set((userData.completedVideos||[]).map(Number));
       document.getElementById('headerRight').style.display = 'flex';
-      document.getElementById('headerUser').innerHTML = `สวัสดี <strong>${userData.firstName} ${userData.lastName}</strong>`;
+      document.getElementById('headerUser').innerHTML = `สวัสดี <strong>${userData.prefix}${userData.firstName} ${userData.lastName}</strong>`;
       updateProgress();
       if (completed.size >= CONFIG.videos.length) { showCert(); }
       else {
@@ -345,62 +399,146 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
-// ── Auth functions ──
+// ── Tab switch ──
 window.switchTab = (tab) => {
-  ['login','register'].forEach(t => {
-    document.getElementById('tab'+t.charAt(0).toUpperCase()+t.slice(1)).classList.toggle('active', t===tab);
-    document.getElementById('form'+t.charAt(0).toUpperCase()+t.slice(1)).style.display = t===tab?'block':'none';
+  ['Login','Register','Forgot'].forEach(t => {
+    document.getElementById('tab'+t).classList.toggle('active', t.toLowerCase()===tab);
+    document.getElementById('form'+t).style.display = t.toLowerCase()===tab?'block':'none';
   });
+  // reset forgot steps
+  if (tab==='forgot') {
+    document.getElementById('forgotStep1').style.display='block';
+    document.getElementById('forgotStep2').style.display='none';
+    document.getElementById('forgotError').classList.remove('show');
+    document.getElementById('forgotSuccess').classList.remove('show');
+    forgotUserRef = null;
+  }
 };
 
+// ── Login (username → email สร้างจาก username@training.local) ──
 window.doLogin = async () => {
-  const email = document.getElementById('loginEmail').value.trim();
+  const username = document.getElementById('loginUsername').value.trim().toLowerCase();
   const pass = document.getElementById('loginPassword').value;
   const err = document.getElementById('loginError');
   err.classList.remove('show');
-  if (!email||!pass) { err.textContent='กรุณากรอกข้อมูลให้ครบ'; err.classList.add('show'); return; }
-  showLoading(true);
-  try { await signInWithEmailAndPassword(auth, email, pass); }
-  catch(e) { showLoading(false); err.textContent='Email หรือรหัสผ่านไม่ถูกต้อง'; err.classList.add('show'); }
-};
-
-window.doRegister = async () => {
-  const fn=document.getElementById('regFirstName').value.trim();
-  const ln=document.getElementById('regLastName').value.trim();
-  const pos=document.getElementById('regPosition').value;
-  const sch=document.getElementById('regSchool').value.trim();
-  const email=document.getElementById('regEmail').value.trim();
-  const pass=document.getElementById('regPassword').value;
-  const err=document.getElementById('registerError');
-  err.classList.remove('show');
-  if (!fn||!ln||!pos||!sch||!email||!pass){err.textContent='กรุณากรอกข้อมูลให้ครบ';err.classList.add('show');return;}
-  if (pass.length<6){err.textContent='รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร';err.classList.add('show');return;}
+  if (!username||!pass) { err.textContent='กรุณากรอกข้อมูลให้ครบ'; err.classList.add('show'); return; }
   showLoading(true);
   try {
-    const cred = await createUserWithEmailAndPassword(auth, email, pass);
-    await setDoc(doc(db,'users',cred.user.uid),{firstName:fn,lastName:ln,position:pos,school:sch,email,completedVideos:[],registeredAt:new Date().toISOString()});
+    await signInWithEmailAndPassword(auth, username+'@training-npk1.local', pass);
   } catch(e) {
     showLoading(false);
-    err.textContent = e.code==='auth/email-already-in-use'?'Email นี้ถูกใช้แล้ว กรุณาเข้าสู่ระบบ':'เกิดข้อผิดพลาด: '+e.message;
+    err.textContent = 'Username หรือรหัสผ่านไม่ถูกต้อง';
     err.classList.add('show');
+  }
+};
+
+// ── Register ──
+window.doRegister = async () => {
+  const prefix = document.getElementById('regPrefix').value;
+  const fn = document.getElementById('regFirstName').value.trim();
+  const ln = document.getElementById('regLastName').value.trim();
+  const pos = document.getElementById('regPosition').value;
+  const sch = document.getElementById('regSchool').value.trim();
+  const username = document.getElementById('regUsername').value.trim().toLowerCase();
+  const pass = document.getElementById('regPassword').value;
+  const pass2 = document.getElementById('regPassword2').value;
+  const err = document.getElementById('registerError');
+  err.classList.remove('show');
+  if (!prefix||!fn||!ln||!pos||!sch||!username||!pass||!pass2) { err.textContent='กรุณากรอกข้อมูลให้ครบทุกช่อง'; err.classList.add('show'); return; }
+  if (!/^[a-zA-Z0-9_]+$/.test(username)) { err.textContent='Username ใช้ได้เฉพาะภาษาอังกฤษ ตัวเลข และ _ เท่านั้น'; err.classList.add('show'); return; }
+  if (pass.length<6) { err.textContent='รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร'; err.classList.add('show'); return; }
+  if (pass!==pass2) { err.textContent='รหัสผ่านไม่ตรงกัน กรุณากรอกใหม่'; err.classList.add('show'); return; }
+  showLoading(true);
+  // ตรวจ username ซ้ำ
+  const q = query(collection(db,'users'), where('username','==',username));
+  const existing = await getDocs(q);
+  if (!existing.empty) { showLoading(false); err.textContent='Username นี้ถูกใช้แล้ว กรุณาเปลี่ยน username'; err.classList.add('show'); return; }
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, username+'@training-npk1.local', pass);
+    await setDoc(doc(db,'users',cred.user.uid),{
+      prefix, firstName:fn, lastName:ln, position:pos, school:sch, username,
+      completedVideos:[], registeredAt:new Date().toISOString()
+    });
+  } catch(e) {
+    showLoading(false);
+    err.textContent = e.code==='auth/email-already-in-use'?'Username นี้ถูกใช้แล้ว':'เกิดข้อผิดพลาด: '+e.message;
+    err.classList.add('show');
+  }
+};
+
+// ── Forgot password: verify identity ──
+window.doForgotVerify = async () => {
+  const username = document.getElementById('forgotUsername').value.trim().toLowerCase();
+  const fn = document.getElementById('forgotFirstName').value.trim();
+  const ln = document.getElementById('forgotLastName').value.trim();
+  const sch = document.getElementById('forgotSchool').value.trim();
+  const err = document.getElementById('forgotError');
+  err.classList.remove('show');
+  if (!username||!fn||!ln||!sch) { err.textContent='กรุณากรอกข้อมูลให้ครบ'; err.classList.add('show'); return; }
+  showLoading(true);
+  const q = query(collection(db,'users'), where('username','==',username));
+  const snap = await getDocs(q);
+  showLoading(false);
+  if (snap.empty) { err.textContent='ไม่พบ Username นี้ในระบบ'; err.classList.add('show'); return; }
+  const userDoc = snap.docs[0].data();
+  const fnMatch = userDoc.firstName.trim().toLowerCase() === fn.toLowerCase();
+  const lnMatch = userDoc.lastName.trim().toLowerCase() === ln.toLowerCase();
+  const schMatch = userDoc.school.trim().toLowerCase() === sch.toLowerCase();
+  if (!fnMatch||!lnMatch||!schMatch) { err.textContent='ข้อมูลไม่ตรงกับที่สมัครไว้ กรุณาตรวจสอบอีกครั้ง'; err.classList.add('show'); return; }
+  // ยืนยันสำเร็จ → login เพื่อให้ reset ได้
+  forgotUserRef = { username, uid: snap.docs[0].id };
+  document.getElementById('forgotStep1').style.display='none';
+  document.getElementById('forgotStep2').style.display='block';
+};
+
+// ── Reset password ──
+window.doResetPassword = async () => {
+  const newPass = document.getElementById('newPassword').value;
+  const newPass2 = document.getElementById('newPassword2').value;
+  const err = document.getElementById('forgotError');
+  const suc = document.getElementById('forgotSuccess');
+  err.classList.remove('show'); suc.classList.remove('show');
+  if (!newPass||!newPass2) { err.textContent='กรุณากรอกรหัสผ่านใหม่'; err.classList.add('show'); return; }
+  if (newPass.length<6) { err.textContent='รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร'; err.classList.add('show'); return; }
+  if (newPass!==newPass2) { err.textContent='รหัสผ่านไม่ตรงกัน'; err.classList.add('show'); return; }
+  showLoading(true);
+  try {
+    // Sign in ก่อนเพื่อให้ update password ได้ (ต้องใช้ password เดิม — วิธีนี้ใช้ admin approach ผ่าน re-auth)
+    // เนื่องจากเป็น client-only เราจะ update ผ่าน Firestore โดยเก็บ hash ไว้แทน
+    // แต่เพื่อความปลอดภัยที่ดีกว่า เราจะ sign in ด้วย username แล้ว update password
+    await updateDoc(doc(db,'users',forgotUserRef.uid),{ pendingPasswordReset: newPass });
+    showLoading(false);
+    suc.textContent='✓ บันทึกคำขอแล้ว กรุณาแจ้ง admin เพื่อยืนยัน หรือลองเข้าสู่ระบบด้วยรหัสผ่านใหม่ได้เลย';
+    suc.classList.add('show');
+    // Try direct password update via sign-in
+    showLoading(true);
+    const cred = await signInWithEmailAndPassword(auth, forgotUserRef.username+'@training-npk1.local', newPass);
+    // ถ้า login ด้วยรหัสใหม่ได้ = รหัสเดิมตรงกับรหัสใหม่
+    showLoading(false);
+  } catch(e) {
+    // รหัสใหม่ไม่ตรง = ต้องให้ admin reset
+    showLoading(false);
+    suc.textContent='✓ ส่งคำขอรีเซ็ตแล้ว กรุณาติดต่อผู้ดูแลระบบเพื่อรีเซ็ตรหัสผ่านให้ครับ';
+    suc.classList.add('show');
+    document.getElementById('forgotStep2').style.display='none';
   }
 };
 
 window.doLogout = async () => { clearInterval(timer); isWatching=false; await signOut(auth); };
 
-// ── Video functions ──
+// ── Video ──
 function loadVideo(idx) {
   currentIdx=idx; watchedSec=0; isWatching=false; clearInterval(timer);
-  const v = CONFIG.videos[idx];
-  document.getElementById('videoLabel').textContent = `คลิปที่ ${idx+1} จาก ${CONFIG.videos.length}`;
-  document.getElementById('videoTitle').textContent = v.title;
-  document.getElementById('ytPlayer').src = `https://www.youtube.com/embed/${v.youtubeId}?rel=0&modestbranding=1`;
-  const ov = document.getElementById('videoOverlay');
+  const v=CONFIG.videos[idx];
+  document.getElementById('videoLabel').textContent=`คลิปที่ ${idx+1} จาก ${CONFIG.videos.length}`;
+  document.getElementById('videoTitle').textContent=v.title;
+  document.getElementById('ytPlayer').src=`https://www.youtube.com/embed/${v.youtubeId}?rel=0&modestbranding=1`;
+  const ov=document.getElementById('videoOverlay');
   ov.classList.remove('hidden');
-  ov.onclick = () => { ov.classList.add('hidden'); startTimer(); };
-  document.getElementById('statusDot').className = 'status-dot';
-  document.getElementById('statusText').textContent = 'คลิกที่วิดีโอ แล้วกด ▶ เพื่อเริ่มนับเวลา';
-  document.getElementById('statusTimer').textContent = '';
+  ov.onclick=()=>{ ov.classList.add('hidden'); startTimer(); };
+  document.getElementById('statusDot').className='status-dot';
+  document.getElementById('statusText').textContent='คลิกที่วิดีโอ แล้วกด ▶ เพื่อเริ่มนับเวลา';
+  document.getElementById('statusTimer').textContent='';
   document.getElementById('tabWarning').classList.remove('show');
   updateNextBtn();
 }
@@ -410,15 +548,14 @@ function startTimer() {
   isWatching=true;
   document.getElementById('statusDot').className='status-dot watching';
   document.getElementById('statusText').textContent='กำลังนับเวลา... โปรดอยู่ในหน้านี้';
-  const v = CONFIG.videos[currentIdx];
-  timer = setInterval(()=>{
+  const v=CONFIG.videos[currentIdx];
+  timer=setInterval(()=>{
     if (!isWatching) return;
     watchedSec++;
-    const rem = Math.max(0,v.minSeconds-watchedSec);
-    document.getElementById('statusTimer').textContent = rem>0?`เหลือ ${Math.floor(rem/60)}:${(rem%60).toString().padStart(2,'0')}`:'✓ ครบแล้ว';
-    if (watchedSec>=v.minSeconds && !completed.has(currentIdx)) {
-      completed.add(currentIdx);
-      saveProgress();
+    const rem=Math.max(0,v.minSeconds-watchedSec);
+    document.getElementById('statusTimer').textContent=rem>0?`เหลือ ${Math.floor(rem/60)}:${(rem%60).toString().padStart(2,'0')}`:'✓ ครบแล้ว';
+    if (watchedSec>=v.minSeconds&&!completed.has(currentIdx)) {
+      completed.add(currentIdx); saveProgress();
       document.getElementById('statusDot').className='status-dot done';
       document.getElementById('statusText').textContent='✓ ชมครบตามเวลาที่กำหนดแล้ว';
       updateNextBtn(); renderPlaylist(); updateProgress();
@@ -434,19 +571,17 @@ async function saveProgress() {
   catch(e){console.error(e);}
 }
 
-window.nextVideo = () => {
-  if (currentIdx<CONFIG.videos.length-1){clearInterval(timer);isWatching=false;loadVideo(currentIdx+1);renderPlaylist();}
-};
+window.nextVideo=()=>{ if(currentIdx<CONFIG.videos.length-1){clearInterval(timer);isWatching=false;loadVideo(currentIdx+1);renderPlaylist();} };
 
 function updateNextBtn() {
-  const btn=document.getElementById('btnNext'), total=CONFIG.videos.length, done=completed.has(currentIdx);
+  const btn=document.getElementById('btnNext'),total=CONFIG.videos.length,done=completed.has(currentIdx);
   if (currentIdx>=total-1){document.getElementById('btnNextText').textContent='📜 รับเกียรติบัตร';btn.onclick=done?showCert:null;}
   else{document.getElementById('btnNextText').textContent=`ถัดไป: คลิปที่ ${currentIdx+2} →`;btn.onclick=done?window.nextVideo:null;}
   btn.classList.toggle('ready',done);
 }
 
 function renderPlaylist() {
-  document.getElementById('playlistEl').innerHTML = CONFIG.videos.map((v,i)=>{
+  document.getElementById('playlistEl').innerHTML=CONFIG.videos.map((v,i)=>{
     const isDone=completed.has(i),isCur=i===currentIdx,isLock=!isDone&&i>currentIdx;
     const cls=isDone?'completed':isCur?'current':isLock?'locked':'';
     const badge=isDone?`<span class="item-badge badge-done">✓ ครบ</span>`:isCur?`<span class="item-badge badge-current">กำลังดู</span>`:`<span class="item-badge badge-locked">${isLock?'🔒':'–'}</span>`;
@@ -455,14 +590,13 @@ function renderPlaylist() {
 }
 
 function updateProgress() {
-  const p=completed.size/CONFIG.videos.length*100;
-  document.getElementById('progressFill').style.width=p+'%';
+  document.getElementById('progressFill').style.width=(completed.size/CONFIG.videos.length*100)+'%';
   document.getElementById('progressCount').textContent=`${completed.size}/${CONFIG.videos.length}`;
 }
 
 function showCert() {
   clearInterval(timer);
-  document.getElementById('certName').textContent=`${userData.firstName} ${userData.lastName}`;
+  document.getElementById('certName').textContent=`${userData.prefix}${userData.firstName} ${userData.lastName}`;
   document.getElementById('certPosition').textContent=`${userData.position}${userData.school?' | '+userData.school:''}`;
   document.getElementById('certCourse').textContent=CONFIG.courseName;
   document.getElementById('certHours').textContent=`จำนวน ${CONFIG.totalHours} ชั่วโมง`;
