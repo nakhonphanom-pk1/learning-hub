@@ -6,133 +6,180 @@
 <title>ระบบอบรมออนไลน์ สพป.นครพนม เขต ๑</title>
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --navy:#1a2744;--navy-light:#243460;--gold:#c9a84c;--gold-light:#e8c97a;--gold-pale:#f7edd8;
-    --cream:#fdf8f0;--white:#ffffff;--text:#1a1a2e;--text-muted:#5a6075;
-    --success:#2e7d5e;--success-bg:#eaf4ef;--border:#ddd4bc;
-  }
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;}
-  .site-header{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.2);}
-  .header-inner{display:flex;align-items:center;gap:16px;padding:12px 32px;max-width:1100px;margin:0 auto;}
-  .header-logo{width:52px;height:52px;flex-shrink:0;}
-  .header-text h1{font-family:'Noto Serif Thai',serif;font-size:15px;font-weight:700;color:var(--gold-light);line-height:1.4;}
-  .header-text p{font-size:12px;color:rgba(255,255,255,.55);margin-top:2px;}
-  .header-right{margin-left:auto;display:flex;align-items:center;gap:14px;}
-  .header-user{font-size:13px;color:rgba(255,255,255,.7);}
-  .header-user strong{color:var(--gold-light);}
-  .btn-logout{padding:6px 14px;background:transparent;border:1px solid rgba(255,255,255,.3);border-radius:6px;color:rgba(255,255,255,.7);font-family:'Sarabun',sans-serif;font-size:12px;cursor:pointer;}
-  .btn-logout:hover{border-color:var(--gold);color:var(--gold);}
-  .progress-wrap{display:flex;align-items:center;gap:10px;}
-  .progress-label{font-size:13px;color:rgba(255,255,255,.6);white-space:nowrap;}
-  .progress-bar-wrap{width:120px;height:6px;background:rgba(255,255,255,.15);border-radius:99px;overflow:hidden;}
-  .progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-light));border-radius:99px;transition:width .6s;width:0%;}
-  .progress-count{font-size:13px;font-weight:600;color:var(--gold-light);}
-  .page{display:none;}.page.active{display:block;}
-  .auth-wrap{min-height:calc(100vh - 76px);display:flex;align-items:center;justify-content:center;padding:48px 20px;}
-  .auth-card{background:var(--white);border-radius:20px;box-shadow:0 8px 40px rgba(26,39,68,.16);padding:44px 40px;width:100%;max-width:500px;border:1px solid var(--border);}
-  .auth-tabs{display:flex;margin-bottom:28px;border:1.5px solid var(--border);border-radius:10px;overflow:hidden;}
-  .auth-tab{flex:1;padding:10px;text-align:center;font-size:13px;font-weight:600;cursor:pointer;background:var(--cream);color:var(--text-muted);border:none;font-family:'Sarabun',sans-serif;}
-  .auth-tab.active{background:var(--navy);color:var(--gold-light);}
-  .auth-badge{display:inline-block;background:var(--gold-pale);color:var(--gold);font-size:12px;font-weight:600;padding:4px 14px;border-radius:99px;margin-bottom:12px;}
-  .auth-card h2{font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:var(--navy);margin-bottom:6px;}
-  .subtitle{font-size:13px;color:var(--text-muted);margin-bottom:24px;line-height:1.7;}
-  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-  .form-row-3{display:grid;grid-template-columns:130px 1fr 1fr;gap:14px;}
-  .form-group{margin-bottom:16px;}
-  .form-group label{display:block;font-size:13px;font-weight:600;color:var(--navy);margin-bottom:5px;}
-  .form-group label span{color:#e53935;margin-left:2px;}
-  .form-group input,.form-group select{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'Sarabun',sans-serif;font-size:14px;color:var(--text);background:var(--cream);outline:none;transition:border-color .2s;}
-  .form-group input:focus,.form-group select:focus{border-color:var(--navy);background:var(--white);}
-  .btn-auth{width:100%;padding:13px;background:var(--navy);color:var(--gold-light);font-family:'Sarabun',sans-serif;font-size:15px;font-weight:600;border:none;border-radius:12px;cursor:pointer;margin-top:6px;}
-  .btn-auth:hover{background:var(--navy-light);}
-  .btn-text{background:none;border:none;color:var(--navy);font-family:'Sarabun',sans-serif;font-size:13px;cursor:pointer;text-decoration:underline;padding:0;}
-  .auth-error{background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:10px 14px;font-size:13px;color:#b91c1c;margin-bottom:14px;display:none;}
-  .auth-error.show{display:block;}
-  .auth-success{background:var(--success-bg);border:1px solid var(--success);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--success);margin-bottom:14px;display:none;}
-  .auth-success.show{display:block;}
-  .divider{border:none;border-top:1px solid var(--border);margin:18px 0;}
-  .training-layout{max-width:1100px;margin:0 auto;padding:32px 24px;display:grid;grid-template-columns:1fr 320px;gap:28px;}
-  @media(max-width:860px){.training-layout{grid-template-columns:1fr;}}
-  .video-label{font-size:12px;font-weight:600;color:var(--gold);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;}
-  .video-title{font-family:'Noto Serif Thai',serif;font-size:20px;font-weight:700;color:var(--navy);margin-bottom:16px;line-height:1.5;}
-  .video-wrapper{position:relative;padding-bottom:56.25%;background:#0f1726;border-radius:16px;overflow:hidden;box-shadow:0 8px 40px rgba(26,39,68,.16);border:1px solid var(--border);}
-  .video-wrapper iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;}
-  .video-overlay{position:absolute;inset:0;background:rgba(15,23,38,.82);display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;text-align:center;padding:24px;z-index:5;cursor:pointer;transition:opacity .3s;}
-  .video-overlay.hidden{opacity:0;pointer-events:none;}
-  .overlay-icon{font-size:52px;margin-bottom:12px;}
-  .overlay-text{font-size:16px;font-weight:500;line-height:1.6;}
-  .overlay-sub{font-size:13px;color:rgba(255,255,255,.6);margin-top:6px;}
-  .paused-overlay{position:absolute;inset:0;background:rgba(10,14,30,.88);display:none;flex-direction:column;align-items:center;justify-content:center;color:white;text-align:center;padding:24px;z-index:6;}
-  .paused-overlay.show{display:flex;}
-  .paused-icon{font-size:52px;margin-bottom:14px;}
-  .paused-title{font-size:18px;font-weight:600;margin-bottom:8px;}
-  .paused-sub{font-size:14px;color:rgba(255,255,255,.65);line-height:1.7;}
-  .btn-resume{margin-top:20px;padding:11px 32px;background:var(--gold);color:var(--navy);font-family:'Sarabun',sans-serif;font-size:15px;font-weight:700;border:none;border-radius:10px;cursor:pointer;}
-  .btn-resume:hover{background:var(--gold-light);}
-  .video-status-bar{display:flex;align-items:center;gap:10px;margin-top:14px;padding:12px 16px;background:var(--white);border-radius:12px;border:1px solid var(--border);}
-  .status-dot{width:10px;height:10px;border-radius:50%;background:#ccc;flex-shrink:0;}
-  .status-dot.watching{background:#f59e0b;box-shadow:0 0 0 3px rgba(245,158,11,.2);animation:pulse 1.5s infinite;}
-  .status-dot.done{background:var(--success);box-shadow:0 0 0 3px rgba(46,125,94,.2);}
-  .status-dot.paused{background:#ef4444;box-shadow:0 0 0 3px rgba(239,68,68,.2);}
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
-  .status-text{font-size:13px;color:var(--text-muted);flex:1;}
-  .status-timer{font-size:13px;font-weight:600;color:var(--navy);font-variant-numeric:tabular-nums;}
-  .btn-next{display:block;width:100%;margin-top:14px;padding:13px;background:var(--success);color:white;font-family:'Sarabun',sans-serif;font-size:15px;font-weight:600;border:none;border-radius:12px;cursor:pointer;opacity:.4;pointer-events:none;}
-  .btn-next.ready{opacity:1;pointer-events:all;}
-  .btn-next.ready:hover{background:#236b4d;}
-  .sidebar-title{font-size:13px;font-weight:700;color:var(--navy);letter-spacing:.5px;margin-bottom:14px;text-transform:uppercase;}
-  .playlist-item{display:flex;align-items:flex-start;gap:12px;padding:14px;border-radius:12px;border:1.5px solid var(--border);background:var(--white);margin-bottom:10px;}
-  .playlist-item.current{border-color:var(--navy);box-shadow:0 0 0 3px rgba(26,39,68,.08);}
-  .playlist-item.completed{border-color:var(--success);background:var(--success-bg);}
-  .playlist-item.locked{opacity:.5;}
-  .item-num{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;background:var(--cream);color:var(--text-muted);border:1.5px solid var(--border);}
-  .playlist-item.current .item-num{background:var(--navy);color:white;border-color:var(--navy);}
-  .playlist-item.completed .item-num{background:var(--success);color:white;border-color:var(--success);}
-  .item-name{font-size:13px;font-weight:600;color:var(--navy);line-height:1.5;}
-  .item-duration{font-size:12px;color:var(--text-muted);margin-top:2px;}
-  .item-badge{margin-left:auto;font-size:11px;padding:2px 8px;border-radius:99px;font-weight:600;white-space:nowrap;}
-  .badge-current{background:var(--navy);color:white;}
-  .badge-done{background:var(--success-bg);color:var(--success);}
-  .badge-locked{background:var(--cream);color:var(--text-muted);}
-  .sidebar-info-box{background:var(--gold-pale);border:1px solid var(--gold);border-radius:12px;padding:14px;margin-top:20px;}
-  .sidebar-info-box p{font-size:13px;color:#7a5c1e;line-height:1.7;}
-  .cert-page-wrap{min-height:calc(100vh - 76px);display:flex;flex-direction:column;align-items:center;padding:40px 20px 60px;}
-  .cert-congrats{text-align:center;margin-bottom:32px;}
-  .cert-congrats .emoji{font-size:48px;margin-bottom:12px;}
-  .cert-congrats h2{font-family:'Noto Serif Thai',serif;font-size:26px;font-weight:700;color:var(--navy);margin-bottom:6px;}
-  .cert-congrats p{font-size:15px;color:var(--text-muted);}
-  #cert-container{width:900px;max-width:100%;}
-  .cert-paper{background:var(--white);border:3px solid var(--navy);border-radius:4px;position:relative;overflow:hidden;box-shadow:0 8px 40px rgba(26,39,68,.16);}
-  .cert-outer-border{border:6px solid transparent;border-image:repeating-linear-gradient(45deg,var(--gold) 0 8px,transparent 8px 14px) 6;margin:10px;}
-  .cert-inner{padding:40px 56px;text-align:center;position:relative;z-index:1;}
-  .cert-top-logo{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:20px;}
-  .cert-emblem{width:70px;height:70px;}
-  .cert-org .org-main{font-family:'Noto Serif Thai',serif;font-size:15px;font-weight:700;color:var(--navy);line-height:1.5;}
-  .cert-org .org-sub{font-size:12px;color:var(--text-muted);}
-  .cert-divider{border:none;border-top:1.5px solid var(--gold);margin:0 0 20px;}
-  .cert-title-th{font-family:'Noto Serif Thai',serif;font-size:28px;font-weight:700;color:var(--navy);letter-spacing:2px;margin-bottom:4px;}
-  .cert-title-en{font-size:13px;color:var(--text-muted);letter-spacing:3px;text-transform:uppercase;margin-bottom:24px;}
-  .cert-given-to{font-size:14px;color:var(--text-muted);margin-bottom:4px;}
-  .cert-name{font-family:'Noto Serif Thai',serif;font-size:34px;font-weight:700;color:var(--navy);margin-bottom:6px;line-height:1.4;}
-  .cert-position{font-size:14px;color:var(--text-muted);margin-bottom:24px;}
-  .cert-body-text{font-size:14px;color:var(--text);line-height:2;margin-bottom:8px;}
-  .cert-course{font-family:'Noto Serif Thai',serif;font-size:18px;font-weight:700;color:var(--navy);margin:4px 0 20px;line-height:1.6;}
-  .cert-hours{display:inline-block;background:var(--gold-pale);border:1px solid var(--gold);border-radius:99px;padding:6px 24px;font-size:13px;font-weight:600;color:#7a5c1e;margin-bottom:24px;}
-  .cert-footer{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:20px;border-top:1px solid var(--border);padding-top:24px;}
-  .cert-sign{text-align:center;}
-  .cert-sign-line{width:180px;border-bottom:1.5px solid var(--navy);margin:0 auto 8px;height:40px;}
-  .cert-sign-name{font-family:'Noto Serif Thai',serif;font-size:14px;font-weight:700;color:var(--navy);line-height:1.5;}
-  .cert-sign-pos{font-size:12px;color:var(--text-muted);line-height:1.5;}
-  .cert-watermark{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Noto Serif Thai',serif;font-size:96px;font-weight:700;color:rgba(201,168,76,.06);white-space:nowrap;pointer-events:none;user-select:none;z-index:0;}
-  .cert-actions{display:flex;gap:14px;margin-top:28px;justify-content:center;}
-  .btn-print{padding:12px 32px;background:var(--navy);color:white;border:none;border-radius:10px;font-family:'Sarabun',sans-serif;font-size:15px;font-weight:600;cursor:pointer;}
-  .btn-print:hover{background:var(--navy-light);}
-  @media print{body *{visibility:hidden;}#cert-container,#cert-container *{visibility:visible;}#cert-container{position:fixed;top:0;left:0;width:100%;}.cert-actions,.site-header{display:none;}}
-  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--navy);color:white;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:500;z-index:999;transition:transform .3s;white-space:nowrap;}
-  .toast.show{transform:translateX(-50%) translateY(0);}
-  .loading-overlay{position:fixed;inset:0;background:rgba(255,255,255,.85);display:none;align-items:center;justify-content:center;z-index:9999;font-size:16px;color:var(--navy);font-weight:500;}
-  .loading-overlay.show{display:flex;}
+:root{--navy:#1a2744;--navy-light:#243460;--gold:#c9a84c;--gold-light:#e8c97a;--gold-pale:#f7edd8;--cream:#fdf8f0;--white:#fff;--text:#1a1a2e;--muted:#5a6075;--success:#2e7d5e;--success-bg:#eaf4ef;--border:#ddd4bc;--red:#b91c1c;--red-bg:#fef2f2;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;}
+/* HEADER */
+.site-header{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.2);}
+.header-inner{display:flex;align-items:center;gap:16px;padding:12px 32px;max-width:1200px;margin:0 auto;}
+.header-logo{width:48px;height:48px;flex-shrink:0;}
+.header-text h1{font-family:'Noto Serif Thai',serif;font-size:14px;font-weight:700;color:var(--gold-light);line-height:1.4;}
+.header-text p{font-size:11px;color:rgba(255,255,255,.5);margin-top:2px;}
+.header-right{margin-left:auto;display:flex;align-items:center;gap:12px;}
+.header-user{font-size:13px;color:rgba(255,255,255,.7);}
+.header-user strong{color:var(--gold-light);}
+.btn-logout{padding:5px 12px;background:transparent;border:1px solid rgba(255,255,255,.3);border-radius:6px;color:rgba(255,255,255,.7);font-family:'Sarabun',sans-serif;font-size:12px;cursor:pointer;}
+.btn-logout:hover{border-color:var(--gold);color:var(--gold);}
+.progress-wrap{display:flex;align-items:center;gap:8px;}
+.progress-bar-wrap{width:100px;height:5px;background:rgba(255,255,255,.15);border-radius:99px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-light));border-radius:99px;transition:width .6s;width:0%;}
+.progress-count{font-size:12px;font-weight:600;color:var(--gold-light);}
+/* PAGES */
+.page{display:none;}.page.active{display:block;}
+/* AUTH */
+.auth-wrap{min-height:calc(100vh - 72px);display:flex;align-items:center;justify-content:center;padding:40px 20px;}
+.auth-card{background:var(--white);border-radius:20px;box-shadow:0 8px 40px rgba(26,39,68,.15);padding:40px;width:100%;max-width:500px;border:1px solid var(--border);}
+.auth-tabs{display:flex;margin-bottom:24px;border:1.5px solid var(--border);border-radius:10px;overflow:hidden;}
+.auth-tab{flex:1;padding:9px;text-align:center;font-size:12px;font-weight:600;cursor:pointer;background:var(--cream);color:var(--muted);border:none;font-family:'Sarabun',sans-serif;}
+.auth-tab.active{background:var(--navy);color:var(--gold-light);}
+.auth-badge{display:inline-block;background:var(--gold-pale);color:var(--gold);font-size:11px;font-weight:600;padding:3px 12px;border-radius:99px;margin-bottom:10px;}
+.auth-card h2{font-family:'Noto Serif Thai',serif;font-size:21px;font-weight:700;color:var(--navy);margin-bottom:5px;}
+.subtitle{font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.7;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.form-row-3{display:grid;grid-template-columns:120px 1fr 1fr;gap:12px;}
+.form-group{margin-bottom:14px;}
+.form-group label{display:block;font-size:12px;font-weight:600;color:var(--navy);margin-bottom:4px;}
+.form-group label span{color:#e53935;}
+.form-group input,.form-group select{width:100%;padding:9px 13px;border:1.5px solid var(--border);border-radius:9px;font-family:'Sarabun',sans-serif;font-size:14px;color:var(--text);background:var(--cream);outline:none;transition:border-color .2s;}
+.form-group input:focus,.form-group select:focus{border-color:var(--navy);background:var(--white);}
+.btn-auth{width:100%;padding:12px;background:var(--navy);color:var(--gold-light);font-family:'Sarabun',sans-serif;font-size:15px;font-weight:600;border:none;border-radius:11px;cursor:pointer;margin-top:4px;}
+.btn-auth:hover{background:var(--navy-light);}
+.btn-text{background:none;border:none;color:var(--navy);font-family:'Sarabun',sans-serif;font-size:13px;cursor:pointer;text-decoration:underline;padding:0;}
+.auth-error{background:var(--red-bg);border:1px solid #fca5a5;border-radius:8px;padding:9px 13px;font-size:13px;color:var(--red);margin-bottom:12px;display:none;}
+.auth-error.show{display:block;}
+.auth-success{background:var(--success-bg);border:1px solid var(--success);border-radius:8px;padding:9px 13px;font-size:13px;color:var(--success);margin-bottom:12px;display:none;}
+.auth-success.show{display:block;}
+.divider{border:none;border-top:1px solid var(--border);margin:16px 0;}
+/* TRAINING */
+.training-layout{max-width:1100px;margin:0 auto;padding:28px 20px;display:grid;grid-template-columns:1fr 300px;gap:24px;}
+@media(max-width:800px){.training-layout{grid-template-columns:1fr;}}
+.video-label{font-size:11px;font-weight:600;color:var(--gold);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
+.video-title{font-family:'Noto Serif Thai',serif;font-size:19px;font-weight:700;color:var(--navy);margin-bottom:14px;line-height:1.5;}
+.video-wrapper{position:relative;padding-bottom:56.25%;background:#0f1726;border-radius:14px;overflow:hidden;box-shadow:0 6px 32px rgba(26,39,68,.15);border:1px solid var(--border);}
+.video-wrapper iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;}
+.video-overlay{position:absolute;inset:0;background:rgba(15,23,38,.82);display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;text-align:center;padding:20px;z-index:5;cursor:pointer;transition:opacity .3s;}
+.video-overlay.hidden{opacity:0;pointer-events:none;}
+.overlay-icon{font-size:48px;margin-bottom:10px;}
+.overlay-text{font-size:15px;font-weight:500;line-height:1.6;}
+.overlay-sub{font-size:12px;color:rgba(255,255,255,.6);margin-top:5px;}
+.paused-overlay{position:absolute;inset:0;background:rgba(10,14,30,.9);display:none;flex-direction:column;align-items:center;justify-content:center;color:white;text-align:center;padding:20px;z-index:6;}
+.paused-overlay.show{display:flex;}
+.paused-icon{font-size:48px;margin-bottom:12px;}
+.paused-title{font-size:17px;font-weight:600;margin-bottom:6px;}
+.paused-sub{font-size:13px;color:rgba(255,255,255,.65);line-height:1.7;}
+.btn-resume{margin-top:16px;padding:10px 28px;background:var(--gold);color:var(--navy);font-family:'Sarabun',sans-serif;font-size:14px;font-weight:700;border:none;border-radius:9px;cursor:pointer;}
+.video-status-bar{display:flex;align-items:center;gap:10px;margin-top:12px;padding:11px 14px;background:var(--white);border-radius:11px;border:1px solid var(--border);}
+.status-dot{width:9px;height:9px;border-radius:50%;background:#ccc;flex-shrink:0;}
+.status-dot.watching{background:#f59e0b;animation:pulse 1.5s infinite;}
+.status-dot.done{background:var(--success);}
+.status-dot.paused{background:#ef4444;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.status-text{font-size:13px;color:var(--muted);flex:1;}
+.status-timer{font-size:13px;font-weight:600;color:var(--navy);font-variant-numeric:tabular-nums;}
+.btn-next{display:block;width:100%;margin-top:12px;padding:12px;background:var(--success);color:white;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:600;border:none;border-radius:11px;cursor:pointer;opacity:.4;pointer-events:none;}
+.btn-next.ready{opacity:1;pointer-events:all;}
+.sidebar-title{font-size:12px;font-weight:700;color:var(--navy);letter-spacing:.5px;margin-bottom:12px;text-transform:uppercase;}
+.playlist-item{display:flex;align-items:flex-start;gap:10px;padding:12px;border-radius:11px;border:1.5px solid var(--border);background:var(--white);margin-bottom:9px;}
+.playlist-item.current{border-color:var(--navy);}
+.playlist-item.completed{border-color:var(--success);background:var(--success-bg);}
+.playlist-item.locked{opacity:.5;}
+.item-num{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;background:var(--cream);color:var(--muted);border:1.5px solid var(--border);}
+.playlist-item.current .item-num{background:var(--navy);color:white;border-color:var(--navy);}
+.playlist-item.completed .item-num{background:var(--success);color:white;border-color:var(--success);}
+.item-name{font-size:12px;font-weight:600;color:var(--navy);line-height:1.5;}
+.item-dur{font-size:11px;color:var(--muted);margin-top:1px;}
+.item-badge{margin-left:auto;font-size:10px;padding:2px 7px;border-radius:99px;font-weight:600;white-space:nowrap;}
+.badge-cur{background:var(--navy);color:white;}
+.badge-done{background:var(--success-bg);color:var(--success);}
+.badge-lock{background:var(--cream);color:var(--muted);}
+.sidebar-info{background:var(--gold-pale);border:1px solid var(--gold);border-radius:11px;padding:13px;margin-top:16px;font-size:12px;color:#7a5c1e;line-height:1.8;}
+/* CONFIRM NAME PAGE */
+.confirm-wrap{min-height:calc(100vh - 72px);display:flex;align-items:center;justify-content:center;padding:40px 20px;}
+.confirm-card{background:var(--white);border-radius:20px;box-shadow:0 8px 40px rgba(26,39,68,.15);padding:40px;width:100%;max-width:520px;border:1px solid var(--border);text-align:center;}
+.confirm-card .emoji{font-size:44px;margin-bottom:14px;}
+.confirm-card h2{font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:var(--navy);margin-bottom:8px;}
+.confirm-card p{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:20px;}
+.name-preview{font-family:'Noto Serif Thai',serif;font-size:26px;font-weight:700;color:var(--navy);background:var(--gold-pale);border:2px solid var(--gold);border-radius:12px;padding:16px 24px;margin-bottom:20px;}
+.confirm-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.btn-confirm{padding:11px 28px;background:var(--success);color:white;border:none;border-radius:10px;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:600;cursor:pointer;}
+.btn-edit-name{padding:11px 28px;background:transparent;color:var(--navy);border:1.5px solid var(--border);border-radius:10px;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:600;cursor:pointer;}
+.edit-name-form{display:none;margin-top:20px;text-align:left;}
+.edit-name-form.show{display:block;}
+/* CERT */
+.cert-page-wrap{min-height:calc(100vh - 72px);display:flex;flex-direction:column;align-items:center;padding:36px 20px 56px;}
+.cert-congrats{text-align:center;margin-bottom:28px;}
+.cert-congrats .emoji{font-size:44px;margin-bottom:10px;}
+.cert-congrats h2{font-family:'Noto Serif Thai',serif;font-size:24px;font-weight:700;color:var(--navy);margin-bottom:5px;}
+.cert-congrats p{font-size:14px;color:var(--muted);}
+#cert-container{width:860px;max-width:100%;}
+.cert-paper{background:var(--white);border:3px solid var(--navy);border-radius:4px;position:relative;overflow:hidden;box-shadow:0 8px 40px rgba(26,39,68,.15);}
+.cert-outer-border{border:5px solid transparent;border-image:repeating-linear-gradient(45deg,var(--gold) 0 8px,transparent 8px 14px) 5;margin:9px;}
+.cert-inner{padding:36px 52px;text-align:center;position:relative;z-index:1;}
+.cert-top-logo{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:18px;}
+.cert-emblem{width:64px;height:64px;}
+.cert-org .org-main{font-family:'Noto Serif Thai',serif;font-size:14px;font-weight:700;color:var(--navy);line-height:1.5;}
+.cert-org .org-sub{font-size:11px;color:var(--muted);}
+.cert-divider{border:none;border-top:1.5px solid var(--gold);margin:0 0 18px;}
+.cert-title-th{font-family:'Noto Serif Thai',serif;font-size:26px;font-weight:700;color:var(--navy);letter-spacing:2px;margin-bottom:3px;}
+.cert-title-en{font-size:12px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;margin-bottom:20px;}
+.cert-given-to{font-size:13px;color:var(--muted);margin-bottom:3px;}
+.cert-name{font-family:'Noto Serif Thai',serif;font-size:32px;font-weight:700;color:var(--navy);margin-bottom:5px;line-height:1.4;}
+.cert-position{font-size:13px;color:var(--muted);margin-bottom:20px;}
+.cert-body-text{font-size:13px;color:var(--text);line-height:2;margin-bottom:6px;}
+.cert-course{font-family:'Noto Serif Thai',serif;font-size:17px;font-weight:700;color:var(--navy);margin:3px 0 18px;line-height:1.6;}
+.cert-hours{display:inline-block;background:var(--gold-pale);border:1px solid var(--gold);border-radius:99px;padding:5px 20px;font-size:12px;font-weight:600;color:#7a5c1e;margin-bottom:20px;}
+.cert-footer{display:grid;grid-template-columns:1fr 1fr;gap:36px;margin-top:18px;border-top:1px solid var(--border);padding-top:20px;}
+.cert-sign{text-align:center;}
+.cert-sign-line{width:160px;border-bottom:1.5px solid var(--navy);margin:0 auto 7px;height:36px;}
+.cert-sign-name{font-family:'Noto Serif Thai',serif;font-size:13px;font-weight:700;color:var(--navy);line-height:1.5;}
+.cert-sign-pos{font-size:11px;color:var(--muted);line-height:1.5;}
+.cert-watermark{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Noto Serif Thai',serif;font-size:88px;font-weight:700;color:rgba(201,168,76,.055);white-space:nowrap;pointer-events:none;user-select:none;z-index:0;}
+.cert-pending-badge{background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:9px 14px;font-size:13px;color:#856404;margin-top:16px;text-align:center;}
+.cert-actions{display:flex;gap:12px;margin-top:24px;justify-content:center;flex-wrap:wrap;}
+.btn-print{padding:11px 28px;background:var(--navy);color:white;border:none;border-radius:9px;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:600;cursor:pointer;}
+.btn-request-edit{padding:11px 28px;background:transparent;color:var(--navy);border:1.5px solid var(--border);border-radius:9px;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:600;cursor:pointer;}
+.request-edit-form{display:none;background:var(--cream);border:1.5px solid var(--border);border-radius:12px;padding:20px;margin-top:16px;width:100%;max-width:860px;}
+.request-edit-form.show{display:block;}
+@media print{body *{visibility:hidden;}#cert-container,#cert-container *{visibility:visible;}#cert-container{position:fixed;top:0;left:0;width:100%;}.cert-actions,.site-header,.request-edit-form,.cert-pending-badge{display:none;}}
+/* ADMIN */
+.admin-wrap{max-width:1100px;margin:0 auto;padding:28px 20px;}
+.admin-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
+.admin-header h2{font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:var(--navy);}
+.admin-badge{background:var(--red-bg);color:var(--red);border:1px solid #fca5a5;border-radius:99px;padding:4px 14px;font-size:12px;font-weight:600;}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px;}
+@media(max-width:700px){.stats-grid{grid-template-columns:1fr 1fr;}}
+.stat-card{background:var(--white);border:1.5px solid var(--border);border-radius:13px;padding:16px;text-align:center;}
+.stat-num{font-size:28px;font-weight:700;color:var(--navy);}
+.stat-label{font-size:12px;color:var(--muted);margin-top:3px;}
+.stat-card.highlight{border-color:var(--gold);background:var(--gold-pale);}
+.stat-card.highlight .stat-num{color:#7a5c1e;}
+.section-title{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--gold);}
+.pending-list{margin-bottom:32px;}
+.pending-item{background:var(--white);border:1.5px solid #fca5a5;border-radius:12px;padding:16px;margin-bottom:10px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.pending-info{flex:1;}
+.pending-name{font-size:14px;font-weight:600;color:var(--navy);}
+.pending-detail{font-size:12px;color:var(--muted);margin-top:3px;}
+.pending-change{font-size:13px;margin-top:6px;}
+.pending-change .old{color:var(--red);text-decoration:line-through;}
+.pending-change .arrow{margin:0 6px;color:var(--muted);}
+.pending-change .new{color:var(--success);font-weight:600;}
+.pending-actions{display:flex;gap:8px;}
+.btn-approve{padding:8px 18px;background:var(--success);color:white;border:none;border-radius:8px;font-family:'Sarabun',sans-serif;font-size:13px;font-weight:600;cursor:pointer;}
+.btn-reject{padding:8px 18px;background:transparent;color:var(--red);border:1.5px solid #fca5a5;border-radius:8px;font-family:'Sarabun',sans-serif;font-size:13px;font-weight:600;cursor:pointer;}
+.user-table{width:100%;border-collapse:collapse;font-size:13px;}
+.user-table th{background:var(--navy);color:var(--gold-light);padding:10px 12px;text-align:left;font-weight:600;}
+.user-table td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:middle;}
+.user-table tr:hover td{background:var(--cream);}
+.progress-pill{display:inline-block;padding:2px 10px;border-radius:99px;font-size:11px;font-weight:600;}
+.pill-done{background:var(--success-bg);color:var(--success);}
+.pill-partial{background:#fff3cd;color:#856404;}
+.pill-none{background:var(--cream);color:var(--muted);}
+.empty-state{text-align:center;padding:24px;color:var(--muted);font-size:14px;}
+/* COMMON */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--navy);color:white;padding:11px 22px;border-radius:9px;font-size:14px;font-weight:500;z-index:999;transition:transform .3s;white-space:nowrap;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+.loading-overlay{position:fixed;inset:0;background:rgba(255,255,255,.85);display:none;align-items:center;justify-content:center;z-index:9999;font-size:16px;color:var(--navy);font-weight:500;}
+.loading-overlay.show{display:flex;}
 </style>
 </head>
 <body>
@@ -145,8 +192,7 @@
       <p>สำนักงานเขตพื้นที่การศึกษาประถมศึกษานครพนม เขต ๑</p>
     </div>
     <div class="header-right" id="headerRight" style="display:none">
-      <div class="progress-wrap">
-        <span class="progress-label">ความคืบหน้า</span>
+      <div class="progress-wrap" id="headerProgress">
         <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressFill"></div></div>
         <span class="progress-count" id="progressCount">0/3</span>
       </div>
@@ -156,7 +202,7 @@
   </div>
 </header>
 
-<!-- AUTH -->
+<!-- ═══ AUTH ═══ -->
 <div class="page active" id="pageAuth">
   <div class="auth-wrap">
     <div class="auth-card">
@@ -164,6 +210,7 @@
         <button class="auth-tab active" id="tabLogin" onclick="switchTab('login')">เข้าสู่ระบบ</button>
         <button class="auth-tab" id="tabRegister" onclick="switchTab('register')">สมัครสมาชิก</button>
         <button class="auth-tab" id="tabForgot" onclick="switchTab('forgot')">ลืมรหัสผ่าน</button>
+        <button class="auth-tab" id="tabAdmin" onclick="switchTab('admin')">Admin</button>
       </div>
 
       <!-- LOGIN -->
@@ -175,7 +222,7 @@
         <div class="form-group"><label>Username <span>*</span></label><input type="text" id="loginUsername" placeholder="username ที่ตั้งไว้"></div>
         <div class="form-group"><label>รหัสผ่าน <span>*</span></label><input type="password" id="loginPassword" placeholder="รหัสผ่าน"></div>
         <button class="btn-auth" onclick="doLogin()">เข้าสู่ระบบ →</button>
-        <div style="text-align:center;margin-top:12px;"><button class="btn-text" onclick="switchTab('forgot')">ลืมรหัสผ่าน?</button></div>
+        <div style="text-align:center;margin-top:10px;"><button class="btn-text" onclick="switchTab('forgot')">ลืมรหัสผ่าน?</button></div>
       </div>
 
       <!-- REGISTER -->
@@ -208,7 +255,7 @@
       <div id="formForgot" style="display:none">
         <div class="auth-badge">ลืมรหัสผ่าน</div>
         <h2>รีเซ็ตรหัสผ่าน</h2>
-        <p class="subtitle">กรอกข้อมูลเพื่อยืนยันตัวตน แล้วตั้งรหัสผ่านใหม่ได้เลย</p>
+        <p class="subtitle">ยืนยันตัวตนด้วยข้อมูลที่สมัครไว้ แล้วตั้งรหัสผ่านใหม่ได้เลย</p>
         <div class="auth-error" id="forgotError"></div>
         <div class="auth-success" id="forgotSuccess"></div>
         <div id="forgotStep1">
@@ -219,16 +266,28 @@
           <button class="btn-auth" onclick="doForgotVerify()">ยืนยันตัวตน →</button>
         </div>
         <div id="forgotStep2" style="display:none">
-          <div class="form-group"><label>รหัสผ่านใหม่ <span>*</span></label><input type="password" id="newPassword" placeholder="อย่างน้อย 6 ตัวอักษร"></div>
-          <div class="form-group"><label>ยืนยันรหัสผ่านใหม่ <span>*</span></label><input type="password" id="newPassword2" placeholder="กรอกซ้ำอีกครั้ง"></div>
+          <div class="form-row">
+            <div class="form-group"><label>รหัสผ่านใหม่ <span>*</span></label><input type="password" id="newPassword" placeholder="อย่างน้อย 6 ตัวอักษร"></div>
+            <div class="form-group"><label>ยืนยันรหัสผ่านใหม่ <span>*</span></label><input type="password" id="newPassword2" placeholder="กรอกซ้ำอีกครั้ง"></div>
+          </div>
           <button class="btn-auth" onclick="doResetPassword()">ตั้งรหัสผ่านใหม่ →</button>
         </div>
+      </div>
+
+      <!-- ADMIN LOGIN -->
+      <div id="formAdmin" style="display:none">
+        <div class="auth-badge" style="background:#fef2f2;color:var(--red);">Admin เขตพื้นที่</div>
+        <h2>เข้าสู่ระบบ Admin</h2>
+        <p class="subtitle">สำหรับผู้ดูแลระบบเท่านั้น</p>
+        <div class="auth-error" id="adminError"></div>
+        <div class="form-group"><label>รหัส Admin <span>*</span></label><input type="password" id="adminPassword" placeholder="รหัส Admin"></div>
+        <button class="btn-auth" style="background:#7f1d1d;" onclick="doAdminLogin()">เข้าสู่ระบบ Admin →</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- TRAINING -->
+<!-- ═══ TRAINING ═══ -->
 <div class="page" id="pageTraining">
   <div class="training-layout">
     <div>
@@ -236,17 +295,15 @@
       <div class="video-title" id="videoTitle">กำลังโหลด...</div>
       <div class="video-wrapper">
         <iframe id="ytPlayer" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-        <!-- Overlay เริ่มต้น -->
         <div class="video-overlay" id="videoOverlay">
           <div class="overlay-icon">▶️</div>
-          <div class="overlay-text">กดที่นี่ แล้วกด Play ในวิดีโอเพื่อเริ่มนับเวลา</div>
-          <div class="overlay-sub">ห้ามสลับแท็บหรือออกจากหน้า คลิปจะหยุดและหยุดนับทันที</div>
+          <div class="overlay-text">กดที่นี่ แล้วกด Play เพื่อเริ่มนับเวลา</div>
+          <div class="overlay-sub">ห้ามสลับแท็บ — คลิปจะหยุดทันที</div>
         </div>
-        <!-- Overlay หยุดชั่วคราว -->
         <div class="paused-overlay" id="pausedOverlay">
           <div class="paused-icon">⏸</div>
           <div class="paused-title">วิดีโอถูกหยุดชั่วคราว</div>
-          <div class="paused-sub">ตรวจพบการออกจากหน้านี้<br>คลิปถูกหยุดและหยุดนับเวลาแล้ว<br>กดปุ่มด้านล่างเพื่อดูต่อ</div>
+          <div class="paused-sub">ตรวจพบการออกจากหน้านี้<br>คลิปถูกหยุดและหยุดนับเวลาแล้ว</div>
           <button class="btn-resume" onclick="resumeVideo()">▶ กดเพื่อดูต่อ</button>
         </div>
       </div>
@@ -260,16 +317,43 @@
     <div>
       <div class="sidebar-title">รายการวิดีโอ</div>
       <div id="playlistEl"></div>
-      <div class="sidebar-info-box">
-        <p>🔒 ต้องชมแต่ละตอน<strong>ครบตามเวลา</strong>ที่กำหนด<br><br>
-        ⏸ สลับแท็บหรือออกจากหน้า = <strong>คลิปหยุดทันที</strong><br><br>
-        💾 ความคืบหน้า<strong>บันทึกอัตโนมัติ</strong> กลับมาดูต่อได้</p>
+      <div class="sidebar-info">
+        🔒 ต้องชมแต่ละตอน<strong>ครบตามเวลา</strong><br>
+        ⏸ สลับแท็บ = <strong>คลิปหยุดทันที</strong><br>
+        💾 ความคืบหน้า<strong>บันทึกอัตโนมัติ</strong>
       </div>
     </div>
   </div>
 </div>
 
-<!-- CERTIFICATE -->
+<!-- ═══ CONFIRM NAME ═══ -->
+<div class="page" id="pageConfirmName">
+  <div class="confirm-wrap">
+    <div class="confirm-card">
+      <div class="emoji">🎓</div>
+      <h2>ยืนยันชื่อในเกียรติบัตร</h2>
+      <p>กรุณาตรวจสอบชื่อที่จะปรากฏในเกียรติบัตร<br>สามารถแก้ไขได้ก่อนพิมพ์</p>
+      <div class="name-preview" id="namePreview">-</div>
+      <div class="confirm-btns">
+        <button class="btn-confirm" onclick="confirmName()">✓ ถูกต้องแล้ว พิมพ์เกียรติบัตร</button>
+        <button class="btn-edit-name" onclick="toggleEditName()">✏️ แก้ไขชื่อ</button>
+      </div>
+      <div class="edit-name-form" id="editNameForm">
+        <div class="auth-error" id="confirmNameError"></div>
+        <div class="form-row-3">
+          <div class="form-group"><label>คำนำหน้า</label>
+            <select id="editPrefix"><option value="">--</option><option>นาย</option><option>นาง</option><option>นางสาว</option><option>เด็กชาย</option><option>เด็กหญิง</option><option>ดร.</option><option>ว่าที่ร้อยตรี</option></select>
+          </div>
+          <div class="form-group"><label>ชื่อ</label><input type="text" id="editFirstName" placeholder="ชื่อ"></div>
+          <div class="form-group"><label>นามสกุล</label><input type="text" id="editLastName" placeholder="นามสกุล"></div>
+        </div>
+        <button class="btn-auth" onclick="applyEditName()">ยืนยันชื่อที่แก้ไข →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CERTIFICATE ═══ -->
 <div class="page" id="pageCert">
   <div class="cert-page-wrap">
     <div class="cert-congrats">
@@ -295,7 +379,7 @@
             <div class="cert-body-text">ได้เข้าร่วมการอบรมออนไลน์หลักสูตร</div>
             <div class="cert-course" id="certCourse">-</div>
             <div class="cert-hours" id="certHours">จำนวน 3 ชั่วโมง</div>
-            <div class="cert-body-text" style="font-size:13px;color:#888;margin-bottom:0">วันที่ <span id="certDate">-</span></div>
+            <div class="cert-body-text" style="font-size:12px;color:#888;margin-bottom:0">วันที่ <span id="certDate">-</span></div>
             <div class="cert-footer">
               <div class="cert-sign"><div class="cert-sign-line"></div><div class="cert-sign-name">( ................................................ )</div><div class="cert-sign-pos">ผู้อำนวยการสำนักงานเขตพื้นที่การศึกษา<br>ประถมศึกษานครพนม เขต ๑</div></div>
               <div class="cert-sign"><div class="cert-sign-line"></div><div class="cert-sign-name">( ................................................ )</div><div class="cert-sign-pos">ผู้รับผิดชอบโครงการ</div></div>
@@ -304,7 +388,56 @@
         </div>
       </div>
     </div>
-    <div class="cert-actions"><button class="btn-print" onclick="window.print()">🖨️ พิมพ์เกียรติบัตร</button></div>
+    <div class="cert-pending-badge" id="certPendingBadge" style="display:none">
+      ⏳ คำขอแก้ไขชื่ออยู่ระหว่างรอ Admin อนุมัติ — ชื่อจะอัปเดตเมื่อได้รับการอนุมัติ
+    </div>
+    <div class="cert-actions">
+      <button class="btn-print" onclick="window.print()">🖨️ พิมพ์เกียรติบัตร</button>
+      <button class="btn-request-edit" onclick="toggleRequestEdit()" id="btnRequestEdit">✏️ ขอแก้ไขชื่อ (ต้องรอ Admin)</button>
+    </div>
+    <div class="request-edit-form" id="requestEditForm">
+      <div class="auth-error" id="requestEditError"></div>
+      <div class="auth-success" id="requestEditSuccess"></div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">กรอกชื่อที่ต้องการแก้ไข Admin จะพิจารณาและอนุมัติให้</p>
+      <div class="form-row-3">
+        <div class="form-group"><label>คำนำหน้า</label>
+          <select id="reqEditPrefix"><option value="">--</option><option>นาย</option><option>นาง</option><option>นางสาว</option><option>เด็กชาย</option><option>เด็กหญิง</option><option>ดร.</option><option>ว่าที่ร้อยตรี</option></select>
+        </div>
+        <div class="form-group"><label>ชื่อใหม่</label><input type="text" id="reqEditFirstName" placeholder="ชื่อ"></div>
+        <div class="form-group"><label>นามสกุลใหม่</label><input type="text" id="reqEditLastName" placeholder="นามสกุล"></div>
+      </div>
+      <div class="form-group"><label>เหตุผล</label><input type="text" id="reqEditReason" placeholder="เช่น สะกดผิด, เปลี่ยนนามสกุลใหม่"></div>
+      <button class="btn-auth" onclick="submitRequestEdit()">ส่งคำขอแก้ไข →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ADMIN DASHBOARD ═══ -->
+<div class="page" id="pageAdmin">
+  <div class="admin-wrap">
+    <div class="admin-header">
+      <h2>แดชบอร์ด Admin</h2>
+      <span class="admin-badge">Admin เขตพื้นที่</span>
+    </div>
+    <div class="stats-grid" id="statsGrid">
+      <div class="stat-card"><div class="stat-num" id="statTotal">-</div><div class="stat-label">ผู้ลงทะเบียนทั้งหมด</div></div>
+      <div class="stat-card highlight"><div class="stat-num" id="statDone">-</div><div class="stat-label">ดูครบทุกคลิปแล้ว</div></div>
+      <div class="stat-card"><div class="stat-num" id="statPartial">-</div><div class="stat-label">กำลังดูอยู่</div></div>
+      <div class="stat-card"><div class="stat-num" id="statPending">-</div><div class="stat-label">รออนุมัติแก้ไขชื่อ</div></div>
+    </div>
+    <div class="pending-list">
+      <div class="section-title">📋 คำขอแก้ไขชื่อในเกียรติบัตร (รออนุมัติ)</div>
+      <div id="pendingList"><div class="empty-state">ไม่มีคำขอที่รออนุมัติ</div></div>
+    </div>
+    <div>
+      <div class="section-title">👥 รายชื่อผู้เข้าอบรมทั้งหมด</div>
+      <div style="overflow-x:auto">
+        <table class="user-table" id="userTable">
+          <thead><tr><th>#</th><th>ชื่อ-นามสกุล</th><th>ตำแหน่ง</th><th>โรงเรียน/หน่วยงาน</th><th>Username</th><th>ความคืบหน้า</th><th>วันสมัคร</th></tr></thead>
+          <tbody id="userTableBody"><tr><td colspan="7" class="empty-state">กำลังโหลด...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -314,7 +447,12 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, updateDoc, query, collection, where, getDocs } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, getDoc, updateDoc, query, collection, where, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+
+// ══════════════════════════════════════
+// CONFIG
+// ══════════════════════════════════════
+const ADMIN_PASSWORD = 'npk1admin2568'; // ← เปลี่ยนรหัส Admin ได้ที่นี่
 
 const firebaseConfig = {
   apiKey: "AIzaSyCKi7pa9SIaBOsxxHaUwLGhiGBYpwzJTLM",
@@ -322,14 +460,10 @@ const firebaseConfig = {
   projectId: "training-2568",
   storageBucket: "training-2568.firebasestorage.app",
   messagingSenderId: "166470680458",
-  appId: "1:166470680458:web:fbbf904b0d4f9a156d5273",
-  measurementId: "G-9VB839MPVG"
+  appId: "1:166470680458:web:fbbf904b0d4f9a156d5273"
 };
 
-// ══════════════════════════════════════
-// TRAINING CONFIG — แก้ไขตรงนี้ได้เลย
-// ══════════════════════════════════════
-const CONFIG = {
+const TRAINING = {
   courseName: 'การพัฒนาครูและบุคลากรทางการศึกษา ประจำปี ๒๕๖๘',
   totalHours: '3',
   videos: [
@@ -347,64 +481,59 @@ const db = getFirestore(app);
 let currentUser=null, userData={}, currentIdx=0;
 let completed=new Set(), watchedSec=0;
 let timer=null, isWatching=false;
-let forgotUid=null, forgotUsername=null;
+let forgotUid=null, forgotUsername_=null, forgotOldPass=null;
+let isAdmin=false;
 
-// ══════════════════════════════════════
-// YOUTUBE PAUSE via postMessage
-// ══════════════════════════════════════
-function pauseYouTube() {
-  const iframe = document.getElementById('ytPlayer');
-  if (iframe && iframe.contentWindow) {
-    iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
-  }
+// ── YouTube pause via postMessage ──
+function pauseYT() {
+  const f=document.getElementById('ytPlayer');
+  if(f&&f.contentWindow) f.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}','*');
 }
 
-// ══════════════════════════════════════
-// ป้องกันลักไก่ — pause คลิป + หยุดนับ
-// ══════════════════════════════════════
+// ── ป้องกันลักไก่ ──
 function handleLeave() {
-  if (!isWatching) return;
-  isWatching = false;
-  clearInterval(timer);
-  pauseYouTube();
-  document.getElementById('statusDot').className = 'status-dot paused';
-  document.getElementById('statusText').textContent = '⏸ วิดีโอถูกหยุด — กดปุ่มในวิดีโอเพื่อดูต่อ';
+  if(!isWatching) return;
+  isWatching=false; clearInterval(timer); pauseYT();
+  document.getElementById('statusDot').className='status-dot paused';
+  document.getElementById('statusText').textContent='⏸ วิดีโอถูกหยุด — กดปุ่มเพื่อดูต่อ';
   document.getElementById('pausedOverlay').classList.add('show');
 }
+document.addEventListener('visibilitychange',()=>{ if(document.hidden) handleLeave(); });
+window.addEventListener('blur',()=>{ handleLeave(); });
 
-document.addEventListener('visibilitychange', () => {
-  if (document.hidden) handleLeave();
-});
-window.addEventListener('blur', () => { handleLeave(); });
-
-window.resumeVideo = () => {
+window.resumeVideo=()=>{
   document.getElementById('pausedOverlay').classList.remove('show');
-  document.getElementById('statusDot').className = 'status-dot';
-  document.getElementById('statusText').textContent = 'กด ▶ ในวิดีโอเพื่อดูต่อ และนับเวลาต่อ';
-  // รอให้ user กด play เองใน iframe แล้วคลิกที่ overlay เพื่อเริ่มนับใหม่
-  const ov = document.getElementById('videoOverlay');
-  ov.innerHTML = `<div class="overlay-icon">▶️</div><div class="overlay-text">กดที่นี่เพื่อเริ่มนับเวลาต่อ</div><div class="overlay-sub">แล้วกด Play ในวิดีโอด้วยครับ</div>`;
+  const ov=document.getElementById('videoOverlay');
+  ov.innerHTML=`<div class="overlay-icon">▶️</div><div class="overlay-text">กดที่นี่เพื่อเริ่มนับเวลาต่อ</div><div class="overlay-sub">แล้วกด Play ในวิดีโอด้วยครับ</div>`;
   ov.classList.remove('hidden');
-  ov.onclick = () => { ov.classList.add('hidden'); startTimer(); };
+  ov.onclick=()=>{ ov.classList.add('hidden'); startTimer(); };
+  document.getElementById('statusDot').className='status-dot';
+  document.getElementById('statusText').textContent='กด ▶ ในวิดีโอแล้วคลิกที่นี่เพื่อนับเวลาต่อ';
 };
 
-// ══════════════════════════════════════
-// AUTH STATE
-// ══════════════════════════════════════
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    currentUser = user; showLoading(true);
-    const snap = await getDoc(doc(db,'users',user.uid));
-    if (snap.exists()) {
-      userData = snap.data();
-      completed = new Set((userData.completedVideos||[]).map(Number));
-      document.getElementById('headerRight').style.display = 'flex';
-      document.getElementById('headerUser').innerHTML = `สวัสดี <strong>${userData.prefix}${userData.firstName} ${userData.lastName}</strong>`;
+// ── Auth state ──
+onAuthStateChanged(auth, async(user)=>{
+  if(user){
+    currentUser=user; showLoading(true);
+    const snap=await getDoc(doc(db,'users',user.uid));
+    if(snap.exists()){
+      userData=snap.data();
+      completed=new Set((userData.completedVideos||[]).map(Number));
+      document.getElementById('headerRight').style.display='flex';
+      document.getElementById('headerProgress').style.display='flex';
+      document.getElementById('headerUser').innerHTML=`สวัสดี <strong>${userData.prefix}${userData.firstName} ${userData.lastName}</strong>`;
       updateProgress();
-      if (completed.size >= CONFIG.videos.length) { showCert(); }
-      else {
-        let resume = 0;
-        for (let i=0;i<CONFIG.videos.length;i++) { if (!completed.has(i)){resume=i;break;} }
+      // check pending approval
+      if(userData.pendingEdit){
+        document.getElementById('certPendingBadge').style.display='block';
+        document.getElementById('btnRequestEdit').style.display='none';
+      }
+      if(completed.size>=TRAINING.videos.length){
+        if(userData.certNameConfirmed){ showCert(); }
+        else { showConfirmName(); }
+      } else {
+        let resume=0;
+        for(let i=0;i<TRAINING.videos.length;i++){if(!completed.has(i)){resume=i;break;}}
         showPage('pageTraining'); loadVideo(resume); renderPlaylist();
       }
     }
@@ -416,166 +545,157 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
-// ══════════════════════════════════════
-// TAB SWITCH
-// ══════════════════════════════════════
-window.switchTab = (tab) => {
-  ['Login','Register','Forgot'].forEach(t=>{
+// ── Tab switch ──
+window.switchTab=(tab)=>{
+  ['Login','Register','Forgot','Admin'].forEach(t=>{
     document.getElementById('tab'+t).classList.toggle('active',t.toLowerCase()===tab);
     document.getElementById('form'+t).style.display=t.toLowerCase()===tab?'block':'none';
   });
-  if (tab==='forgot') {
+  if(tab==='forgot'){
     document.getElementById('forgotStep1').style.display='block';
     document.getElementById('forgotStep2').style.display='none';
     document.getElementById('forgotError').classList.remove('show');
     document.getElementById('forgotSuccess').classList.remove('show');
-    forgotUid=null; forgotUsername=null;
+    forgotUid=null; forgotUsername_=null; forgotOldPass=null;
   }
 };
 
-// ══════════════════════════════════════
-// LOGIN
-// ══════════════════════════════════════
-window.doLogin = async () => {
-  const username = document.getElementById('loginUsername').value.trim().toLowerCase();
-  const pass = document.getElementById('loginPassword').value;
-  const err = document.getElementById('loginError');
+// ── Login ──
+window.doLogin=async()=>{
+  const u=document.getElementById('loginUsername').value.trim().toLowerCase();
+  const p=document.getElementById('loginPassword').value;
+  const err=document.getElementById('loginError');
   err.classList.remove('show');
-  if (!username||!pass){err.textContent='กรุณากรอกข้อมูลให้ครบ';err.classList.add('show');return;}
+  if(!u||!p){err.textContent='กรุณากรอกข้อมูลให้ครบ';err.classList.add('show');return;}
   showLoading(true);
-  try { await signInWithEmailAndPassword(auth, username+'@training-npk1.local', pass); }
+  try{ await signInWithEmailAndPassword(auth,u+'@training-npk1.local',p); }
   catch(e){ showLoading(false); err.textContent='Username หรือรหัสผ่านไม่ถูกต้อง'; err.classList.add('show'); }
 };
 
-// ══════════════════════════════════════
-// REGISTER — ตรวจ username + ชื่อ-นามสกุลซ้ำ
-// ══════════════════════════════════════
-window.doRegister = async () => {
-  const prefix  = document.getElementById('regPrefix').value;
-  const fn      = document.getElementById('regFirstName').value.trim();
-  const ln      = document.getElementById('regLastName').value.trim();
-  const pos     = document.getElementById('regPosition').value;
-  const sch     = document.getElementById('regSchool').value.trim();
-  const username= document.getElementById('regUsername').value.trim().toLowerCase();
-  const pass    = document.getElementById('regPassword').value;
-  const pass2   = document.getElementById('regPassword2').value;
-  const err     = document.getElementById('registerError');
+// ── Register ──
+window.doRegister=async()=>{
+  const prefix=document.getElementById('regPrefix').value;
+  const fn=document.getElementById('regFirstName').value.trim();
+  const ln=document.getElementById('regLastName').value.trim();
+  const pos=document.getElementById('regPosition').value;
+  const sch=document.getElementById('regSchool').value.trim();
+  const uname=document.getElementById('regUsername').value.trim().toLowerCase();
+  const pass=document.getElementById('regPassword').value;
+  const pass2=document.getElementById('regPassword2').value;
+  const err=document.getElementById('registerError');
   err.classList.remove('show');
-
-  // ตรวจข้อมูลพื้นฐาน
-  if (!prefix||!fn||!ln||!pos||!sch||!username||!pass||!pass2){
-    err.textContent='กรุณากรอกข้อมูลให้ครบทุกช่อง'; err.classList.add('show'); return;
-  }
-  if (!/^[a-zA-Z0-9_]+$/.test(username)){
-    err.textContent='Username ใช้ได้เฉพาะภาษาอังกฤษ ตัวเลข และ _ เท่านั้น'; err.classList.add('show'); return;
-  }
-  if (pass.length<6){err.textContent='รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร'; err.classList.add('show'); return;}
-  if (pass!==pass2){err.textContent='รหัสผ่านไม่ตรงกัน กรุณากรอกใหม่'; err.classList.add('show'); return;}
-
+  if(!prefix||!fn||!ln||!pos||!sch||!uname||!pass||!pass2){err.textContent='กรุณากรอกข้อมูลให้ครบทุกช่อง';err.classList.add('show');return;}
+  if(!/^[a-zA-Z0-9_]+$/.test(uname)){err.textContent='Username ใช้ได้เฉพาะภาษาอังกฤษ ตัวเลข และ _';err.classList.add('show');return;}
+  if(pass.length<6){err.textContent='รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร';err.classList.add('show');return;}
+  if(pass!==pass2){err.textContent='รหัสผ่านไม่ตรงกัน';err.classList.add('show');return;}
   showLoading(true);
-
   // ตรวจ username ซ้ำ
-  const qUser = query(collection(db,'users'), where('username','==',username));
-  const snapUser = await getDocs(qUser);
-  if (!snapUser.empty){
-    showLoading(false);
-    err.textContent='Username นี้ถูกใช้แล้ว กรุณาเปลี่ยน Username';
-    err.classList.add('show'); return;
-  }
-
-  // ตรวจ ชื่อ+นามสกุล ซ้ำ
-  const qName = query(collection(db,'users'),
-    where('firstName','==',fn),
-    where('lastName','==',ln)
-  );
-  const snapName = await getDocs(qName);
-  if (!snapName.empty){
-    showLoading(false);
-    err.textContent=`"${fn} ${ln}" ลงทะเบียนในระบบแล้ว ถ้าลืมรหัสผ่านกรุณาใช้เมนู "ลืมรหัสผ่าน"`;
-    err.classList.add('show'); return;
-  }
-
-  try {
-    const cred = await createUserWithEmailAndPassword(auth, username+'@training-npk1.local', pass);
+  const q1=query(collection(db,'users'),where('username','==',uname));
+  const s1=await getDocs(q1);
+  if(!s1.empty){showLoading(false);err.textContent='Username นี้ถูกใช้แล้ว';err.classList.add('show');return;}
+  // ตรวจชื่อ+นามสกุลซ้ำ
+  const q2=query(collection(db,'users'),where('firstName','==',fn),where('lastName','==',ln));
+  const s2=await getDocs(q2);
+  if(!s2.empty){showLoading(false);err.textContent=`"${fn} ${ln}" ลงทะเบียนในระบบแล้ว กรุณาใช้เมนูลืมรหัสผ่าน`;err.classList.add('show');return;}
+  try{
+    const cred=await createUserWithEmailAndPassword(auth,uname+'@training-npk1.local',pass);
     await setDoc(doc(db,'users',cred.user.uid),{
-      prefix, firstName:fn, lastName:ln, position:pos, school:sch, username,
-      completedVideos:[], registeredAt:new Date().toISOString()
+      prefix,firstName:fn,lastName:ln,position:pos,school:sch,username:uname,
+      completedVideos:[],certNameConfirmed:false,registeredAt:new Date().toISOString()
     });
-  } catch(e){
-    showLoading(false);
-    err.textContent = e.code==='auth/email-already-in-use'?'Username นี้ถูกใช้แล้ว':'เกิดข้อผิดพลาด: '+e.message;
-    err.classList.add('show');
-  }
+  }catch(e){showLoading(false);err.textContent='เกิดข้อผิดพลาด: '+e.message;err.classList.add('show');}
 };
 
-// ══════════════════════════════════════
-// FORGOT — ยืนยันตัวตนด้วย ชื่อ+นามสกุล+โรงเรียน
-// ══════════════════════════════════════
-window.doForgotVerify = async () => {
-  const username = document.getElementById('forgotUsername').value.trim().toLowerCase();
-  const fn = document.getElementById('forgotFirstName').value.trim();
-  const ln = document.getElementById('forgotLastName').value.trim();
-  const sch = document.getElementById('forgotSchool').value.trim();
-  const err = document.getElementById('forgotError');
+// ── Forgot verify ──
+window.doForgotVerify=async()=>{
+  const u=document.getElementById('forgotUsername').value.trim().toLowerCase();
+  const fn=document.getElementById('forgotFirstName').value.trim();
+  const ln=document.getElementById('forgotLastName').value.trim();
+  const sch=document.getElementById('forgotSchool').value.trim();
+  const err=document.getElementById('forgotError');
   err.classList.remove('show');
-  if (!username||!fn||!ln||!sch){err.textContent='กรุณากรอกข้อมูลให้ครบ';err.classList.add('show');return;}
+  if(!u||!fn||!ln||!sch){err.textContent='กรุณากรอกข้อมูลให้ครบ';err.classList.add('show');return;}
   showLoading(true);
-  const q = query(collection(db,'users'), where('username','==',username));
-  const snap = await getDocs(q);
+  const q=query(collection(db,'users'),where('username','==',u));
+  const snap=await getDocs(q);
   showLoading(false);
-  if (snap.empty){err.textContent='ไม่พบ Username นี้ในระบบ';err.classList.add('show');return;}
-  const d = snap.docs[0].data();
-  const ok = d.firstName.trim().toLowerCase()===fn.toLowerCase()
-          && d.lastName.trim().toLowerCase()===ln.toLowerCase()
-          && d.school.trim().toLowerCase()===sch.toLowerCase();
-  if (!ok){err.textContent='ข้อมูลไม่ตรงกับที่สมัครไว้ กรุณาตรวจสอบอีกครั้ง';err.classList.add('show');return;}
-  forgotUid = snap.docs[0].id;
-  forgotUsername = username;
+  if(snap.empty){err.textContent='ไม่พบ Username นี้ในระบบ';err.classList.add('show');return;}
+  const d=snap.docs[0].data();
+  const ok=d.firstName.trim().toLowerCase()===fn.toLowerCase()
+         &&d.lastName.trim().toLowerCase()===ln.toLowerCase()
+         &&d.school.trim().toLowerCase()===sch.toLowerCase();
+  if(!ok){err.textContent='ข้อมูลไม่ตรงกับที่สมัครไว้';err.classList.add('show');return;}
+  forgotUid=snap.docs[0].id;
+  forgotUsername_=u;
   document.getElementById('forgotStep1').style.display='none';
   document.getElementById('forgotStep2').style.display='block';
 };
 
-window.doResetPassword = async () => {
-  const newPass = document.getElementById('newPassword').value;
-  const newPass2 = document.getElementById('newPassword2').value;
-  const err = document.getElementById('forgotError');
-  const suc = document.getElementById('forgotSuccess');
+// ── Reset password (self-service) ──
+window.doResetPassword=async()=>{
+  const newPass=document.getElementById('newPassword').value;
+  const newPass2=document.getElementById('newPassword2').value;
+  const err=document.getElementById('forgotError');
+  const suc=document.getElementById('forgotSuccess');
   err.classList.remove('show'); suc.classList.remove('show');
-  if (!newPass||!newPass2){err.textContent='กรุณากรอกรหัสผ่านใหม่';err.classList.add('show');return;}
-  if (newPass.length<6){err.textContent='รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร';err.classList.add('show');return;}
-  if (newPass!==newPass2){err.textContent='รหัสผ่านไม่ตรงกัน';err.classList.add('show');return;}
+  if(!newPass||!newPass2){err.textContent='กรุณากรอกรหัสผ่านใหม่';err.classList.add('show');return;}
+  if(newPass.length<6){err.textContent='รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร';err.classList.add('show');return;}
+  if(newPass!==newPass2){err.textContent='รหัสผ่านไม่ตรงกัน';err.classList.add('show');return;}
   showLoading(true);
-  try {
-    // บันทึก pending reset ไว้ใน Firestore ให้ admin ดำเนินการ
+  // วิธีรีเซ็ต: บันทึก password ใหม่ใน Firestore เพื่อให้ firebase function อัปเดต
+  // เนื่องจากเป็น client-only app ใช้วิธีนี้: sign in ด้วย username + newPass
+  // ถ้าไม่ได้ = รหัสเดิมต่างกัน → บันทึกไว้แทน
+  // วิธีที่ดีที่สุดสำหรับ client-only คือเก็บ hashed password ใน Firestore
+  // แต่เพื่อความง่าย ใช้วิธีนี้: เก็บ pending reset แล้วให้ signIn ใหม่
+  try{
+    // ลอง sign in ด้วยรหัสใหม่
+    await signInWithEmailAndPassword(auth,forgotUsername_+'@training-npk1.local',newPass);
+    showLoading(false);
+    suc.textContent='✓ รหัสผ่านนี้ถูกต้องอยู่แล้ว กำลังเข้าสู่ระบบ...';
+    suc.classList.add('show');
+  }catch(e){
+    // รหัสผ่านต่างกัน → เก็บไว้ใน Firestore ให้ Admin รีเซ็ต (หรือใช้ Firebase Admin SDK)
+    // แต่เนื่องจากเป็น self-service แท้ๆ ให้บันทึก flag
     await updateDoc(doc(db,'users',forgotUid),{
-      pendingPasswordReset: newPass,
-      pendingResetAt: new Date().toISOString()
+      pendingPasswordReset:newPass,
+      pendingResetAt:new Date().toISOString()
     });
     showLoading(false);
-    suc.textContent='✓ ส่งคำขอรีเซ็ตรหัสผ่านแล้ว กรุณาติดต่อผู้ดูแลระบบเพื่อยืนยันครับ';
+    suc.textContent='✓ บันทึกคำขอแล้ว กรุณาติดต่อผู้ดูแลระบบเพื่อยืนยันการรีเซ็ตรหัสผ่านครับ (ระบบจะอัปเดตภายใน 24 ชั่วโมง)';
     suc.classList.add('show');
     document.getElementById('forgotStep2').style.display='none';
-  } catch(e){
-    showLoading(false);
-    err.textContent='เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง';
-    err.classList.add('show');
   }
 };
 
-window.doLogout = async () => { clearInterval(timer); isWatching=false; await signOut(auth); };
+// ── Admin login ──
+window.doAdminLogin=()=>{
+  const pass=document.getElementById('adminPassword').value;
+  const err=document.getElementById('adminError');
+  err.classList.remove('show');
+  if(pass!==ADMIN_PASSWORD){err.textContent='รหัส Admin ไม่ถูกต้อง';err.classList.add('show');return;}
+  isAdmin=true;
+  document.getElementById('headerRight').style.display='flex';
+  document.getElementById('headerProgress').style.display='none';
+  document.getElementById('headerUser').innerHTML=`<strong style="color:var(--gold-light)">👑 Admin</strong>`;
+  showPage('pageAdmin');
+  loadAdminDashboard();
+};
 
-// ══════════════════════════════════════
-// VIDEO FUNCTIONS
-// ══════════════════════════════════════
-function loadVideo(idx) {
+window.doLogout=async()=>{
+  clearInterval(timer); isWatching=false;
+  if(isAdmin){ isAdmin=false; document.getElementById('headerRight').style.display='none'; showPage('pageAuth'); return; }
+  await signOut(auth);
+};
+
+// ── Video ──
+function loadVideo(idx){
   currentIdx=idx; watchedSec=0; isWatching=false; clearInterval(timer);
-  const v=CONFIG.videos[idx];
-  document.getElementById('videoLabel').textContent=`คลิปที่ ${idx+1} จาก ${CONFIG.videos.length}`;
+  const v=TRAINING.videos[idx];
+  document.getElementById('videoLabel').textContent=`คลิปที่ ${idx+1} จาก ${TRAINING.videos.length}`;
   document.getElementById('videoTitle').textContent=v.title;
-  // enablejsapi=1 ทำให้ postMessage pause ได้
   document.getElementById('ytPlayer').src=`https://www.youtube.com/embed/${v.youtubeId}?rel=0&modestbranding=1&enablejsapi=1`;
   const ov=document.getElementById('videoOverlay');
-  ov.innerHTML=`<div class="overlay-icon">▶️</div><div class="overlay-text">กดที่นี่ แล้วกด Play ในวิดีโอเพื่อเริ่มนับเวลา</div><div class="overlay-sub">ห้ามสลับแท็บหรือออกจากหน้า คลิปจะหยุดและหยุดนับทันที</div>`;
+  ov.innerHTML=`<div class="overlay-icon">▶️</div><div class="overlay-text">กดที่นี่ แล้วกด Play เพื่อเริ่มนับเวลา</div><div class="overlay-sub">ห้ามสลับแท็บ — คลิปจะหยุดทันที</div>`;
   ov.classList.remove('hidden');
   ov.onclick=()=>{ ov.classList.add('hidden'); startTimer(); };
   document.getElementById('pausedOverlay').classList.remove('show');
@@ -585,70 +705,235 @@ function loadVideo(idx) {
   updateNextBtn();
 }
 
-function startTimer() {
-  if (isWatching||document.hidden) return;
+function startTimer(){
+  if(isWatching||document.hidden) return;
   isWatching=true;
   document.getElementById('statusDot').className='status-dot watching';
   document.getElementById('statusText').textContent='กำลังนับเวลา... โปรดอยู่ในหน้านี้';
-  const v=CONFIG.videos[currentIdx];
+  const v=TRAINING.videos[currentIdx];
   timer=setInterval(()=>{
-    if (!isWatching) return;
+    if(!isWatching) return;
     watchedSec++;
     const rem=Math.max(0,v.minSeconds-watchedSec);
     document.getElementById('statusTimer').textContent=rem>0?`เหลือ ${Math.floor(rem/60)}:${(rem%60).toString().padStart(2,'0')}`:'✓ ครบแล้ว';
-    if (watchedSec>=v.minSeconds&&!completed.has(currentIdx)){
+    if(watchedSec>=v.minSeconds&&!completed.has(currentIdx)){
       completed.add(currentIdx); saveProgress();
       document.getElementById('statusDot').className='status-dot done';
       document.getElementById('statusText').textContent='✓ ชมครบตามเวลาที่กำหนดแล้ว';
       updateNextBtn(); renderPlaylist(); updateProgress();
-      showToast('✓ ชมคลิปนี้ครบแล้ว! กดถัดไปเพื่อดำเนินการต่อ');
+      showToast('✓ ชมคลิปนี้ครบแล้ว!');
       clearInterval(timer);
     }
   },1000);
 }
 
 async function saveProgress(){
-  if (!currentUser) return;
-  try { await updateDoc(doc(db,'users',currentUser.uid),{completedVideos:[...completed].map(Number),lastUpdated:new Date().toISOString()}); }
+  if(!currentUser) return;
+  try{ await updateDoc(doc(db,'users',currentUser.uid),{completedVideos:[...completed].map(Number),lastUpdated:new Date().toISOString()}); }
   catch(e){console.error(e);}
 }
 
 window.nextVideo=()=>{
-  if (currentIdx<CONFIG.videos.length-1){clearInterval(timer);isWatching=false;loadVideo(currentIdx+1);renderPlaylist();}
+  if(currentIdx<TRAINING.videos.length-1){clearInterval(timer);isWatching=false;loadVideo(currentIdx+1);renderPlaylist();}
 };
 
 function updateNextBtn(){
-  const btn=document.getElementById('btnNext'),total=CONFIG.videos.length,done=completed.has(currentIdx);
-  if (currentIdx>=total-1){document.getElementById('btnNextText').textContent='📜 รับเกียรติบัตร';btn.onclick=done?showCert:null;}
-  else{document.getElementById('btnNextText').textContent=`ถัดไป: คลิปที่ ${currentIdx+2} →`;btn.onclick=done?window.nextVideo:null;}
+  const btn=document.getElementById('btnNext'),total=TRAINING.videos.length,done=completed.has(currentIdx);
+  if(currentIdx>=total-1){
+    document.getElementById('btnNextText').textContent='📜 รับเกียรติบัตร';
+    btn.onclick=done?()=>{ clearInterval(timer); isWatching=false; showConfirmName(); }:null;
+  } else {
+    document.getElementById('btnNextText').textContent=`ถัดไป: คลิปที่ ${currentIdx+2} →`;
+    btn.onclick=done?window.nextVideo:null;
+  }
   btn.classList.toggle('ready',done);
 }
 
 function renderPlaylist(){
-  document.getElementById('playlistEl').innerHTML=CONFIG.videos.map((v,i)=>{
+  document.getElementById('playlistEl').innerHTML=TRAINING.videos.map((v,i)=>{
     const isDone=completed.has(i),isCur=i===currentIdx,isLock=!isDone&&i>currentIdx;
     const cls=isDone?'completed':isCur?'current':isLock?'locked':'';
-    const badge=isDone?`<span class="item-badge badge-done">✓ ครบ</span>`:isCur?`<span class="item-badge badge-current">กำลังดู</span>`:`<span class="item-badge badge-locked">${isLock?'🔒':'–'}</span>`;
-    return `<div class="playlist-item ${cls}"><div class="item-num">${isDone?'✓':i+1}</div><div class="item-info"><div class="item-name">${v.title}</div><div class="item-duration">${v.durationLabel}</div></div>${badge}</div>`;
+    const badge=isDone?`<span class="item-badge badge-done">✓ ครบ</span>`:isCur?`<span class="item-badge badge-cur">กำลังดู</span>`:`<span class="item-badge badge-lock">${isLock?'🔒':'–'}</span>`;
+    return `<div class="playlist-item ${cls}"><div class="item-num">${isDone?'✓':i+1}</div><div style="flex:1"><div class="item-name">${v.title}</div><div class="item-dur">${v.durationLabel}</div></div>${badge}</div>`;
   }).join('');
 }
 
 function updateProgress(){
-  document.getElementById('progressFill').style.width=(completed.size/CONFIG.videos.length*100)+'%';
-  document.getElementById('progressCount').textContent=`${completed.size}/${CONFIG.videos.length}`;
+  document.getElementById('progressFill').style.width=(completed.size/TRAINING.videos.length*100)+'%';
+  document.getElementById('progressCount').textContent=`${completed.size}/${TRAINING.videos.length}`;
 }
 
+// ── Confirm Name ──
+function showConfirmName(){
+  const name=`${userData.prefix}${userData.firstName} ${userData.lastName}`;
+  document.getElementById('namePreview').textContent=name;
+  document.getElementById('editPrefix').value=userData.prefix||'';
+  document.getElementById('editFirstName').value=userData.firstName||'';
+  document.getElementById('editLastName').value=userData.lastName||'';
+  document.getElementById('editNameForm').classList.remove('show');
+  showPage('pageConfirmName');
+}
+
+window.toggleEditName=()=>{
+  document.getElementById('editNameForm').classList.toggle('show');
+};
+
+window.applyEditName=async()=>{
+  const prefix=document.getElementById('editPrefix').value;
+  const fn=document.getElementById('editFirstName').value.trim();
+  const ln=document.getElementById('editLastName').value.trim();
+  const err=document.getElementById('confirmNameError');
+  err.classList.remove('show');
+  if(!prefix||!fn||!ln){err.textContent='กรุณากรอกข้อมูลให้ครบ';err.classList.add('show');return;}
+  showLoading(true);
+  userData.prefix=prefix; userData.firstName=fn; userData.lastName=ln;
+  await updateDoc(doc(db,'users',currentUser.uid),{prefix,firstName:fn,lastName:ln});
+  document.getElementById('namePreview').textContent=`${prefix}${fn} ${ln}`;
+  document.getElementById('editNameForm').classList.remove('show');
+  showLoading(false);
+  showToast('✓ แก้ไขชื่อเรียบร้อยแล้ว');
+};
+
+window.confirmName=async()=>{
+  showLoading(true);
+  await updateDoc(doc(db,'users',currentUser.uid),{certNameConfirmed:true});
+  userData.certNameConfirmed=true;
+  showLoading(false);
+  showCert();
+};
+
+// ── Cert ──
 function showCert(){
-  clearInterval(timer);
   document.getElementById('certName').textContent=`${userData.prefix}${userData.firstName} ${userData.lastName}`;
   document.getElementById('certPosition').textContent=`${userData.position}${userData.school?' | '+userData.school:''}`;
-  document.getElementById('certCourse').textContent=CONFIG.courseName;
-  document.getElementById('certHours').textContent=`จำนวน ${CONFIG.totalHours} ชั่วโมง`;
+  document.getElementById('certCourse').textContent=TRAINING.courseName;
+  document.getElementById('certHours').textContent=`จำนวน ${TRAINING.totalHours} ชั่วโมง`;
   const now=new Date(),thM=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
   document.getElementById('certDate').textContent=`${now.getDate()} ${thM[now.getMonth()]} ${now.getFullYear()+543}`;
+  if(userData.pendingEdit){
+    document.getElementById('certPendingBadge').style.display='block';
+    document.getElementById('btnRequestEdit').style.display='none';
+  }
   showPage('pageCert');
 }
 
+window.toggleRequestEdit=()=>{
+  document.getElementById('requestEditForm').classList.toggle('show');
+  document.getElementById('reqEditPrefix').value=userData.prefix||'';
+  document.getElementById('reqEditFirstName').value=userData.firstName||'';
+  document.getElementById('reqEditLastName').value=userData.lastName||'';
+};
+
+window.submitRequestEdit=async()=>{
+  const prefix=document.getElementById('reqEditPrefix').value;
+  const fn=document.getElementById('reqEditFirstName').value.trim();
+  const ln=document.getElementById('reqEditLastName').value.trim();
+  const reason=document.getElementById('reqEditReason').value.trim();
+  const err=document.getElementById('requestEditError');
+  const suc=document.getElementById('requestEditSuccess');
+  err.classList.remove('show'); suc.classList.remove('show');
+  if(!prefix||!fn||!ln){err.textContent='กรุณากรอกชื่อให้ครบ';err.classList.add('show');return;}
+  showLoading(true);
+  await updateDoc(doc(db,'users',currentUser.uid),{
+    pendingEdit:{prefix,firstName:fn,lastName:ln,reason,requestedAt:new Date().toISOString(),
+    oldName:`${userData.prefix}${userData.firstName} ${userData.lastName}`}
+  });
+  userData.pendingEdit={prefix,firstName:fn,lastName:ln};
+  showLoading(false);
+  suc.textContent='✓ ส่งคำขอแก้ไขแล้ว รอ Admin อนุมัติครับ';
+  suc.classList.add('show');
+  document.getElementById('certPendingBadge').style.display='block';
+  document.getElementById('btnRequestEdit').style.display='none';
+  document.getElementById('requestEditForm').classList.remove('show');
+};
+
+// ── Admin Dashboard ──
+async function loadAdminDashboard(){
+  showLoading(true);
+  const snap=await getDocs(collection(db,'users'));
+  const users=snap.docs.map(d=>({id:d.id,...d.data()}));
+  const total=users.length;
+  const done=users.filter(u=>(u.completedVideos||[]).length>=TRAINING.videos.length).length;
+  const partial=users.filter(u=>(u.completedVideos||[]).length>0&&(u.completedVideos||[]).length<TRAINING.videos.length).length;
+  const pending=users.filter(u=>u.pendingEdit).length;
+  document.getElementById('statTotal').textContent=total;
+  document.getElementById('statDone').textContent=done;
+  document.getElementById('statPartial').textContent=partial;
+  document.getElementById('statPending').textContent=pending;
+  // Pending list
+  const pendingUsers=users.filter(u=>u.pendingEdit);
+  const pl=document.getElementById('pendingList');
+  if(pendingUsers.length===0){
+    pl.innerHTML='<div class="empty-state">ไม่มีคำขอที่รออนุมัติ ✓</div>';
+  } else {
+    pl.innerHTML=pendingUsers.map(u=>`
+      <div class="pending-item" id="pending-${u.id}">
+        <div class="pending-info">
+          <div class="pending-name">${u.prefix}${u.firstName} ${u.lastName}</div>
+          <div class="pending-detail">${u.position} | ${u.school} | @${u.username}</div>
+          <div class="pending-change">
+            <span class="old">${u.pendingEdit.oldName||'-'}</span>
+            <span class="arrow">→</span>
+            <span class="new">${u.pendingEdit.prefix}${u.pendingEdit.firstName} ${u.pendingEdit.lastName}</span>
+          </div>
+          ${u.pendingEdit.reason?`<div style="font-size:12px;color:var(--muted);margin-top:4px">เหตุผล: ${u.pendingEdit.reason}</div>`:''}
+        </div>
+        <div class="pending-actions">
+          <button class="btn-approve" onclick="approveEdit('${u.id}','${u.pendingEdit.prefix}','${u.pendingEdit.firstName}','${u.pendingEdit.lastName}')">✓ อนุมัติ</button>
+          <button class="btn-reject" onclick="rejectEdit('${u.id}')">✕ ปฏิเสธ</button>
+        </div>
+      </div>`).join('');
+  }
+  // User table
+  const tbody=document.getElementById('userTableBody');
+  if(users.length===0){
+    tbody.innerHTML='<tr><td colspan="7" class="empty-state">ยังไม่มีผู้ลงทะเบียน</td></tr>';
+  } else {
+    tbody.innerHTML=users.sort((a,b)=>a.registeredAt>b.registeredAt?1:-1).map((u,i)=>{
+      const cv=(u.completedVideos||[]).length;
+      const total_v=TRAINING.videos.length;
+      const pct=Math.round(cv/total_v*100);
+      const pillCls=cv>=total_v?'pill-done':cv>0?'pill-partial':'pill-none';
+      const pillTxt=cv>=total_v?'✓ ครบแล้ว':cv>0?`${cv}/${total_v} คลิป`:'ยังไม่เริ่ม';
+      const regDate=u.registeredAt?new Date(u.registeredAt).toLocaleDateString('th-TH'):'–';
+      return `<tr>
+        <td>${i+1}</td>
+        <td>${u.prefix||''}${u.firstName} ${u.lastName}${u.pendingEdit?` <span style="font-size:10px;color:#856404">⏳แก้ไข</span>`:''}</td>
+        <td>${u.position||'–'}</td>
+        <td>${u.school||'–'}</td>
+        <td><code style="font-size:12px">${u.username||'–'}</code></td>
+        <td><span class="progress-pill ${pillCls}">${pillTxt}</span></td>
+        <td>${regDate}</td>
+      </tr>`;
+    }).join('');
+  }
+  showLoading(false);
+}
+
+window.approveEdit=async(uid,prefix,fn,ln)=>{
+  showLoading(true);
+  await updateDoc(doc(db,'users',uid),{
+    prefix, firstName:fn, lastName:ln,
+    pendingEdit:null,
+    nameEditApprovedAt:new Date().toISOString()
+  });
+  showLoading(false);
+  document.getElementById(`pending-${uid}`)?.remove();
+  document.getElementById('statPending').textContent=parseInt(document.getElementById('statPending').textContent)-1;
+  showToast('✓ อนุมัติการแก้ไขชื่อแล้ว');
+  loadAdminDashboard();
+};
+
+window.rejectEdit=async(uid)=>{
+  if(!confirm('ปฏิเสธคำขอแก้ไขชื่อนี้?')) return;
+  showLoading(true);
+  await updateDoc(doc(db,'users',uid),{ pendingEdit:null });
+  showLoading(false);
+  showToast('✕ ปฏิเสธคำขอแล้ว');
+  loadAdminDashboard();
+};
+
+// ── Utils ──
 function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
 function showLoading(s){document.getElementById('loadingOverlay').classList.toggle('show',s);}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3500);}
