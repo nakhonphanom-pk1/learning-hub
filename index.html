@@ -7,1015 +7,473 @@
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --navy: #1a2744;
-    --navy-light: #243460;
-    --gold: #c9a84c;
-    --gold-light: #e8c97a;
-    --gold-pale: #f7edd8;
-    --cream: #fdf8f0;
-    --white: #ffffff;
-    --text: #1a1a2e;
-    --text-muted: #5a6075;
-    --success: #2e7d5e;
-    --success-bg: #eaf4ef;
-    --border: #ddd4bc;
-    --shadow: 0 4px 24px rgba(26,39,68,0.10);
-    --shadow-lg: 0 8px 40px rgba(26,39,68,0.16);
+    --navy:#1a2744;--navy-light:#243460;--gold:#c9a84c;--gold-light:#e8c97a;--gold-pale:#f7edd8;
+    --cream:#fdf8f0;--white:#ffffff;--text:#1a1a2e;--text-muted:#5a6075;
+    --success:#2e7d5e;--success-bg:#eaf4ef;--border:#ddd4bc;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'Sarabun', sans-serif;
-    background: var(--cream);
-    color: var(--text);
-    min-height: 100vh;
-  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;}
+  .site-header{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.2);}
+  .header-inner{display:flex;align-items:center;gap:16px;padding:12px 32px;max-width:1100px;margin:0 auto;}
+  .header-logo{width:52px;height:52px;flex-shrink:0;}
+  .header-text h1{font-family:'Noto Serif Thai',serif;font-size:15px;font-weight:700;color:var(--gold-light);line-height:1.4;}
+  .header-text p{font-size:12px;color:rgba(255,255,255,.55);margin-top:2px;}
+  .header-right{margin-left:auto;display:flex;align-items:center;gap:14px;}
+  .header-user{font-size:13px;color:rgba(255,255,255,.7);}
+  .header-user strong{color:var(--gold-light);}
+  .btn-logout{padding:6px 14px;background:transparent;border:1px solid rgba(255,255,255,.3);border-radius:6px;color:rgba(255,255,255,.7);font-family:'Sarabun',sans-serif;font-size:12px;cursor:pointer;}
+  .btn-logout:hover{border-color:var(--gold);color:var(--gold);}
+  .progress-wrap{display:flex;align-items:center;gap:10px;}
+  .progress-label{font-size:13px;color:rgba(255,255,255,.6);white-space:nowrap;}
+  .progress-bar-wrap{width:120px;height:6px;background:rgba(255,255,255,.15);border-radius:99px;overflow:hidden;}
+  .progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-light));border-radius:99px;transition:width .6s;width:0%;}
+  .progress-count{font-size:13px;font-weight:600;color:var(--gold-light);}
+  .page{display:none;}.page.active{display:block;}
 
-  /* ===== HEADER ===== */
-  .site-header {
-    background: var(--navy);
-    padding: 0;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.2);
-  }
-  .header-inner {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 12px 32px;
-    max-width: 1100px;
-    margin: 0 auto;
-  }
-  .header-logo {
-    width: 52px;
-    height: 52px;
-    flex-shrink: 0;
-  }
-  .header-text h1 {
-    font-family: 'Noto Serif Thai', serif;
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--gold-light);
-    line-height: 1.4;
-  }
-  .header-text p {
-    font-size: 12px;
-    color: rgba(255,255,255,0.55);
-    margin-top: 2px;
-  }
-  .header-progress {
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .progress-label { font-size: 13px; color: rgba(255,255,255,0.6); white-space: nowrap; }
-  .progress-bar-wrap {
-    width: 140px;
-    height: 6px;
-    background: rgba(255,255,255,0.15);
-    border-radius: 99px;
-    overflow: hidden;
-  }
-  .progress-bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--gold), var(--gold-light));
-    border-radius: 99px;
-    transition: width 0.6s ease;
-    width: 0%;
-  }
-  .progress-count {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--gold-light);
-    white-space: nowrap;
-  }
+  /* AUTH */
+  .auth-wrap{min-height:calc(100vh - 76px);display:flex;align-items:center;justify-content:center;padding:48px 20px;}
+  .auth-card{background:var(--white);border-radius:20px;box-shadow:0 8px 40px rgba(26,39,68,.16);padding:44px 40px;width:100%;max-width:480px;border:1px solid var(--border);}
+  .auth-tabs{display:flex;margin-bottom:28px;border:1.5px solid var(--border);border-radius:10px;overflow:hidden;}
+  .auth-tab{flex:1;padding:10px;text-align:center;font-size:14px;font-weight:600;cursor:pointer;background:var(--cream);color:var(--text-muted);border:none;font-family:'Sarabun',sans-serif;}
+  .auth-tab.active{background:var(--navy);color:var(--gold-light);}
+  .auth-badge{display:inline-block;background:var(--gold-pale);color:var(--gold);font-size:12px;font-weight:600;padding:4px 14px;border-radius:99px;margin-bottom:12px;}
+  .auth-card h2{font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:var(--navy);margin-bottom:6px;}
+  .subtitle{font-size:13px;color:var(--text-muted);margin-bottom:24px;line-height:1.7;}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .form-group{margin-bottom:16px;}
+  .form-group label{display:block;font-size:13px;font-weight:600;color:var(--navy);margin-bottom:5px;}
+  .form-group label span{color:#e53935;margin-left:2px;}
+  .form-group input,.form-group select{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'Sarabun',sans-serif;font-size:14px;color:var(--text);background:var(--cream);outline:none;}
+  .form-group input:focus,.form-group select:focus{border-color:var(--navy);background:var(--white);}
+  .btn-auth{width:100%;padding:13px;background:var(--navy);color:var(--gold-light);font-family:'Sarabun',sans-serif;font-size:15px;font-weight:600;border:none;border-radius:12px;cursor:pointer;margin-top:6px;}
+  .btn-auth:hover{background:var(--navy-light);}
+  .auth-error{background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:10px 14px;font-size:13px;color:#b91c1c;margin-bottom:14px;display:none;}
+  .auth-error.show{display:block;}
 
-  /* ===== PAGES ===== */
-  .page { display: none; }
-  .page.active { display: block; }
+  /* TRAINING */
+  .training-layout{max-width:1100px;margin:0 auto;padding:32px 24px;display:grid;grid-template-columns:1fr 320px;gap:28px;}
+  @media(max-width:860px){.training-layout{grid-template-columns:1fr;}}
+  .video-label{font-size:12px;font-weight:600;color:var(--gold);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;}
+  .video-title{font-family:'Noto Serif Thai',serif;font-size:20px;font-weight:700;color:var(--navy);margin-bottom:16px;line-height:1.5;}
+  .video-wrapper{position:relative;padding-bottom:56.25%;background:#0f1726;border-radius:16px;overflow:hidden;box-shadow:0 8px 40px rgba(26,39,68,.16);border:1px solid var(--border);}
+  .video-wrapper iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;}
+  .video-overlay{position:absolute;inset:0;background:rgba(15,23,38,.75);display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;text-align:center;padding:24px;z-index:5;cursor:pointer;}
+  .video-overlay.hidden{opacity:0;pointer-events:none;}
+  .overlay-icon{font-size:48px;margin-bottom:12px;}
+  .overlay-text{font-size:16px;font-weight:500;line-height:1.6;}
+  .overlay-sub{font-size:13px;color:rgba(255,255,255,.6);margin-top:6px;}
+  .tab-warning{display:none;background:#fff3cd;border:1px solid #ffc107;border-radius:10px;padding:10px 14px;margin-top:10px;font-size:13px;color:#856404;}
+  .tab-warning.show{display:block;}
+  .video-status-bar{display:flex;align-items:center;gap:10px;margin-top:14px;padding:12px 16px;background:var(--white);border-radius:12px;border:1px solid var(--border);}
+  .status-dot{width:10px;height:10px;border-radius:50%;background:#ccc;flex-shrink:0;}
+  .status-dot.watching{background:#f59e0b;box-shadow:0 0 0 3px rgba(245,158,11,.2);animation:pulse 1.5s infinite;}
+  .status-dot.done{background:var(--success);box-shadow:0 0 0 3px rgba(46,125,94,.2);}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+  .status-text{font-size:13px;color:var(--text-muted);flex:1;}
+  .status-timer{font-size:13px;font-weight:600;color:var(--navy);font-variant-numeric:tabular-nums;}
+  .btn-next{display:block;width:100%;margin-top:14px;padding:13px;background:var(--success);color:white;font-family:'Sarabun',sans-serif;font-size:15px;font-weight:600;border:none;border-radius:12px;cursor:pointer;opacity:.4;pointer-events:none;}
+  .btn-next.ready{opacity:1;pointer-events:all;}
+  .btn-next.ready:hover{background:#236b4d;}
+  .sidebar-title{font-size:13px;font-weight:700;color:var(--navy);letter-spacing:.5px;margin-bottom:14px;text-transform:uppercase;}
+  .playlist-item{display:flex;align-items:flex-start;gap:12px;padding:14px;border-radius:12px;border:1.5px solid var(--border);background:var(--white);margin-bottom:10px;}
+  .playlist-item.current{border-color:var(--navy);box-shadow:0 0 0 3px rgba(26,39,68,.08);}
+  .playlist-item.completed{border-color:var(--success);background:var(--success-bg);}
+  .playlist-item.locked{opacity:.5;}
+  .item-num{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;background:var(--cream);color:var(--text-muted);border:1.5px solid var(--border);}
+  .playlist-item.current .item-num{background:var(--navy);color:white;border-color:var(--navy);}
+  .playlist-item.completed .item-num{background:var(--success);color:white;border-color:var(--success);}
+  .item-name{font-size:13px;font-weight:600;color:var(--navy);line-height:1.5;}
+  .item-duration{font-size:12px;color:var(--text-muted);margin-top:2px;}
+  .item-badge{margin-left:auto;font-size:11px;padding:2px 8px;border-radius:99px;font-weight:600;white-space:nowrap;}
+  .badge-current{background:var(--navy);color:white;}
+  .badge-done{background:var(--success-bg);color:var(--success);}
+  .badge-locked{background:var(--cream);color:var(--text-muted);}
+  .sidebar-info-box{background:var(--gold-pale);border:1px solid var(--gold);border-radius:12px;padding:14px;margin-top:20px;}
+  .sidebar-info-box p{font-size:13px;color:#7a5c1e;line-height:1.7;}
 
-  /* ===== REGISTER PAGE ===== */
-  .register-wrap {
-    min-height: calc(100vh - 76px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 48px 20px;
-  }
-  .register-card {
-    background: var(--white);
-    border-radius: 20px;
-    box-shadow: var(--shadow-lg);
-    padding: 48px 40px;
-    width: 100%;
-    max-width: 540px;
-    border: 1px solid var(--border);
-  }
-  .register-badge {
-    display: inline-block;
-    background: var(--gold-pale);
-    color: var(--gold);
-    font-size: 12px;
-    font-weight: 600;
-    padding: 4px 14px;
-    border-radius: 99px;
-    margin-bottom: 16px;
-    letter-spacing: 0.5px;
-  }
-  .register-card h2 {
-    font-family: 'Noto Serif Thai', serif;
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--navy);
-    line-height: 1.5;
-    margin-bottom: 8px;
-  }
-  .register-card .subtitle {
-    font-size: 14px;
-    color: var(--text-muted);
-    margin-bottom: 32px;
-    line-height: 1.7;
-  }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .form-group { margin-bottom: 18px; }
-  .form-group label {
-    display: block;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--navy);
-    margin-bottom: 6px;
-  }
-  .form-group label span { color: #e53935; margin-left: 2px; }
-  .form-group input, .form-group select {
-    width: 100%;
-    padding: 10px 14px;
-    border: 1.5px solid var(--border);
-    border-radius: 10px;
-    font-family: 'Sarabun', sans-serif;
-    font-size: 14px;
-    color: var(--text);
-    background: var(--cream);
-    transition: border-color 0.2s, box-shadow 0.2s;
-    outline: none;
-  }
-  .form-group input:focus, .form-group select:focus {
-    border-color: var(--navy);
-    box-shadow: 0 0 0 3px rgba(26,39,68,0.08);
-    background: var(--white);
-  }
-  .btn-start {
-    width: 100%;
-    padding: 14px;
-    background: var(--navy);
-    color: var(--gold-light);
-    font-family: 'Sarabun', sans-serif;
-    font-size: 16px;
-    font-weight: 600;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    margin-top: 8px;
-    transition: background 0.2s, transform 0.1s;
-    letter-spacing: 0.3px;
-  }
-  .btn-start:hover { background: var(--navy-light); }
-  .btn-start:active { transform: scale(0.99); }
-
-  /* ===== TRAINING PAGE ===== */
-  .training-layout {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 32px 24px;
-    display: grid;
-    grid-template-columns: 1fr 320px;
-    gap: 28px;
-    min-height: calc(100vh - 76px);
-  }
-  @media(max-width: 860px) {
-    .training-layout { grid-template-columns: 1fr; }
-  }
-
-  /* video area */
-  .video-main {}
-  .video-label {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--gold);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-  }
-  .video-title {
-    font-family: 'Noto Serif Thai', serif;
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--navy);
-    margin-bottom: 16px;
-    line-height: 1.5;
-  }
-  .video-wrapper {
-    position: relative;
-    padding-bottom: 56.25%;
-    background: #0f1726;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: var(--shadow-lg);
-    border: 1px solid var(--border);
-  }
-  .video-wrapper iframe {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    border: none;
-  }
-  .video-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(15,23,38,0.75);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    text-align: center;
-    padding: 24px;
-    z-index: 5;
-    transition: opacity 0.3s;
-  }
-  .video-overlay.hidden { opacity: 0; pointer-events: none; }
-  .overlay-icon { font-size: 48px; margin-bottom: 12px; }
-  .overlay-text { font-size: 16px; font-weight: 500; line-height: 1.6; }
-  .overlay-sub { font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 6px; }
-
-  .video-status-bar {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 14px;
-    padding: 12px 16px;
-    background: var(--white);
-    border-radius: 12px;
-    border: 1px solid var(--border);
-  }
-  .status-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: #ccc;
-    flex-shrink: 0;
-    transition: background 0.3s;
-  }
-  .status-dot.watching { background: #f59e0b; box-shadow: 0 0 0 3px rgba(245,158,11,0.2); animation: pulse 1.5s infinite; }
-  .status-dot.done { background: var(--success); box-shadow: 0 0 0 3px rgba(46,125,94,0.2); }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
-  .status-text { font-size: 13px; color: var(--text-muted); flex: 1; }
-  .status-timer {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--navy);
-    font-variant-numeric: tabular-nums;
-  }
-
-  .btn-next {
-    display: block;
-    width: 100%;
-    margin-top: 14px;
-    padding: 13px;
-    background: var(--success);
-    color: white;
-    font-family: 'Sarabun', sans-serif;
-    font-size: 15px;
-    font-weight: 600;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: background 0.2s, opacity 0.2s;
-    opacity: 0.4;
-    pointer-events: none;
-  }
-  .btn-next.ready { opacity: 1; pointer-events: all; }
-  .btn-next.ready:hover { background: #236b4d; }
-
-  /* playlist sidebar */
-  .playlist-sidebar {}
-  .sidebar-title {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--navy);
-    letter-spacing: 0.5px;
-    margin-bottom: 14px;
-    text-transform: uppercase;
-  }
-  .playlist-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 14px;
-    border-radius: 12px;
-    border: 1.5px solid var(--border);
-    background: var(--white);
-    margin-bottom: 10px;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    cursor: default;
-    user-select: none;
-  }
-  .playlist-item.current {
-    border-color: var(--navy);
-    box-shadow: 0 0 0 3px rgba(26,39,68,0.08);
-  }
-  .playlist-item.completed { border-color: var(--success); background: var(--success-bg); }
-  .playlist-item.locked { opacity: 0.5; }
-  .item-num {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
-    font-weight: 700;
-    flex-shrink: 0;
-    background: var(--cream);
-    color: var(--text-muted);
-    border: 1.5px solid var(--border);
-    transition: all 0.2s;
-  }
-  .playlist-item.current .item-num { background: var(--navy); color: white; border-color: var(--navy); }
-  .playlist-item.completed .item-num { background: var(--success); color: white; border-color: var(--success); }
-  .item-info {}
-  .item-name { font-size: 13px; font-weight: 600; color: var(--navy); line-height: 1.5; }
-  .item-duration { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-  .item-badge {
-    margin-left: auto;
-    font-size: 11px;
-    padding: 2px 8px;
-    border-radius: 99px;
-    font-weight: 600;
-    white-space: nowrap;
-  }
-  .badge-current { background: var(--navy); color: white; }
-  .badge-done { background: var(--success-bg); color: var(--success); }
-  .badge-locked { background: var(--cream); color: var(--text-muted); }
-
-  .sidebar-info-box {
-    background: var(--gold-pale);
-    border: 1px solid var(--gold);
-    border-radius: 12px;
-    padding: 14px;
-    margin-top: 20px;
-  }
-  .sidebar-info-box p { font-size: 13px; color: #7a5c1e; line-height: 1.7; }
-  .sidebar-info-box strong { color: var(--navy); }
-
-  /* ===== CERTIFICATE PAGE ===== */
-  .cert-page-wrap {
-    min-height: calc(100vh - 76px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 40px 20px 60px;
-  }
-  .cert-congrats {
-    text-align: center;
-    margin-bottom: 32px;
-  }
-  .cert-congrats .emoji { font-size: 48px; margin-bottom: 12px; }
-  .cert-congrats h2 {
-    font-family: 'Noto Serif Thai', serif;
-    font-size: 26px;
-    font-weight: 700;
-    color: var(--navy);
-    margin-bottom: 6px;
-  }
-  .cert-congrats p { font-size: 15px; color: var(--text-muted); }
-
-  /* the actual certificate */
-  #cert-container {
-    width: 900px;
-    max-width: 100%;
-  }
-  .cert-paper {
-    background: var(--white);
-    border: 3px solid var(--navy);
-    border-radius: 4px;
-    padding: 0;
-    position: relative;
-    overflow: hidden;
-    box-shadow: var(--shadow-lg);
-  }
-  .cert-outer-border {
-    border: 6px solid transparent;
-    border-image: repeating-linear-gradient(45deg, var(--gold) 0 8px, transparent 8px 14px) 6;
-    margin: 10px;
-  }
-  .cert-inner {
-    padding: 40px 56px;
-    text-align: center;
-    position: relative;
-    z-index: 1;
-  }
-  .cert-top-logo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    margin-bottom: 20px;
-  }
-  .cert-emblem {
-    width: 70px;
-    height: 70px;
-  }
-  .cert-org {
-    text-align: left;
-  }
-  .cert-org .org-main {
-    font-family: 'Noto Serif Thai', serif;
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--navy);
-    line-height: 1.5;
-  }
-  .cert-org .org-sub {
-    font-size: 12px;
-    color: var(--text-muted);
-  }
-  .cert-divider {
-    border: none;
-    border-top: 1.5px solid var(--gold);
-    margin: 0 0 20px;
-  }
-  .cert-title-th {
-    font-family: 'Noto Serif Thai', serif;
-    font-size: 28px;
-    font-weight: 700;
-    color: var(--navy);
-    letter-spacing: 2px;
-    margin-bottom: 4px;
-  }
-  .cert-title-en {
-    font-size: 13px;
-    color: var(--text-muted);
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    margin-bottom: 24px;
-  }
-  .cert-given-to {
-    font-size: 14px;
-    color: var(--text-muted);
-    margin-bottom: 4px;
-  }
-  .cert-name {
-    font-family: 'Noto Serif Thai', serif;
-    font-size: 34px;
-    font-weight: 700;
-    color: var(--navy);
-    margin-bottom: 6px;
-    line-height: 1.4;
-  }
-  .cert-position {
-    font-size: 14px;
-    color: var(--text-muted);
-    margin-bottom: 24px;
-  }
-  .cert-body-text {
-    font-size: 14px;
-    color: var(--text);
-    line-height: 2;
-    margin-bottom: 8px;
-  }
-  .cert-course {
-    font-family: 'Noto Serif Thai', serif;
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--navy);
-    margin: 4px 0 20px;
-    line-height: 1.6;
-  }
-  .cert-hours {
-    display: inline-block;
-    background: var(--gold-pale);
-    border: 1px solid var(--gold);
-    border-radius: 99px;
-    padding: 6px 24px;
-    font-size: 13px;
-    font-weight: 600;
-    color: #7a5c1e;
-    margin-bottom: 24px;
-  }
-  .cert-footer {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
-    margin-top: 20px;
-    border-top: 1px solid var(--border);
-    padding-top: 24px;
-  }
-  .cert-sign { text-align: center; }
-  .cert-sign-line {
-    width: 180px;
-    border-bottom: 1.5px solid var(--navy);
-    margin: 0 auto 8px;
-    height: 40px;
-  }
-  .cert-sign-name {
-    font-family: 'Noto Serif Thai', serif;
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--navy);
-    line-height: 1.5;
-  }
-  .cert-sign-pos { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
-  .cert-watermark {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-family: 'Noto Serif Thai', serif;
-    font-size: 96px;
-    font-weight: 700;
-    color: rgba(201,168,76,0.06);
-    white-space: nowrap;
-    pointer-events: none;
-    user-select: none;
-    z-index: 0;
-    letter-spacing: 4px;
-  }
-
-  .cert-actions {
-    display: flex;
-    gap: 14px;
-    margin-top: 28px;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  .btn-print {
-    padding: 12px 32px;
-    background: var(--navy);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-family: 'Sarabun', sans-serif;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  .btn-print:hover { background: var(--navy-light); }
-
-  @media print {
-    body * { visibility: hidden; }
-    #cert-container, #cert-container * { visibility: visible; }
-    #cert-container { position: fixed; top: 0; left: 0; width: 100%; }
-    .cert-actions { display: none; }
-    .site-header { display: none; }
-  }
-
-  /* toast */
-  .toast {
-    position: fixed;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%) translateY(80px);
-    background: var(--navy);
-    color: white;
-    padding: 12px 24px;
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: 500;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
-    z-index: 999;
-    transition: transform 0.3s ease;
-    white-space: nowrap;
-  }
-  .toast.show { transform: translateX(-50%) translateY(0); }
+  /* CERT */
+  .cert-page-wrap{min-height:calc(100vh - 76px);display:flex;flex-direction:column;align-items:center;padding:40px 20px 60px;}
+  .cert-congrats{text-align:center;margin-bottom:32px;}
+  .cert-congrats .emoji{font-size:48px;margin-bottom:12px;}
+  .cert-congrats h2{font-family:'Noto Serif Thai',serif;font-size:26px;font-weight:700;color:var(--navy);margin-bottom:6px;}
+  .cert-congrats p{font-size:15px;color:var(--text-muted);}
+  #cert-container{width:900px;max-width:100%;}
+  .cert-paper{background:var(--white);border:3px solid var(--navy);border-radius:4px;position:relative;overflow:hidden;box-shadow:0 8px 40px rgba(26,39,68,.16);}
+  .cert-outer-border{border:6px solid transparent;border-image:repeating-linear-gradient(45deg,var(--gold) 0 8px,transparent 8px 14px) 6;margin:10px;}
+  .cert-inner{padding:40px 56px;text-align:center;position:relative;z-index:1;}
+  .cert-top-logo{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:20px;}
+  .cert-emblem{width:70px;height:70px;}
+  .cert-org .org-main{font-family:'Noto Serif Thai',serif;font-size:15px;font-weight:700;color:var(--navy);line-height:1.5;}
+  .cert-org .org-sub{font-size:12px;color:var(--text-muted);}
+  .cert-divider{border:none;border-top:1.5px solid var(--gold);margin:0 0 20px;}
+  .cert-title-th{font-family:'Noto Serif Thai',serif;font-size:28px;font-weight:700;color:var(--navy);letter-spacing:2px;margin-bottom:4px;}
+  .cert-title-en{font-size:13px;color:var(--text-muted);letter-spacing:3px;text-transform:uppercase;margin-bottom:24px;}
+  .cert-given-to{font-size:14px;color:var(--text-muted);margin-bottom:4px;}
+  .cert-name{font-family:'Noto Serif Thai',serif;font-size:34px;font-weight:700;color:var(--navy);margin-bottom:6px;line-height:1.4;}
+  .cert-position{font-size:14px;color:var(--text-muted);margin-bottom:24px;}
+  .cert-body-text{font-size:14px;color:var(--text);line-height:2;margin-bottom:8px;}
+  .cert-course{font-family:'Noto Serif Thai',serif;font-size:18px;font-weight:700;color:var(--navy);margin:4px 0 20px;line-height:1.6;}
+  .cert-hours{display:inline-block;background:var(--gold-pale);border:1px solid var(--gold);border-radius:99px;padding:6px 24px;font-size:13px;font-weight:600;color:#7a5c1e;margin-bottom:24px;}
+  .cert-footer{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:20px;border-top:1px solid var(--border);padding-top:24px;}
+  .cert-sign{text-align:center;}
+  .cert-sign-line{width:180px;border-bottom:1.5px solid var(--navy);margin:0 auto 8px;height:40px;}
+  .cert-sign-name{font-family:'Noto Serif Thai',serif;font-size:14px;font-weight:700;color:var(--navy);line-height:1.5;}
+  .cert-sign-pos{font-size:12px;color:var(--text-muted);line-height:1.5;}
+  .cert-watermark{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Noto Serif Thai',serif;font-size:96px;font-weight:700;color:rgba(201,168,76,.06);white-space:nowrap;pointer-events:none;user-select:none;z-index:0;}
+  .cert-actions{display:flex;gap:14px;margin-top:28px;justify-content:center;}
+  .btn-print{padding:12px 32px;background:var(--navy);color:white;border:none;border-radius:10px;font-family:'Sarabun',sans-serif;font-size:15px;font-weight:600;cursor:pointer;}
+  .btn-print:hover{background:var(--navy-light);}
+  @media print{body *{visibility:hidden;}#cert-container,#cert-container *{visibility:visible;}#cert-container{position:fixed;top:0;left:0;width:100%;}.cert-actions,.site-header{display:none;}}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--navy);color:white;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:500;z-index:999;transition:transform .3s;white-space:nowrap;}
+  .toast.show{transform:translateX(-50%) translateY(0);}
+  .loading-overlay{position:fixed;inset:0;background:rgba(255,255,255,.85);display:none;align-items:center;justify-content:center;z-index:9999;font-size:16px;color:var(--navy);font-weight:500;}
+  .loading-overlay.show{display:flex;}
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <header class="site-header">
   <div class="header-inner">
-    <svg class="header-logo" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="30" cy="30" r="28" fill="#243460" stroke="#c9a84c" stroke-width="2"/>
-      <text x="30" y="22" text-anchor="middle" fill="#c9a84c" font-family="serif" font-size="10" font-weight="bold">สพป.</text>
-      <text x="30" y="34" text-anchor="middle" fill="white" font-family="serif" font-size="8">นครพนม</text>
-      <text x="30" y="44" text-anchor="middle" fill="#e8c97a" font-family="serif" font-size="8">เขต ๑</text>
-    </svg>
+    <svg class="header-logo" viewBox="0 0 60 60"><circle cx="30" cy="30" r="28" fill="#243460" stroke="#c9a84c" stroke-width="2"/><text x="30" y="22" text-anchor="middle" fill="#c9a84c" font-family="serif" font-size="10" font-weight="bold">สพป.</text><text x="30" y="34" text-anchor="middle" fill="white" font-family="serif" font-size="8">นครพนม</text><text x="30" y="44" text-anchor="middle" fill="#e8c97a" font-family="serif" font-size="8">เขต ๑</text></svg>
     <div class="header-text">
       <h1>ระบบอบรมออนไลน์ สพป.นครพนม เขต ๑</h1>
       <p>สำนักงานเขตพื้นที่การศึกษาประถมศึกษานครพนม เขต ๑</p>
     </div>
-    <div class="header-progress" id="headerProgress" style="display:none">
-      <span class="progress-label">ความคืบหน้า</span>
-      <div class="progress-bar-wrap">
-        <div class="progress-bar-fill" id="progressFill"></div>
+    <div class="header-right" id="headerRight" style="display:none">
+      <div class="progress-wrap">
+        <span class="progress-label">ความคืบหน้า</span>
+        <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressFill"></div></div>
+        <span class="progress-count" id="progressCount">0/3</span>
       </div>
-      <span class="progress-count" id="progressCount">0/3</span>
+      <div class="header-user" id="headerUser"></div>
+      <button class="btn-logout" onclick="doLogout()">ออกจากระบบ</button>
     </div>
   </div>
 </header>
 
-<!-- PAGE 1: REGISTER -->
-<div class="page active" id="pageRegister">
-  <div class="register-wrap">
-    <div class="register-card">
-      <div class="register-badge">การอบรมออนไลน์</div>
-      <h2>การพัฒนาครูและบุคลากร<br>ทางการศึกษา ประจำปี ๒๕๖๘</h2>
-      <p class="subtitle">กรุณากรอกข้อมูลให้ครบถ้วนก่อนเริ่มการอบรม<br>เพื่อใช้ออกเกียรติบัตรเมื่อสำเร็จหลักสูตร</p>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label>ชื่อ <span>*</span></label>
-          <input type="text" id="firstName" placeholder="ชื่อ (ไม่ต้องใส่คำนำหน้า)">
+<!-- AUTH -->
+<div class="page active" id="pageAuth">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tabLogin" onclick="switchTab('login')">เข้าสู่ระบบ</button>
+        <button class="auth-tab" id="tabRegister" onclick="switchTab('register')">สมัครสมาชิก</button>
+      </div>
+      <div id="formLogin">
+        <div class="auth-badge">การอบรมออนไลน์</div>
+        <h2>เข้าสู่ระบบ</h2>
+        <p class="subtitle">กรอก Email และรหัสผ่านที่สมัครไว้</p>
+        <div class="auth-error" id="loginError"></div>
+        <div class="form-group"><label>Email <span>*</span></label><input type="email" id="loginEmail" placeholder="example@email.com"></div>
+        <div class="form-group"><label>รหัสผ่าน <span>*</span></label><input type="password" id="loginPassword" placeholder="รหัสผ่าน"></div>
+        <button class="btn-auth" onclick="doLogin()">เข้าสู่ระบบ →</button>
+      </div>
+      <div id="formRegister" style="display:none">
+        <div class="auth-badge">สมัครใหม่</div>
+        <h2>สมัครเข้าอบรม</h2>
+        <p class="subtitle">กรอกข้อมูลให้ครบถ้วน เพื่อใช้ออกเกียรติบัตร</p>
+        <div class="auth-error" id="registerError"></div>
+        <div class="form-row">
+          <div class="form-group"><label>ชื่อ <span>*</span></label><input type="text" id="regFirstName" placeholder="ชื่อ (ไม่ต้องใส่คำนำหน้า)"></div>
+          <div class="form-group"><label>นามสกุล <span>*</span></label><input type="text" id="regLastName" placeholder="นามสกุล"></div>
         </div>
-        <div class="form-group">
-          <label>นามสกุล <span>*</span></label>
-          <input type="text" id="lastName" placeholder="นามสกุล">
+        <div class="form-group"><label>ตำแหน่ง <span>*</span></label>
+          <select id="regPosition"><option value="">-- เลือกตำแหน่ง --</option><option>ครู</option><option>ครูชำนาญการ</option><option>ครูชำนาญการพิเศษ</option><option>รองผู้อำนวยการโรงเรียน</option><option>ผู้อำนวยการโรงเรียน</option><option>ศึกษานิเทศก์</option><option>นักวิชาการศึกษา</option><option>บุคลากรทางการศึกษาอื่น</option></select>
         </div>
+        <div class="form-group"><label>โรงเรียน / หน่วยงาน <span>*</span></label><input type="text" id="regSchool" placeholder="เช่น โรงเรียนบ้านนาคอกควาย"></div>
+        <div class="form-group"><label>Email <span>*</span></label><input type="email" id="regEmail" placeholder="ใช้สำหรับเข้าสู่ระบบครั้งต่อไป"></div>
+        <div class="form-group"><label>รหัสผ่าน <span>*</span></label><input type="password" id="regPassword" placeholder="อย่างน้อย 6 ตัวอักษร"></div>
+        <button class="btn-auth" onclick="doRegister()">สมัครและเริ่มอบรม →</button>
       </div>
-      <div class="form-group">
-        <label>ตำแหน่ง <span>*</span></label>
-        <select id="position">
-          <option value="">-- เลือกตำแหน่ง --</option>
-          <option>ครู</option>
-          <option>ครูชำนาญการ</option>
-          <option>ครูชำนาญการพิเศษ</option>
-          <option>รองผู้อำนวยการโรงเรียน</option>
-          <option>ผู้อำนวยการโรงเรียน</option>
-          <option>ศึกษานิเทศก์</option>
-          <option>นักวิชาการศึกษา</option>
-          <option>บุคลากรทางการศึกษาอื่น</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>โรงเรียน / หน่วยงาน <span>*</span></label>
-        <input type="text" id="school" placeholder="เช่น โรงเรียนบ้านนาคอกควาย">
-      </div>
-      <button class="btn-start" onclick="startTraining()">เริ่มการอบรม →</button>
     </div>
   </div>
 </div>
 
-<!-- PAGE 2: TRAINING -->
+<!-- TRAINING -->
 <div class="page" id="pageTraining">
   <div class="training-layout">
-    <!-- Video Main -->
-    <div class="video-main">
+    <div>
       <div class="video-label" id="videoLabel">คลิปที่ 1 จาก 3</div>
       <div class="video-title" id="videoTitle">กำลังโหลด...</div>
       <div class="video-wrapper">
         <iframe id="ytPlayer" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
         <div class="video-overlay" id="videoOverlay">
           <div class="overlay-icon">▶️</div>
-          <div class="overlay-text">กดปุ่มเล่นในวิดีโอเพื่อเริ่มชม</div>
-          <div class="overlay-sub">ระบบจะนับเวลาเมื่อวิดีโอเล่น</div>
+          <div class="overlay-text">กดที่นี่ แล้วกด Play ในวิดีโอเพื่อเริ่มนับเวลา</div>
+          <div class="overlay-sub">ห้ามสลับแท็บหรือออกจากหน้า ระบบจะหยุดนับทันที</div>
         </div>
       </div>
-
+      <div class="tab-warning" id="tabWarning">⚠️ ตรวจพบการออกจากหน้านี้ — การนับเวลาถูกหยุดแล้ว กรุณากลับมาดูต่อครับ</div>
       <div class="video-status-bar">
         <div class="status-dot" id="statusDot"></div>
-        <div class="status-text" id="statusText">กด Play เพื่อเริ่มชมวิดีโอ</div>
+        <div class="status-text" id="statusText">คลิกที่วิดีโอ แล้วกด ▶ เพื่อเริ่มนับเวลา</div>
         <div class="status-timer" id="statusTimer"></div>
       </div>
-
-      <button class="btn-next" id="btnNext" onclick="nextVideo()">
-        <span id="btnNextText">ถัดไป: คลิปที่ 2 →</span>
-      </button>
+      <button class="btn-next" id="btnNext"><span id="btnNextText">ถัดไป: คลิปที่ 2 →</span></button>
     </div>
-
-    <!-- Sidebar -->
-    <div class="playlist-sidebar">
+    <div>
       <div class="sidebar-title">รายการวิดีโอ</div>
       <div id="playlistEl"></div>
-
       <div class="sidebar-info-box">
-        <p>🔒 ต้องชมวิดีโอแต่ละตอน<strong>ครบตามเวลา</strong>ที่กำหนด จึงจะเลื่อนไปคลิปถัดไปได้<br><br>
-        เมื่อชมครบทุกคลิป ระบบจะออก<strong>เกียรติบัตร</strong>ให้อัตโนมัติ</p>
+        <p>🔒 ต้องชมแต่ละตอน<strong>ครบตามเวลา</strong>ที่กำหนด<br><br>
+        ⏸ สลับแท็บหรือออกจากหน้า = หยุดนับทันที<br><br>
+        💾 ความคืบหน้า<strong>บันทึกอัตโนมัติ</strong> กลับมาดูต่อได้</p>
       </div>
     </div>
   </div>
 </div>
 
-<!-- PAGE 3: CERTIFICATE -->
+<!-- CERTIFICATE -->
 <div class="page" id="pageCert">
   <div class="cert-page-wrap">
     <div class="cert-congrats">
       <div class="emoji">🎉</div>
       <h2>ยินดีด้วย! ท่านผ่านการอบรมเรียบร้อยแล้ว</h2>
-      <p>เกียรติบัตรของท่านพร้อมแล้ว สามารถพิมพ์หรือบันทึกได้ทันที</p>
+      <p>เกียรติบัตรของท่านพร้อมแล้ว สามารถพิมพ์ได้ทันที</p>
     </div>
-
     <div id="cert-container">
       <div class="cert-paper">
         <div class="cert-watermark">เกียรติบัตร</div>
         <div class="cert-outer-border">
           <div class="cert-inner">
             <div class="cert-top-logo">
-              <svg class="cert-emblem" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="40" cy="40" r="36" fill="#1a2744" stroke="#c9a84c" stroke-width="2.5"/>
-                <text x="40" y="28" text-anchor="middle" fill="#c9a84c" font-family="serif" font-size="12" font-weight="bold">สพป.</text>
-                <text x="40" y="43" text-anchor="middle" fill="white" font-family="serif" font-size="10">นครพนม</text>
-                <text x="40" y="56" text-anchor="middle" fill="#e8c97a" font-family="serif" font-size="10">เขต ๑</text>
-              </svg>
-              <div class="cert-org">
-                <div class="org-main">สำนักงานเขตพื้นที่การศึกษาประถมศึกษา<br>นครพนม เขต ๑</div>
-                <div class="org-sub">Nakhon Phanom Primary Educational Service Area Office 1</div>
-              </div>
+              <svg class="cert-emblem" viewBox="0 0 80 80"><circle cx="40" cy="40" r="36" fill="#1a2744" stroke="#c9a84c" stroke-width="2.5"/><text x="40" y="28" text-anchor="middle" fill="#c9a84c" font-family="serif" font-size="12" font-weight="bold">สพป.</text><text x="40" y="43" text-anchor="middle" fill="white" font-family="serif" font-size="10">นครพนม</text><text x="40" y="56" text-anchor="middle" fill="#e8c97a" font-family="serif" font-size="10">เขต ๑</text></svg>
+              <div class="cert-org"><div class="org-main">สำนักงานเขตพื้นที่การศึกษาประถมศึกษา<br>นครพนม เขต ๑</div><div class="org-sub">Nakhon Phanom Primary Educational Service Area Office 1</div></div>
             </div>
-
             <hr class="cert-divider">
-
             <div class="cert-title-th">เกียรติบัตร</div>
             <div class="cert-title-en">Certificate of Completion</div>
-
             <div class="cert-given-to">มอบให้แก่</div>
             <div class="cert-name" id="certName">-</div>
             <div class="cert-position" id="certPosition">-</div>
-
             <div class="cert-body-text">ได้เข้าร่วมการอบรมออนไลน์หลักสูตร</div>
-            <div class="cert-course" id="certCourse">การพัฒนาครูและบุคลากรทางการศึกษา ประจำปี ๒๕๖๘</div>
-
+            <div class="cert-course" id="certCourse">-</div>
             <div class="cert-hours" id="certHours">จำนวน 3 ชั่วโมง</div>
-
-            <div class="cert-body-text" style="font-size:13px; color:#888; margin-bottom:0">
-              วันที่ <span id="certDate">-</span>
-            </div>
-
+            <div class="cert-body-text" style="font-size:13px;color:#888;margin-bottom:0">วันที่ <span id="certDate">-</span></div>
             <div class="cert-footer">
-              <div class="cert-sign">
-                <div class="cert-sign-line"></div>
-                <div class="cert-sign-name">( ................................................ )</div>
-                <div class="cert-sign-pos">ผู้อำนวยการสำนักงานเขตพื้นที่การศึกษา<br>ประถมศึกษานครพนม เขต ๑</div>
-              </div>
-              <div class="cert-sign">
-                <div class="cert-sign-line"></div>
-                <div class="cert-sign-name">( ................................................ )</div>
-                <div class="cert-sign-pos">ผู้รับผิดชอบโครงการ</div>
-              </div>
+              <div class="cert-sign"><div class="cert-sign-line"></div><div class="cert-sign-name">( ................................................ )</div><div class="cert-sign-pos">ผู้อำนวยการสำนักงานเขตพื้นที่การศึกษา<br>ประถมศึกษานครพนม เขต ๑</div></div>
+              <div class="cert-sign"><div class="cert-sign-line"></div><div class="cert-sign-name">( ................................................ )</div><div class="cert-sign-pos">ผู้รับผิดชอบโครงการ</div></div>
             </div>
           </div>
         </div>
       </div>
     </div>
-
-    <div class="cert-actions">
-      <button class="btn-print" onclick="window.print()">🖨️ พิมพ์เกียรติบัตร</button>
-    </div>
+    <div class="cert-actions"><button class="btn-print" onclick="window.print()">🖨️ พิมพ์เกียรติบัตร</button></div>
   </div>
 </div>
 
+<div class="loading-overlay" id="loadingOverlay">⏳ กำลังโหลด...</div>
 <div class="toast" id="toast"></div>
 
-<script>
-// ========================================================
-// CONFIG — แก้ไขข้อมูลตรงนี้ได้เลย
-// ========================================================
-const TRAINING_CONFIG = {
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+
+// ══════════════════════════════════════
+// FIREBASE CONFIG (อย่าแก้ไข)
+// ══════════════════════════════════════
+const firebaseConfig = {
+  apiKey: "AIzaSyCKi7pa9SIaBOsxxHaUwLGhiGBYpwzJTLM",
+  authDomain: "training-2568.firebaseapp.com",
+  projectId: "training-2568",
+  storageBucket: "training-2568.firebasestorage.app",
+  messagingSenderId: "166470680458",
+  appId: "1:166470680458:web:fbbf904b0d4f9a156d5273",
+  measurementId: "G-9VB839MPVG"
+};
+
+// ══════════════════════════════════════
+// TRAINING CONFIG — แก้ไขตรงนี้ได้เลย
+// ══════════════════════════════════════
+const CONFIG = {
   courseName: 'การพัฒนาครูและบุคลากรทางการศึกษา ประจำปี ๒๕๖๘',
   totalHours: '3',
-  signatory1: 'นายสมชาย ใจดี',
-  signatory1pos: 'ผู้อำนวยการ สพป.นครพนม เขต ๑',
-  signatory2: 'นายรชต สุวรรณไตรย์',
-  signatory2pos: 'ผู้รับผิดชอบโครงการ',
-  // คลิป YouTube: ใส่ Video ID (ส่วนหลัง ?v= หรือ youtu.be/)
-  // minSeconds = จำนวนวินาทีขั้นต่ำที่ต้องดู
   videos: [
-    {
-      id: 'v1',
-      title: 'บทที่ 1 : แนะนำหลักสูตรและภาพรวม',
-      youtubeId: 'dQw4w9WgXcQ', // ← เปลี่ยนเป็น Video ID จริง
-      minSeconds: 30, // ← เปลี่ยนเป็นเวลาจริงที่ต้องดู (วินาที)
-      durationLabel: '~10 นาที'
-    },
-    {
-      id: 'v2',
-      title: 'บทที่ 2 : เนื้อหาการอบรม',
-      youtubeId: 'dQw4w9WgXcQ', // ← เปลี่ยนเป็น Video ID จริง
-      minSeconds: 30,
-      durationLabel: '~15 นาที'
-    },
-    {
-      id: 'v3',
-      title: 'บทที่ 3 : สรุปและประเมินผล',
-      youtubeId: 'dQw4w9WgXcQ', // ← เปลี่ยนเป็น Video ID จริง
-      minSeconds: 30,
-      durationLabel: '~10 นาที'
-    }
+    { title: 'บทที่ 1 : แนะนำหลักสูตรและภาพรวม', youtubeId: 'dQw4w9WgXcQ', minSeconds: 30, durationLabel: '~10 นาที' },
+    { title: 'บทที่ 2 : เนื้อหาการอบรม',           youtubeId: 'dQw4w9WgXcQ', minSeconds: 30, durationLabel: '~15 นาที' },
+    { title: 'บทที่ 3 : สรุปและประเมินผล',         youtubeId: 'dQw4w9WgXcQ', minSeconds: 30, durationLabel: '~10 นาที' }
   ]
 };
-// ========================================================
+// ══════════════════════════════════════
 
-let userData = {};
-let currentVideoIndex = 0;
-let completedVideos = new Set();
-let watchedSeconds = 0;
-let timerInterval = null;
-let isWatching = false;
-let ytCheckInterval = null;
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-function startTraining() {
-  const fn = document.getElementById('firstName').value.trim();
-  const ln = document.getElementById('lastName').value.trim();
-  const pos = document.getElementById('position').value;
-  const sch = document.getElementById('school').value.trim();
-  if (!fn || !ln || !pos || !sch) {
-    showToast('กรุณากรอกข้อมูลให้ครบทุกช่อง');
-    return;
-  }
-  userData = { firstName: fn, lastName: ln, position: pos, school: sch };
-  showPage('pageTraining');
-  document.getElementById('headerProgress').style.display = 'flex';
-  loadVideo(0);
-  renderPlaylist();
-  updateProgress();
+let currentUser = null, userData = {}, currentIdx = 0;
+let completed = new Set(), watchedSec = 0;
+let timer = null, isWatching = false;
+
+// ── ป้องกันลักไก่ ──
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden && isWatching) pauseTimer('⏸ หยุดนับเวลา — กรุณากลับมาดูต่อ');
+  if (!document.hidden) document.getElementById('tabWarning').classList.remove('show');
+});
+window.addEventListener('blur', () => { if (isWatching) pauseTimer('⏸ หยุดนับเวลา — คลิกที่วิดีโอเพื่อดูต่อ'); });
+
+function pauseTimer(msg) {
+  isWatching = false; clearInterval(timer);
+  document.getElementById('statusDot').className = 'status-dot';
+  document.getElementById('statusText').textContent = msg;
+  document.getElementById('tabWarning').classList.add('show');
 }
 
-function showPage(id) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  window.scrollTo(0, 0);
-}
-
-function loadVideo(idx) {
-  currentVideoIndex = idx;
-  const v = TRAINING_CONFIG.videos[idx];
-  watchedSeconds = 0;
-  isWatching = false;
-  clearInterval(timerInterval);
-
-  document.getElementById('videoLabel').textContent = `คลิปที่ ${idx + 1} จาก ${TRAINING_CONFIG.videos.length}`;
-  document.getElementById('videoTitle').textContent = v.title;
-
-  const overlay = document.getElementById('videoOverlay');
-  overlay.classList.remove('hidden');
-
-  // Load YouTube with enablejsapi
-  document.getElementById('ytPlayer').src =
-    `https://www.youtube.com/embed/${v.youtubeId}?enablejsapi=1&rel=0&modestbranding=1`;
-
-  // Reset status
-  setStatusWaiting();
-
-  // Check next button
-  updateNextBtn();
-
-  // Poll for play via postMessage (YouTube IFrame API fallback)
-  startYTPolling();
-}
-
-function startYTPolling() {
-  clearInterval(ytCheckInterval);
-  // We use a timer approach: user clicks play manually,
-  // we detect via overlay click or auto-start the watch timer
-  // Since we can't directly detect YT play without API key binding,
-  // we'll use a simple "start watching" overlay button approach
-  const overlay = document.getElementById('videoOverlay');
-  overlay.onclick = () => {
-    overlay.classList.add('hidden');
-    startWatchTimer();
-  };
-}
-
-function startWatchTimer() {
-  if (isWatching) return;
-  isWatching = true;
-  const dot = document.getElementById('statusDot');
-  dot.className = 'status-dot watching';
-  document.getElementById('statusText').textContent = 'กำลังชมวิดีโอ... โปรดชมให้ครบ';
-  const v = TRAINING_CONFIG.videos[currentVideoIndex];
-
-  timerInterval = setInterval(() => {
-    if (!isWatching) return;
-    watchedSeconds++;
-    const remaining = Math.max(0, v.minSeconds - watchedSeconds);
-    const mins = Math.floor(remaining / 60);
-    const secs = remaining % 60;
-    document.getElementById('statusTimer').textContent =
-      remaining > 0 ? `เหลือ ${mins}:${secs.toString().padStart(2,'0')}` : '✓ ครบแล้ว';
-
-    if (watchedSeconds >= v.minSeconds && !completedVideos.has(currentVideoIndex)) {
-      completedVideos.add(currentVideoIndex);
-      document.getElementById('statusDot').className = 'status-dot done';
-      document.getElementById('statusText').textContent = '✓ ชมครบตามเวลาที่กำหนดแล้ว';
-      updateNextBtn();
-      renderPlaylist();
+// ── Auth state ──
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    currentUser = user; showLoading(true);
+    const snap = await getDoc(doc(db, 'users', user.uid));
+    if (snap.exists()) {
+      userData = snap.data();
+      completed = new Set((userData.completedVideos||[]).map(Number));
+      document.getElementById('headerRight').style.display = 'flex';
+      document.getElementById('headerUser').innerHTML = `สวัสดี <strong>${userData.firstName} ${userData.lastName}</strong>`;
       updateProgress();
-      showToast('✓ ชมคลิปนี้ครบแล้ว! กดถัดไปเพื่อดำเนินการต่อ');
-      clearInterval(timerInterval);
+      if (completed.size >= CONFIG.videos.length) { showCert(); }
+      else {
+        let resume = 0;
+        for (let i = 0; i < CONFIG.videos.length; i++) { if (!completed.has(i)) { resume = i; break; } }
+        showPage('pageTraining'); loadVideo(resume); renderPlaylist();
+      }
     }
-  }, 1000);
-}
+    showLoading(false);
+  } else {
+    currentUser = null; userData = {};
+    document.getElementById('headerRight').style.display = 'none';
+    showPage('pageAuth'); showLoading(false);
+  }
+});
 
-function setStatusWaiting() {
+// ── Auth functions ──
+window.switchTab = (tab) => {
+  ['login','register'].forEach(t => {
+    document.getElementById('tab'+t.charAt(0).toUpperCase()+t.slice(1)).classList.toggle('active', t===tab);
+    document.getElementById('form'+t.charAt(0).toUpperCase()+t.slice(1)).style.display = t===tab?'block':'none';
+  });
+};
+
+window.doLogin = async () => {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass = document.getElementById('loginPassword').value;
+  const err = document.getElementById('loginError');
+  err.classList.remove('show');
+  if (!email||!pass) { err.textContent='กรุณากรอกข้อมูลให้ครบ'; err.classList.add('show'); return; }
+  showLoading(true);
+  try { await signInWithEmailAndPassword(auth, email, pass); }
+  catch(e) { showLoading(false); err.textContent='Email หรือรหัสผ่านไม่ถูกต้อง'; err.classList.add('show'); }
+};
+
+window.doRegister = async () => {
+  const fn=document.getElementById('regFirstName').value.trim();
+  const ln=document.getElementById('regLastName').value.trim();
+  const pos=document.getElementById('regPosition').value;
+  const sch=document.getElementById('regSchool').value.trim();
+  const email=document.getElementById('regEmail').value.trim();
+  const pass=document.getElementById('regPassword').value;
+  const err=document.getElementById('registerError');
+  err.classList.remove('show');
+  if (!fn||!ln||!pos||!sch||!email||!pass){err.textContent='กรุณากรอกข้อมูลให้ครบ';err.classList.add('show');return;}
+  if (pass.length<6){err.textContent='รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร';err.classList.add('show');return;}
+  showLoading(true);
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, email, pass);
+    await setDoc(doc(db,'users',cred.user.uid),{firstName:fn,lastName:ln,position:pos,school:sch,email,completedVideos:[],registeredAt:new Date().toISOString()});
+  } catch(e) {
+    showLoading(false);
+    err.textContent = e.code==='auth/email-already-in-use'?'Email นี้ถูกใช้แล้ว กรุณาเข้าสู่ระบบ':'เกิดข้อผิดพลาด: '+e.message;
+    err.classList.add('show');
+  }
+};
+
+window.doLogout = async () => { clearInterval(timer); isWatching=false; await signOut(auth); };
+
+// ── Video functions ──
+function loadVideo(idx) {
+  currentIdx=idx; watchedSec=0; isWatching=false; clearInterval(timer);
+  const v = CONFIG.videos[idx];
+  document.getElementById('videoLabel').textContent = `คลิปที่ ${idx+1} จาก ${CONFIG.videos.length}`;
+  document.getElementById('videoTitle').textContent = v.title;
+  document.getElementById('ytPlayer').src = `https://www.youtube.com/embed/${v.youtubeId}?rel=0&modestbranding=1`;
+  const ov = document.getElementById('videoOverlay');
+  ov.classList.remove('hidden');
+  ov.onclick = () => { ov.classList.add('hidden'); startTimer(); };
   document.getElementById('statusDot').className = 'status-dot';
   document.getElementById('statusText').textContent = 'คลิกที่วิดีโอ แล้วกด ▶ เพื่อเริ่มนับเวลา';
   document.getElementById('statusTimer').textContent = '';
+  document.getElementById('tabWarning').classList.remove('show');
+  updateNextBtn();
 }
+
+function startTimer() {
+  if (isWatching||document.hidden) return;
+  isWatching=true;
+  document.getElementById('statusDot').className='status-dot watching';
+  document.getElementById('statusText').textContent='กำลังนับเวลา... โปรดอยู่ในหน้านี้';
+  const v = CONFIG.videos[currentIdx];
+  timer = setInterval(()=>{
+    if (!isWatching) return;
+    watchedSec++;
+    const rem = Math.max(0,v.minSeconds-watchedSec);
+    document.getElementById('statusTimer').textContent = rem>0?`เหลือ ${Math.floor(rem/60)}:${(rem%60).toString().padStart(2,'0')}`:'✓ ครบแล้ว';
+    if (watchedSec>=v.minSeconds && !completed.has(currentIdx)) {
+      completed.add(currentIdx);
+      saveProgress();
+      document.getElementById('statusDot').className='status-dot done';
+      document.getElementById('statusText').textContent='✓ ชมครบตามเวลาที่กำหนดแล้ว';
+      updateNextBtn(); renderPlaylist(); updateProgress();
+      showToast('✓ ชมคลิปนี้ครบแล้ว! กดถัดไปเพื่อดำเนินการต่อ');
+      clearInterval(timer);
+    }
+  },1000);
+}
+
+async function saveProgress() {
+  if (!currentUser) return;
+  try { await updateDoc(doc(db,'users',currentUser.uid),{completedVideos:[...completed].map(Number),lastUpdated:new Date().toISOString()}); }
+  catch(e){console.error(e);}
+}
+
+window.nextVideo = () => {
+  if (currentIdx<CONFIG.videos.length-1){clearInterval(timer);isWatching=false;loadVideo(currentIdx+1);renderPlaylist();}
+};
 
 function updateNextBtn() {
-  const btn = document.getElementById('btnNext');
-  const total = TRAINING_CONFIG.videos.length;
-  const isDone = completedVideos.has(currentVideoIndex);
-
-  if (currentVideoIndex >= total - 1) {
-    // last video
-    document.getElementById('btnNextText').textContent = '📜 รับเกียรติบัตร';
-    if (isDone) {
-      btn.classList.add('ready');
-      btn.onclick = showCertificate;
-    } else {
-      btn.classList.remove('ready');
-    }
-  } else {
-    const nextNum = currentVideoIndex + 2;
-    document.getElementById('btnNextText').textContent = `ถัดไป: คลิปที่ ${nextNum} →`;
-    if (isDone) {
-      btn.classList.add('ready');
-      btn.onclick = () => nextVideo();
-    } else {
-      btn.classList.remove('ready');
-    }
-  }
-}
-
-function nextVideo() {
-  if (currentVideoIndex < TRAINING_CONFIG.videos.length - 1) {
-    clearInterval(timerInterval);
-    isWatching = false;
-    loadVideo(currentVideoIndex + 1);
-    renderPlaylist();
-  }
+  const btn=document.getElementById('btnNext'), total=CONFIG.videos.length, done=completed.has(currentIdx);
+  if (currentIdx>=total-1){document.getElementById('btnNextText').textContent='📜 รับเกียรติบัตร';btn.onclick=done?showCert:null;}
+  else{document.getElementById('btnNextText').textContent=`ถัดไป: คลิปที่ ${currentIdx+2} →`;btn.onclick=done?window.nextVideo:null;}
+  btn.classList.toggle('ready',done);
 }
 
 function renderPlaylist() {
-  const el = document.getElementById('playlistEl');
-  el.innerHTML = '';
-  TRAINING_CONFIG.videos.forEach((v, i) => {
-    const isDone = completedVideos.has(i);
-    const isCurrent = i === currentVideoIndex;
-    const isLocked = !isDone && i > currentVideoIndex;
-
-    let statusClass = '';
-    let badgeHtml = '';
-    if (isDone) {
-      statusClass = 'completed';
-      badgeHtml = `<span class="item-badge badge-done">✓ ครบ</span>`;
-    } else if (isCurrent) {
-      statusClass = 'current';
-      badgeHtml = `<span class="item-badge badge-current">กำลังดู</span>`;
-    } else {
-      statusClass = isLocked ? 'locked' : '';
-      badgeHtml = `<span class="item-badge badge-locked">${isLocked ? '🔒' : '–'}</span>`;
-    }
-
-    el.innerHTML += `
-      <div class="playlist-item ${statusClass}">
-        <div class="item-num">${isDone ? '✓' : i+1}</div>
-        <div class="item-info">
-          <div class="item-name">${v.title}</div>
-          <div class="item-duration">${v.durationLabel}</div>
-        </div>
-        ${badgeHtml}
-      </div>`;
-  });
+  document.getElementById('playlistEl').innerHTML = CONFIG.videos.map((v,i)=>{
+    const isDone=completed.has(i),isCur=i===currentIdx,isLock=!isDone&&i>currentIdx;
+    const cls=isDone?'completed':isCur?'current':isLock?'locked':'';
+    const badge=isDone?`<span class="item-badge badge-done">✓ ครบ</span>`:isCur?`<span class="item-badge badge-current">กำลังดู</span>`:`<span class="item-badge badge-locked">${isLock?'🔒':'–'}</span>`;
+    return `<div class="playlist-item ${cls}"><div class="item-num">${isDone?'✓':i+1}</div><div class="item-info"><div class="item-name">${v.title}</div><div class="item-duration">${v.durationLabel}</div></div>${badge}</div>`;
+  }).join('');
 }
 
 function updateProgress() {
-  const total = TRAINING_CONFIG.videos.length;
-  const done = completedVideos.size;
-  const pct = (done / total) * 100;
-  document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progressCount').textContent = `${done}/${total}`;
+  const p=completed.size/CONFIG.videos.length*100;
+  document.getElementById('progressFill').style.width=p+'%';
+  document.getElementById('progressCount').textContent=`${completed.size}/${CONFIG.videos.length}`;
 }
 
-function showCertificate() {
-  // fill cert data
-  document.getElementById('certName').textContent =
-    `${userData.firstName} ${userData.lastName}`;
-  document.getElementById('certPosition').textContent =
-    `${userData.position} ${userData.school ? '| ' + userData.school : ''}`;
-  document.getElementById('certCourse').textContent = TRAINING_CONFIG.courseName;
-  document.getElementById('certHours').textContent = `จำนวน ${TRAINING_CONFIG.totalHours} ชั่วโมง`;
-
-  const now = new Date();
-  const thMonth = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน',
-    'กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
-  const thYear = now.getFullYear() + 543;
-  document.getElementById('certDate').textContent =
-    `${now.getDate()} ${thMonth[now.getMonth()]} ${thYear}`;
-
+function showCert() {
+  clearInterval(timer);
+  document.getElementById('certName').textContent=`${userData.firstName} ${userData.lastName}`;
+  document.getElementById('certPosition').textContent=`${userData.position}${userData.school?' | '+userData.school:''}`;
+  document.getElementById('certCourse').textContent=CONFIG.courseName;
+  document.getElementById('certHours').textContent=`จำนวน ${CONFIG.totalHours} ชั่วโมง`;
+  const now=new Date(),thM=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+  document.getElementById('certDate').textContent=`${now.getDate()} ${thM[now.getMonth()]} ${now.getFullYear()+543}`;
   showPage('pageCert');
 }
 
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3500);
-}
+function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+function showLoading(s){document.getElementById('loadingOverlay').classList.toggle('show',s);}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3500);}
 </script>
 </body>
 </html>
