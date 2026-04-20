@@ -3,18 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ระบบอบรมออนไลน์ สพป.นครพนม เขต ๑</title>
+<title>ระบบอบรมออนไลน์ การใช้งานระบบ ปพ.3 ออนไลน์</title>
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--navy:#1a2744;--navy-light:#243460;--gold:#c9a84c;--gold-light:#e8c97a;--gold-pale:#f7edd8;--cream:#fdf8f0;--white:#fff;--text:#1a1a2e;--muted:#5a6075;--success:#2e7d5e;--success-bg:#eaf4ef;--border:#ddd4bc;--red:#b91c1c;--red-bg:#fef2f2;}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;}
-/* HEADER */
 .site-header{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.2);}
 .header-inner{display:flex;align-items:center;gap:16px;padding:12px 32px;max-width:1200px;margin:0 auto;}
 .header-logo{width:48px;height:48px;flex-shrink:0;}
-.header-text h1{font-family:'Noto Serif Thai',serif;font-size:14px;font-weight:700;color:var(--gold-light);line-height:1.4;}
-.header-text p{font-size:11px;color:rgba(255,255,255,.5);margin-top:2px;}
+.header-text h1{font-family:'Noto Serif Thai',serif;font-size:13px;font-weight:700;color:var(--gold-light);line-height:1.5;}
+.header-text p{font-size:11px;color:rgba(255,255,255,.5);margin-top:1px;}
 .header-right{margin-left:auto;display:flex;align-items:center;gap:12px;}
 .header-user{font-size:13px;color:rgba(255,255,255,.7);}
 .header-user strong{color:var(--gold-light);}
@@ -24,8 +23,8 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
 .progress-bar-wrap{width:100px;height:5px;background:rgba(255,255,255,.15);border-radius:99px;overflow:hidden;}
 .progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-light));border-radius:99px;transition:width .6s;width:0%;}
 .progress-count{font-size:12px;font-weight:600;color:var(--gold-light);}
-/* PAGES */
 .page{display:none;}.page.active{display:block;}
+
 /* AUTH */
 .auth-wrap{min-height:calc(100vh - 72px);display:flex;align-items:center;justify-content:center;padding:40px 20px;}
 .auth-card{background:var(--white);border-radius:20px;box-shadow:0 8px 40px rgba(26,39,68,.15);padding:40px;width:100%;max-width:500px;border:1px solid var(--border);}
@@ -50,11 +49,12 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
 .auth-success{background:var(--success-bg);border:1px solid var(--success);border-radius:8px;padding:9px 13px;font-size:13px;color:var(--success);margin-bottom:12px;display:none;}
 .auth-success.show{display:block;}
 .divider{border:none;border-top:1px solid var(--border);margin:16px 0;}
+
 /* TRAINING */
 .training-layout{max-width:1100px;margin:0 auto;padding:28px 20px;display:grid;grid-template-columns:1fr 300px;gap:24px;}
 @media(max-width:800px){.training-layout{grid-template-columns:1fr;}}
 .video-label{font-size:11px;font-weight:600;color:var(--gold);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
-.video-title{font-family:'Noto Serif Thai',serif;font-size:19px;font-weight:700;color:var(--navy);margin-bottom:14px;line-height:1.5;}
+.video-title{font-family:'Noto Serif Thai',serif;font-size:18px;font-weight:700;color:var(--navy);margin-bottom:14px;line-height:1.5;}
 .video-wrapper{position:relative;padding-bottom:56.25%;background:#0f1726;border-radius:14px;overflow:hidden;box-shadow:0 6px 32px rgba(26,39,68,.15);border:1px solid var(--border);}
 .video-wrapper iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;}
 .video-overlay{position:absolute;inset:0;background:rgba(15,23,38,.82);display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;text-align:center;padding:20px;z-index:5;cursor:pointer;transition:opacity .3s;}
@@ -78,6 +78,7 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
 .status-timer{font-size:13px;font-weight:600;color:var(--navy);font-variant-numeric:tabular-nums;}
 .btn-next{display:block;width:100%;margin-top:12px;padding:12px;background:var(--success);color:white;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:600;border:none;border-radius:11px;cursor:pointer;opacity:.4;pointer-events:none;}
 .btn-next.ready{opacity:1;pointer-events:all;}
+.btn-next.ready:hover{background:#236b4d;}
 .sidebar-title{font-size:12px;font-weight:700;color:var(--navy);letter-spacing:.5px;margin-bottom:12px;text-transform:uppercase;}
 .playlist-item{display:flex;align-items:flex-start;gap:10px;padding:12px;border-radius:11px;border:1.5px solid var(--border);background:var(--white);margin-bottom:9px;}
 .playlist-item.current{border-color:var(--navy);}
@@ -93,7 +94,54 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
 .badge-done{background:var(--success-bg);color:var(--success);}
 .badge-lock{background:var(--cream);color:var(--muted);}
 .sidebar-info{background:var(--gold-pale);border:1px solid var(--gold);border-radius:11px;padding:13px;margin-top:16px;font-size:12px;color:#7a5c1e;line-height:1.8;}
-/* CONFIRM NAME PAGE */
+
+/* QUIZ */
+.quiz-wrap{min-height:calc(100vh - 72px);display:flex;align-items:flex-start;justify-content:center;padding:32px 20px;}
+.quiz-card{background:var(--white);border-radius:20px;box-shadow:0 8px 40px rgba(26,39,68,.15);padding:36px;width:100%;max-width:720px;border:1px solid var(--border);}
+.quiz-header{margin-bottom:24px;}
+.quiz-progress-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.quiz-part{font-size:12px;font-weight:600;color:var(--gold);letter-spacing:1px;text-transform:uppercase;}
+.quiz-counter{font-size:13px;color:var(--muted);}
+.quiz-prog-bar{height:5px;background:var(--cream);border-radius:99px;overflow:hidden;margin-bottom:20px;}
+.quiz-prog-fill{height:100%;background:var(--navy);border-radius:99px;transition:width .4s;}
+.quiz-question{font-family:'Noto Serif Thai',serif;font-size:17px;font-weight:600;color:var(--navy);line-height:1.7;margin-bottom:20px;}
+.quiz-options{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;}
+.quiz-opt{display:flex;align-items:flex-start;gap:12px;padding:13px 16px;border:1.5px solid var(--border);border-radius:11px;cursor:pointer;transition:all .15s;background:var(--cream);}
+.quiz-opt:hover{border-color:var(--navy);background:var(--white);}
+.quiz-opt.selected{border-color:var(--navy);background:#e8f0fe;}
+.quiz-opt.correct{border-color:var(--success);background:var(--success-bg);}
+.quiz-opt.wrong{border-color:#e53935;background:var(--red-bg);}
+.quiz-opt.show-correct{border-color:var(--success);background:var(--success-bg);}
+.opt-letter{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;border:1.5px solid var(--border);background:var(--white);color:var(--muted);}
+.quiz-opt.selected .opt-letter{background:var(--navy);color:white;border-color:var(--navy);}
+.quiz-opt.correct .opt-letter{background:var(--success);color:white;border-color:var(--success);}
+.quiz-opt.wrong .opt-letter{background:#e53935;color:white;border-color:#e53935;}
+.quiz-opt.show-correct .opt-letter{background:var(--success);color:white;border-color:var(--success);}
+.opt-text{font-size:14px;color:var(--text);line-height:1.6;padding-top:2px;}
+.quiz-feedback{display:none;padding:14px 16px;border-radius:10px;font-size:13px;line-height:1.7;margin-bottom:16px;}
+.quiz-feedback.show{display:block;}
+.quiz-feedback.correct-fb{background:var(--success-bg);border:1px solid var(--success);color:#1a5c3e;}
+.quiz-feedback.wrong-fb{background:var(--red-bg);border:1px solid #fca5a5;color:var(--red);}
+.quiz-actions{display:flex;gap:10px;justify-content:flex-end;}
+.btn-check{padding:10px 24px;background:var(--navy);color:var(--gold-light);border:none;border-radius:9px;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:600;cursor:pointer;opacity:.4;pointer-events:none;}
+.btn-check.ready{opacity:1;pointer-events:all;}
+.btn-next-q{padding:10px 24px;background:var(--success);color:white;border:none;border-radius:9px;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:600;cursor:pointer;display:none;}
+.btn-next-q.show{display:block;}
+.quiz-result{text-align:center;padding:20px 0;}
+.quiz-result .result-emoji{font-size:52px;margin-bottom:12px;}
+.quiz-result h3{font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:var(--navy);margin-bottom:8px;}
+.quiz-result p{font-size:14px;color:var(--muted);margin-bottom:20px;}
+.score-badge{display:inline-block;background:var(--success-bg);border:2px solid var(--success);border-radius:99px;padding:10px 32px;font-size:20px;font-weight:700;color:var(--success);margin-bottom:20px;}
+.wrong-list{text-align:left;background:var(--red-bg);border:1px solid #fca5a5;border-radius:12px;padding:16px;margin-bottom:20px;}
+.wrong-list h4{font-size:14px;font-weight:600;color:var(--red);margin-bottom:10px;}
+.wrong-item{font-size:13px;color:var(--text);margin-bottom:8px;line-height:1.6;padding-bottom:8px;border-bottom:1px solid #fca5a5;}
+.wrong-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.wrong-item .wi-q{font-weight:600;color:var(--navy);margin-bottom:3px;}
+.wrong-item .wi-correct{color:var(--success);}
+.btn-retry{padding:11px 28px;background:var(--red);color:white;border:none;border-radius:9px;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:600;cursor:pointer;margin-right:10px;}
+.btn-proceed{padding:11px 28px;background:var(--success);color:white;border:none;border-radius:9px;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:600;cursor:pointer;}
+
+/* CONFIRM NAME */
 .confirm-wrap{min-height:calc(100vh - 72px);display:flex;align-items:center;justify-content:center;padding:40px 20px;}
 .confirm-card{background:var(--white);border-radius:20px;box-shadow:0 8px 40px rgba(26,39,68,.15);padding:40px;width:100%;max-width:520px;border:1px solid var(--border);text-align:center;}
 .confirm-card .emoji{font-size:44px;margin-bottom:14px;}
@@ -105,6 +153,7 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
 .btn-edit-name{padding:11px 28px;background:transparent;color:var(--navy);border:1.5px solid var(--border);border-radius:10px;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:600;cursor:pointer;}
 .edit-name-form{display:none;margin-top:20px;text-align:left;}
 .edit-name-form.show{display:block;}
+
 /* CERT */
 .cert-page-wrap{min-height:calc(100vh - 72px);display:flex;flex-direction:column;align-items:center;padding:36px 20px 56px;}
 .cert-congrats{text-align:center;margin-bottom:28px;}
@@ -141,6 +190,7 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
 .request-edit-form{display:none;background:var(--cream);border:1.5px solid var(--border);border-radius:12px;padding:20px;margin-top:16px;width:100%;max-width:860px;}
 .request-edit-form.show{display:block;}
 @media print{body *{visibility:hidden;}#cert-container,#cert-container *{visibility:visible;}#cert-container{position:fixed;top:0;left:0;width:100%;}.cert-actions,.site-header,.request-edit-form,.cert-pending-badge{display:none;}}
+
 /* ADMIN */
 .admin-wrap{max-width:1100px;margin:0 auto;padding:28px 20px;}
 .admin-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
@@ -162,7 +212,7 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
 .pending-change{font-size:13px;margin-top:6px;}
 .pending-change .old{color:var(--red);text-decoration:line-through;}
 .pending-change .arrow{margin:0 6px;color:var(--muted);}
-.pending-change .new{color:var(--success);font-weight:600;}
+.pending-change .new-name{color:var(--success);font-weight:600;}
 .pending-actions{display:flex;gap:8px;}
 .btn-approve{padding:8px 18px;background:var(--success);color:white;border:none;border-radius:8px;font-family:'Sarabun',sans-serif;font-size:13px;font-weight:600;cursor:pointer;}
 .btn-reject{padding:8px 18px;background:transparent;color:var(--red);border:1.5px solid #fca5a5;border-radius:8px;font-family:'Sarabun',sans-serif;font-size:13px;font-weight:600;cursor:pointer;}
@@ -175,7 +225,6 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
 .pill-partial{background:#fff3cd;color:#856404;}
 .pill-none{background:var(--cream);color:var(--muted);}
 .empty-state{text-align:center;padding:24px;color:var(--muted);font-size:14px;}
-/* COMMON */
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--navy);color:white;padding:11px 22px;border-radius:9px;font-size:14px;font-weight:500;z-index:999;transition:transform .3s;white-space:nowrap;}
 .toast.show{transform:translateX(-50%) translateY(0);}
 .loading-overlay{position:fixed;inset:0;background:rgba(255,255,255,.85);display:none;align-items:center;justify-content:center;z-index:9999;font-size:16px;color:var(--navy);font-weight:500;}
@@ -188,13 +237,13 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
   <div class="header-inner">
     <svg class="header-logo" viewBox="0 0 60 60"><circle cx="30" cy="30" r="28" fill="#243460" stroke="#c9a84c" stroke-width="2"/><text x="30" y="22" text-anchor="middle" fill="#c9a84c" font-family="serif" font-size="10" font-weight="bold">สพป.</text><text x="30" y="34" text-anchor="middle" fill="white" font-family="serif" font-size="8">นครพนม</text><text x="30" y="44" text-anchor="middle" fill="#e8c97a" font-family="serif" font-size="8">เขต ๑</text></svg>
     <div class="header-text">
-      <h1>ระบบอบรมออนไลน์ สพป.นครพนม เขต ๑</h1>
-      <p>สำนักงานเขตพื้นที่การศึกษาประถมศึกษานครพนม เขต ๑</p>
+      <h1>การอบรมการใช้งานระบบ ปพ.3 ออนไลน์ ผ่านระบบออนไลน์ (หลักสูตรปี 2569)</h1>
+      <p>สังกัดสำนักงานเขตพื้นที่การศึกษาประถมศึกษานครพนม เขต 1</p>
     </div>
     <div class="header-right" id="headerRight" style="display:none">
       <div class="progress-wrap" id="headerProgress">
         <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressFill"></div></div>
-        <span class="progress-count" id="progressCount">0/3</span>
+        <span class="progress-count" id="progressCount">0/4</span>
       </div>
       <div class="header-user" id="headerUser"></div>
       <button class="btn-logout" onclick="doLogout()">ออกจากระบบ</button>
@@ -202,7 +251,7 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
   </div>
 </header>
 
-<!-- ═══ AUTH ═══ -->
+<!-- AUTH -->
 <div class="page active" id="pageAuth">
   <div class="auth-wrap">
     <div class="auth-card">
@@ -212,8 +261,6 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
         <button class="auth-tab" id="tabForgot" onclick="switchTab('forgot')">ลืมรหัสผ่าน</button>
         <button class="auth-tab" id="tabAdmin" onclick="switchTab('admin')">Admin</button>
       </div>
-
-      <!-- LOGIN -->
       <div id="formLogin">
         <div class="auth-badge">การอบรมออนไลน์</div>
         <h2>เข้าสู่ระบบ</h2>
@@ -224,8 +271,6 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
         <button class="btn-auth" onclick="doLogin()">เข้าสู่ระบบ →</button>
         <div style="text-align:center;margin-top:10px;"><button class="btn-text" onclick="switchTab('forgot')">ลืมรหัสผ่าน?</button></div>
       </div>
-
-      <!-- REGISTER -->
       <div id="formRegister" style="display:none">
         <div class="auth-badge">สมัครใหม่</div>
         <h2>สมัครเข้าอบรม</h2>
@@ -250,8 +295,6 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
         </div>
         <button class="btn-auth" onclick="doRegister()">สมัครและเริ่มอบรม →</button>
       </div>
-
-      <!-- FORGOT -->
       <div id="formForgot" style="display:none">
         <div class="auth-badge">ลืมรหัสผ่าน</div>
         <h2>รีเซ็ตรหัสผ่าน</h2>
@@ -273,8 +316,6 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
           <button class="btn-auth" onclick="doResetPassword()">ตั้งรหัสผ่านใหม่ →</button>
         </div>
       </div>
-
-      <!-- ADMIN LOGIN -->
       <div id="formAdmin" style="display:none">
         <div class="auth-badge" style="background:#fef2f2;color:var(--red);">Admin เขตพื้นที่</div>
         <h2>เข้าสู่ระบบ Admin</h2>
@@ -287,14 +328,14 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
   </div>
 </div>
 
-<!-- ═══ TRAINING ═══ -->
+<!-- TRAINING -->
 <div class="page" id="pageTraining">
   <div class="training-layout">
     <div>
-      <div class="video-label" id="videoLabel">คลิปที่ 1 จาก 3</div>
+      <div class="video-label" id="videoLabel">Part 1 จาก 4</div>
       <div class="video-title" id="videoTitle">กำลังโหลด...</div>
       <div class="video-wrapper">
-        <iframe id="ytPlayer" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        <iframe id="gdPlayer" src="" allow="autoplay" allowfullscreen></iframe>
         <div class="video-overlay" id="videoOverlay">
           <div class="overlay-icon">▶️</div>
           <div class="overlay-text">กดที่นี่ แล้วกด Play เพื่อเริ่มนับเวลา</div>
@@ -312,13 +353,14 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
         <div class="status-text" id="statusText">คลิกที่วิดีโอ แล้วกด ▶ เพื่อเริ่มนับเวลา</div>
         <div class="status-timer" id="statusTimer"></div>
       </div>
-      <button class="btn-next" id="btnNext"><span id="btnNextText">ถัดไป: คลิปที่ 2 →</span></button>
+      <button class="btn-next" id="btnNext"><span id="btnNextText">ถัดไป</span></button>
     </div>
     <div>
       <div class="sidebar-title">รายการวิดีโอ</div>
       <div id="playlistEl"></div>
       <div class="sidebar-info">
         🔒 ต้องชมแต่ละตอน<strong>ครบตามเวลา</strong><br>
+        📝 มีข้อสอบหลังจบแต่ละ Part<br>
         ⏸ สลับแท็บ = <strong>คลิปหยุดทันที</strong><br>
         💾 ความคืบหน้า<strong>บันทึกอัตโนมัติ</strong>
       </div>
@@ -326,7 +368,23 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
   </div>
 </div>
 
-<!-- ═══ CONFIRM NAME ═══ -->
+<!-- QUIZ -->
+<div class="page" id="pageQuiz">
+  <div class="quiz-wrap">
+    <div class="quiz-card" id="quizCard">
+      <div class="quiz-header">
+        <div class="quiz-progress-row">
+          <span class="quiz-part" id="quizPartLabel">Part 1</span>
+          <span class="quiz-counter" id="quizCounter">ข้อ 1 / 12</span>
+        </div>
+        <div class="quiz-prog-bar"><div class="quiz-prog-fill" id="quizProgFill"></div></div>
+      </div>
+      <div id="quizBody"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM NAME -->
 <div class="page" id="pageConfirmName">
   <div class="confirm-wrap">
     <div class="confirm-card">
@@ -335,7 +393,7 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
       <p>กรุณาตรวจสอบชื่อที่จะปรากฏในเกียรติบัตร<br>สามารถแก้ไขได้ก่อนพิมพ์</p>
       <div class="name-preview" id="namePreview">-</div>
       <div class="confirm-btns">
-        <button class="btn-confirm" onclick="confirmName()">✓ ถูกต้องแล้ว พิมพ์เกียรติบัตร</button>
+        <button class="btn-confirm" onclick="confirmName()">✓ ถูกต้องแล้ว</button>
         <button class="btn-edit-name" onclick="toggleEditName()">✏️ แก้ไขชื่อ</button>
       </div>
       <div class="edit-name-form" id="editNameForm">
@@ -344,8 +402,8 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
           <div class="form-group"><label>คำนำหน้า</label>
             <select id="editPrefix"><option value="">--</option><option>นาย</option><option>นาง</option><option>นางสาว</option><option>เด็กชาย</option><option>เด็กหญิง</option><option>ดร.</option><option>ว่าที่ร้อยตรี</option></select>
           </div>
-          <div class="form-group"><label>ชื่อ</label><input type="text" id="editFirstName" placeholder="ชื่อ"></div>
-          <div class="form-group"><label>นามสกุล</label><input type="text" id="editLastName" placeholder="นามสกุล"></div>
+          <div class="form-group"><label>ชื่อ</label><input type="text" id="editFirstName"></div>
+          <div class="form-group"><label>นามสกุล</label><input type="text" id="editLastName"></div>
         </div>
         <button class="btn-auth" onclick="applyEditName()">ยืนยันชื่อที่แก้ไข →</button>
       </div>
@@ -353,7 +411,7 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
   </div>
 </div>
 
-<!-- ═══ CERTIFICATE ═══ -->
+<!-- CERT -->
 <div class="page" id="pageCert">
   <div class="cert-page-wrap">
     <div class="cert-congrats">
@@ -378,7 +436,7 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
             <div class="cert-position" id="certPosition">-</div>
             <div class="cert-body-text">ได้เข้าร่วมการอบรมออนไลน์หลักสูตร</div>
             <div class="cert-course" id="certCourse">-</div>
-            <div class="cert-hours" id="certHours">จำนวน 3 ชั่วโมง</div>
+            <div class="cert-hours" id="certHours">-</div>
             <div class="cert-body-text" style="font-size:12px;color:#888;margin-bottom:0">วันที่ <span id="certDate">-</span></div>
             <div class="cert-footer">
               <div class="cert-sign"><div class="cert-sign-line"></div><div class="cert-sign-name">( ................................................ )</div><div class="cert-sign-pos">ผู้อำนวยการสำนักงานเขตพื้นที่การศึกษา<br>ประถมศึกษานครพนม เขต ๑</div></div>
@@ -388,12 +446,10 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
         </div>
       </div>
     </div>
-    <div class="cert-pending-badge" id="certPendingBadge" style="display:none">
-      ⏳ คำขอแก้ไขชื่ออยู่ระหว่างรอ Admin อนุมัติ — ชื่อจะอัปเดตเมื่อได้รับการอนุมัติ
-    </div>
+    <div class="cert-pending-badge" id="certPendingBadge" style="display:none">⏳ คำขอแก้ไขชื่ออยู่ระหว่างรอ Admin อนุมัติ</div>
     <div class="cert-actions">
       <button class="btn-print" onclick="window.print()">🖨️ พิมพ์เกียรติบัตร</button>
-      <button class="btn-request-edit" onclick="toggleRequestEdit()" id="btnRequestEdit">✏️ ขอแก้ไขชื่อ (ต้องรอ Admin)</button>
+      <button class="btn-request-edit" id="btnRequestEdit" onclick="toggleRequestEdit()">✏️ ขอแก้ไขชื่อ (ต้องรอ Admin)</button>
     </div>
     <div class="request-edit-form" id="requestEditForm">
       <div class="auth-error" id="requestEditError"></div>
@@ -403,26 +459,26 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
         <div class="form-group"><label>คำนำหน้า</label>
           <select id="reqEditPrefix"><option value="">--</option><option>นาย</option><option>นาง</option><option>นางสาว</option><option>เด็กชาย</option><option>เด็กหญิง</option><option>ดร.</option><option>ว่าที่ร้อยตรี</option></select>
         </div>
-        <div class="form-group"><label>ชื่อใหม่</label><input type="text" id="reqEditFirstName" placeholder="ชื่อ"></div>
-        <div class="form-group"><label>นามสกุลใหม่</label><input type="text" id="reqEditLastName" placeholder="นามสกุล"></div>
+        <div class="form-group"><label>ชื่อใหม่</label><input type="text" id="reqEditFirstName"></div>
+        <div class="form-group"><label>นามสกุลใหม่</label><input type="text" id="reqEditLastName"></div>
       </div>
-      <div class="form-group"><label>เหตุผล</label><input type="text" id="reqEditReason" placeholder="เช่น สะกดผิด, เปลี่ยนนามสกุลใหม่"></div>
+      <div class="form-group"><label>เหตุผล</label><input type="text" id="reqEditReason" placeholder="เช่น สะกดผิด"></div>
       <button class="btn-auth" onclick="submitRequestEdit()">ส่งคำขอแก้ไข →</button>
     </div>
   </div>
 </div>
 
-<!-- ═══ ADMIN DASHBOARD ═══ -->
+<!-- ADMIN -->
 <div class="page" id="pageAdmin">
   <div class="admin-wrap">
     <div class="admin-header">
       <h2>แดชบอร์ด Admin</h2>
       <span class="admin-badge">Admin เขตพื้นที่</span>
     </div>
-    <div class="stats-grid" id="statsGrid">
+    <div class="stats-grid">
       <div class="stat-card"><div class="stat-num" id="statTotal">-</div><div class="stat-label">ผู้ลงทะเบียนทั้งหมด</div></div>
-      <div class="stat-card highlight"><div class="stat-num" id="statDone">-</div><div class="stat-label">ดูครบทุกคลิปแล้ว</div></div>
-      <div class="stat-card"><div class="stat-num" id="statPartial">-</div><div class="stat-label">กำลังดูอยู่</div></div>
+      <div class="stat-card highlight"><div class="stat-num" id="statDone">-</div><div class="stat-label">ผ่านการอบรมแล้ว</div></div>
+      <div class="stat-card"><div class="stat-num" id="statPartial">-</div><div class="stat-label">กำลังอบรมอยู่</div></div>
       <div class="stat-card"><div class="stat-num" id="statPending">-</div><div class="stat-label">รออนุมัติแก้ไขชื่อ</div></div>
     </div>
     <div class="pending-list">
@@ -432,7 +488,7 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
     <div>
       <div class="section-title">👥 รายชื่อผู้เข้าอบรมทั้งหมด</div>
       <div style="overflow-x:auto">
-        <table class="user-table" id="userTable">
+        <table class="user-table">
           <thead><tr><th>#</th><th>ชื่อ-นามสกุล</th><th>ตำแหน่ง</th><th>โรงเรียน/หน่วยงาน</th><th>Username</th><th>ความคืบหน้า</th><th>วันสมัคร</th></tr></thead>
           <tbody id="userTableBody"><tr><td colspan="7" class="empty-state">กำลังโหลด...</td></tr></tbody>
         </table>
@@ -447,12 +503,12 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, updateDoc, query, collection, where, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, getDoc, updateDoc, query, collection, where, getDocs } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
 // ══════════════════════════════════════
 // CONFIG
 // ══════════════════════════════════════
-const ADMIN_PASSWORD = 'npk1admin2568'; // ← เปลี่ยนรหัส Admin ได้ที่นี่
+const ADMIN_PASSWORD = 'npk1admin2569'; // ← เปลี่ยนรหัส Admin ได้ที่นี่
 
 const firebaseConfig = {
   apiKey: "AIzaSyCKi7pa9SIaBOsxxHaUwLGhiGBYpwzJTLM",
@@ -464,12 +520,161 @@ const firebaseConfig = {
 };
 
 const TRAINING = {
-  courseName: 'การพัฒนาครูและบุคลากรทางการศึกษา ประจำปี ๒๕๖๘',
-  totalHours: '3',
+  courseName: 'การอบรมการใช้งานระบบ ปพ.3 ออนไลน์ ผ่านระบบออนไลน์ หลักสูตรปี 2569',
+  totalHours: '4',
   videos: [
-    { title: 'บทที่ 1 : แนะนำหลักสูตรและภาพรวม', youtubeId: 'dQw4w9WgXcQ', minSeconds: 30, durationLabel: '~10 นาที' },
-    { title: 'บทที่ 2 : เนื้อหาการอบรม',           youtubeId: 'dQw4w9WgXcQ', minSeconds: 30, durationLabel: '~15 นาที' },
-    { title: 'บทที่ 3 : สรุปและประเมินผล',         youtubeId: 'dQw4w9WgXcQ', minSeconds: 30, durationLabel: '~10 นาที' }
+    {
+      title: 'Part 1 : การเตรียมความพร้อมและขั้นตอนการลงทะเบียนเข้าใช้งานระบบ ปพ.3 ออนไลน์',
+      driveId: '1o048pRlSi9aqCu8uBl8Lz-06GW1Ct9qO',
+      minSeconds: 600,
+      durationLabel: '12:39 นาที',
+      quiz: [
+        { q:'ในคลิปวิดีโอ วิทยากรได้กล่าวถึงระบบ ปพ.3 ออนไลน์ว่ามีประวัติการใช้งานมาแล้วระยะหนึ่ง บริบทด้านเวลาใดที่อธิบายสถานการณ์การเข้าใช้งานของ "โรงเรียนประถมศึกษา" สังกัด สพป. ได้ถูกต้องที่สุด',
+          opts:['โรงเรียนประถมศึกษาใช้งานระบบนี้มาตั้งแต่ปีการศึกษา 2563 อย่างต่อเนื่อง','โรงเรียนประถมศึกษาเพิ่งเริ่มถูกนำเข้าสู่ระบบ ปพ.3 ออนไลน์ หลังวันที่ 15 พฤศจิกายน ปีการศึกษา 2567','โรงเรียนประถมศึกษามีความคุ้นเคยกับระบบนี้มากกว่าโรงเรียนขยายโอกาส','ระบบนี้ถูกพัฒนาขึ้นใหม่ทั้งหมดในปีการศึกษา 2567 เฉพาะสำหรับเขตพื้นที่ สพป. เท่านั้น'],
+          ans:1, fb:['ระบบมีมาก่อน แต่โรงเรียนประถมยังไม่ได้เข้าใช้งานในเวลานั้น','ถูกต้อง! วิทยากรระบุชัดว่าเขตประถมเพิ่งเริ่มใช้หลังวันที่ 15 พ.ย. 2567','ตรงข้ามกับความจริง โรงเรียนขยายโอกาสคุ้นเคยมากกว่า','ระบบไม่ได้ถูกพัฒนาใหม่ทั้งหมด แต่ขยายผลมาสู่โรงเรียนประถม']},
+        { q:'ตามโครงสร้างของระบบ ปพ.3 ออนไลน์ในปัจจุบัน คำสั่งแต่งตั้งคณะกรรมการวิชาการที่ถูกต้องและเป็นปัจจุบันที่สุด จะต้องประกอบด้วยตำแหน่งใดบ้าง',
+          opts:['นายทะเบียน, ผู้ตรวจทาน, ผู้เขียน/ผู้พิมพ์','ผู้เขียน/ผู้พิมพ์, ผู้ทาน, นายทะเบียน, ผู้ตรวจทาน, ผู้อนุมัติ','นายทะเบียน, ผู้อำนวยการโรงเรียน, ผู้อนุมัติ','นายทะเบียน, ผู้ตรวจทาน, ผู้อนุมัติ'],
+          ans:3, fb:['ตำแหน่งผู้เขียน/ผู้พิมพ์ ถูกยกเลิกไปแล้ว','นี่คือโครงสร้างแบบกระดาษเดิมที่มี 5 ตำแหน่ง ไม่สอดคล้องกับระบบออนไลน์','ขาดตำแหน่งผู้ตรวจทาน','ถูกต้อง! ปัจจุบันเหลือเพียง 3 ตำแหน่งหลักนี้']},
+        { q:'เมื่อโรงเรียนมีการเปลี่ยนตัวนายทะเบียน ขั้นตอนแรกสุดที่วิทยากรแนะนำให้ดำเนินการเพื่อตรวจสอบสถานะคำสั่งคณะกรรมการวิชาการของโรงเรียนคืออะไร',
+          opts:['เข้าสู่ระบบ ปพ.3 ออนไลน์ด้วยแอปพลิเคชัน ThaiD เพื่อตรวจสอบรายชื่อในระบบ','สแกน QR Code เพื่อตรวจสอบ "ทะเบียนคำสั่งคณะกรรมการวิชาการ" ที่เขตพื้นที่การศึกษารวบรวมไว้','ส่งข้อความผ่าน LINE แจ้งแอดมินเขตพื้นที่การศึกษาทันทีเพื่อขอเปลี่ยนชื่อ','ร่างคำสั่งแต่งตั้งคณะกรรมการวิชาการฉบับใหม่ทันที'],
+          ans:1, fb:['นายทะเบียนคนใหม่ยังเข้าระบบ ThaiD ไม่ได้หากยังไม่ได้ลงทะเบียน','ถูกต้อง! ควรตรวจสอบข้อมูลเดิมผ่าน QR Code ก่อนเสมอ','การแจ้งเขตทำในขั้นตอนหลังจากตรวจสอบและเตรียมข้อมูลแล้ว','ควรตรวจสอบคำสั่งเดิมก่อน บางกรณีอาจไม่ต้องทำใหม่']},
+        { q:'หากพบว่าคณะกรรมการวิชาการยังคงเป็นบุคคลเดิมทั้งหมด แต่ในคำสั่งระบุข้อความว่า "ให้ปฏิบัติหน้าที่ในภาคเรียนที่ 1 ปีการศึกษา 2567" โรงเรียนจะต้องดำเนินการอย่างไรหากต้องการใช้งานระบบในภาคเรียนที่ 2',
+          opts:['สามารถใช้งานคำสั่งเดิมต่อไปได้เลย เนื่องจากตัวบุคคลไม่ได้มีการเปลี่ยนแปลง','ต้องจัดทำคำสั่งแต่งตั้งคณะกรรมการวิชาการฉบับใหม่','แจ้งแอดมินเขตให้ขยายเวลาในคำสั่งเดิมผ่านระบบออนไลน์','ให้ผู้อำนวยการโรงเรียนลงนามรับรองสำเนาถูกต้องในคำสั่งเดิม'],
+          ans:1, fb:['แม้บุคคลเหมือนเดิม แต่คำสั่งหมดอายุตามเงื่อนไขเวลา ไม่สามารถอ้างอิงได้','ถูกต้อง! หากคำสั่งหมดอายุตามที่ระบุ ต้องออกคำสั่งใหม่','แอดมินเขตฯ ไม่สามารถแก้ไขระยะเวลาในเอกสารคำสั่งทางการของโรงเรียนได้','การต่ออายุต้องออกเป็นคำสั่งฉบับใหม่ ไม่ใช่เซ็นรับรองสำเนา']},
+        { q:'โรงเรียนแห่งหนึ่งมีคำสั่งที่ไม่ได้ระบุปีการศึกษาหรือระยะเวลาสิ้นสุด และบุคลากรยังคงปฏิบัติหน้าที่ปกติทั้งหมด หากต้องการออก ปพ.3 ในปีการศึกษาใหม่ โรงเรียนแห่งนี้ต้องดำเนินการอย่างไร',
+          opts:['ต้องจัดทำคำสั่งแต่งตั้งใหม่ทุกปีการศึกษา','ไม่จำเป็นต้องทำคำสั่งใหม่ สามารถใช้คำสั่งฉบับเดิมต่อได้เลย','ต้องทำคำสั่งใหม่โดยเพิ่มตำแหน่งผู้เขียน/ผู้พิมพ์เข้าไป','ต้องแจ้งแอดมินเขตฯ ให้ลบคำสั่งเดิมออกจากระบบก่อน'],
+          ans:1, fb:['ระบบไม่ได้บังคับให้ทำคำสั่งใหม่ทุกปีหากไม่มีการเปลี่ยนแปลง','ถูกต้อง! หากไม่มีการเปลี่ยนตัวบุคคลและคำสั่งไม่มีวันหมดอายุ ใช้ต่อได้เลย','ตำแหน่งผู้เขียน/ผู้พิมพ์ถูกตัดออกไปแล้ว','ไม่จำเป็นต้องแจ้งลบหากไม่ต้องทำคำสั่งใหม่']},
+        { q:'วิทยากรแนะนำเทคนิคการเขียนคำสั่งอย่างไร เพื่อลดภาระการทำคำสั่งใหม่ในทุกๆ ปีการศึกษา',
+          opts:['ระบุให้ชัดเจนว่า "ให้ปฏิบัติหน้าที่เป็นเวลา 5 ปีการศึกษา"','ไม่ต้องระบุปีการศึกษาหรือระยะเวลาสิ้นสุดการปฏิบัติงานในตัวคำสั่ง','ระบุข้อความว่า "ให้มีผลบังคับใช้ตลอดไปจนกว่าระบบจะยกเลิก"','ใส่ตำแหน่งผู้เขียน/ผู้พิมพ์สำรองไว้ในคำสั่ง'],
+          ans:1, fb:['การระบุเวลาเจาะจงอาจเกิดปัญหาหากมีการย้ายก่อนกำหนด','ถูกต้อง! หากไม่ระบุเงื่อนไขเวลา คำสั่งจะมีผลต่อเนื่องจนกว่าจะมีคำสั่งใหม่มาแทน','เป็นภาษาที่ไม่เป็นทางการในระเบียบงานสารบรรณราชการ','ตำแหน่งผู้เขียน/ผู้พิมพ์ถูกยกเลิกไปแล้ว']},
+        { q:'ทำไมจึงต้องสแกน QR Code เพื่อแจ้งแอดมินเขตฯ ก่อนที่จะเข้าไปกดลงทะเบียนในระบบ ปพ.3 ออนไลน์',
+          opts:['เพื่อให้แอดมินเขตส่งรหัส OTP กลับมา','เพื่อให้แอดมินเขตลบรายชื่อนายทะเบียนคนเดิมออกจากระบบ','เพื่อให้แอดมินเขตนำรายชื่อคนใหม่ไปรายงานกระทรวง','เพื่อให้แอดมินเขตกรอกข้อมูลลงทะเบียนแทน'],
+          ans:1, fb:['ระบบไม่ได้ใช้การยืนยันด้วย OTP จากเขต','ถูกต้อง! ระบบอนุญาตให้มีนายทะเบียนได้เพียง 1 คน ต้องลบชื่อเดิมก่อน','เหตุผลหลักคือการเคลียร์พื้นที่ในระบบ ไม่ใช่การรายงาน','นายทะเบียนต้องกรอกข้อมูลด้วยตนเอง']},
+        { q:'คุณครูท่านหนึ่งได้รับมอบหมายให้เป็นนายทะเบียนคนใหม่ และได้เข้าไปกรอกข้อมูลในเมนู "สถานศึกษาลงทะเบียน" แต่ระบบแจ้งเตือนและบล็อกไม่ให้ลงทะเบียน สาเหตุที่เป็นไปได้มากที่สุดคืออะไร',
+          opts:['รหัสสถานศึกษา 10 หลักไม่ถูกต้อง','มีชื่อนายทะเบียนคนเดิมค้างอยู่ในระบบ','คุณครูยังไม่ได้เข้าสู่ระบบผ่านแอปพลิเคชัน ThaiD','ระบบอยู่ระหว่างการปรับปรุงข้อมูลระดับประเทศ'],
+          ans:1, fb:['รหัสสถานศึกษามักเป็นข้อมูลคงที่ ปัญหาหลักคือความซ้ำซ้อน','ถูกต้อง! หากนายทะเบียนคนเดิมยังไม่ถูกลบออก คนใหม่ลงทะเบียนทับไม่ได้','การสแกน ThaiD ทำในขั้นตอนหลังจากลงทะเบียนผ่านแล้ว','ปัญหาไม่ได้เกิดจากการปรับปรุงระบบ แต่เป็น Data Conflict']},
+        { q:'เมนู "สถานศึกษาลงทะเบียน" ที่หน้าแรกของเว็บไซต์ ปพ.3 ออนไลน์ ถูกออกแบบมาให้ใครเป็นผู้เข้าไปดำเนินการ',
+          opts:['เฉพาะตำแหน่งนายทะเบียนเท่านั้น','เฉพาะตำแหน่งผู้ตรวจทานและนายทะเบียน','เฉพาะผู้อนุมัติ (ผู้อำนวยการโรงเรียน) เท่านั้น','คณะกรรมการวิชาการทั้ง 3 ตำแหน่ง'],
+          ans:0, fb:['ถูกต้อง! เมนูนี้สงวนสิทธิ์ไว้สำหรับการสร้างบัญชีเริ่มต้นของนายทะเบียนเท่านั้น','ผู้ตรวจทานไม่ได้ลงทะเบียนผ่านเมนูนี้','ผู้อนุมัติไม่ได้ลงทะเบียนผ่านเมนูนี้','ผู้ตรวจทานและผู้อนุมัติไม่ได้เข้าสู่ระบบด้วยวิธีนี้']},
+        { q:'หลังจากนายทะเบียนคนใหม่ลงทะเบียนผ่านหน้าเว็บจนเสร็จสิ้น ขั้นตอนต่อไปที่ต้องทำคืออะไร',
+          opts:['เข้าใช้งานระบบ ปพ.3 ออนไลน์ผ่านแอปพลิเคชัน ThaiD ได้ทันที','รอให้แอดมินเขตพื้นที่การศึกษากด "อนุมัติ" สถานะบัญชีผู้ใช้งานเสียก่อน','พิมพ์แบบฟอร์มการลงทะเบียนส่งเป็นจดหมายตอบรับไปที่ สพฐ.','สร้างบัญชีผู้ใช้งานให้กับตำแหน่งผู้ตรวจทานต่อทันที'],
+          ans:1, fb:['ยังเข้าไม่ได้ทันที ต้องรอรับการอนุมัติสิทธิ์ก่อน','ถูกต้อง! เมื่อลงทะเบียนใหม่ ข้อมูลจะรอที่เขตเพื่อให้แอดมินตรวจสอบและกดอนุมัติ','ระบบเป็นออนไลน์ทั้งหมด ไม่ต้องพิมพ์กระดาษส่ง','ยังสร้างบัญชีให้คนอื่นไม่ได้จนกว่าบัญชีของตนเองจะได้รับอนุมัติ']},
+        { q:'ข้อใดเรียงลำดับขั้นตอนการทำงานสำหรับ "นายทะเบียนคนใหม่" ได้ถูกต้องและสมบูรณ์ที่สุด',
+          opts:['ลงทะเบียนผ่านหน้าเว็บ → แจ้งเขตลบชื่อคนเดิม → โหลดแอปฯ ThaiD → รอเขตดึงเข้าระบบ','แจ้งเขตให้ลบชื่อคนเดิม → ลงทะเบียนผ่านหน้าเว็บ → แจ้งเขตให้กดอนุมัติ → เข้าสู่ระบบด้วยการสแกน ThaiD','โหลดแอปฯ ThaiD → เข้าสู่ระบบ ปพ.3 → ลบชื่อคนเดิมด้วยตนเอง → ลงทะเบียนชื่อตนเอง','ลงทะเบียนผ่านหน้าเว็บ → แอดมินเขตส่งรหัสผ่านให้ → เข้าสู่ระบบด้วยรหัสผ่าน'],
+          ans:1, fb:['ไม่สามารถลงทะเบียนหน้าเว็บได้สำเร็จหากยังไม่แจ้งลบชื่อคนเดิม','ถูกต้อง! เคลียร์พื้นที่ก่อน สร้างใหม่ รับไฟเขียว แล้วจึงใช้งาน','นายทะเบียนคนใหม่ไม่มีสิทธิ์ลบชื่อคนเดิมด้วยตนเอง','ระบบนี้ใช้ ThaiD ในการเข้าระบบ ไม่ใช่รหัสผ่านจากเขต']},
+        { q:'ในการเข้าใช้งานระบบ ปพ.3 ออนไลน์ครั้งแรกและครั้งต่อๆ ไป จะต้องใช้กลไกใดในการ Log in',
+          opts:['เข้าสู่ระบบโดยการกรอกเลขประจำตัวประชาชน 13 หลักและรหัสผ่าน','เข้าสู่ระบบผ่านระบบ Single Sign-On ของ My OBEC','สแกนคิวอาร์โค้ดและยืนยันตัวตนผ่านแอปพลิเคชัน ThaiD','ยืนยันตัวตนด้วยการรับรหัส OTP ผ่านทางอีเมล'],
+          ans:2, fb:['ระบบ ปพ.3 ออนไลน์ไม่ได้ใช้ระบบรหัสผ่านแบบดั้งเดิม','แม้จะเป็นระบบ สพฐ. แต่การเข้าระบบ ปพ.3 มีช่องทางยืนยันตัวตนเฉพาะ','ถูกต้อง! ต้องยืนยันตัวตนดิจิทัลผ่านแอปพลิเคชัน ThaiD ของกรมการปกครองทุกครั้ง','รหัส OTP ทางอีเมลไม่ใช่กลไกหลักในการเข้าระบบนี้']}
+      ]
+    },
+    {
+      title: 'Part 2 : การตั้งค่าข้อมูลผู้ใช้งานและการจัดการลายมือชื่ออิเล็กทรอนิกส์ในระบบ ปพ.3 ออนไลน์',
+      driveId: '17fztAxSkEe3IT-ntUEZqzGLPDbj6anmX',
+      minSeconds: 1050,
+      durationLabel: '22:04 นาที',
+      quiz: [
+        { q:'หลังจากที่นายทะเบียนเข้าสู่ระบบ ปพ.3 ออนไลน์ได้สำเร็จเป็นครั้งแรก ขั้นตอนแรกสุดที่วิทยากรแนะนำให้ดำเนินการก่อนคืออะไร',
+          opts:['เพิ่มรายชื่อผู้อำนวยการโรงเรียนเข้าสู่ระบบในฐานะผู้อนุมัติ','กรอกและตรวจสอบ "ข้อมูลส่วนบุคคล" ของตนเองให้ครบถ้วน','นำเข้าข้อมูลรายชื่อนักเรียนเพื่อเตรียมจัดทำเอกสาร','สร้างบัญชีผู้ใช้งานและกำหนดสิทธิ์ให้กับผู้ตรวจทานทันที'],
+          ans:1, fb:['ขั้นตอนนี้ทำในลำดับถัดไป หลังจากข้อมูลผู้ใช้งานหลักสมบูรณ์แล้ว','ถูกต้อง! สิ่งแรกที่ควรทำคือตรวจสอบโปรไฟล์และข้อมูลส่วนบุคคลของนายทะเบียนเอง','เป็นกระบวนการถัดไปหลังตั้งค่าผู้ใช้งานเสร็จ','ทำในลำดับถัดไปหลังจากข้อมูลของนายทะเบียนสมบูรณ์']},
+        { q:'ในขั้นตอนที่นายทะเบียนต้องเพิ่มรายชื่อผู้ตรวจทานและผู้อนุมัติ ข้อมูลสำคัญใดที่ต้องระบุให้ถูกต้องแม่นยำที่สุด',
+          opts:['เลขประจำตัวประชาชน 13 หลัก','อีเมลส่วนตัวของคณะกรรมการแต่ละท่าน','วันเดือนปีเกิดที่ตรงตามทะเบียนบ้าน','รหัสผ่านชั่วคราว 6 หลัก'],
+          ans:0, fb:['ถูกต้อง! ระบบผูกกับ ThaiD ซึ่งใช้เลขประจำตัวประชาชน หากกรอกผิดจะล็อกอินไม่ได้','ข้อมูลนี้ไม่ใช่คีย์หลักในการเชื่อมโยงสิทธิ์','ไม่ใช่ข้อมูลหลักที่ใช้ในระบบ','ระบบนี้ไม่ใช้การตั้งรหัสผ่านแบบดั้งเดิม']},
+        { q:'ทำไมการกรอกชื่อ-นามสกุลและเลขประจำตัวประชาชน 13 หลักของคณะกรรมการ จึงต้องระมัดระวังให้สะกดตรงตามบัตรประชาชนทุกประการ',
+          opts:['เพื่อให้สอดคล้องกับระบบจ่ายเงินเดือนของกระทรวงการคลัง','เพื่อให้สามารถยืนยันตัวตนผ่านแอปพลิเคชัน ThaiD ที่เชื่อมกับฐานข้อมูลทะเบียนราษฎรได้','เพื่อป้องกันไม่ให้เขตพื้นที่การศึกษาลบข้อมูลทิ้ง','เพื่อให้ระบบส่งรหัส OTP ไปยังโทรศัพท์ที่ลงทะเบียนไว้'],
+          ans:1, fb:['ไม่ใช่เหตุผลหลักในการทำงานของระบบ ปพ.3','ถูกต้อง! ThaiD ดึงข้อมูลจากทะเบียนราษฎร หากพิมพ์ผิดแม้ตัวเดียว ระบบจะเชื่อมโยงไม่ได้','ไม่เกี่ยวกับการลบข้อมูลของเขต','ระบบใช้ ThaiD ไม่ได้ใช้ OTP ผ่านโทรศัพท์']},
+        { q:'หลังจากนายทะเบียนเพิ่มรายชื่อผู้อนุมัติเข้าระบบแล้ว ผู้อนุมัติจะต้องทำอย่างไรเพื่อเข้าสู่ระบบ ปพ.3 ออนไลน์',
+          opts:['ต้องเข้าไปกดเมนู "สถานศึกษาลงทะเบียน" ที่หน้าเว็บก่อน','รอรับรหัสผ่านจากนายทะเบียน','ใช้สมาร์ทโฟนเปิดแอปพลิเคชัน ThaiD สแกน QR Code หน้าเว็บเพื่อเข้าสู่ระบบได้เลย','นำบัตรประชาชนไปเสียบเครื่องอ่านบัตรที่โรงเรียน'],
+          ans:2, fb:['เมนูลงทะเบียนสงวนสิทธิ์ไว้สำหรับนายทะเบียนคนแรกเท่านั้น','ระบบไม่ได้ใช้รหัสผ่านในการล็อกอิน','ถูกต้อง! เมื่อนายทะเบียนเพิ่มชื่อและสิทธิ์แล้ว ผู้อนุมัติใช้แอป ThaiD สแกนเข้าได้ทันที','ระบบไม่ได้ใช้เครื่องอ่านบัตรในการล็อกอินปกติ']},
+        { q:'หากผู้อำนวยการโรงเรียนเกษียณหรือย้าย และมีการแต่งตั้งผู้รักษาราชการแทน การตั้งค่าในระบบ ปพ.3 ออนไลน์ควรดำเนินการอย่างไร',
+          opts:['ไม่ต้องแก้ไขข้อมูลใดๆ ให้ผู้รักษาราชการแทนใช้สิทธิ์ของผู้อำนวยการคนเดิม','ให้นายทะเบียนเพิ่มชื่อผู้รักษาราชการแทนเข้าไปในตำแหน่งผู้อนุมัติตามที่ระบุในคำสั่ง','ต้องทำเรื่องแจ้งไปยังส่วนกลาง (สพฐ.) เพื่อขอเปิดสิทธิ์กรณีพิเศษ','ให้หยุดการใช้งานระบบไว้ก่อนจนกว่าจะได้ผู้อำนวยการตัวจริง'],
+          ans:1, fb:['การใช้บัญชีของบุคคลอื่นถือเป็นการผิดระเบียบ เพราะต้องสแกน ThaiD ส่วนบุคคล','ถูกต้อง! นายทะเบียนลบชื่อผู้อำนวยการคนเดิมออก และเพิ่มชื่อผู้รักษาราชการแทนในสิทธิ์ผู้อนุมัติ','ไม่จำเป็นต้องแจ้งส่วนกลาง โรงเรียนสามารถบริหารจัดการได้เอง','ไม่จำเป็นต้องหยุดใช้งาน สามารถปรับเปลี่ยนได้ทันที']},
+        { q:'หากต้องการเพิ่มผู้ตรวจทานคนใหม่เข้าสู่ระบบ นายทะเบียนต้องดำเนินการอย่างไร',
+          opts:['ลบข้อมูลผู้ตรวจทานคนเดิมออกก่อน แล้วจึงเพิ่มชื่อผู้ตรวจทานคนใหม่เข้าไป','เพิ่มชื่อผู้ตรวจทานคนใหม่เข้าไปได้เลย โดยไม่ต้องลบข้อมูลของคนเดิม','แจ้งแอดมินเขตพื้นที่การศึกษาให้ทำการลบและเพิ่มผู้ตรวจทานใหม่','ให้ผู้ตรวจทานคนใหม่เข้าไปลงทะเบียนผ่านหน้าเว็บด้วยตนเอง'],
+          ans:0, fb:['ถูกต้อง! ระบบกำหนดให้มีผู้ตรวจทานได้เพียง 1 คน ต้องลบคนเดิมออกก่อนจึงจะเพิ่มคนใหม่ได้','หากไม่ลบคนเดิม ระบบจะฟ้องว่าสิทธิ์ซ้ำซ้อน','นายทะเบียนสามารถจัดการได้เอง ไม่ต้องรบกวนเขต','ผู้ตรวจทานไม่ต้องลงทะเบียนผ่านหน้าเว็บ']},
+        { q:'ตำแหน่งใดในระบบ ปพ.3 ออนไลน์ที่มีสิทธิ์ในการเพิ่ม ลบ หรือแก้ไขข้อมูลของคณะกรรมการท่านอื่นๆ',
+          opts:['แอดมินเขตพื้นที่การศึกษา','ผู้อนุมัติ','นายทะเบียน','ผู้ตรวจทาน'],
+          ans:2, fb:['แอดมินเขตดูแลภาพรวม แต่การจัดการภายในเป็นหน้าที่ของโรงเรียน','ไม่มีสิทธิ์แก้ไขข้อมูลผู้ใช้งานท่านอื่น','ถูกต้อง! นายทะเบียนเปรียบเสมือน Admin ระดับสถานศึกษา มีสิทธิ์จัดการข้อมูลคณะกรรมการท่านอื่น','ไม่มีสิทธิ์แก้ไขข้อมูลผู้ใช้งานท่านอื่น']},
+        { q:'หากโรงเรียนมีการตั้ง "ผู้ช่วยนายทะเบียน" บุคคลเหล่านี้จะต้องมีชื่อปรากฏในระบบ ปพ.3 ออนไลน์หรือไม่',
+          opts:['ต้องมีชื่อปรากฏในระบบ โดยนายทะเบียนเป็นผู้เพิ่มสิทธิ์ให้','ต้องมีชื่อปรากฏในระบบ และต้องลงทะเบียนผ่านหน้าเว็บด้วยตนเอง','ไม่ต้องมีชื่อในระบบ แต่สามารถใช้บัญชีของนายทะเบียนแทนได้','ไม่ต้องมีชื่อในระบบ และระบบไม่อนุญาตให้บุคคลอื่นนอกจากกรรมการ 3 ตำแหน่งหลักเข้าใช้งาน'],
+          ans:3, fb:['ระบบไม่ได้ออกแบบมาให้รองรับตำแหน่งผู้ช่วย','ระบบไม่รองรับตำแหน่งผู้ช่วย','ไม่อนุญาตให้ใช้บัญชีร่วมกัน เพราะต้องสแกน ThaiD ส่วนบุคคล','ถูกต้อง! มีเพียง 3 ตำแหน่งหลักเท่านั้นที่เข้าระบบได้']},
+        { q:'การจัดเตรียมไฟล์ลายมือชื่ออิเล็กทรอนิกส์เพื่ออัปโหลดเข้าระบบ ข้อใดคือข้อกำหนดที่ถูกต้องที่สุด',
+          opts:['ต้องเซ็นด้วยปากกาสีดำหรือสีน้ำเงินเท่านั้น และอัปโหลดไฟล์ในรูปแบบ PDF','ต้องเซ็นบนกระดาษขาวไม่มีเส้นบรรทัด และทำการลบพื้นหลังออกให้โปร่งใส','สามารถใช้รูปถ่ายลายเซ็นที่ถ่ายจากโทรศัพท์แบบมีแสงเงาอัปโหลดได้เลย','ต้องให้ผู้อำนวยการโรงเรียนเซ็นกำกับรับรองสำเนาถูกต้องทับลงบนไฟล์ลายเซ็น'],
+          ans:1, fb:['ระบบรองรับไฟล์รูปภาพ ไม่ใช่ไฟล์ PDF','ถูกต้อง! ต้องเซ็นบนกระดาษขาวและลบพื้นหลังออก เพื่อให้ลายเซ็นแนบเนียนกับเอกสาร','แสงเงาจะทำให้เกิดกรอบสี่เหลี่ยมเมื่อนำไปใช้','ไม่จำเป็นต้องมีการเซ็นรับรองสำเนาบนไฟล์ลายเซ็น']},
+        { q:'วิทยากรแนะนำแอปพลิเคชันประเภทใดในการช่วยจัดการภาพถ่ายลายเซ็นก่อนนำไปลบพื้นหลัง',
+          opts:['โปรแกรมวาดภาพบนคอมพิวเตอร์ (Paint)','แอปพลิเคชันตกแต่งใบหน้า (Beauty Camera)','แอปพลิเคชันสแกนเอกสารบนสมาร์ทโฟน (เช่น Clear Scanner, CamScanner)','ระบบสร้างลายเซ็นอัตโนมัติจากแป้นพิมพ์'],
+          ans:2, fb:['ไม่ใช่เครื่องมือที่เหมาะสม','ไม่ใช่เครื่องมือที่วิทยากรแนะนำ','ถูกต้อง! แอปสแกนเอกสารช่วยปรับภาพโหมด B&W ลดแสงเงาได้อย่างหมดจด','ไม่ใช่เครื่องมือที่วิทยากรแนะนำ']},
+        { q:'ข้อควรระวังที่สำคัญที่สุดเมื่ออัปโหลดไฟล์ .PNG ที่ลบพื้นหลังให้โปร่งใสแล้วเข้าระบบ ปพ.3 ออนไลน์ คืออะไร',
+          opts:['ระบบจะไม่รองรับไฟล์ .PNG และบล็อกไม่ให้อัปโหลด','พื้นหลังที่โปร่งใสอาจประมวลผลผิดพลาด กลายเป็นพื้นหลังสีดำทึบทับข้อความ','ไฟล์ภาพจะถูกลดความละเอียดจนลายเซ็นเบลอ','ระบบจะเปลี่ยนสีหมึกของลายเซ็นให้เป็นสีดำทั้งหมด'],
+          ans:1, fb:['ระบบอนุญาตให้อัปโหลดได้','ถูกต้อง! ค่าความโปร่งใส (Alpha Channel) อาจประมวลผลเพี้ยน กลายเป็นกรอบสีดำทับข้อความ','ระบบไม่ได้ปรับขนาดหรือลดความละเอียด','สีของลายเซ็นขึ้นอยู่กับไฟล์ต้นฉบับ']},
+        { q:'หากผู้ใช้งานอัปโหลดรูปลายเซ็นที่ไม่ได้ตัดพื้นหลังออก เมื่อระบบนำไปประทับลงบนเอกสาร ปพ.3 จะเกิดปัญหาใด',
+          opts:['ระบบจะปฏิเสธการอัปโหลดไฟล์ทันที','ลายเซ็นจะเล็กเกินไปจนมองไม่เห็น','จะเกิดกรอบสี่เหลี่ยมสีทึบหรือสีเทาทับตัวอักษรบนเอกสาร ทำให้เอกสารไม่สมบูรณ์','ลายเซ็นจะกลายเป็นสีดำทั้งหมดโดยอัตโนมัติ'],
+          ans:2, fb:['ระบบอาจยอมรับไฟล์ แต่ผลลัพธ์บนเอกสารจะผิดพลาด','ขนาดสามารถปรับแต่งได้ ไม่เกี่ยวกับพื้นหลัง','ถูกต้อง! พื้นหลังกระดาษหรือแสงเงาจะกลายเป็นกรอบสี่เหลี่ยมทับเส้นบรรทัดหรือข้อความ','สีของลายเซ็นขึ้นอยู่กับไฟล์ภาพต้นฉบับ']}
+      ]
+    },
+    {
+      title: 'Part 3 : การอัปโหลดข้อมูลและการจัดการข้อผิดพลาดในระบบ ปพ.3 ออนไลน์',
+      driveId: '1f1ZdS74gZwOOzdQlcmMexWEHnrLeRp0h',
+      minSeconds: 1300,
+      durationLabel: '27:11 นาที',
+      quiz: [
+        { q:'สำหรับโรงเรียนประถมศึกษาที่ดำเนินการหลังวันที่ 15 พฤศจิกายน 2567 จะต้องเลือกอัปโหลดในส่วนใด',
+          opts:['อัปโหลดฝั่งซ้าย 100% เพราะเป็นรูปแบบเดิมที่คุ้นเคย','อัปโหลดผ่านระบบ SGS เท่านั้น เพื่อความแม่นยำ','อัปโหลดฝั่งขวา 100% เพราะเป็นรูปแบบใหม่ที่บังคับใช้ตั้งแต่วันที่ 15 พฤศจิกายน 2567','อัปโหลดฝั่งใดก็ได้ขึ้นอยู่กับความสะดวก'],
+          ans:2, fb:['การอัปโหลดฝั่งซ้ายใช้สำหรับข้อมูลก่อนวันที่ 15 พ.ย. 2567 เท่านั้น','วิทยากรแนะนำให้อัปโหลดผ่าน School Miss มากกว่า','ถูกต้อง! ข้อมูลตั้งแต่วันที่ 15 พ.ย. 2567 เป็นต้นไป ต้องอัปโหลดฝั่งขวา 100%','ระบบบังคับให้แยกฝั่งตามช่วงเวลาอย่างชัดเจน']},
+        { q:'หากสถานะในเมนูจัดการ ปพ.3 แสดงผลเป็น "20%" บุคคลใดคือผู้ที่ต้องดำเนินการ',
+          opts:['นายทะเบียน (0%) สามารถแก้ไขไฟล์ Excel แล้วอัปโหลดใหม่','ผู้ตรวจทาน (20%) สามารถกดตีกลับข้อมูลได้หากตรวจสอบแล้วไม่ถูกต้อง','ผู้อำนวยการโรงเรียน (80%) สามารถกดอนุมัติได้ทันที','แอดมินเขตพื้นที่ (100%) สามารถแก้ไขข้อมูลในระบบแทนโรงเรียน'],
+          ans:1, fb:['นายทะเบียนคือผู้ดำเนินการในสถานะเริ่มต้นหรือ 0%','ถูกต้อง! สถานะ 20% เป็นหน้าที่ของผู้ตรวจทาน ซึ่งมีสิทธิ์กดตีกลับได้','ผู้อนุมัติจะดำเนินการเมื่อสถานะขึ้นเป็น 80%','สถานะ 20% เป็นการทำงานในบทบาทของผู้ตรวจทาน']},
+        { q:'ในการดาวน์โหลดไฟล์ Excel จากระบบ School Miss หากโรงเรียนของคุณเป็น "โรงเรียนขยายโอกาส" ก่อนกดดาวน์โหลดจะต้องตั้งค่าสิ่งใด',
+          opts:['เลือกวันที่อนุมัติจบเป็น 31 มีนาคม เท่านั้น','เปลี่ยนการดึงข้อมูลจากระบบ SGS มาเป็น School Miss','เลือกเปลี่ยนระดับชั้นให้เป็น ม.3','เลือกระดับความหนาแน่นของข้อมูลเป็นแบบพิเศษ'],
+          ans:2, fb:['การเลือกวันที่อนุมัติจบเป็นขั้นตอนตอนอัปโหลด ไม่ใช่ตอนดาวน์โหลด','วิทยากรกำลังอธิบายการดาวน์โหลดไฟล์จากระบบ School Miss','ถูกต้อง! โรงเรียนขยายโอกาสต้องเปลี่ยนระดับชั้นให้เป็น ม.3 ก่อนดาวน์โหลด','ไม่มีเมนูการตั้งค่าความหนาแน่นในขั้นตอนนี้']},
+        { q:'หากระบบแจ้งเตือนข้อผิดพลาด "สีฟ้า" (ความคล้าย) เช่น การพิมพ์นามสกุลนักเรียนผิด วิธีการแก้ไขที่เหมาะสมที่สุดคืออะไร',
+          opts:['ต้องลบข้อมูลทั้งหมดแล้วอัปโหลดไฟล์ Excel ใหม่เท่านั้น','กดไอคอน "นักเรียนรับปริญญา" แล้วพิมพ์แก้ไขคำที่ถูกต้องในระบบได้เลย จากนั้นกดบันทึก','แนบเอกสารไฟล์ PDF ยืนยันแล้วกดปุ่ม Bypass','ส่งข้อมูลต่อไปให้ผู้ตรวจทาน (20%) เป็นผู้แก้ไข'],
+          ans:1, fb:['ไม่จำเป็นต้องย้อนกลับไปแก้ใน Excel เสมอไป สามารถแก้ในระบบได้เลย','ถูกต้อง! ข้อผิดพลาดสีฟ้าสามารถพิมพ์แก้ไขในระบบได้เลยทันที','การแนบไฟล์ PDF เป็นวิธีจัดการกับข้อผิดพลาดสีเหลือง','นายทะเบียนต้องแก้ไขให้เสร็จก่อน จึงจะส่งต่อได้']},
+        { q:'ในกรณีที่ระบบขึ้นแจ้งเตือน "สีแดง" เนื่องจากไม่ได้เรียงลำดับเลขประจำตัวนักเรียน ทำไมวิทยากรจึงแนะนำให้กลับไปแก้ไขในไฟล์ Excel',
+          opts:['เพราะระบบล็อกช่องหมายเลขประจำตัวนักเรียนไว้ไม่ให้แก้ไข','เพราะการแก้ไขในระบบอาจทำให้เปอร์เซ็นต์รีเซ็ตเป็น 0%','เพราะในระบบไม่มีปุ่มสลับลำดับอัตโนมัติ หากแก้เพียงตัวเลขในระบบจะทำให้เลขไม่ตรงกับตัวนักเรียน','เพราะข้อผิดพลาดสีแดงต้องให้แอดมินเขตปลดล็อกก่อน'],
+          ans:2, fb:['ระบบไม่ได้ล็อก อนุญาตให้พิมพ์แก้ไขได้ แต่ไม่แนะนำ','การแก้ไขข้อผิดพลาดไม่ได้ทำให้เปอร์เซ็นต์รีเซ็ตแบบนี้','ถูกต้อง! ระบบไม่มีฟังก์ชันเลื่อนสลับข้อมูล หากแก้แค่ตัวเลข เลขจะไม่ตรงกับตัวเด็ก','โรงเรียนสามารถลบและจัดเรียงใหม่ใน Excel ได้เอง']},
+        { q:'กรณีที่นามสกุลของนักเรียนไม่ตรงกับบิดามารดา กรณีใดที่ผู้ใช้งาน "ไม่ต้อง" แนบเอกสารเพิ่มเติม',
+          opts:['เมื่อนามสกุลนักเรียนไม่ตรงกับใครเลย แต่ครูประจำชั้นรับรองแล้ว','เมื่อนามสกุลของนักเรียนตรงกับมารดาโดยกำเนิดเพียงฝ่ายเดียว','เมื่อนักเรียนคนนั้นเป็นเด็กในระบบ GE','เมื่ออัปโหลดข้อมูลเสร็จแล้วระบบผ่านไปสถานะ 20% อัตโนมัติ'],
+          ans:1, fb:['หากไม่ตรงกับใครเลย ระบบบังคับให้แนบเอกสารยืนยันเสมอ','ถูกต้อง! เงื่อนไขการแนบเอกสารคือ "ไม่ตรงทั้งบิดาและมารดา" ถ้าตรงฝ่ายใดฝ่ายหนึ่งถือว่าผ่าน','สำหรับนักเรียน GE ต้องทำให้ข้อมูลตรงกับระบบ GE ของกระทรวงศึกษา','หากติดข้อผิดพลาดสีเหลือง ระบบจะไม่ผ่านไปสถานะ 20% จนกว่าจะแก้ไขเสร็จ']},
+        { q:'หลังอัปโหลดไฟล์สแกน PDF เพื่อยืนยันกรณีนามสกุลไม่ตรงเสร็จแล้ว ต้องทำขั้นตอนใดเพื่อให้ "ปุ่มถูก" ปรากฏขึ้นในระบบ',
+          opts:['รอให้ระบบประมวลผลไฟล์ PDF แล้วปุ่มจะปรากฏขึ้นเอง','เข้าไปแก้ไขข้อผิดพลาดสีฟ้าให้เสร็จก่อน','ต้องกลับมาที่หน้าหลักแล้วกดปุ่ม "ยืนยันเอกสารแนบ" (Bypass) ก่อน 1 ครั้ง','ส่งข้อมูลให้ผู้ตรวจทาน (สถานะ 20%) เป็นผู้กดตรวจสอบเอกสาร'],
+          ans:2, fb:['ปุ่มยืนยันจะไม่แสดงอัตโนมัติ ต้องกดคำสั่งเอง','ต้องแก้สีฟ้าก่อนแนบเอกสารสีเหลือง แต่หลังแนบแล้วก็ต้องกด Bypass อยู่ดี','ถูกต้อง! หลังแนบเอกสารแล้ว ต้องกดยืนยันเอกสารแนบ (Bypass) ก่อน ปุ่มถูกจึงจะแสดง','หากไม่กด Bypass ก่อน จะไม่เห็นปุ่มถูก ทำให้ส่งข้อมูลให้ผู้ตรวจทานไม่ได้']},
+        { q:'วิทยากรให้ระดับความสำคัญ "10 คะแนน" แก่เมนูใด เพราะเป็นหน้าจอหลักในการดูรายละเอียดข้อผิดพลาดทั้งหมดของนักเรียน',
+          opts:['เมนู "ดูข้อมูลการติดต่อสถานศึกษา"','เมนู "ตรวจสอบสถานะการอนุมัติ"','เมนู "ดาวน์โหลดเป็น Excel"','เมนู "ตรวจสอบข้อมูลนักเรียน" (ปุ่มไอคอนรูปนักเรียนรับปริญญา)'],
+          ans:3, fb:['ปุ่มติดต่อสถานศึกษาเอาไว้ดูรายชื่อคณะกรรมการวิชาการ','เมนูนี้เป็นปุ่มลับเอาไว้ดูเหตุผลเวลาข้อมูลถูกตีกลับ','ปุ่มนี้มีไว้สำหรับดาวน์โหลดออกมาเป็นไฟล์ Excel','ถูกต้อง! วิทยากรเรียกว่า "พระเอก" เพราะเป็นปุ่มที่ใช้ดูและเจาะลึกข้อผิดพลาดทุกสีได้']}
+      ]
+    },
+    {
+      title: 'Part 4 : กรณีศึกษา ม.ต้น ขยายโอกาส และการทำงานของผู้ตรวจทาน',
+      driveId: '1WXCnlfngz5Lcf1pUvcaGyx-ulOJRMdwJ',
+      minSeconds: 860,
+      durationLabel: '17:52 นาที',
+      quiz: [
+        { q:'หากโรงเรียนมีนักเรียนที่จบไม่พร้อมรุ่น โดยอนุมัติจบในวันที่ 20 เมษายน การรัน "เลขที่ ปพ.2" สำหรับรอบ 20 เมษายน จะต้องดำเนินการอย่างไร',
+          opts:['รันตัวเลขต่อเนื่องจากนักเรียนคนสุดท้ายของรอบ 31 มีนาคม','รันเริ่มต้นที่เลข 1 ใหม่เสมอ ตามรอบการอนุมัติจบนั้นๆ','ไม่ต้องกรอกเลขที่ ปพ.2 สำหรับนักเรียนที่จบไม่พร้อมรุ่น','นำข้อมูลนักเรียนทั้งสองรอบมารวมกันเป็นไฟล์เดียวแล้วรันเลขใหม่ทั้งหมด'],
+          ans:1, fb:['การรันเลข ปพ.2 จะไม่รันต่อจากรุ่นก่อนหน้า','ถูกต้อง! หากเด็กจบไม่พร้อมรุ่น เลข ปพ.2 ต้องรันเริ่มที่เลข 1 ใหม่เสมอตามรอบ','นักเรียนทุกคนจำเป็นต้องมีเลขที่ ปพ.2 ที่รันตามลำดับ','ไม่จำเป็นต้องรวมไฟล์ สามารถอัปโหลดแยกตามรอบได้']},
+        { q:'หากระบบแจ้งเตือนข้อผิดพลาด "สีแดง" เนื่องจากนักเรียน ม.ต้น ใช้คำนำหน้าว่า "นางสาว" แทนที่จะเป็น "เด็กหญิง" วิทยากรแนะนำให้แก้ไขที่ใดจึงจะเหมาะสมที่สุดในระยะยาว',
+          opts:['แก้ไขในระบบ ปพ.3 ออนไลน์ได้เลย เพื่อความรวดเร็ว','ต้องส่งข้อมูลให้เขตพื้นที่เป็นผู้แก้ไขในระบบส่วนกลาง','ควรกลับไปแก้ไขที่ไฟล์ Excel ต้นฉบับ เพื่อให้ข้อมูลอัปเดตตรงกัน','แนบเอกสารชี้แจงเป็นไฟล์ PDF เพื่อขอ Bypass'],
+          ans:2, fb:['แม้ว่าระบบจะอนุญาตให้แก้ได้ แต่วิทยากรไม่แนะนำให้ทำเป็นหลัก','โรงเรียนสามารถแก้ไขได้เองเลย ไม่ต้องรบกวนเขต','ถูกต้อง! ควรแก้ใน Excel ต้นฉบับ เพราะหากแก้แค่ในระบบ ไฟล์เดิมก็ยังมีข้อมูลผิดอยู่','ข้อผิดพลาดเรื่องคำนำหน้าเป็นการพิมพ์ผิด ไม่ใช่กรณีที่ต้องแนบเอกสาร PDF']},
+        { q:'ในการตรวจสอบข้อมูล ปพ.3 : บ (ม.ต้น ขยายโอกาส) ช่อง "หน่วยกิตที่เรียน" มีความหมายตรงกับข้อใด',
+          opts:['จำนวนหน่วยกิตเฉพาะรายวิชาที่นักเรียนสอบผ่าน','จำนวนหน่วยกิตทั้งหมดที่มาจากหลักสูตรของสถานศึกษา','จำนวนหน่วยกิตสะสมรวมตั้งแต่ระดับชั้น ป.1 ถึง ม.3','จำนวนหน่วยกิตที่นักเรียนลงทะเบียนเรียนเสริมพิเศษ'],
+          ans:1, fb:['จำนวนหน่วยกิตที่สอบผ่านจะอยู่ในช่อง "หน่วยกิตที่ได้"','ถูกต้อง! หน่วยกิตที่เรียน หมายถึง หน่วยกิตทั้งหมดที่มาจากหลักสูตรของสถานศึกษา','ไม่ได้รวมตั้งแต่ระดับประถม เป็นหน่วยกิตของหลักสูตร ม.ต้น','เป็นหน่วยกิตจากหลักสูตรปกติ ไม่ใช่การเรียนเสริมพิเศษ']},
+        { q:'เมื่อข้อมูลถูกส่งมาถึงสถานะ "20%" ผู้ตรวจทานจะมองเห็นข้อผิดพลาดแจ้งเตือนสีใดได้บ้าง',
+          opts:['เห็นได้เฉพาะสีฟ้าเท่านั้น','เห็นได้ทั้งสีฟ้าและสีเหลือง','เห็นได้ครบทั้งสีฟ้า สีเหลือง และสีแดง','ไม่เห็นข้อผิดพลาดใดๆ เลย เพราะระบบบังคับให้นายทะเบียนแก้จนเป็นสีเขียว 100%'],
+          ans:0, fb:['ถูกต้อง! ข้อผิดพลาดสีแดงและสีเหลืองจะไม่หลุดมาถึงผู้ตรวจทาน แต่สีฟ้ายังคงแสดงได้','ข้อผิดพลาดสีเหลืองจะไม่ผ่านมาถึงผู้ตรวจทาน ระบบบังคับให้นายทะเบียนจัดการก่อน','ระบบจะล็อกไม่ให้ส่งหากยังมีข้อผิดพลาดสีแดงหรือสีเหลืองค้างอยู่','ผู้ตรวจทานยังเห็นข้อผิดพลาดสีฟ้าได้']},
+        { q:'หาก "ผู้ตรวจทาน" (สถานะ 20%) ตรวจพบว่าข้อมูลไม่ถูกต้องและต้องการกด "ตีกลับ" ข้อจำกัดของผู้ตรวจทานในระบบนี้คืออะไร',
+          opts:['ไม่สามารถกดตีกลับได้ ต้องให้ผู้อนุมัติ (80%) เป็นผู้กดเท่านั้น','สามารถกดตีกลับได้ แต่จะพิมพ์ข้อความคอมเมนต์ชี้แจงเหตุผลไม่ได้','ต้องสแกน QR Code ใหม่ทุกครั้งที่ต้องการกดตีกลับ','สามารถตีกลับได้เฉพาะข้อผิดพลาดสีแดงเท่านั้น'],
+          ans:1, fb:['ผู้ตรวจทานมีสิทธิ์กดตีกลับให้นายทะเบียนได้','ถูกต้อง! ผู้ตรวจทานสามารถกดตีกลับได้ แต่ระบบไม่อนุญาตให้พิมพ์คอมเมนต์แนบไปด้วย','การสแกน QR Code ใช้เฉพาะตอนเข้าสู่ระบบ','ข้อผิดพลาดสีแดงจะไม่ถูกส่งมาถึงผู้ตรวจทานตั้งแต่แรก']},
+        { q:'เมื่อระบบดำเนินการถึงสถานะ 40% ความแตกต่างระหว่าง ปพ.3 : ป (ประถม) และ ปพ.3 : บ (ม.ต้น) คืออะไร',
+          opts:['ปพ.3 : ป จะต้องรอ สพฐ. ตรวจสอบ แต่ ปพ.3 : บ สพฐ. จะให้ผ่านอัตโนมัติ','ทั้งสองแบบต้องรอให้เขตพื้นที่กดยืนยันด้วยมือเท่านั้น','ปพ.3 : ป สพฐ. จะให้ผ่านโดยอัตโนมัติ แต่ ปพ.3 : บ จะต้องรอ สพฐ. ตรวจสอบ','สพฐ. จะไม่เข้ามาเกี่ยวข้องในขั้นตอนนี้'],
+          ans:2, fb:['สลับกันครับ ปพ.3 : ป คือแบบที่ผ่านอัตโนมัติ','ระบบมีการดำเนินการอัตโนมัติจาก สพฐ. สำหรับบางกรณี','ถูกต้อง! ปพ.3 : ป สพฐ. ให้ผ่านอัตโนมัติ แต่ ปพ.3 : บ ต้องรอ สพฐ. ตรวจสอบ','หลังสถานะ 40% จะมีบทบาทของ สพฐ. เข้ามาเกี่ยวข้อง']},
+        { q:'หากโรงเรียนมีนักเรียนที่จบไม่พร้อมรุ่น โรงเรียนจะต้องจัดการอัปโหลดข้อมูลเข้าสู่ระบบ ปพ.3 อย่างไร',
+          opts:['ต้องรอให้เด็กทุกคนจบพร้อมกันแล้วจึงค่อยอัปโหลดทีเดียว','สามารถนำไฟล์ Excel แต่ละรอบแยกอัปโหลดเข้าสู่ระบบตามวันที่อนุมัติจบได้เลย','ต้องนำข้อมูลนักเรียนทุกรอบมารวมกันในไฟล์ Excel ต้นฉบับไฟล์เดียวก่อนอัปโหลด','ต้องให้เขตพื้นที่เป็นผู้อัปโหลดข้อมูลสำหรับเด็กที่จบไม่พร้อมรุ่น'],
+          ans:1, fb:['ไม่จำเป็นต้องรอให้เด็กทุกคนจบพร้อมกัน','ถูกต้อง! สามารถอัปโหลดไฟล์ ปพ.3 แยกตามรอบวันอนุมัติจบเข้าไปได้เรื่อยๆ','ไม่จำเป็นต้องรวมไฟล์เป็นไฟล์เดียว','นายทะเบียนของโรงเรียนสามารถอัปโหลดได้เองทั้งหมด']},
+        { q:'การเข้าสู่ระบบของ "ผู้ตรวจทาน" เพื่อตรวจสอบข้อมูล ปพ.3 จะต้องดำเนินการอย่างไร',
+          opts:['ล็อกอินผ่านบัญชีของนายทะเบียน แล้วเลือกสลับผู้ใช้งานในระบบ','เข้าสู่ระบบด้วย ID ของผู้ตรวจทานที่หน้าเว็บหลัก โดยใช้การสแกน QR Code ซึ่งมีเวลา 1 นาที','ผู้ตรวจทานไม่ต้องเข้าสู่ระบบ เพียงแค่รับเอกสารกระดาษจากนายทะเบียนมาเซ็นชื่อ','เข้าสู่ระบบผ่าน School Miss แล้วข้อมูลจะเชื่อมโยงมายัง ปพ.3 อัตโนมัติ'],
+          ans:1, fb:['ผู้ตรวจทานจะไม่ได้อยู่ในระบบไอดีเดียวกับนายทะเบียน','ถูกต้อง! ผู้ตรวจทานต้องสแกน QR Code ที่หน้าเว็บด้วย ID ของตนเอง โดย QR Code มีเวลาจำกัด 1 นาที','การตรวจสอบและลงนามต้องทำในระบบอิเล็กทรอนิกส์ทั้งหมด','การเข้าสู่ระบบต้องทำผ่านหน้าเว็บ ปพ.3 ออนไลน์โดยตรง']}
+      ]
+    }
   ]
 };
 // ══════════════════════════════════════
@@ -479,21 +684,22 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 let currentUser=null, userData={}, currentIdx=0;
-let completed=new Set(), watchedSec=0;
-let timer=null, isWatching=false;
-let forgotUid=null, forgotUsername_=null, forgotOldPass=null;
+let completed=new Set(), quizPassed=new Set();
+let watchedSec=0, timer=null, isWatching=false;
+let forgotUid=null, forgotUsername_=null;
 let isAdmin=false;
+// Quiz state
+let quizIdx=0, quizVideoIdx=0, selectedOpt=null, answered=false;
 
-// ── YouTube pause via postMessage ──
-function pauseYT() {
-  const f=document.getElementById('ytPlayer');
-  if(f&&f.contentWindow) f.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}','*');
+// ── Pause YT/GDrive ──
+function pauseVideo_() {
+  const f=document.getElementById('gdPlayer');
+  if(f) { const s=f.src; f.src=''; f.src=s; }
 }
 
-// ── ป้องกันลักไก่ ──
 function handleLeave() {
   if(!isWatching) return;
-  isWatching=false; clearInterval(timer); pauseYT();
+  isWatching=false; clearInterval(timer); pauseVideo_();
   document.getElementById('statusDot').className='status-dot paused';
   document.getElementById('statusText').textContent='⏸ วิดีโอถูกหยุด — กดปุ่มเพื่อดูต่อ';
   document.getElementById('pausedOverlay').classList.add('show');
@@ -511,7 +717,7 @@ window.resumeVideo=()=>{
   document.getElementById('statusText').textContent='กด ▶ ในวิดีโอแล้วคลิกที่นี่เพื่อนับเวลาต่อ';
 };
 
-// ── Auth state ──
+// ── Auth ──
 onAuthStateChanged(auth, async(user)=>{
   if(user){
     currentUser=user; showLoading(true);
@@ -519,21 +725,17 @@ onAuthStateChanged(auth, async(user)=>{
     if(snap.exists()){
       userData=snap.data();
       completed=new Set((userData.completedVideos||[]).map(Number));
+      quizPassed=new Set((userData.quizPassed||[]).map(Number));
       document.getElementById('headerRight').style.display='flex';
       document.getElementById('headerProgress').style.display='flex';
       document.getElementById('headerUser').innerHTML=`สวัสดี <strong>${userData.prefix}${userData.firstName} ${userData.lastName}</strong>`;
       updateProgress();
-      // check pending approval
-      if(userData.pendingEdit){
-        document.getElementById('certPendingBadge').style.display='block';
-        document.getElementById('btnRequestEdit').style.display='none';
-      }
-      if(completed.size>=TRAINING.videos.length){
-        if(userData.certNameConfirmed){ showCert(); }
-        else { showConfirmName(); }
+      if(userData.pendingEdit){ document.getElementById('certPendingBadge').style.display='block'; document.getElementById('btnRequestEdit').style.display='none'; }
+      if(quizPassed.size>=TRAINING.videos.length){
+        if(userData.certNameConfirmed){ showCert(); } else { showConfirmName(); }
       } else {
         let resume=0;
-        for(let i=0;i<TRAINING.videos.length;i++){if(!completed.has(i)){resume=i;break;}}
+        for(let i=0;i<TRAINING.videos.length;i++){ if(!quizPassed.has(i)){resume=i;break;} }
         showPage('pageTraining'); loadVideo(resume); renderPlaylist();
       }
     }
@@ -545,7 +747,6 @@ onAuthStateChanged(auth, async(user)=>{
   }
 });
 
-// ── Tab switch ──
 window.switchTab=(tab)=>{
   ['Login','Register','Forgot','Admin'].forEach(t=>{
     document.getElementById('tab'+t).classList.toggle('active',t.toLowerCase()===tab);
@@ -556,11 +757,10 @@ window.switchTab=(tab)=>{
     document.getElementById('forgotStep2').style.display='none';
     document.getElementById('forgotError').classList.remove('show');
     document.getElementById('forgotSuccess').classList.remove('show');
-    forgotUid=null; forgotUsername_=null; forgotOldPass=null;
+    forgotUid=null; forgotUsername_=null;
   }
 };
 
-// ── Login ──
 window.doLogin=async()=>{
   const u=document.getElementById('loginUsername').value.trim().toLowerCase();
   const p=document.getElementById('loginPassword').value;
@@ -572,7 +772,6 @@ window.doLogin=async()=>{
   catch(e){ showLoading(false); err.textContent='Username หรือรหัสผ่านไม่ถูกต้อง'; err.classList.add('show'); }
 };
 
-// ── Register ──
 window.doRegister=async()=>{
   const prefix=document.getElementById('regPrefix').value;
   const fn=document.getElementById('regFirstName').value.trim();
@@ -589,11 +788,9 @@ window.doRegister=async()=>{
   if(pass.length<6){err.textContent='รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร';err.classList.add('show');return;}
   if(pass!==pass2){err.textContent='รหัสผ่านไม่ตรงกัน';err.classList.add('show');return;}
   showLoading(true);
-  // ตรวจ username ซ้ำ
   const q1=query(collection(db,'users'),where('username','==',uname));
   const s1=await getDocs(q1);
   if(!s1.empty){showLoading(false);err.textContent='Username นี้ถูกใช้แล้ว';err.classList.add('show');return;}
-  // ตรวจชื่อ+นามสกุลซ้ำ
   const q2=query(collection(db,'users'),where('firstName','==',fn),where('lastName','==',ln));
   const s2=await getDocs(q2);
   if(!s2.empty){showLoading(false);err.textContent=`"${fn} ${ln}" ลงทะเบียนในระบบแล้ว กรุณาใช้เมนูลืมรหัสผ่าน`;err.classList.add('show');return;}
@@ -601,12 +798,11 @@ window.doRegister=async()=>{
     const cred=await createUserWithEmailAndPassword(auth,uname+'@training-npk1.local',pass);
     await setDoc(doc(db,'users',cred.user.uid),{
       prefix,firstName:fn,lastName:ln,position:pos,school:sch,username:uname,
-      completedVideos:[],certNameConfirmed:false,registeredAt:new Date().toISOString()
+      completedVideos:[],quizPassed:[],certNameConfirmed:false,registeredAt:new Date().toISOString()
     });
   }catch(e){showLoading(false);err.textContent='เกิดข้อผิดพลาด: '+e.message;err.classList.add('show');}
 };
 
-// ── Forgot verify ──
 window.doForgotVerify=async()=>{
   const u=document.getElementById('forgotUsername').value.trim().toLowerCase();
   const fn=document.getElementById('forgotFirstName').value.trim();
@@ -621,17 +817,13 @@ window.doForgotVerify=async()=>{
   showLoading(false);
   if(snap.empty){err.textContent='ไม่พบ Username นี้ในระบบ';err.classList.add('show');return;}
   const d=snap.docs[0].data();
-  const ok=d.firstName.trim().toLowerCase()===fn.toLowerCase()
-         &&d.lastName.trim().toLowerCase()===ln.toLowerCase()
-         &&d.school.trim().toLowerCase()===sch.toLowerCase();
+  const ok=d.firstName.trim().toLowerCase()===fn.toLowerCase()&&d.lastName.trim().toLowerCase()===ln.toLowerCase()&&d.school.trim().toLowerCase()===sch.toLowerCase();
   if(!ok){err.textContent='ข้อมูลไม่ตรงกับที่สมัครไว้';err.classList.add('show');return;}
-  forgotUid=snap.docs[0].id;
-  forgotUsername_=u;
+  forgotUid=snap.docs[0].id; forgotUsername_=u;
   document.getElementById('forgotStep1').style.display='none';
   document.getElementById('forgotStep2').style.display='block';
 };
 
-// ── Reset password (self-service) ──
 window.doResetPassword=async()=>{
   const newPass=document.getElementById('newPassword').value;
   const newPass2=document.getElementById('newPassword2').value;
@@ -642,32 +834,20 @@ window.doResetPassword=async()=>{
   if(newPass.length<6){err.textContent='รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร';err.classList.add('show');return;}
   if(newPass!==newPass2){err.textContent='รหัสผ่านไม่ตรงกัน';err.classList.add('show');return;}
   showLoading(true);
-  // วิธีรีเซ็ต: บันทึก password ใหม่ใน Firestore เพื่อให้ firebase function อัปเดต
-  // เนื่องจากเป็น client-only app ใช้วิธีนี้: sign in ด้วย username + newPass
-  // ถ้าไม่ได้ = รหัสเดิมต่างกัน → บันทึกไว้แทน
-  // วิธีที่ดีที่สุดสำหรับ client-only คือเก็บ hashed password ใน Firestore
-  // แต่เพื่อความง่าย ใช้วิธีนี้: เก็บ pending reset แล้วให้ signIn ใหม่
   try{
-    // ลอง sign in ด้วยรหัสใหม่
     await signInWithEmailAndPassword(auth,forgotUsername_+'@training-npk1.local',newPass);
     showLoading(false);
     suc.textContent='✓ รหัสผ่านนี้ถูกต้องอยู่แล้ว กำลังเข้าสู่ระบบ...';
     suc.classList.add('show');
   }catch(e){
-    // รหัสผ่านต่างกัน → เก็บไว้ใน Firestore ให้ Admin รีเซ็ต (หรือใช้ Firebase Admin SDK)
-    // แต่เนื่องจากเป็น self-service แท้ๆ ให้บันทึก flag
-    await updateDoc(doc(db,'users',forgotUid),{
-      pendingPasswordReset:newPass,
-      pendingResetAt:new Date().toISOString()
-    });
+    await updateDoc(doc(db,'users',forgotUid),{pendingPasswordReset:newPass,pendingResetAt:new Date().toISOString()});
     showLoading(false);
-    suc.textContent='✓ บันทึกคำขอแล้ว กรุณาติดต่อผู้ดูแลระบบเพื่อยืนยันการรีเซ็ตรหัสผ่านครับ (ระบบจะอัปเดตภายใน 24 ชั่วโมง)';
+    suc.textContent='✓ ส่งคำขอแล้ว กรุณาติดต่อผู้ดูแลระบบเพื่อยืนยันการรีเซ็ตรหัสผ่านครับ';
     suc.classList.add('show');
     document.getElementById('forgotStep2').style.display='none';
   }
 };
 
-// ── Admin login ──
 window.doAdminLogin=()=>{
   const pass=document.getElementById('adminPassword').value;
   const err=document.getElementById('adminError');
@@ -683,7 +863,7 @@ window.doAdminLogin=()=>{
 
 window.doLogout=async()=>{
   clearInterval(timer); isWatching=false;
-  if(isAdmin){ isAdmin=false; document.getElementById('headerRight').style.display='none'; showPage('pageAuth'); return; }
+  if(isAdmin){isAdmin=false;document.getElementById('headerRight').style.display='none';showPage('pageAuth');return;}
   await signOut(auth);
 };
 
@@ -691,9 +871,9 @@ window.doLogout=async()=>{
 function loadVideo(idx){
   currentIdx=idx; watchedSec=0; isWatching=false; clearInterval(timer);
   const v=TRAINING.videos[idx];
-  document.getElementById('videoLabel').textContent=`คลิปที่ ${idx+1} จาก ${TRAINING.videos.length}`;
+  document.getElementById('videoLabel').textContent=`Part ${idx+1} จาก ${TRAINING.videos.length}`;
   document.getElementById('videoTitle').textContent=v.title;
-  document.getElementById('ytPlayer').src=`https://www.youtube.com/embed/${v.youtubeId}?rel=0&modestbranding=1&enablejsapi=1`;
+  document.getElementById('gdPlayer').src=`https://drive.google.com/file/d/${v.driveId}/preview`;
   const ov=document.getElementById('videoOverlay');
   ov.innerHTML=`<div class="overlay-icon">▶️</div><div class="overlay-text">กดที่นี่ แล้วกด Play เพื่อเริ่มนับเวลา</div><div class="overlay-sub">ห้ามสลับแท็บ — คลิปจะหยุดทันที</div>`;
   ov.classList.remove('hidden');
@@ -719,9 +899,8 @@ function startTimer(){
     if(watchedSec>=v.minSeconds&&!completed.has(currentIdx)){
       completed.add(currentIdx); saveProgress();
       document.getElementById('statusDot').className='status-dot done';
-      document.getElementById('statusText').textContent='✓ ชมครบตามเวลาที่กำหนดแล้ว';
+      document.getElementById('statusText').textContent='✓ ชมครบแล้ว! กดปุ่มด้านล่างเพื่อทำข้อสอบ';
       updateNextBtn(); renderPlaylist(); updateProgress();
-      showToast('✓ ชมคลิปนี้ครบแล้ว!');
       clearInterval(timer);
     }
   },1000);
@@ -729,44 +908,169 @@ function startTimer(){
 
 async function saveProgress(){
   if(!currentUser) return;
-  try{ await updateDoc(doc(db,'users',currentUser.uid),{completedVideos:[...completed].map(Number),lastUpdated:new Date().toISOString()}); }
+  try{ await updateDoc(doc(db,'users',currentUser.uid),{completedVideos:[...completed].map(Number),quizPassed:[...quizPassed].map(Number),lastUpdated:new Date().toISOString()}); }
   catch(e){console.error(e);}
 }
 
-window.nextVideo=()=>{
-  if(currentIdx<TRAINING.videos.length-1){clearInterval(timer);isWatching=false;loadVideo(currentIdx+1);renderPlaylist();}
+window.goToQuiz=()=>{
+  clearInterval(timer); isWatching=false;
+  startQuiz(currentIdx);
 };
 
 function updateNextBtn(){
-  const btn=document.getElementById('btnNext'),total=TRAINING.videos.length,done=completed.has(currentIdx);
-  if(currentIdx>=total-1){
-    document.getElementById('btnNextText').textContent='📜 รับเกียรติบัตร';
-    btn.onclick=done?()=>{ clearInterval(timer); isWatching=false; showConfirmName(); }:null;
+  const btn=document.getElementById('btnNext');
+  const done=completed.has(currentIdx);
+  const quizDone=quizPassed.has(currentIdx);
+  if(quizDone){
+    if(currentIdx>=TRAINING.videos.length-1){
+      document.getElementById('btnNextText').textContent='📜 รับเกียรติบัตร';
+      btn.onclick=()=>{ clearInterval(timer); isWatching=false; showConfirmName(); };
+      btn.classList.add('ready');
+    } else {
+      document.getElementById('btnNextText').textContent=`ถัดไป: Part ${currentIdx+2} →`;
+      btn.onclick=()=>{ clearInterval(timer); isWatching=false; loadVideo(currentIdx+1); renderPlaylist(); };
+      btn.classList.add('ready');
+    }
+  } else if(done){
+    document.getElementById('btnNextText').textContent='📝 ทำข้อสอบ Part นี้';
+    btn.onclick=window.goToQuiz;
+    btn.classList.add('ready');
   } else {
-    document.getElementById('btnNextText').textContent=`ถัดไป: คลิปที่ ${currentIdx+2} →`;
-    btn.onclick=done?window.nextVideo:null;
+    document.getElementById('btnNextText').textContent=`Part ${currentIdx+1}: ดูให้ครบก่อน`;
+    btn.onclick=null;
+    btn.classList.remove('ready');
   }
-  btn.classList.toggle('ready',done);
 }
 
 function renderPlaylist(){
   document.getElementById('playlistEl').innerHTML=TRAINING.videos.map((v,i)=>{
-    const isDone=completed.has(i),isCur=i===currentIdx,isLock=!isDone&&i>currentIdx;
+    const isDone=quizPassed.has(i), isWatched=completed.has(i), isCur=i===currentIdx, isLock=!isDone&&i>currentIdx&&!(isWatched&&i===currentIdx);
     const cls=isDone?'completed':isCur?'current':isLock?'locked':'';
-    const badge=isDone?`<span class="item-badge badge-done">✓ ครบ</span>`:isCur?`<span class="item-badge badge-cur">กำลังดู</span>`:`<span class="item-badge badge-lock">${isLock?'🔒':'–'}</span>`;
-    return `<div class="playlist-item ${cls}"><div class="item-num">${isDone?'✓':i+1}</div><div style="flex:1"><div class="item-name">${v.title}</div><div class="item-dur">${v.durationLabel}</div></div>${badge}</div>`;
+    const badge=isDone?`<span class="item-badge badge-done">✓ ผ่าน</span>`:isWatched&&isCur?`<span class="item-badge badge-cur">ทำข้อสอบ</span>`:isCur?`<span class="item-badge badge-cur">กำลังดู</span>`:`<span class="item-badge badge-lock">${isLock?'🔒':'–'}</span>`;
+    return `<div class="playlist-item ${cls}"><div class="item-num">${isDone?'✓':i+1}</div><div style="flex:1"><div class="item-name">Part ${i+1}</div><div class="item-dur">${v.durationLabel}</div></div>${badge}</div>`;
   }).join('');
 }
 
 function updateProgress(){
-  document.getElementById('progressFill').style.width=(completed.size/TRAINING.videos.length*100)+'%';
-  document.getElementById('progressCount').textContent=`${completed.size}/${TRAINING.videos.length}`;
+  document.getElementById('progressFill').style.width=(quizPassed.size/TRAINING.videos.length*100)+'%';
+  document.getElementById('progressCount').textContent=`${quizPassed.size}/${TRAINING.videos.length}`;
 }
+
+// ── QUIZ ──
+function startQuiz(videoIdx){
+  quizVideoIdx=videoIdx; quizIdx=0; selectedOpt=null; answered=false;
+  document.getElementById('quizPartLabel').textContent=`Part ${videoIdx+1}`;
+  showPage('pageQuiz');
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const qs=TRAINING.videos[quizVideoIdx].quiz;
+  const total=qs.length;
+  document.getElementById('quizCounter').textContent=`ข้อ ${quizIdx+1} / ${total}`;
+  document.getElementById('quizProgFill').style.width=((quizIdx)/total*100)+'%';
+  selectedOpt=null; answered=false;
+  const q=qs[quizIdx];
+  const letters=['ก','ข','ค','ง'];
+  document.getElementById('quizBody').innerHTML=`
+    <div class="quiz-question">${quizIdx+1}. ${q.q}</div>
+    <div class="quiz-options" id="quizOpts">
+      ${q.opts.map((o,i)=>`
+        <div class="quiz-opt" data-idx="${i}" onclick="selectOpt(${i})">
+          <div class="opt-letter">${letters[i]}</div>
+          <div class="opt-text">${o}</div>
+        </div>`).join('')}
+    </div>
+    <div class="quiz-feedback" id="quizFeedback"></div>
+    <div class="quiz-actions">
+      <button class="btn-check" id="btnCheck" onclick="checkAnswer()">ตรวจคำตอบ</button>
+      <button class="btn-next-q" id="btnNextQ" onclick="nextQuestion()">ถัดไป →</button>
+    </div>`;
+}
+
+window.selectOpt=(idx)=>{
+  if(answered) return;
+  selectedOpt=idx;
+  document.querySelectorAll('.quiz-opt').forEach((el,i)=>{
+    el.classList.toggle('selected',i===idx);
+  });
+  document.getElementById('btnCheck').classList.add('ready');
+};
+
+window.checkAnswer=()=>{
+  if(selectedOpt===null||answered) return;
+  answered=true;
+  const q=TRAINING.videos[quizVideoIdx].quiz[quizIdx];
+  const isCorrect=selectedOpt===q.ans;
+  const opts=document.querySelectorAll('.quiz-opt');
+  opts[selectedOpt].classList.remove('selected');
+  opts[selectedOpt].classList.add(isCorrect?'correct':'wrong');
+  if(!isCorrect) opts[q.ans].classList.add('show-correct');
+  const fb=document.getElementById('quizFeedback');
+  fb.className='quiz-feedback show '+(isCorrect?'correct-fb':'wrong-fb');
+  fb.textContent=(isCorrect?'✓ ถูกต้อง! ':'✗ ไม่ถูกต้อง ')+q.fb[selectedOpt];
+  document.getElementById('btnCheck').style.display='none';
+  const btnNext=document.getElementById('btnNextQ');
+  btnNext.classList.add('show');
+  const qs=TRAINING.videos[quizVideoIdx].quiz;
+  if(quizIdx>=qs.length-1){
+    btnNext.textContent='ดูผลคะแนน →';
+    btnNext.onclick=showQuizResult;
+  }
+};
+
+// track wrong answers per attempt
+let wrongAnswers=[];
+window.nextQuestion=()=>{
+  const q=TRAINING.videos[quizVideoIdx].quiz[quizIdx];
+  if(selectedOpt!==q.ans){ wrongAnswers.push({q:q.q,correct:q.opts[q.ans],chosen:q.opts[selectedOpt]}); }
+  quizIdx++;
+  renderQuestion();
+};
+
+function showQuizResult(){
+  const qs=TRAINING.videos[quizVideoIdx].quiz;
+  // recalculate wrongs from the last pass
+  const total=qs.length;
+  const wrongs=wrongAnswers;
+  wrongAnswers=[];
+  const score=total-wrongs.length;
+  const passed=score>=total;
+  const body=document.getElementById('quizBody');
+  if(passed){
+    quizPassed.add(quizVideoIdx); saveProgress(); updateProgress(); renderPlaylist();
+    body.innerHTML=`<div class="quiz-result">
+      <div class="result-emoji">🎉</div>
+      <h3>ผ่านแล้ว!</h3>
+      <p>ได้คะแนนเต็ม ${total}/${total} ข้อ</p>
+      <div class="score-badge">✓ ${score}/${total} คะแนน</div>
+      <button class="btn-proceed" onclick="afterQuiz()">ดำเนินการต่อ →</button>
+    </div>`;
+  } else {
+    body.innerHTML=`<div class="quiz-result">
+      <div class="result-emoji">📝</div>
+      <h3>ยังไม่ผ่าน</h3>
+      <p>ต้องได้ ${total}/${total} คะแนนจึงจะผ่าน คุณได้ ${score}/${total}</p>
+      <div class="wrong-list">
+        <h4>ข้อที่ตอบผิด:</h4>
+        ${wrongs.map(w=>`<div class="wrong-item"><div class="wi-q">${w.q}</div><div>คำตอบที่ถูก: <span class="wi-correct">${w.correct}</span></div></div>`).join('')}
+      </div>
+      <button class="btn-retry" onclick="retryQuiz()">ทำใหม่อีกครั้ง</button>
+    </div>`;
+  }
+  document.getElementById('quizProgFill').style.width='100%';
+}
+
+window.afterQuiz=()=>{
+  if(quizVideoIdx>=TRAINING.videos.length-1){ showConfirmName(); }
+  else { showPage('pageTraining'); loadVideo(quizVideoIdx+1); renderPlaylist(); }
+};
+
+window.retryQuiz=()=>{ quizIdx=0; wrongAnswers=[]; renderQuestion(); };
 
 // ── Confirm Name ──
 function showConfirmName(){
-  const name=`${userData.prefix}${userData.firstName} ${userData.lastName}`;
-  document.getElementById('namePreview').textContent=name;
+  document.getElementById('namePreview').textContent=`${userData.prefix}${userData.firstName} ${userData.lastName}`;
   document.getElementById('editPrefix').value=userData.prefix||'';
   document.getElementById('editFirstName').value=userData.firstName||'';
   document.getElementById('editLastName').value=userData.lastName||'';
@@ -774,9 +1078,7 @@ function showConfirmName(){
   showPage('pageConfirmName');
 }
 
-window.toggleEditName=()=>{
-  document.getElementById('editNameForm').classList.toggle('show');
-};
+window.toggleEditName=()=>{ document.getElementById('editNameForm').classList.toggle('show'); };
 
 window.applyEditName=async()=>{
   const prefix=document.getElementById('editPrefix').value;
@@ -790,16 +1092,14 @@ window.applyEditName=async()=>{
   await updateDoc(doc(db,'users',currentUser.uid),{prefix,firstName:fn,lastName:ln});
   document.getElementById('namePreview').textContent=`${prefix}${fn} ${ln}`;
   document.getElementById('editNameForm').classList.remove('show');
-  showLoading(false);
-  showToast('✓ แก้ไขชื่อเรียบร้อยแล้ว');
+  showLoading(false); showToast('✓ แก้ไขชื่อเรียบร้อยแล้ว');
 };
 
 window.confirmName=async()=>{
   showLoading(true);
   await updateDoc(doc(db,'users',currentUser.uid),{certNameConfirmed:true});
   userData.certNameConfirmed=true;
-  showLoading(false);
-  showCert();
+  showLoading(false); showCert();
 };
 
 // ── Cert ──
@@ -810,10 +1110,7 @@ function showCert(){
   document.getElementById('certHours').textContent=`จำนวน ${TRAINING.totalHours} ชั่วโมง`;
   const now=new Date(),thM=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
   document.getElementById('certDate').textContent=`${now.getDate()} ${thM[now.getMonth()]} ${now.getFullYear()+543}`;
-  if(userData.pendingEdit){
-    document.getElementById('certPendingBadge').style.display='block';
-    document.getElementById('btnRequestEdit').style.display='none';
-  }
+  if(userData.pendingEdit){document.getElementById('certPendingBadge').style.display='block';document.getElementById('btnRequestEdit').style.display='none';}
   showPage('pageCert');
 }
 
@@ -835,8 +1132,7 @@ window.submitRequestEdit=async()=>{
   if(!prefix||!fn||!ln){err.textContent='กรุณากรอกชื่อให้ครบ';err.classList.add('show');return;}
   showLoading(true);
   await updateDoc(doc(db,'users',currentUser.uid),{
-    pendingEdit:{prefix,firstName:fn,lastName:ln,reason,requestedAt:new Date().toISOString(),
-    oldName:`${userData.prefix}${userData.firstName} ${userData.lastName}`}
+    pendingEdit:{prefix,firstName:fn,lastName:ln,reason,requestedAt:new Date().toISOString(),oldName:`${userData.prefix}${userData.firstName} ${userData.lastName}`}
   });
   userData.pendingEdit={prefix,firstName:fn,lastName:ln};
   showLoading(false);
@@ -847,93 +1143,59 @@ window.submitRequestEdit=async()=>{
   document.getElementById('requestEditForm').classList.remove('show');
 };
 
-// ── Admin Dashboard ──
+// ── Admin ──
 async function loadAdminDashboard(){
   showLoading(true);
   const snap=await getDocs(collection(db,'users'));
   const users=snap.docs.map(d=>({id:d.id,...d.data()}));
   const total=users.length;
-  const done=users.filter(u=>(u.completedVideos||[]).length>=TRAINING.videos.length).length;
-  const partial=users.filter(u=>(u.completedVideos||[]).length>0&&(u.completedVideos||[]).length<TRAINING.videos.length).length;
+  const totalV=TRAINING.videos.length;
+  const done=users.filter(u=>(u.quizPassed||[]).length>=totalV).length;
+  const partial=users.filter(u=>(u.quizPassed||[]).length>0&&(u.quizPassed||[]).length<totalV).length;
   const pending=users.filter(u=>u.pendingEdit).length;
   document.getElementById('statTotal').textContent=total;
   document.getElementById('statDone').textContent=done;
   document.getElementById('statPartial').textContent=partial;
   document.getElementById('statPending').textContent=pending;
-  // Pending list
   const pendingUsers=users.filter(u=>u.pendingEdit);
   const pl=document.getElementById('pendingList');
-  if(pendingUsers.length===0){
-    pl.innerHTML='<div class="empty-state">ไม่มีคำขอที่รออนุมัติ ✓</div>';
-  } else {
-    pl.innerHTML=pendingUsers.map(u=>`
-      <div class="pending-item" id="pending-${u.id}">
-        <div class="pending-info">
-          <div class="pending-name">${u.prefix}${u.firstName} ${u.lastName}</div>
-          <div class="pending-detail">${u.position} | ${u.school} | @${u.username}</div>
-          <div class="pending-change">
-            <span class="old">${u.pendingEdit.oldName||'-'}</span>
-            <span class="arrow">→</span>
-            <span class="new">${u.pendingEdit.prefix}${u.pendingEdit.firstName} ${u.pendingEdit.lastName}</span>
-          </div>
-          ${u.pendingEdit.reason?`<div style="font-size:12px;color:var(--muted);margin-top:4px">เหตุผล: ${u.pendingEdit.reason}</div>`:''}
-        </div>
-        <div class="pending-actions">
-          <button class="btn-approve" onclick="approveEdit('${u.id}','${u.pendingEdit.prefix}','${u.pendingEdit.firstName}','${u.pendingEdit.lastName}')">✓ อนุมัติ</button>
-          <button class="btn-reject" onclick="rejectEdit('${u.id}')">✕ ปฏิเสธ</button>
-        </div>
-      </div>`).join('');
-  }
-  // User table
+  pl.innerHTML=pendingUsers.length===0?'<div class="empty-state">ไม่มีคำขอที่รออนุมัติ ✓</div>':
+    pendingUsers.map(u=>`<div class="pending-item" id="pending-${u.id}">
+      <div class="pending-info">
+        <div class="pending-name">${u.prefix}${u.firstName} ${u.lastName}</div>
+        <div class="pending-detail">${u.position} | ${u.school} | @${u.username}</div>
+        <div class="pending-change"><span class="old">${u.pendingEdit.oldName||'-'}</span><span class="arrow">→</span><span class="new-name">${u.pendingEdit.prefix}${u.pendingEdit.firstName} ${u.pendingEdit.lastName}</span></div>
+        ${u.pendingEdit.reason?`<div style="font-size:12px;color:var(--muted);margin-top:4px">เหตุผล: ${u.pendingEdit.reason}</div>`:''}
+      </div>
+      <div class="pending-actions">
+        <button class="btn-approve" onclick="approveEdit('${u.id}','${u.pendingEdit.prefix}','${u.pendingEdit.firstName}','${u.pendingEdit.lastName}')">✓ อนุมัติ</button>
+        <button class="btn-reject" onclick="rejectEdit('${u.id}')">✕ ปฏิเสธ</button>
+      </div></div>`).join('');
   const tbody=document.getElementById('userTableBody');
-  if(users.length===0){
-    tbody.innerHTML='<tr><td colspan="7" class="empty-state">ยังไม่มีผู้ลงทะเบียน</td></tr>';
-  } else {
-    tbody.innerHTML=users.sort((a,b)=>a.registeredAt>b.registeredAt?1:-1).map((u,i)=>{
-      const cv=(u.completedVideos||[]).length;
-      const total_v=TRAINING.videos.length;
-      const pct=Math.round(cv/total_v*100);
-      const pillCls=cv>=total_v?'pill-done':cv>0?'pill-partial':'pill-none';
-      const pillTxt=cv>=total_v?'✓ ครบแล้ว':cv>0?`${cv}/${total_v} คลิป`:'ยังไม่เริ่ม';
+  tbody.innerHTML=users.length===0?'<tr><td colspan="7" class="empty-state">ยังไม่มีผู้ลงทะเบียน</td></tr>':
+    users.sort((a,b)=>a.registeredAt>b.registeredAt?1:-1).map((u,i)=>{
+      const qp=(u.quizPassed||[]).length;
+      const pillCls=qp>=totalV?'pill-done':qp>0?'pill-partial':'pill-none';
+      const pillTxt=qp>=totalV?'✓ ผ่านแล้ว':qp>0?`${qp}/${totalV} Part`:'ยังไม่เริ่ม';
       const regDate=u.registeredAt?new Date(u.registeredAt).toLocaleDateString('th-TH'):'–';
-      return `<tr>
-        <td>${i+1}</td>
-        <td>${u.prefix||''}${u.firstName} ${u.lastName}${u.pendingEdit?` <span style="font-size:10px;color:#856404">⏳แก้ไข</span>`:''}</td>
-        <td>${u.position||'–'}</td>
-        <td>${u.school||'–'}</td>
-        <td><code style="font-size:12px">${u.username||'–'}</code></td>
-        <td><span class="progress-pill ${pillCls}">${pillTxt}</span></td>
-        <td>${regDate}</td>
-      </tr>`;
+      return `<tr><td>${i+1}</td><td>${u.prefix||''}${u.firstName} ${u.lastName}${u.pendingEdit?` <span style="font-size:10px;color:#856404">⏳</span>`:''}</td><td>${u.position||'–'}</td><td>${u.school||'–'}</td><td><code style="font-size:12px">${u.username||'–'}</code></td><td><span class="progress-pill ${pillCls}">${pillTxt}</span></td><td>${regDate}</td></tr>`;
     }).join('');
-  }
   showLoading(false);
 }
 
 window.approveEdit=async(uid,prefix,fn,ln)=>{
   showLoading(true);
-  await updateDoc(doc(db,'users',uid),{
-    prefix, firstName:fn, lastName:ln,
-    pendingEdit:null,
-    nameEditApprovedAt:new Date().toISOString()
-  });
-  showLoading(false);
-  document.getElementById(`pending-${uid}`)?.remove();
-  document.getElementById('statPending').textContent=parseInt(document.getElementById('statPending').textContent)-1;
-  showToast('✓ อนุมัติการแก้ไขชื่อแล้ว');
-  loadAdminDashboard();
+  await updateDoc(doc(db,'users',uid),{prefix,firstName:fn,lastName:ln,pendingEdit:null,nameEditApprovedAt:new Date().toISOString()});
+  showLoading(false); showToast('✓ อนุมัติการแก้ไขชื่อแล้ว'); loadAdminDashboard();
 };
 
 window.rejectEdit=async(uid)=>{
   if(!confirm('ปฏิเสธคำขอแก้ไขชื่อนี้?')) return;
   showLoading(true);
-  await updateDoc(doc(db,'users',uid),{ pendingEdit:null });
-  showLoading(false);
-  showToast('✕ ปฏิเสธคำขอแล้ว');
-  loadAdminDashboard();
+  await updateDoc(doc(db,'users',uid),{pendingEdit:null});
+  showLoading(false); showToast('✕ ปฏิเสธคำขอแล้ว'); loadAdminDashboard();
 };
 
-// ── Utils ──
 function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
 function showLoading(s){document.getElementById('loadingOverlay').classList.toggle('show',s);}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3500);}
