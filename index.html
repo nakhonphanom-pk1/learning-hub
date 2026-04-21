@@ -1382,8 +1382,7 @@ window.adminBypassUser = async(uid) => {
 };
 
 window.adminBypassAll = async() => {
-  if(!confirm('Bypass quiz ผ่านทั้งหมด สำหรับทุกคนในระบบ?
-(ใช้สำหรับการทดสอบเท่านั้น)')) return;
+  if(!confirm('Bypass quiz ผ่านทั้งหมด สำหรับทุกคนในระบบ? (ใช้สำหรับการทดสอบเท่านั้น)')) return;
   showLoading(true);
   try {
     const snap = await getDocs(collection(db,'users'));
