@@ -166,7 +166,7 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
 .form-row-3{display:grid;grid-template-columns:120px 1fr 1fr;gap:12px;}
 
 /* CERT */
-.cert-page-wrap{min-height:calc(100vh - 72px);display:flex;flex-direction:column;align-items:center;padding:36px 20px 56px;}
+.cert-page-wrap{min-height:calc(100vh - 72px);display:flex;flex-direction:column;align-items:center;padding:24px 12px 40px;}
 .cert-congrats{text-align:center;margin-bottom:28px;}
 .cert-congrats .emoji{font-size:44px;margin-bottom:10px;}
 .cert-congrats h2{font-family:'Noto Serif Thai',serif;font-size:24px;font-weight:700;color:var(--navy);margin-bottom:5px;}
@@ -268,19 +268,22 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
 .loading-overlay.show{display:flex;}
 
 /* ── PNG Cert (cert_preview style) ── */
-.cert-png-wrap {
-  position: relative;
-  width: 297mm;
-  height: 210mm;
-  max-width: 100%;
-  box-shadow: 0 8px 32px rgba(0,0,0,.4);
-  background: white;
+/* Screen preview: ใช้ aspect-ratio 297:210 (A4 landscape) */
+#cert-container {
+  width: min(900px, 96vw);
   margin: 0 auto;
 }
+.cert-png-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 297 / 210;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0,0,0,.4);
+  background: white;
+}
 .cert-png-wrap img.cert-bg {
-  width: 297mm;
-  height: 210mm;
-  max-width: 100%;
+  width: 100%;
+  height: 100%;
   display: block;
   object-fit: fill;
 }
@@ -288,34 +291,41 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
   position: absolute;
   inset: 0;
 }
+/* ตำแหน่งใช้ % เทียบกับขนาด wrap (297mm x 210mm) */
+/* top% = mm/210*100, right%/left% = mm/297*100 */
 .cert-png-num {
   position: absolute;
-  top: 13.45mm;
-  right: 34.2mm;
+  /* top: 13.45mm → 13.45/210 = 6.405% */
+  top: 6.4%;
+  /* right: 34.2mm → 34.2/297 = 11.52% */
+  right: 11.5%;
   font-family: 'Sarabun', sans-serif;
-  font-size: 4.2mm;
+  font-size: clamp(8px, 1.7%, 16px);
   font-weight: 600;
   color: #3a2000;
   white-space: nowrap;
 }
 .cert-png-name {
   position: absolute;
-  top: 92.552mm;
-  left: 5.8861mm; right: 0;
+  /* top: 92.552mm → 92.552/210 = 44.07% */
+  top: 44.07%;
+  left: 0; right: 0;
   text-align: center;
   font-family: 'Sarabun', sans-serif;
-  font-size: 9mm;
+  font-size: clamp(12px, 4.0%, 42px);
   font-weight: 700;
   color: #1a1a2e;
   white-space: nowrap;
+  padding: 0 2%;
 }
 .cert-png-date {
   position: absolute;
-  top: 148.476mm;
-  left: 20.8mm; right: 0;
+  /* top: 148.476mm → 148.476/210 = 70.7% */
+  top: 70.7%;
+  left: 0; right: 0;
   text-align: center;
   font-family: 'Sarabun', sans-serif;
-  font-size: 5mm;
+  font-size: clamp(9px, 2.2%, 22px);
   font-weight: 400;
   color: #1a1a2e;
   white-space: nowrap;
@@ -324,9 +334,18 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
   @page { size: 297mm 210mm; margin: 0; }
   html, body { margin: 0; padding: 0; width: 297mm; height: 210mm; background: white !important; display: block; }
   .cert-page-wrap > *:not(#cert-container) { display: none !important; }
-  #cert-container { position: fixed; top: 0; left: 0; }
-  .cert-png-wrap { box-shadow: none !important; width: 297mm; height: 210mm; }
-  .cert-png-wrap img.cert-bg { width: 297mm; height: 210mm; }
+  #cert-container { position: fixed !important; top: 0; left: 0; width: 297mm !important; }
+  .cert-png-wrap { 
+    width: 297mm !important; 
+    height: 210mm !important; 
+    aspect-ratio: unset !important;
+    box-shadow: none !important; 
+  }
+  .cert-png-wrap img.cert-bg { width: 297mm !important; height: 210mm !important; }
+  /* พิมพ์ใช้ mm เหมือน cert_preview.html */
+  .cert-png-num { top: 13.45mm !important; right: 34.2mm !important; font-size: 4.2mm !important; }
+  .cert-png-name { top: 92.552mm !important; font-size: 9mm !important; }
+  .cert-png-date { top: 148.476mm !important; font-size: 5mm !important; }
 }
 </style>
 </head>
@@ -336,8 +355,8 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
   <div class="header-inner">
     <svg class="header-logo" viewBox="0 0 60 60"><circle cx="30" cy="30" r="28" fill="#243460" stroke="#c9a84c" stroke-width="2"/><text x="30" y="22" text-anchor="middle" fill="#c9a84c" font-family="serif" font-size="10" font-weight="bold">สพป.</text><text x="30" y="34" text-anchor="middle" fill="white" font-family="serif" font-size="8">นครพนม</text><text x="30" y="44" text-anchor="middle" fill="#e8c97a" font-family="serif" font-size="8">เขต ๑</text></svg>
     <div class="header-text">
-      <h1>การอบรมการใช้งานระบบ ปพ.3 ออนไลน์ ในรูปแบบ E-learning<br>สังกัดสำนักงานเขตพื้นที่การศึกษาประถมศึกษานครพนม เขต 1</h1>
-      <p>สังกัดสำนักงานเขตพื้นที่การศึกษาประถมศึกษานครพนม เขต 1</p>
+      <h1>การอบรมการใช้งานระบบ ปพ.3 ออนไลน์ ในรูปแบบ E-learning</h1>
+      <p>หลักสูตรประจำปี พ.ศ. 2569 | สังกัด สพป.นครพนม เขต 1</p>
     </div>
     <div class="header-right" id="headerRight" style="display:none">
       <div class="progress-wrap" id="headerProgress">
@@ -360,7 +379,7 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
         <div class="auth-logo-area">
           <svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="28" fill="#243460" stroke="#c9a84c" stroke-width="2"/><text x="30" y="22" text-anchor="middle" fill="#c9a84c" font-family="serif" font-size="10" font-weight="bold">สพป.</text><text x="30" y="34" text-anchor="middle" fill="white" font-family="serif" font-size="8">นครพนม</text><text x="30" y="44" text-anchor="middle" fill="#e8c97a" font-family="serif" font-size="8">เขต ๑</text></svg>
           <h2>เข้าสู่ระบบอบรม</h2>
-          <p>การอบรมการใช้งานระบบ ปพ.3 ออนไลน์<br>สังกัด สพป.นครพนม เขต 1</p>
+          <p>การอบรมการใช้งานระบบ ปพ.3 ออนไลน์ ในรูปแบบ E-learning<br>หลักสูตรประจำปี พ.ศ. 2569 | สังกัด สพป.นครพนม เขต 1</p>
         </div>
         <div class="auth-error" id="loginError"></div>
         <div class="form-group"><label>Username <span>*</span></label><input type="text" id="loginUsername" placeholder="กรอก username ของคุณ"></div>
@@ -596,6 +615,7 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
       <div class="admin-header-right">
         <button class="btn-qr" onclick="showQRCode()">📱 QR Code ลิงก์อบรม</button>
         <button class="btn-export" onclick="exportExcel()">📥 Export Excel</button>
+        <button class="btn-bypass" onclick="adminBypassAll()" style="padding:7px 14px;font-size:12px;">🧪 Bypass ทุกคน (เทสต์)</button>
         <span class="admin-badge">Admin เขตพื้นที่</span>
       </div>
     </div>
@@ -622,7 +642,7 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
       <div class="section-title">👥 รายชื่อผู้เข้าอบรมทั้งหมด</div>
       <div style="overflow-x:auto">
         <table class="user-table">
-          <thead><tr><th>#</th><th>ชื่อ-นามสกุล</th><th>ตำแหน่ง</th><th>โรงเรียน/หน่วยงาน</th><th>Username</th><th>ความคืบหน้า</th><th>คะแนนเฉลี่ย</th><th>ออกจากหน้า</th><th>วันสมัคร</th></tr></thead>
+          <thead><tr><th>#</th><th>ชื่อ-นามสกุล</th><th>ตำแหน่ง</th><th>โรงเรียน/หน่วยงาน</th><th>Username</th><th>ความคืบหน้า</th><th>คะแนนเฉลี่ย</th><th>ออกจากหน้า</th><th>วันสมัคร</th><th>🔧</th></tr></thead>
           <tbody id="userTableBody"><tr><td colspan="9" class="empty-state">กำลังโหลด...</td></tr></tbody>
         </table>
       </div>
@@ -971,7 +991,7 @@ function loadVideo(idx) {
   const v=TRAINING.videos[idx];
   document.getElementById('videoLabel').textContent=`Part ${idx+1} จาก ${TRAINING.videos.length}`;
   document.getElementById('videoTitle').textContent=v.title;
-  document.getElementById('vimeoPlayer').src=`https://player.vimeo.com/video/${v.vimeoId}?title=0&byline=0&portrait=0&controls=0`;
+  document.getElementById('vimeoPlayer').src=`https://player.vimeo.com/video/${v.vimeoId}?title=0&byline=0&portrait=0`;
   const ov=document.getElementById('videoOverlay');
   ov.innerHTML=`<div class="overlay-icon">▶️</div><div class="overlay-text">กดที่นี่ แล้วกด Play เพื่อเริ่มนับเวลา</div><div class="overlay-sub">ระบบจะเริ่มนับเวลาเมื่อคุณกดปุ่มนี้</div>`;
   ov.classList.remove('hidden');
@@ -1334,10 +1354,56 @@ async function loadAdminDashboard() {
       const pillCls=qp>=totalV?'pill-done':qp>0?'pill-partial':'pill-none';
       const pillTxt=qp>=totalV?'✓ ผ่านแล้ว':qp>0?`${qp}/${totalV} Part`:'ยังไม่เริ่ม';
       const regDate=u.registeredAt?new Date(u.registeredAt).toLocaleDateString('th-TH'):'–';
-      return `<tr><td>${i+1}</td><td>${u.prefix||''}${u.firstName} ${u.lastName}${u.pendingEdit?` <span style="font-size:10px;color:#856404">⏳</span>`:''}</td><td>${u.position||'–'}</td><td>${u.school||'–'}</td><td><code style="font-size:11px">${u.username||'–'}</code></td><td><span class="progress-pill ${pillCls}">${pillTxt}</span></td><td>${avgScore}${avgScore!=='-'?'%':''}</td><td style="color:${(u.leaveCount||0)>5?'var(--red)':'var(--muted)'}">${u.leaveCount||0}</td><td>${regDate}</td></tr>`;
+      const bypassBtn = qp>=totalV ? '' : `<button class="btn-bypass" onclick="adminBypassUser('${u.id}')" title="Bypass quiz ผ่านทั้งหมด">✓ Pass</button>`;
+      return `<tr><td>${i+1}</td><td>${u.prefix||''}${u.firstName} ${u.lastName}${u.pendingEdit?` <span style="font-size:10px;color:#856404">⏳</span>`:''}</td><td>${u.position||'–'}</td><td>${u.school||'–'}</td><td><code style="font-size:11px">${u.username||'–'}</code></td><td><span class="progress-pill ${pillCls}">${pillTxt}</span></td><td>${avgScore}${avgScore!=='-'?'%':''}</td><td style="color:${(u.leaveCount||0)>5?'var(--red)':'var(--muted)'}">${u.leaveCount||0}</td><td>${regDate}</td><td>${bypassBtn}</td></tr>`;
     }).join('');
   showLoading(false);
 }
+
+// ── Admin Bypass Quiz (สำหรับทดสอบ) ──
+const BYPASS_ALL_VIDEOS = [0,1,2,3];
+const BYPASS_QUIZ_PASSED = [0,1,2,3];
+const BYPASS_SCORES = {0:100,1:100,2:100,3:100};
+
+window.adminBypassUser = async(uid) => {
+  if(!confirm('Bypass quiz ผ่านทั้งหมดสำหรับ user นี้?')) return;
+  showLoading(true);
+  try {
+    await updateDoc(doc(db,'users',uid),{
+      completedVideos: BYPASS_ALL_VIDEOS,
+      quizPassed: BYPASS_QUIZ_PASSED,
+      quizScores: BYPASS_SCORES,
+      certNameConfirmed: false,
+      bypassedAt: new Date().toISOString(),
+      bypassedByAdmin: true
+    });
+    showLoading(false); showToast('✓ Bypass แล้ว'); loadAdminDashboard();
+  } catch(e) { showLoading(false); showToast('Error: '+e.message); }
+};
+
+window.adminBypassAll = async() => {
+  if(!confirm('Bypass quiz ผ่านทั้งหมด สำหรับทุกคนในระบบ?
+(ใช้สำหรับการทดสอบเท่านั้น)')) return;
+  showLoading(true);
+  try {
+    const snap = await getDocs(collection(db,'users'));
+    const batch_promises = snap.docs.map(d => {
+      const u = d.data();
+      const qp = (u.quizPassed||[]).length;
+      if(qp >= 4) return Promise.resolve(); // ผ่านแล้ว ข้ามไป
+      return updateDoc(doc(db,'users',d.id),{
+        completedVideos: BYPASS_ALL_VIDEOS,
+        quizPassed: BYPASS_QUIZ_PASSED,
+        quizScores: BYPASS_SCORES,
+        certNameConfirmed: false,
+        bypassedAt: new Date().toISOString(),
+        bypassedByAdmin: true
+      });
+    });
+    await Promise.all(batch_promises);
+    showLoading(false); showToast('✓ Bypass ทุกคนแล้ว'); loadAdminDashboard();
+  } catch(e) { showLoading(false); showToast('Error: '+e.message); }
+};
 
 window.approvePasswordReset = async(uid,username,newPass) => {
   if(!confirm('เปลี่ยนรหัสผ่านสำหรับ @'+username+' เป็นรหัสใหม่?')) return;
