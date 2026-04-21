@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ระบบอบรมออนไลน์ การใช้งานระบบ ปพ.3 ออนไลน์</title>
+<title>การอบรมการใช้งานระบบ ปพ.3 ออนไลน์ ในรูปแบบ E-learning สังกัดสำนักงานเขตพื้นที่การศึกษาประถมศึกษานครพนม เขต 1</title>
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--navy:#1a2744;--navy-light:#243460;--gold:#c9a84c;--gold-light:#e8c97a;--gold-pale:#f7edd8;--cream:#fdf8f0;--white:#fff;--text:#1a1a2e;--muted:#5a6075;--success:#2e7d5e;--success-bg:#eaf4ef;--border:#ddd4bc;--red:#b91c1c;--red-bg:#fef2f2;}
@@ -487,6 +487,7 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
             <hr class="cert-divider">
             <div class="cert-title-th">เกียรติบัตร</div>
             <div class="cert-title-en">Certificate of Completion</div>
+            <div style="font-size:11px;color:#888;margin-bottom:12px;letter-spacing:0.5px">เลขที่ <span id="certNumberDisplay" style="font-weight:600;color:#5a6075">-</span></div>
             <div class="cert-given-to">มอบให้แก่</div>
             <div class="cert-name" id="certName">-</div>
             <div class="cert-position" id="certPosition">-</div>
@@ -553,11 +554,16 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
         <span class="admin-badge">Admin เขตพื้นที่</span>
       </div>
     </div>
+    <!-- แบนเนอร์แจ้งเตือนเลขเกียรติบัตร -->
+    <div id="certNumberWarning" style="display:none;background:#fff3cd;border:1px solid #ffc107;border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#856404;line-height:1.7;"></div>
     <div class="stats-grid">
       <div class="stat-card"><div class="stat-num" id="statTotal">-</div><div class="stat-label">ผู้ลงทะเบียนทั้งหมด</div></div>
       <div class="stat-card highlight"><div class="stat-num" id="statDone">-</div><div class="stat-label">ผ่านการอบรมแล้ว</div></div>
       <div class="stat-card"><div class="stat-num" id="statPartial">-</div><div class="stat-label">กำลังอบรมอยู่</div></div>
       <div class="stat-card"><div class="stat-num" id="statPending">-</div><div class="stat-label">รออนุมัติแก้ไขชื่อ</div></div>
+    </div>
+    <div style="font-size:12px;color:#5a6075;margin-bottom:16px;padding:8px 12px;background:#f7edd8;border-radius:8px;border:1px solid #ddd4bc;">
+      🔢 <strong>เลขเกียรติบัตร:</strong> <span id="certNumberStat">กำลังโหลด...</span>
     </div>
     <div class="pending-list">
       <div class="section-title">📋 คำขอแก้ไขชื่อในเกียรติบัตร (รออนุมัติ)</div>
@@ -593,7 +599,7 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, updateDoc, query, collection, where, getDocs } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, getDoc, updateDoc, query, collection, where, getDocs, runTransaction } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
 // ══════════════════════════════════════
 // CONFIG
@@ -722,9 +728,10 @@ document.addEventListener('visibilitychange', () => {
   if(document.hidden) { handleLeave('visibility'); }
   else { lastHeartbeat = Date.now(); document.getElementById('warningBanner').classList.remove('show'); }
 });
-window.addEventListener('blur', () => { handleLeave('blur'); });
+// blur และ mouseleave ถูกปิดการใช้งาน — ใช้ visibilitychange เท่านั้นเพื่อลดความรำคาญ
+// window.addEventListener('blur', () => { handleLeave('blur'); });
 window.addEventListener('focus', () => { lastHeartbeat = Date.now(); });
-document.addEventListener('mouseleave', () => { if(isWatching) handleLeave('mouseleave'); });
+// document.addEventListener('mouseleave', () => { if(isWatching) handleLeave('mouseleave'); });
 window.addEventListener('beforeunload', () => { handleLeave('unload'); });
 window.addEventListener('pagehide', () => { handleLeave('pagehide'); });
 document.addEventListener('mousemove', () => { lastHeartbeat = Date.now(); });
@@ -759,7 +766,7 @@ onAuthStateChanged(auth, async(user) => {
       updateProgress();
       if(userData.pendingEdit){ document.getElementById('certPendingBadge').style.display='block'; document.getElementById('btnRequestEdit').style.display='none'; }
       if(quizPassed.size >= TRAINING.videos.length) {
-        if(userData.certNameConfirmed){ showCert(); } else { showConfirmName(); }
+        if(userData.certNameConfirmed){ showCert(); } else { showConfirmName(); }  // showCert is async
       } else {
         let resume=0;
         for(let i=0;i<TRAINING.videos.length;i++){ if(!quizPassed.has(i)){resume=i;break;} }
@@ -1093,17 +1100,64 @@ window.applyEditName = async() => {
 window.confirmName = async() => {
   showLoading(true);
   await updateDoc(doc(db,'users',currentUser.uid),{certNameConfirmed:true});
-  userData.certNameConfirmed=true; showLoading(false); showCert();
+  userData.certNameConfirmed=true; showLoading(false); showCert();  // showCert is async — fire and forget OK
 };
 
+// ── Cert Number System ──
+const CERT_START = 11688;
+const CERT_END   = 12187;
+const CERT_WARN  = 12088; // ใช้ครบ 400 ใบ → แจ้งเตือน Admin
+
+async function assignCertNumber() {
+  if(userData.certNumber) return userData.certNumber;
+  try {
+    const certRef = doc(db, 'certNumbers', 'main');
+    let assigned = null;
+    await runTransaction(db, async(tx) => {
+      const snap = await tx.get(certRef);
+      let last = snap.exists() ? (snap.data().lastUsed || CERT_START - 1) : CERT_START - 1;
+      if(last >= CERT_END) throw new Error('CERT_FULL');
+      assigned = last + 1;
+      tx.set(certRef, { lastUsed: assigned }, { merge: true });
+    });
+    const certNumStr = `${assigned}/2569`;
+    const now = new Date();
+    const thM = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+    const certDate = `${now.getDate()} ${thM[now.getMonth()]} ${now.getFullYear()+543}`;
+    await updateDoc(doc(db,'users',currentUser.uid), { certNumber: certNumStr, certIssuedDate: certDate });
+    userData.certNumber = certNumStr;
+    userData.certIssuedDate = certDate;
+    return certNumStr;
+  } catch(e) {
+    if(e.message === 'CERT_FULL') { showToast('⚠️ เลขเกียรติบัตรหมดแล้ว กรุณาติดต่อผู้ดูแลระบบ'); return null; }
+    console.error('assignCertNumber error:', e);
+    return null;
+  }
+}
+
 // ── Cert ──
-function showCert() {
+async function showCert() {
+  showLoading(true);
+  if(!userData.certNumber) {
+    const certRef = doc(db, 'certNumbers', 'main');
+    const snap = await getDoc(certRef);
+    const last = snap.exists() ? (snap.data().lastUsed || CERT_START - 1) : CERT_START - 1;
+    if(last >= CERT_END) {
+      showLoading(false);
+      alert('⚠️ เลขเกียรติบัตรครบจำนวนแล้ว กรุณาติดต่อผู้ดูแลระบบ สพป.นครพนม เขต 1');
+      return;
+    }
+  }
+  const certNum = await assignCertNumber();
+  showLoading(false);
+  if(!certNum) return;
   document.getElementById('certName').textContent=`${userData.prefix}${userData.firstName} ${userData.lastName}`;
   document.getElementById('certPosition').textContent=`${userData.position}${userData.school?' | '+userData.school:''}`;
   document.getElementById('certCourse').textContent=TRAINING.courseName;
   document.getElementById('certHours').textContent=`จำนวน ${TRAINING.totalHours} ชั่วโมง`;
-  const now=new Date(),thM=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
-  document.getElementById('certDate').textContent=`${now.getDate()} ${thM[now.getMonth()]} ${now.getFullYear()+543}`;
+  document.getElementById('certDate').textContent = userData.certIssuedDate || '';
+  const certNumEl = document.getElementById('certNumberDisplay');
+  if(certNumEl) certNumEl.textContent = certNum;
   if(userData.pendingEdit){document.getElementById('certPendingBadge').style.display='block';document.getElementById('btnRequestEdit').style.display='none';}
   showPage('pageCert');
 }
@@ -1136,6 +1190,27 @@ window.submitRequestEdit = async() => {
 // ── Admin ──
 async function loadAdminDashboard() {
   showLoading(true);
+  // โหลดข้อมูลเลขเกียรติบัตร
+  const certSnap = await getDoc(doc(db,'certNumbers','main'));
+  const lastUsed = certSnap.exists() ? (certSnap.data().lastUsed || CERT_START - 1) : CERT_START - 1;
+  const usedCount = lastUsed - CERT_START + 1;
+  const certWarnEl = document.getElementById('certNumberWarning');
+  if(certWarnEl) {
+    if(lastUsed >= CERT_END) {
+      certWarnEl.style.display='block';
+      certWarnEl.innerHTML=`<strong>🚨 เลขเกียรติบัตรหมดแล้ว!</strong> ใช้ไปครบ ${usedCount} ใบ (${CERT_START}/2569 – ${CERT_END}/2569) — กรุณาติดต่อ สพฐ. เพื่อขอเลขเพิ่ม`;
+      certWarnEl.style.background='#fef2f2'; certWarnEl.style.borderColor='#fca5a5'; certWarnEl.style.color='#b91c1c';
+    } else if(lastUsed >= CERT_WARN) {
+      certWarnEl.style.display='block';
+      certWarnEl.innerHTML=`<strong>⚠️ แจ้งเตือน:</strong> ใช้เลขเกียรติบัตรไปแล้ว ${usedCount} ใบ (เหลืออีก ${CERT_END - lastUsed} ใบ) — ล็อตนี้ใช้ได้ถึงเลขที่ ${CERT_END}/2569 กรุณาเตรียมขอเลขเพิ่ม`;
+    } else {
+      certWarnEl.style.display='none';
+    }
+  }
+  // แสดงสถิติเลขเกียรติบัตร
+  const certStatEl = document.getElementById('certNumberStat');
+  if(certStatEl) certStatEl.textContent = `เลขล่าสุด: ${usedCount > 0 ? lastUsed+'/2569' : '-'} | ใช้แล้ว ${usedCount} ใบ | เหลือ ${CERT_END - lastUsed} ใบ`;
+
   const snap=await getDocs(collection(db,'users'));
   allUsersCache=snap.docs.map(d=>({id:d.id,...d.data()}));
   const total=allUsersCache.length, totalV=TRAINING.videos.length;
