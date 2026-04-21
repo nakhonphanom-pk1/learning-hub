@@ -35,7 +35,7 @@ body { background: #888; display: flex; flex-direction: column; align-items: cen
 .cert-date {
   position: absolute;
   top: 148.476mm;
-  left: 163mm;
+  left: 140mm;
   text-align: left;
   font-family: 'Sarabun', sans-serif;
   font-size: 5mm;
@@ -75,9 +75,11 @@ const p = new URLSearchParams(window.location.search);
 const name = p.get('name') || '-';
 const num  = p.get('num')  || '-';
 const date = p.get('date') || '-';
+// เพิ่ม พ.ศ. ถ้ายังไม่มี
+const dateDisplay = date.includes('พ.ศ.') ? date : date.replace(/(\d{4})$/, 'พ.ศ. $1');
 document.getElementById('certName').textContent = name;
 document.getElementById('certNum').textContent  = num;
-document.getElementById('certDate').textContent = date;
+document.getElementById('certDate').textContent = dateDisplay;
 document.title = 'เกียรติบัตร - ' + name;
 </script>
 </body>
