@@ -1012,8 +1012,8 @@ async function loadVideo(idx) {
 }
 
 function startTimer() {
-  if(isWatching||document.hidden) return;
-  isWatching=true; lastHeartbeat=Date.now();
+  if(isWatching) return;
+  isWatching=true;
   startHeartbeat();
   document.getElementById('statusDot').className='status-dot watching';
   document.getElementById('statusText').textContent='กำลังนับเวลา... โปรดอยู่ในหน้านี้ตลอดเวลา';
