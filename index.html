@@ -757,6 +757,9 @@ let quizIdx=0, quizVideoIdx=0, selectedOpt=null, answered=false, wrongAnswers=[]
 function handleLeave(reason) {
   if(!isWatching) return;
   isWatching=false; clearInterval(timer); clearInterval(heartbeatTimer);
+  // บันทึกเวลาที่ดูค้างไว้ทันทีที่ออก
+  saveWatchedProgress();
+  if(reason==='unload'||reason==='pagehide') return; // ปิดแท็บจริงๆ ไม่ต้องแสดง UI
   leaveCount++;
   saveLeaveCount();
   document.getElementById('statusDot').className='status-dot paused';
@@ -772,34 +775,22 @@ async function saveLeaveCount() {
 }
 
 // Heartbeat — ถ้าขาด ping ถือว่าออก
-let lastHeartbeat = Date.now();
-function startHeartbeat() {
-  clearInterval(heartbeatTimer);
-  lastHeartbeat = Date.now();
-  heartbeatTimer = setInterval(() => {
-    if(Date.now() - lastHeartbeat > 8000 && isWatching) {
-      handleLeave('heartbeat');
-    }
-  }, 3000);
-}
+// ใช้เฉพาะ visibilitychange เท่านั้น — ออกจากแท็บจริงๆ ถึงจะหยุดนับ
+// ยกเลิก heartbeat เพราะทำให้ขึ้นเตือนตอนนั่งดูคลิปเฉยๆ ไม่ขยับเมาส์
+function startHeartbeat() { /* disabled */ }
 document.addEventListener('visibilitychange', () => {
   if(document.hidden) {
-    if(isWatching) handleLeave('visibility'); // trigger เฉพาะตอนกำลังดูเท่านั้น
+    if(isWatching) handleLeave('visibility');
   } else {
-    lastHeartbeat = Date.now();
-    // ซ่อน warning banner เสมอเมื่อกลับมา (ไม่ว่าจะดูอยู่หรือไม่)
+    // กลับมาที่แท็บ — ซ่อน warning และ resume นับต่อ
     document.getElementById('warningBanner').classList.remove('show');
+    if(!isWatching && currentUser && completed && !completed.has(currentIdx)) {
+      // ไม่ต้อง resume อัตโนมัติ ให้ผู้ใช้กด Play เองในวิดีโอ
+    }
   }
 });
-// blur และ mouseleave ถูกปิดการใช้งาน — ใช้ visibilitychange เท่านั้นเพื่อลดความรำคาญ
-// window.addEventListener('blur', () => { handleLeave('blur'); });
-window.addEventListener('focus', () => { lastHeartbeat = Date.now(); });
-// document.addEventListener('mouseleave', () => { if(isWatching) handleLeave('mouseleave'); });
-window.addEventListener('beforeunload', () => { handleLeave('unload'); });
-window.addEventListener('pagehide', () => { handleLeave('pagehide'); });
-document.addEventListener('mousemove', () => { lastHeartbeat = Date.now(); });
-document.addEventListener('keydown', () => { lastHeartbeat = Date.now(); });
-document.addEventListener('click', () => { lastHeartbeat = Date.now(); });
+window.addEventListener('beforeunload', () => { if(isWatching) handleLeave('unload'); });
+window.addEventListener('pagehide', () => { if(isWatching) handleLeave('pagehide'); });
 
 window.resumeVideo = () => {
   document.getElementById('pausedOverlay').classList.remove('show');
