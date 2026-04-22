@@ -976,19 +976,31 @@ window.doLogout = async() => {
 };
 
 // ── Video ──
-function loadVideo(idx) {
+async function loadVideo(idx) {
   currentIdx=idx; watchedSec=0; isWatching=false; clearInterval(timer); clearInterval(heartbeatTimer);
-  // โหลด watchedSec ที่บันทึกไว้ (ถ้ามี) เพื่อ resume ต่อจากที่ดูค้างไว้
-  if(userData && !completed.has(idx)){
-    const saved = userData['watchedSec_'+idx]||0;
-    if(saved>0){ watchedSec=saved; }
+  // fetch จาก Firestore สดๆ เพื่อโหลด watchedSec ที่บันทึกไว้ล่าสุด
+  if(currentUser && !completed.has(idx)){
+    try {
+      const fresh = await getDoc(doc(db,'users',currentUser.uid));
+      if(fresh.exists()){
+        const saved = fresh.data()['watchedSec_'+idx]||0;
+        if(saved>0){ watchedSec=saved; }
+      }
+    } catch(e){ console.error(e); }
   }
   const v=TRAINING.videos[idx];
   document.getElementById('videoLabel').textContent=`Part ${idx+1} จาก ${TRAINING.videos.length}`;
   document.getElementById('videoTitle').textContent=v.title;
   document.getElementById('vimeoPlayer').src=`https://player.vimeo.com/video/${v.vimeoId}?title=0&byline=0&portrait=0`;
   const ov=document.getElementById('videoOverlay');
-  ov.innerHTML=`<div class="overlay-icon">▶️</div><div class="overlay-text">กดที่นี่ แล้วกด Play เพื่อเริ่มนับเวลา</div><div class="overlay-sub">ระบบจะเริ่มนับเวลาเมื่อคุณกดปุ่มนี้</div>`;
+  const v2=TRAINING.videos[idx];
+  if(watchedSec>0){
+    const rem=Math.max(0,v2.minSeconds-watchedSec);
+    const remTxt=rem>0?`เหลืออีก ${Math.floor(rem/60)}:${(rem%60).toString().padStart(2,'0')} นาที`:'✓ ดูครบแล้ว รอผลทำข้อสอบ';
+    ov.innerHTML=`<div class="overlay-icon">⏩</div><div class="overlay-text">ดูค้างไว้ ${Math.floor(watchedSec/60)}:${(watchedSec%60).toString().padStart(2,'0')} นาทีแล้ว</div><div class="overlay-sub">${remTxt}<br>กดที่นี่แล้วกด Play เพื่อดูต่อ</div>`;
+  } else {
+    ov.innerHTML=`<div class="overlay-icon">▶️</div><div class="overlay-text">กดที่นี่ แล้วกด Play เพื่อเริ่มนับเวลา</div><div class="overlay-sub">ระบบจะเริ่มนับเวลาเมื่อคุณกดปุ่มนี้</div>`;
+  }
   ov.classList.remove('hidden');
   ov.onclick=()=>{ ov.classList.add('hidden'); startTimer(); };
   document.getElementById('pausedOverlay').classList.remove('show');
