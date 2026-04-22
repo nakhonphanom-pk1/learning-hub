@@ -978,6 +978,11 @@ window.doLogout = async() => {
 // ── Video ──
 function loadVideo(idx) {
   currentIdx=idx; watchedSec=0; isWatching=false; clearInterval(timer); clearInterval(heartbeatTimer);
+  // โหลด watchedSec ที่บันทึกไว้ (ถ้ามี) เพื่อ resume ต่อจากที่ดูค้างไว้
+  if(userData && !completed.has(idx)){
+    const saved = userData['watchedSec_'+idx]||0;
+    if(saved>0){ watchedSec=saved; }
+  }
   const v=TRAINING.videos[idx];
   document.getElementById('videoLabel').textContent=`Part ${idx+1} จาก ${TRAINING.videos.length}`;
   document.getElementById('videoTitle').textContent=v.title;
@@ -1006,6 +1011,8 @@ function startTimer() {
     watchedSec++;
     const rem=Math.max(0,v.minSeconds-watchedSec);
     document.getElementById('statusTimer').textContent=rem>0?`เหลือ ${Math.floor(rem/60)}:${(rem%60).toString().padStart(2,'0')}`:'✓ ครบแล้ว';
+    // บันทึก watchedSec ทุก 30 วิ เพื่อให้ resume ได้เมื่อ logout กลับมา
+    if(watchedSec%30===0) saveWatchedProgress();
     if(watchedSec>=v.minSeconds&&!completed.has(currentIdx)){
       completed.add(currentIdx); saveProgress();
       document.getElementById('statusDot').className='status-dot done';
@@ -1020,6 +1027,14 @@ async function saveProgress() {
   if(!currentUser) return;
   try { await updateDoc(doc(db,'users',currentUser.uid),{completedVideos:[...completed].map(Number),quizPassed:[...quizPassed].map(Number),quizScores,lastUpdated:new Date().toISOString()}); }
   catch(e){console.error(e);}
+}
+
+async function saveWatchedProgress() {
+  if(!currentUser) return;
+  try {
+    const key='watchedSec_'+currentIdx;
+    await updateDoc(doc(db,'users',currentUser.uid),{[key]:watchedSec});
+  } catch(e){console.error(e);}
 }
 
 window.goToQuiz = () => { clearInterval(timer); clearInterval(heartbeatTimer); isWatching=false; document.getElementById('vimeoPlayer').src=''; startQuiz(currentIdx); };
