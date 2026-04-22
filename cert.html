@@ -11,6 +11,11 @@ body { background: #888; display: flex; flex-direction: column; align-items: cen
 .cert-wrap img { width: 297mm; height: 210mm; display: block; object-fit: fill; }
 .cert-overlay { position: absolute; inset: 0; }
 
+/* ========== LOCKED POSITIONS — ห้ามแก้ไข ==========
+   cert-num  : top 13.45mm   right 34.2mm   LOCKED
+   cert-name : top 92.552mm  left  5.8861mm LOCKED
+   cert-date : top 148.476mm left  136mm    LOCKED
+   ===================================================== */
 .cert-num {
   position: absolute;
   top: 13.45mm;
@@ -20,6 +25,7 @@ body { background: #888; display: flex; flex-direction: column; align-items: cen
   font-weight: 600;
   color: #3a2000;
   white-space: nowrap;
+  overflow: visible;
 }
 .cert-name {
   position: absolute;
@@ -31,6 +37,7 @@ body { background: #888; display: flex; flex-direction: column; align-items: cen
   font-weight: 700;
   color: #1a1a2e;
   white-space: nowrap;
+  overflow: visible;
 }
 .cert-date {
   position: absolute;
@@ -42,6 +49,7 @@ body { background: #888; display: flex; flex-direction: column; align-items: cen
   font-weight: 400;
   color: #1a1a2e;
   white-space: nowrap;
+  overflow: visible;
 }
 
 .btn-wrap { margin-top: 16px; display: flex; gap: 12px; }
