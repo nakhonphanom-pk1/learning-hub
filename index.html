@@ -783,8 +783,13 @@ function startHeartbeat() {
   }, 3000);
 }
 document.addEventListener('visibilitychange', () => {
-  if(document.hidden) { handleLeave('visibility'); }
-  else { lastHeartbeat = Date.now(); document.getElementById('warningBanner').classList.remove('show'); }
+  if(document.hidden) {
+    if(isWatching) handleLeave('visibility'); // trigger เฉพาะตอนกำลังดูเท่านั้น
+  } else {
+    lastHeartbeat = Date.now();
+    // ซ่อน warning banner เสมอเมื่อกลับมา (ไม่ว่าจะดูอยู่หรือไม่)
+    document.getElementById('warningBanner').classList.remove('show');
+  }
 });
 // blur และ mouseleave ถูกปิดการใช้งาน — ใช้ visibilitychange เท่านั้นเพื่อลดความรำคาญ
 // window.addEventListener('blur', () => { handleLeave('blur'); });
@@ -978,6 +983,9 @@ window.doLogout = async() => {
 // ── Video ──
 async function loadVideo(idx) {
   currentIdx=idx; watchedSec=0; isWatching=false; clearInterval(timer); clearInterval(heartbeatTimer);
+  // ซ่อน warning/paused overlay ทันทีเมื่อโหลดวิดีโอใหม่
+  document.getElementById('warningBanner').classList.remove('show');
+  document.getElementById('pausedOverlay').classList.remove('show');
   // fetch จาก Firestore สดๆ เพื่อโหลด watchedSec ที่บันทึกไว้ล่าสุด
   if(currentUser && !completed.has(idx)){
     try {
@@ -991,7 +999,8 @@ async function loadVideo(idx) {
   const v=TRAINING.videos[idx];
   document.getElementById('videoLabel').textContent=`Part ${idx+1} จาก ${TRAINING.videos.length}`;
   document.getElementById('videoTitle').textContent=v.title;
-  document.getElementById('vimeoPlayer').src=`https://player.vimeo.com/video/${v.vimeoId}?title=0&byline=0&portrait=0`;
+  const startAt = (!completed.has(idx) && watchedSec>0) ? `#t=${watchedSec}s` : '';
+  document.getElementById('vimeoPlayer').src=`https://player.vimeo.com/video/${v.vimeoId}?title=0&byline=0&portrait=0${startAt}`;
   const ov=document.getElementById('videoOverlay');
   const v2=TRAINING.videos[idx];
   if(watchedSec>0){
