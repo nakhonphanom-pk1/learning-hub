@@ -970,6 +970,7 @@ window.doAdminLogin = () => {
 
 window.doLogout = async() => {
   clearInterval(timer); clearInterval(heartbeatTimer); isWatching=false;
+  document.getElementById('vimeoPlayer').src='';
   if(isAdmin){isAdmin=false;document.getElementById('headerRight').style.display='none';showPage('pageAuth');return;}
   await signOut(auth);
 };
@@ -1021,7 +1022,7 @@ async function saveProgress() {
   catch(e){console.error(e);}
 }
 
-window.goToQuiz = () => { clearInterval(timer); clearInterval(heartbeatTimer); isWatching=false; startQuiz(currentIdx); };
+window.goToQuiz = () => { clearInterval(timer); clearInterval(heartbeatTimer); isWatching=false; document.getElementById('vimeoPlayer').src=''; startQuiz(currentIdx); };
 
 function updateNextBtn() {
   const btn=document.getElementById('btnNext');
