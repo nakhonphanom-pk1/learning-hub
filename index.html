@@ -762,7 +762,7 @@ function handleLeave(reason) {
   document.getElementById('statusDot').className='status-dot paused';
   document.getElementById('statusText').textContent='⏸ หยุดนับเวลา — กดปุ่มในวิดีโอเพื่อดูต่อ';
   document.getElementById('pausedOverlay').classList.add('show');
-  document.getElementById('pausedCount').textContent=`ออกจากหน้านี้แล้ว ${leaveCount} ครั้ง`;
+  document.getElementById('pausedCount').textContent='';
   document.getElementById('warningBanner').classList.add('show');
 }
 
