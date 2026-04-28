@@ -1052,7 +1052,8 @@ async function saveWatchedProgress() {
 }
 
 window.adminSkipVideo = () => {
-  if(!isAdmin) return;
+  const isDemo = new URLSearchParams(window.location.search).get('demo')==='1';
+  // demo mode — skip allowed for all
   clearInterval(timer); clearInterval(heartbeatTimer); isWatching=false;
   completed.add(currentIdx);
   quizPassed.add(currentIdx);
@@ -1062,7 +1063,8 @@ window.adminSkipVideo = () => {
   else { showPage('pageDone'); }
 };
 window.adminSkipQuiz = () => {
-  if(!isAdmin) return;
+  const isDemo = new URLSearchParams(window.location.search).get('demo')==='1';
+  // demo mode — skip allowed for all
   quizPassed.add(currentIdx);
   saveProgress();
   const next = currentIdx+1;
@@ -1074,8 +1076,8 @@ window.goToQuiz = () => { clearInterval(timer); clearInterval(heartbeatTimer); i
 function toggleAdminSkipBtns() {
   const v = document.getElementById('btnSkipAdmin');
   const q = document.getElementById('btnSkipQuiz');
-  if(v) v.style.display = isAdmin ? 'block' : 'none';
-  if(q) q.style.display = isAdmin ? 'inline-block' : 'none';
+  if(v) v.style.display = 'block';
+  if(q) q.style.display = 'inline-block';
 }
 function updateNextBtn() {
   const btn=document.getElementById('btnNext');
