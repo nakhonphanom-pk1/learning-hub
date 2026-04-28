@@ -143,6 +143,14 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
 .score-pass{background:var(--success-bg);border:2px solid var(--success);color:var(--success);}
 .score-fail{background:var(--red-bg);border:2px solid #e53935;color:#e53935;}
 .wrong-list{text-align:left;background:var(--red-bg);border:1px solid #fca5a5;border-radius:12px;padding:16px;margin-bottom:20px;}
+.review-list{margin-top:16px;text-align:left;display:flex;flex-direction:column;gap:10px;width:100%;}
+.review-item{padding:12px 14px;border-radius:10px;border:1px solid;}
+.review-correct{background:#f0faf0;border-color:#4caf50;}
+.review-wrong{background:#fff5f5;border-color:#f44336;}
+.review-q{font-weight:600;margin-bottom:6px;color:#1a1a2e;font-size:14px;}
+.review-chosen{font-size:13px;}
+.review-correct .review-chosen{color:#2e7d32;}
+.review-wrong .review-chosen{color:#c62828;}
 .wrong-list h4{font-size:14px;font-weight:600;color:var(--red);margin-bottom:10px;}
 .wrong-item{font-size:13px;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid #fca5a5;line-height:1.6;}
 .wrong-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
@@ -750,7 +758,7 @@ let watchedSec=0, timer=null, isWatching=false;
 let leaveCount=0, heartbeatTimer=null;
 let forgotUid=null, forgotUsername_=null;
 let isAdmin=false, allUsersCache=[];
-let quizIdx=0, quizVideoIdx=0, selectedOpt=null, answered=false, wrongAnswers=[];
+let quizIdx=0, quizVideoIdx=0, selectedOpt=null, answered=false, wrongAnswers=[], allAnswers=[];
 
 // ══════════════════════════════════════
 // ANTI-TAB-SWITCH — หลายชั้น
@@ -1122,7 +1130,7 @@ window.goToTraining = () => {
 // ── QUIZ ──
 function startQuiz(videoIdx) {
   toggleAdminSkipBtns();
-  quizVideoIdx=videoIdx; quizIdx=0; selectedOpt=null; answered=false; wrongAnswers=[];
+  quizVideoIdx=videoIdx; quizIdx=0; selectedOpt=null; answered=false; wrongAnswers=[]; allAnswers=[];
   document.getElementById('quizPartLabel').textContent=`Part ${videoIdx+1}`;
   document.getElementById('quizPassNote').textContent=`✏️ ต้องได้คะแนน ${TRAINING.passPercent}% ขึ้นไปถึงจะผ่าน — ทำใหม่ได้ไม่จำกัดครั้ง`;
   showPage('pageQuiz'); renderQuestion();
@@ -1181,7 +1189,9 @@ window.checkAnswer = () => {
 
 window.nextQuestion = () => {
   const q=TRAINING.videos[quizVideoIdx].quiz[quizIdx];
-  if(selectedOpt!==q.ans) wrongAnswers.push({q:q.q,correct:q.opts[q.ans],chosen:q.opts[selectedOpt]});
+  const correct = selectedOpt===q.ans;
+  allAnswers.push({q:q.q, opts:q.opts, ans:q.ans, chosen:selectedOpt, correct});
+  if(!correct) wrongAnswers.push({q:q.q,correct:q.opts[q.ans],chosen:q.opts[selectedOpt]});
   quizIdx++; renderQuestion();
 };
 
@@ -1197,12 +1207,22 @@ function showQuizResult() {
     saveProgress(); updateProgress(); renderPlaylist();
   }
   document.getElementById('quizProgFill').style.width='100%';
+  const reviewHtml = allAnswers.map((a,i)=>{
+    const cls = a.correct ? 'review-correct' : 'review-wrong';
+    const icon = a.correct ? '✅' : '❌';
+    const chosenText = a.opts[a.chosen];
+    return `<div class="review-item ${cls}">
+      <div class="review-q">${i+1}. ${a.q}</div>
+      <div class="review-chosen">${icon} คำตอบที่เลือก: <strong>${chosenText}</strong></div>
+    </div>`;
+  }).join('');
+
   document.getElementById('quizBody').innerHTML=`<div class="quiz-result">
     <div class="result-emoji">${passed?'🎉':'📝'}</div>
     <h3>${passed?'ผ่านแล้ว!':'ยังไม่ผ่าน'}</h3>
     <p>${passed?`ได้คะแนน ${pct}% ผ่านเกณฑ์ ${TRAINING.passPercent}%`:`ต้องได้ ${TRAINING.passPercent}% ขึ้นไป คุณได้ ${pct}% (${score}/${total} ข้อ)`}</p>
     <div class="score-badge ${passed?'score-pass':'score-fail'}">${score}/${total} คะแนน (${pct}%)</div>
-    ${!passed?`<div class="wrong-list"><h4>ข้อที่ตอบผิด:</h4>${wrongs.map(w=>`<div class="wrong-item"><div class="wi-q">${w.q}</div><div>คำตอบที่ถูก: <span class="wi-correct">${w.correct}</span></div></div>`).join('')}</div>`:''}
+    <div class="review-list">${reviewHtml}</div>
     ${passed?`<button class="btn-proceed" onclick="afterQuiz()">ดำเนินการต่อ →</button>`:`<button class="btn-retry" onclick="retryQuiz()">ทำใหม่อีกครั้ง</button>`}
   </div>`;
 }
@@ -1211,7 +1231,7 @@ window.afterQuiz = () => {
   if(quizVideoIdx>=TRAINING.videos.length-1){ showConfirmName(); }
   else { showPage('pageTraining'); loadVideo(quizVideoIdx+1); renderPlaylist(); }
 };
-window.retryQuiz = () => { quizIdx=0; wrongAnswers=[]; renderQuestion(); };
+window.retryQuiz = () => { quizIdx=0; wrongAnswers=[]; allAnswers=[]; renderQuestion(); };
 
 // ── Confirm Name ──
 function showConfirmName() {
