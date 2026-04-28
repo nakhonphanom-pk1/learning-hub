@@ -406,7 +406,7 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
         <div class="auth-error" id="registerError"></div>
         <div class="form-row-3">
           <div class="form-group"><label>คำนำหน้า <span>*</span></label>
-            <select id="regPrefix"><option value="">--</option><option>นาย</option><option>นาง</option><option>นางสาว</option><option>เด็กชาย</option><option>เด็กหญิง</option><option>ดร.</option><option>ว่าที่ร้อยตรี</option><option>ว่าที่ร้อยโท</option><option>ว่าที่ร้อยเอก</option></select>
+            <input type="text" id="regPrefix" placeholder="คำนำหน้า เช่น นาย, นาง, ดร." maxlength="30">
           </div>
           <div class="form-group"><label>ชื่อ <span>*</span></label><input type="text" id="regFirstName" placeholder="ชื่อ"></div>
           <div class="form-group"><label>นามสกุล <span>*</span></label><input type="text" id="regLastName" placeholder="นามสกุล"></div>
@@ -546,7 +546,7 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
         <div class="auth-error" id="confirmNameError"></div>
         <div class="form-row-3">
           <div class="form-group"><label>คำนำหน้า</label>
-            <select id="editPrefix"><option value="">--</option><option>นาย</option><option>นาง</option><option>นางสาว</option><option>เด็กชาย</option><option>เด็กหญิง</option><option>ดร.</option><option>ว่าที่ร้อยตรี</option></select>
+            <input type="text" id="editPrefix" placeholder="คำนำหน้า เช่น นาย, นาง, ดร." maxlength="30">
           </div>
           <div class="form-group"><label>ชื่อ</label><input type="text" id="editFirstName"></div>
           <div class="form-group"><label>นามสกุล</label><input type="text" id="editLastName"></div>
@@ -579,7 +579,7 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
       <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">กรอกชื่อที่ต้องการแก้ไข Admin จะพิจารณาและอนุมัติให้</p>
       <div class="form-row-3">
         <div class="form-group"><label>คำนำหน้า</label>
-          <select id="reqEditPrefix"><option value="">--</option><option>นาย</option><option>นาง</option><option>นางสาว</option><option>เด็กชาย</option><option>เด็กหญิง</option><option>ดร.</option><option>ว่าที่ร้อยตรี</option></select>
+          <input type="text" id="reqEditPrefix" placeholder="คำนำหน้า เช่น นาย, นาง, ดร." maxlength="30">
         </div>
         <div class="form-group"><label>ชื่อใหม่</label><input type="text" id="reqEditFirstName"></div>
         <div class="form-group"><label>นามสกุลใหม่</label><input type="text" id="reqEditLastName"></div>
