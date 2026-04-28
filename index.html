@@ -9,8 +9,8 @@
 :root{--navy:#1a2744;--navy-light:#243460;--gold:#c9a84c;--gold-light:#e8c97a;--gold-pale:#f7edd8;--cream:#fdf8f0;--white:#fff;--text:#1a1a2e;--muted:#5a6075;--success:#2e7d5e;--success-bg:#eaf4ef;--border:#ddd4bc;--red:#b91c1c;--red-bg:#fef2f2;}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;}
-.top-banner{width:100%;display:block;line-height:0;}
-.top-banner img{width:100%;max-height:200px;object-fit:cover;object-position:center top;display:block;image-rendering:auto;-webkit-font-smoothing:antialiased;}
+.top-banner{width:100%;display:block;line-height:0;background:#1a2744;}
+.top-banner img{width:100%;max-height:200px;object-fit:contain;object-position:center;display:block;image-rendering:-webkit-optimize-contrast;image-rendering:crisp-edges;}
 .site-header{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.2);}
 .header-inner{display:flex;align-items:center;gap:16px;padding:12px 32px;max-width:1200px;margin:0 auto;}
 .header-logo{width:48px;height:48px;flex-shrink:0;}
@@ -579,8 +579,8 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
     <div class="feedback-card">
       <div class="emoji">💬</div>
       <h2>ก่อนรับเกียรติบัตร</h2>
-      <p class="tagline">ระบบนี้กำลังพัฒนาอย่างต่อเนื่อง ความเห็นของท่านมีคุณค่ามาก</p>
-      <p>ท่านพบปัญหาใด หรืออยากให้ปรับปรุงส่วนไหนเป็นพิเศษ?<br>แม้เพียงบรรทัดเดียว ก็ช่วยให้เราพัฒนาระบบนี้ให้ดีขึ้นสำหรับทุกคนได้</p>
+      <p class="tagline">ความเห็นของท่านมีคุณค่า</p>
+      <p>พบปัญหาใด หรืออยากให้ปรับปรุงส่วนไหน? แชร์ให้เราทราบได้เลยครับ</p>
       <textarea class="feedback-textarea" id="feedbackText" placeholder="เช่น วิดีโอโหลดช้า, ข้อสอบยากเกินไป, อยากให้มีเอกสารประกอบ..."></textarea>
       <button class="btn-feedback-send" onclick="submitFeedback()">📨 ส่งความคิดเห็น และรับเกียรติบัตร</button>
       <button class="btn-feedback-skip" onclick="skipFeedback()">ข้ามและรับเกียรติบัตรเลย</button>
@@ -1305,6 +1305,13 @@ window.confirmName = async() => {
 
 window.submitFeedback = async() => {
   const text = document.getElementById('feedbackText').value.trim();
+  if(!text){
+    const ta = document.getElementById('feedbackText');
+    ta.style.borderColor = '#e67e22';
+    ta.placeholder = 'กรุณาพิมพ์ความคิดเห็นก่อนส่ง หรือกด "ข้ามและรับเกียรติบัตรเลย" ด้านล่าง';
+    ta.focus();
+    return;
+  }
   if(text && currentUser){
     try {
       await addDoc(collection(db,'feedback'),{
