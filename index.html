@@ -488,6 +488,7 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
         <div class="status-timer" id="statusTimer"></div>
       </div>
       <button class="btn-next" id="btnNext"><span id="btnNextText">ถัดไป</span></button>
+      <button class="btn-skip-admin" id="btnSkipAdmin" style="display:none;width:100%;margin-top:6px;padding:8px;background:#e67e22;color:white;font-family:'Sarabun',sans-serif;font-size:13px;font-weight:600;border:none;border-radius:11px;cursor:pointer;" onclick="adminSkipVideo()">⚡ Admin Skip — ข้ามพาร์ทนี้</button>
     </div>
     <div>
       <div class="sidebar-title">รายการวิดีโอ</div>
@@ -1009,6 +1010,7 @@ async function loadVideo(idx) {
   document.getElementById('statusText').textContent='คลิกที่วิดีโอ แล้วกด ▶ เพื่อเริ่มนับเวลา';
   document.getElementById('statusTimer').textContent='';
   updateNextBtn();
+  toggleAdminSkipBtns();
 }
 
 function startTimer() {
@@ -1049,8 +1051,32 @@ async function saveWatchedProgress() {
   } catch(e){console.error(e);}
 }
 
+window.adminSkipVideo = () => {
+  if(!isAdmin) return;
+  clearInterval(timer); clearInterval(heartbeatTimer); isWatching=false;
+  completed.add(currentIdx);
+  quizPassed.add(currentIdx);
+  saveProgress();
+  const next = currentIdx+1;
+  if(next < TRAINING.videos.length){ loadVideo(next); renderPlaylist(); updateProgress(); }
+  else { showPage('pageDone'); }
+};
+window.adminSkipQuiz = () => {
+  if(!isAdmin) return;
+  quizPassed.add(currentIdx);
+  saveProgress();
+  const next = currentIdx+1;
+  if(next < TRAINING.videos.length){ loadVideo(next); showPage('pageTraining'); renderPlaylist(); updateProgress(); }
+  else { showPage('pageDone'); }
+};
 window.goToQuiz = () => { clearInterval(timer); clearInterval(heartbeatTimer); isWatching=false; document.getElementById('vimeoPlayer').src=''; startQuiz(currentIdx); };
 
+function toggleAdminSkipBtns() {
+  const v = document.getElementById('btnSkipAdmin');
+  const q = document.getElementById('btnSkipQuiz');
+  if(v) v.style.display = isAdmin ? 'block' : 'none';
+  if(q) q.style.display = isAdmin ? 'inline-block' : 'none';
+}
 function updateNextBtn() {
   const btn=document.getElementById('btnNext');
   const done=completed.has(currentIdx), quizDone=quizPassed.has(currentIdx);
@@ -1094,6 +1120,7 @@ window.goToTraining = () => {
 
 // ── QUIZ ──
 function startQuiz(videoIdx) {
+  toggleAdminSkipBtns();
   quizVideoIdx=videoIdx; quizIdx=0; selectedOpt=null; answered=false; wrongAnswers=[];
   document.getElementById('quizPartLabel').textContent=`Part ${videoIdx+1}`;
   document.getElementById('quizPassNote').textContent=`✏️ ต้องได้คะแนน ${TRAINING.passPercent}% ขึ้นไปถึงจะผ่าน — ทำใหม่ได้ไม่จำกัดครั้ง`;
@@ -1115,6 +1142,7 @@ function renderQuestion() {
     <div class="quiz-actions">
       <button class="btn-check" id="btnCheck" onclick="checkAnswer()">ตรวจคำตอบ</button>
       <button class="btn-next-q" id="btnNextQ" onclick="nextQuestion()">ถัดไป →</button>
+      <button id="btnSkipQuiz" style="display:none;margin-left:8px;padding:10px 18px;background:#e67e22;color:white;font-family:'Sarabun',sans-serif;font-size:13px;font-weight:600;border:none;border-radius:9px;cursor:pointer;" onclick="adminSkipQuiz()">⚡ Skip ข้อสอบ</button>
     </div>`;
 }
 
