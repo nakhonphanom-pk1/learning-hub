@@ -11,11 +11,6 @@ body { background: #888; display: flex; flex-direction: column; align-items: cen
 .cert-wrap img { width: 297mm; height: 210mm; display: block; object-fit: fill; }
 .cert-overlay { position: absolute; inset: 0; }
 
-/* ========== LOCKED POSITIONS — ห้ามแก้ไข ==========
-   cert-num  : top 13.45mm   right 34.2mm   LOCKED
-   cert-name : top 92.552mm  left  5.8861mm LOCKED
-   cert-date : top 148.476mm left  136mm    LOCKED
-   ===================================================== */
 .cert-num {
   position: absolute;
   top: 13.45mm;
@@ -25,7 +20,6 @@ body { background: #888; display: flex; flex-direction: column; align-items: cen
   font-weight: 600;
   color: #3a2000;
   white-space: nowrap;
-  overflow: visible;
 }
 .cert-name {
   position: absolute;
@@ -37,16 +31,18 @@ body { background: #888; display: flex; flex-direction: column; align-items: cen
   font-weight: 700;
   color: #1a1a2e;
   white-space: nowrap;
-  overflow: visible;
 }
+/* ========== LOCKED POSITIONS — ห้ามแก้ไข ==========
+   cert-date : top 148.476mm left 136mm LOCKED
+   ===================================================== */
 .cert-date {
   position: absolute;
   top: 148.476mm;
   left: 136mm;
   text-align: left;
   font-family: 'Sarabun', sans-serif;
-  font-size: 5mm;
-  font-weight: 400;
+  font-size: 5.7mm;
+  font-weight: 700;
   color: #1a1a2e;
   white-space: nowrap;
   overflow: visible;
@@ -84,7 +80,14 @@ const name = p.get('name') || '-';
 const num  = p.get('num')  || '-';
 const date = p.get('date') || '-';
 // เพิ่ม พ.ศ. ถ้ายังไม่มี
-const dateDisplay = date.includes('พ.ศ.') ? date : date.replace(/(\d{4})$/, 'พ.ศ. $1');
+// รูปแบบวันที่: "28  เมษายน  พ.ศ.2569" (เพิ่ม 2 เคาะหลังวันที่ และหลังเดือน, ชิด พ.ศ.2569)
+function formatCertDate(d) {
+  // รับ "28 เมษายน พ.ศ. 2569" หรือ "28 เมษายน 2569"
+  const m = d.match(/^(\d{1,2})\s+(\S+)\s+(?:พ\.ศ\.\s*)?(\d{4})$/);
+  if(m) return m[1] + '  ' + m[2] + '  พ.ศ.' + m[3];
+  return d;
+}
+const dateDisplay = formatCertDate(date);
 document.getElementById('certName').textContent = name;
 document.getElementById('certNum').textContent  = num;
 document.getElementById('certDate').textContent = dateDisplay;
