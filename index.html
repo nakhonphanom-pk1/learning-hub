@@ -1052,24 +1052,23 @@ async function saveWatchedProgress() {
 }
 
 window.adminSkipVideo = () => {
-  const isDemo = new URLSearchParams(window.location.search).get('demo')==='1';
-  // demo mode — skip allowed for all
+  // Skip คลิป → พาไปทำข้อสอบของ Part นี้
   clearInterval(timer); clearInterval(heartbeatTimer); isWatching=false;
+  document.getElementById('vimeoPlayer').src='';
   completed.add(currentIdx);
-  quizPassed.add(currentIdx);
   saveProgress();
-  const next = currentIdx+1;
-  if(next < TRAINING.videos.length){ loadVideo(next); renderPlaylist(); updateProgress(); }
-  else { showPage('pageDone'); }
+  startQuiz(currentIdx);
 };
 window.adminSkipQuiz = () => {
-  const isDemo = new URLSearchParams(window.location.search).get('demo')==='1';
-  // demo mode — skip allowed for all
+  // Skip ข้อสอบ → ไป Part ถัดไป หรือ pageConfirmName ถ้าจบแล้ว
   quizPassed.add(currentIdx);
   saveProgress();
   const next = currentIdx+1;
-  if(next < TRAINING.videos.length){ loadVideo(next); showPage('pageTraining'); renderPlaylist(); updateProgress(); }
-  else { showPage('pageDone'); }
+  if(next < TRAINING.videos.length){
+    loadVideo(next); showPage('pageTraining'); renderPlaylist(); updateProgress();
+  } else {
+    showPage('pageConfirmName');
+  }
 };
 window.goToQuiz = () => { clearInterval(timer); clearInterval(heartbeatTimer); isWatching=false; document.getElementById('vimeoPlayer').src=''; startQuiz(currentIdx); };
 
