@@ -523,6 +523,9 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
       <div class="quiz-prog-bar"><div class="quiz-prog-fill" id="quizProgFill"></div></div>
       <div class="quiz-pass-note" id="quizPassNote">✏️ ต้องได้คะแนน 80% ขึ้นไปถึงจะผ่าน — ทำใหม่ได้ไม่จำกัดครั้ง</div>
       <div id="quizBody"></div>
+      <div style="text-align:right;margin-top:8px;">
+        <button id="btnSkipQuiz" style="display:none;padding:8px 18px;background:#e67e22;color:white;font-family:'Sarabun',sans-serif;font-size:13px;font-weight:600;border:none;border-radius:9px;cursor:pointer;" onclick="adminSkipQuiz()">⚡ Skip ข้อสอบ</button>
+      </div>
     </div>
   </div>
 </div>
@@ -1151,7 +1154,7 @@ function renderQuestion() {
     <div class="quiz-actions">
       <button class="btn-check" id="btnCheck" onclick="checkAnswer()">ตรวจคำตอบ</button>
       <button class="btn-next-q" id="btnNextQ" onclick="nextQuestion()">ถัดไป →</button>
-      <button id="btnSkipQuiz" style="display:none;margin-left:8px;padding:10px 18px;background:#e67e22;color:white;font-family:'Sarabun',sans-serif;font-size:13px;font-weight:600;border:none;border-radius:9px;cursor:pointer;" onclick="adminSkipQuiz()">⚡ Skip ข้อสอบ</button>
+
     </div>`;
 }
 
