@@ -1121,8 +1121,8 @@ window.goToQuiz = () => { clearInterval(timer); clearInterval(heartbeatTimer); i
 function toggleAdminSkipBtns() {
   const v = document.getElementById('btnSkipAdmin');
   const q = document.getElementById('btnSkipQuiz');
-  if(v) v.style.display = 'block';
-  if(q) q.style.display = 'inline-block';
+  if(v) v.style.display = isAdmin ? 'block' : 'none';
+  if(q) q.style.display = isAdmin ? 'inline-block' : 'none';
 }
 function updateNextBtn() {
   const btn=document.getElementById('btnNext');
