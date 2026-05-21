@@ -3,29 +3,98 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ระบบอบรมการใช้งาน ปพ.3 ออนไลน์ ในรูปแบบ E-learning โดย สพป.นครพนม เขต 1</title>
+<title>NKP1 Learning Hub — ศูนย์อบรมออนไลน์ สพป.นครพนม เขต 1</title>
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--navy:#1a2744;--navy-light:#243460;--gold:#c9a84c;--gold-light:#e8c97a;--gold-pale:#f7edd8;--cream:#fdf8f0;--white:#fff;--text:#1a1a2e;--muted:#5a6075;--success:#2e7d5e;--success-bg:#eaf4ef;--border:#ddd4bc;--red:#b91c1c;--red-bg:#fef2f2;}
-/* === COURSE CARDS (Landing + Catalog) === */
-.course-card{background:white;border-radius:16px;padding:24px;border:2px solid var(--border);transition:all .2s ease;display:flex;flex-direction:column;}
-.course-card:hover{border-color:var(--gold);transform:translateY(-2px);box-shadow:0 8px 24px rgba(26,39,68,.08);}
-.course-card.disabled{opacity:.65;cursor:not-allowed;background:#f7f5f0;}
-.course-card.disabled:hover{transform:none;box-shadow:none;border-color:var(--border);}
-.cc-icon{font-size:48px;margin-bottom:12px;}
+/* === LANDING / CATALOG (HUB) === */
+.hub-page{min-height:calc(100vh - 100px);padding:32px 24px 60px;}
+.hub-wrap{max-width:1200px;margin:0 auto;}
+.hub-hero{text-align:center;margin-bottom:48px;padding:48px 24px 40px;background:linear-gradient(135deg,#1a2744 0%,#243460 50%,#2d3f73 100%);border-radius:24px;color:white;position:relative;overflow:hidden;box-shadow:0 12px 40px rgba(26,39,68,.25);}
+.hub-hero::before{content:'';position:absolute;top:-50%;right:-10%;width:400px;height:400px;background:radial-gradient(circle,rgba(201,168,76,.18) 0%,transparent 70%);pointer-events:none;}
+.hub-hero::after{content:'';position:absolute;bottom:-30%;left:-5%;width:300px;height:300px;background:radial-gradient(circle,rgba(232,201,122,.12) 0%,transparent 70%);pointer-events:none;}
+.hub-eyebrow{display:inline-block;font-size:11.5px;letter-spacing:2.5px;color:var(--gold-light);font-weight:700;background:rgba(201,168,76,.15);padding:6px 14px;border-radius:999px;border:1px solid rgba(201,168,76,.3);margin-bottom:18px;position:relative;z-index:1;}
+.hub-title{font-family:'Noto Serif Thai',serif;font-size:38px;font-weight:700;line-height:1.2;margin-bottom:10px;position:relative;z-index:1;letter-spacing:-.5px;}
+.hub-title-en{font-family:'Sarabun',sans-serif;font-size:18px;font-weight:300;color:var(--gold-light);letter-spacing:1.5px;margin-bottom:14px;position:relative;z-index:1;}
+.hub-sub{font-size:15px;opacity:.85;position:relative;z-index:1;max-width:620px;margin:0 auto;line-height:1.7;}
+.hub-section-label{text-align:center;margin-bottom:24px;}
+.hub-section-label h2{font-family:'Noto Serif Thai',serif;font-size:24px;color:var(--navy);font-weight:700;margin-bottom:6px;}
+.hub-section-label p{color:var(--muted);font-size:14px;}
+
+/* Course card grid */
+.cc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:24px;margin-bottom:32px;}
+
+/* Course card - modern style */
+.course-card{position:relative;background:white;border-radius:20px;padding:0;border:1px solid #ece7d8;transition:all .35s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;overflow:hidden;cursor:default;}
+.course-card:hover{transform:translateY(-6px);box-shadow:0 20px 50px rgba(26,39,68,.15);border-color:transparent;}
+.course-card.disabled{opacity:.75;}
+.course-card.disabled:hover{transform:none;box-shadow:none;border-color:#ece7d8;}
+
+/* Color accent bar (top) */
+.cc-accent{height:5px;background:linear-gradient(90deg,var(--cc-color,#1a2744),var(--cc-color-light,#2d3f73));}
+
+/* Card body */
+.cc-body{padding:28px 26px 26px;display:flex;flex-direction:column;flex:1;}
+.cc-icon-wrap{display:flex;align-items:center;justify-content:center;width:64px;height:64px;border-radius:18px;background:linear-gradient(135deg,var(--cc-color-pale,#f7edd8) 0%,var(--cc-color-pale-2,#fdf8f0) 100%);margin-bottom:16px;font-size:32px;border:1px solid var(--cc-color-border,#e8c97a33);}
 .cc-title{font-family:'Noto Serif Thai',serif;color:var(--navy);font-size:19px;font-weight:700;line-height:1.45;margin-bottom:10px;}
-.cc-desc{color:var(--muted);font-size:13.5px;line-height:1.65;margin-bottom:16px;flex:1;}
-.cc-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
-.cc-badge{font-size:11.5px;padding:4px 10px;border-radius:999px;font-weight:600;}
+.cc-desc{color:var(--muted);font-size:13.5px;line-height:1.7;margin-bottom:18px;flex:1;}
+
+/* Stats / Meta row */
+.cc-stats{display:flex;gap:14px;padding:14px 0;border-top:1px solid #f0ead6;border-bottom:1px solid #f0ead6;margin-bottom:16px;}
+.cc-stat{flex:1;text-align:center;}
+.cc-stat-num{font-family:'Noto Serif Thai',serif;font-size:18px;font-weight:700;color:var(--navy);line-height:1;}
+.cc-stat-label{font-size:11px;color:var(--muted);margin-top:4px;}
+
+/* Badge */
+.cc-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+.cc-badge{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;padding:5px 11px;border-radius:999px;font-weight:600;}
 .cc-badge.ok{background:var(--success-bg);color:var(--success);}
+.cc-badge.ok::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--success);box-shadow:0 0 0 0 var(--success);animation:pulse-dot 2s infinite;}
+@keyframes pulse-dot{0%,100%{box-shadow:0 0 0 0 rgba(46,125,94,.4);}50%{box-shadow:0 0 0 6px rgba(46,125,94,0);}}
 .cc-badge.soon{background:#fef3c7;color:#92400e;}
 .cc-badge.progress{background:#dbeafe;color:#1e40af;}
-.cc-btn{width:100%;padding:11px 16px;border-radius:10px;border:none;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:opacity .2s;}
-.cc-btn.primary{background:var(--navy);color:white;}
-.cc-btn.primary:hover{opacity:.9;}
-.cc-btn.secondary{background:var(--gold);color:var(--navy);}
-.cc-btn.secondary:hover{opacity:.9;}
-.cc-btn:disabled{background:#cbd5e1;color:#64748b;cursor:not-allowed;}
+.cc-badge.done{background:var(--success-bg);color:var(--success);}
+
+/* Cert info (completed) */
+.cc-cert-info{background:linear-gradient(135deg,#fdf8f0,#f7edd8);border:1px solid var(--gold);border-radius:12px;padding:12px 14px;margin-bottom:14px;display:flex;align-items:center;gap:12px;}
+.cc-cert-info-icon{font-size:24px;}
+.cc-cert-info-text{flex:1;}
+.cc-cert-info-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
+.cc-cert-info-num{font-family:'Noto Serif Thai',serif;font-weight:700;color:var(--navy);font-size:15px;}
+
+/* CTA button */
+.cc-btn{width:100%;padding:13px 18px;border-radius:12px;border:none;font-family:'Sarabun',sans-serif;font-size:14.5px;font-weight:600;cursor:pointer;transition:all .25s ease;display:flex;align-items:center;justify-content:center;gap:6px;}
+.cc-btn.primary{background:var(--navy);color:white;box-shadow:0 4px 12px rgba(26,39,68,.2);}
+.cc-btn.primary:hover{background:var(--navy-light);transform:translateY(-1px);box-shadow:0 6px 16px rgba(26,39,68,.3);}
+.cc-btn.secondary{background:linear-gradient(135deg,var(--gold),#d4b25a);color:var(--navy);box-shadow:0 4px 12px rgba(201,168,76,.3);}
+.cc-btn.secondary:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(201,168,76,.45);}
+.cc-btn:disabled{background:#e5e7eb;color:#9ca3af;cursor:not-allowed;box-shadow:none;}
+.cc-btn:disabled:hover{transform:none;}
+
+/* Landing CTA (bottom login) */
+.hub-cta{text-align:center;margin-top:36px;padding:28px 24px;background:white;border-radius:16px;border:1px solid var(--border);}
+.hub-cta-text{color:var(--muted);font-size:14px;margin-bottom:14px;}
+.hub-cta-btn{background:var(--navy);color:white;border:none;padding:12px 32px;border-radius:12px;font-family:'Sarabun',sans-serif;font-size:15px;cursor:pointer;font-weight:600;transition:all .25s;box-shadow:0 4px 12px rgba(26,39,68,.18);}
+.hub-cta-btn:hover{background:var(--navy-light);transform:translateY(-1px);box-shadow:0 6px 16px rgba(26,39,68,.28);}
+
+/* Welcome bar (catalog) */
+.welcome-bar{background:linear-gradient(135deg,#1a2744,#243460);color:white;padding:24px 28px;border-radius:18px;margin-bottom:32px;display:flex;align-items:center;gap:20px;box-shadow:0 8px 24px rgba(26,39,68,.18);}
+.welcome-bar-icon{font-size:38px;}
+.welcome-bar-text{flex:1;}
+.welcome-bar-greeting{font-size:13px;opacity:.75;margin-bottom:4px;}
+.welcome-bar-name{font-family:'Noto Serif Thai',serif;font-size:20px;font-weight:700;}
+
+/* Responsive */
+@media(max-width:640px){
+  .hub-hero{padding:36px 20px 30px;}
+  .hub-title{font-size:28px;}
+  .hub-title-en{font-size:14px;}
+  .hub-sub{font-size:13.5px;}
+  .cc-grid{grid-template-columns:1fr;gap:18px;}
+  .welcome-bar{flex-direction:column;text-align:center;}
+}
+
+/* === END LANDING/CATALOG === */
 
 
 body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;}
@@ -410,39 +479,52 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
 
 <!-- LANDING - Course Catalog ก่อน Login -->
 <div class="page active" id="pageLanding">
-  <div style="max-width:1100px;margin:0 auto;padding:40px 24px;">
-    <div style="text-align:center;margin-bottom:40px;">
-      <h1 style="font-family:'Noto Serif Thai',serif;color:var(--navy);font-size:32px;font-weight:700;margin-bottom:12px;">
-        ระบบอบรมออนไลน์
-      </h1>
-      <p style="color:var(--muted);font-size:16px;">โดย สพป.นครพนม เขต 1</p>
-      <p style="color:var(--muted);font-size:14px;margin-top:8px;">เลือกหลักสูตรที่ต้องการเข้าอบรม</p>
-    </div>
+  <div class="hub-page">
+    <div class="hub-wrap">
+      <div class="hub-hero">
+        <div class="hub-eyebrow">ศูนย์อบรมออนไลน์</div>
+        <div class="hub-title">NKP1 Learning Hub</div>
+        <div class="hub-title-en">สำนักงานเขตพื้นที่การศึกษาประถมศึกษานครพนม เขต 1</div>
+        <div class="hub-sub">ศูนย์รวมหลักสูตรอบรมออนไลน์สำหรับครูและบุคลากรทางการศึกษา เรียนได้ทุกที่ทุกเวลา พร้อมรับเกียรติบัตรหลังจบหลักสูตร</div>
+      </div>
 
-    <div id="landingCardGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px;margin-bottom:32px;">
-      <!-- การ์ดถูก render ด้วย JS ใน renderCourseCards() -->
-    </div>
+      <div class="hub-section-label">
+        <h2>หลักสูตรที่เปิดอบรม</h2>
+        <p>เลือกหลักสูตรที่ต้องการเข้าอบรม</p>
+      </div>
 
-    <div style="text-align:center;margin-top:24px;">
-      <button onclick="showLoginFromLanding()" style="background:var(--navy);color:white;border:none;padding:10px 28px;border-radius:10px;font-family:'Sarabun',sans-serif;font-size:14px;cursor:pointer;font-weight:500;">
-        เข้าสู่ระบบ / สมัครสมาชิก
-      </button>
+      <div class="cc-grid" id="landingCardGrid">
+        <!-- การ์ดถูก render ด้วย JS ใน renderCourseCards() -->
+      </div>
+
+      <div class="hub-cta">
+        <div class="hub-cta-text">ลงทะเบียนสมาชิกใหม่หรือเข้าสู่ระบบเพื่อเริ่มเรียน</div>
+        <button class="hub-cta-btn" onclick="showLoginFromLanding()">เข้าสู่ระบบ / สมัครสมาชิก</button>
+      </div>
     </div>
   </div>
 </div>
 
 <!-- CATALOG - Course Catalog หลัง Login (สำหรับคนที่จบ ปพ.3 แล้ว) -->
 <div class="page" id="pageCatalog">
-  <div style="max-width:1100px;margin:0 auto;padding:40px 24px;">
-    <div style="text-align:center;margin-bottom:32px;">
-      <h1 style="font-family:'Noto Serif Thai',serif;color:var(--navy);font-size:28px;font-weight:700;margin-bottom:8px;">
-        ประวัติการอบรมของคุณ
-      </h1>
-      <p style="color:var(--muted);font-size:14px;">หลักสูตรที่เข้าร่วมอบรมและสถานะการเรียนรู้</p>
-    </div>
+  <div class="hub-page">
+    <div class="hub-wrap">
+      <div class="welcome-bar">
+        <div class="welcome-bar-icon">👋</div>
+        <div class="welcome-bar-text">
+          <div class="welcome-bar-greeting">ยินดีต้อนรับกลับมา</div>
+          <div class="welcome-bar-name" id="catalogWelcomeName">ผู้ใช้งาน</div>
+        </div>
+      </div>
 
-    <div id="catalogCardGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px;">
-      <!-- การ์ดถูก render ด้วย JS ใน renderCourseCards('catalog') -->
+      <div class="hub-section-label">
+        <h2>ประวัติการอบรมของคุณ</h2>
+        <p>หลักสูตรที่เข้าร่วมและสถานะการเรียนรู้ของคุณ</p>
+      </div>
+
+      <div class="cc-grid" id="catalogCardGrid">
+        <!-- การ์ดถูก render ด้วย JS ใน renderCourseCards('catalog') -->
+      </div>
     </div>
   </div>
 </div>
@@ -799,7 +881,7 @@ const COURSES = {
     id: 'pp3',
     name: 'การใช้งานระบบ ปพ.3 ออนไลน์ ในรูปแบบ E-learning',
     shortName: 'ระบบ ปพ.3 ออนไลน์',
-    description: 'เรียนรู้การใช้งานระบบ ปพ.3 ออนไลน์ ทุกขั้นตอน ตั้งแต่การลงทะเบียน จนถึงการอัปโหลดข้อมูลและจัดการข้อผิดพลาด',
+    description: 'เรียนรู้การใช้งานระบบ ปพ.3 ออนไลน์ ครบทุกขั้นตอน ตั้งแต่การลงทะเบียน การตั้งค่าผู้ใช้งาน การอัปโหลดข้อมูลและจัดการข้อผิดพลาด พร้อมรับเกียรติบัตรหลังจบหลักสูตร',
     icon: '📋',
     color: '#1a2744',
     status: 'active',
@@ -872,7 +954,7 @@ const COURSES = {
     id: 'tzd',
     name: 'การรายงานสถานะนักเรียนในระบบ Thailand Zero Dropout (กสศ.)',
     shortName: 'Thailand Zero Dropout',
-    description: 'เรียนรู้วิธีการรายงานสถานะนักเรียนในระบบ Thailand Zero Dropout ของกองทุนเพื่อความเสมอภาคทางการศึกษา (กสศ.) สำหรับครู/บุคลากรในโรงเรียนสังกัด สพป.นครพนม เขต 1',
+    description: 'เรียนรู้วิธีรายงานสถานะนักเรียนในระบบ Thailand Zero Dropout ให้ครบถ้วนและทันเวลา เพื่อใช้ประกอบการพิจารณาจัดสรรเงินอุดหนุนจาก กสศ. ให้แก่นักเรียนยากจนพิเศษในสังกัด',
     icon: '🎯',
     color: '#059669',
     status: 'coming_soon',  // ยังไม่พร้อม - การ์ดแสดง แต่ปุ่ม disabled
@@ -995,70 +1077,126 @@ function renderCourseCards(target) {
   const gridId = isCatalog ? 'catalogCardGrid' : 'landingCardGrid';
   const grid = document.getElementById(gridId);
   if(!grid) return;
-  
+
+  // อัปเดต welcome name ใน catalog
+  if(isCatalog && userData && userData.firstName) {
+    const wn = document.getElementById('catalogWelcomeName');
+    if(wn) wn.textContent = `${userData.prefix||''}${userData.firstName} ${userData.lastName||''}`;
+  }
+
   const cards = Object.values(COURSES).map(course => {
     const isActive = course.status === 'active';
     const isSoon = course.status === 'coming_soon';
-    
+
     // เช็ค progress ของ user (ถ้า login แล้ว = catalog mode)
     let userStatus = null;
     let certNumberDisplay = null;
+    let certDateDisplay = null;
+    let progressPct = 0;
     if(isCatalog && userData && Object.keys(userData).length > 0) {
       const prog = getCourseProgress(userData, course.id);
       if(prog && prog.certNumber) {
         userStatus = 'completed';
         certNumberDisplay = prog.certNumber;
+        certDateDisplay = prog.certIssuedDate || '';
       } else if(prog && (prog.quizPassed||[]).length > 0) {
         userStatus = 'in_progress';
+        progressPct = Math.round((prog.quizPassed.length / (course.videos.length || 1)) * 100);
       } else {
         userStatus = 'not_started';
       }
     }
-    
-    // badge
+
+    // กำหนดสี CSS variables ตาม course
+    const colorVar = course.color;
+    // แปลงสี hex เป็น lighter shade (เบา)
+    const colorPale = course.id === 'pp3' ? '#f7edd8' : (course.id === 'tzd' ? '#d1fae5' : '#f7edd8');
+    const colorPale2 = course.id === 'pp3' ? '#fdf8f0' : (course.id === 'tzd' ? '#ecfdf5' : '#fdf8f0');
+    const colorBorder = course.id === 'pp3' ? '#e8c97a55' : (course.id === 'tzd' ? '#10b98155' : '#e8c97a55');
+    const colorLight = course.id === 'pp3' ? '#2d3f73' : (course.id === 'tzd' ? '#10b981' : '#2d3f73');
+
+    // Badge
     let badgeHTML = '';
     if(isSoon) {
-      badgeHTML = '<span class="cc-badge soon">⏳ เร็วๆ นี้</span>';
+      badgeHTML = '<span class="cc-badge soon">⏳ เปิดเร็วๆ นี้</span>';
     } else if(isCatalog && userStatus === 'completed') {
-      badgeHTML = '<span class="cc-badge ok">✅ ผ่านการอบรมแล้ว</span>';
+      badgeHTML = '<span class="cc-badge done">✅ ผ่านการอบรมแล้ว</span>';
     } else if(isCatalog && userStatus === 'in_progress') {
-      badgeHTML = '<span class="cc-badge progress">📚 กำลังเรียน</span>';
+      badgeHTML = `<span class="cc-badge progress">📚 กำลังเรียน ${progressPct}%</span>`;
     } else if(isActive) {
-      badgeHTML = '<span class="cc-badge ok">🟢 เปิดอบรม</span>';
+      badgeHTML = '<span class="cc-badge ok">เปิดอบรม</span>';
     }
-    
-    // ปุ่ม
+
+    // Stats row
+    const totalParts = course.videos.length;
+    const passPct = course.passPercent || 80;
+    const statsHTML = isActive ? `
+      <div class="cc-stats">
+        <div class="cc-stat">
+          <div class="cc-stat-num">${totalParts}</div>
+          <div class="cc-stat-label">บทเรียน</div>
+        </div>
+        <div class="cc-stat">
+          <div class="cc-stat-num">${course.totalHours}</div>
+          <div class="cc-stat-label">ชั่วโมง</div>
+        </div>
+        <div class="cc-stat">
+          <div class="cc-stat-num">${passPct}%</div>
+          <div class="cc-stat-label">เกณฑ์ผ่าน</div>
+        </div>
+      </div>` : `
+      <div class="cc-stats">
+        <div class="cc-stat" style="flex:1;">
+          <div class="cc-stat-num" style="font-size:14px;color:#92400e;">กำลังจัดทำเนื้อหา</div>
+          <div class="cc-stat-label" style="margin-top:6px;">จะเปิดให้บริการเร็วๆ นี้</div>
+        </div>
+      </div>`;
+
+    // Cert info card (เฉพาะคนจบหลักสูตรแล้ว)
+    let certInfoHTML = '';
+    if(isCatalog && userStatus === 'completed' && certNumberDisplay) {
+      certInfoHTML = `
+        <div class="cc-cert-info">
+          <div class="cc-cert-info-icon">📜</div>
+          <div class="cc-cert-info-text">
+            <div class="cc-cert-info-label">เลขเกียรติบัตร</div>
+            <div class="cc-cert-info-num">${certNumberDisplay}</div>
+            ${certDateDisplay ? `<div style="font-size:11.5px;color:var(--muted);margin-top:2px;">${certDateDisplay}</div>` : ''}
+          </div>
+        </div>`;
+    }
+
+    // Button
     let btnHTML = '';
     if(isSoon) {
-      btnHTML = '<button class="cc-btn primary" disabled>⏳ เร็วๆ นี้</button>';
+      btnHTML = '<button class="cc-btn primary" disabled>⏳ เปิดเร็วๆ นี้</button>';
     } else if(isCatalog && userStatus === 'completed') {
       btnHTML = `<button class="cc-btn secondary" onclick="enterCourse('${course.id}')">📜 ดูเกียรติบัตร</button>`;
+    } else if(isCatalog && userStatus === 'in_progress') {
+      btnHTML = `<button class="cc-btn primary" onclick="enterCourse('${course.id}')">เรียนต่อ →</button>`;
     } else if(isCatalog) {
-      btnHTML = `<button class="cc-btn primary" onclick="enterCourse('${course.id}')">เข้าอบรม</button>`;
+      btnHTML = `<button class="cc-btn primary" onclick="enterCourse('${course.id}')">เริ่มเรียน →</button>`;
     } else {
-      // Landing mode (ก่อน login)
-      btnHTML = `<button class="cc-btn primary" onclick="selectCourseFromLanding('${course.id}')">เข้าอบรม</button>`;
+      btnHTML = `<button class="cc-btn primary" onclick="selectCourseFromLanding('${course.id}')">เข้าอบรม →</button>`;
     }
-    
-    // extra info ตอนจบหลักสูตรแล้ว
-    let extraInfo = '';
-    if(isCatalog && userStatus === 'completed' && certNumberDisplay) {
-      extraInfo = `<div style="font-size:12px;color:var(--muted);margin-bottom:12px;">🔢 เลขที่: <strong>${certNumberDisplay}</strong></div>`;
-    }
-    
+
     const cardClass = isSoon ? 'course-card disabled' : 'course-card';
     return `
-      <div class="${cardClass}" style="border-top:4px solid ${course.color};">
-        <div class="cc-icon">${course.icon}</div>
-        <div class="cc-title">${course.name}</div>
-        <div class="cc-desc">${course.description}</div>
-        ${extraInfo}
-        <div class="cc-meta">${badgeHTML}</div>
-        ${btnHTML}
+      <div class="${cardClass}" style="--cc-color:${colorVar};--cc-color-light:${colorLight};--cc-color-pale:${colorPale};--cc-color-pale-2:${colorPale2};--cc-color-border:${colorBorder};">
+        <div class="cc-accent"></div>
+        <div class="cc-body">
+          <div class="cc-icon-wrap">${course.icon}</div>
+          <div class="cc-meta">${badgeHTML}</div>
+          <div class="cc-title">${course.name}</div>
+          <div class="cc-desc">${course.description}</div>
+          ${statsHTML}
+          ${certInfoHTML}
+          ${btnHTML}
+        </div>
       </div>
     `;
   }).join('');
-  
+
   grid.innerHTML = cards;
 }
 
