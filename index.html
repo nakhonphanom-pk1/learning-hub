@@ -7,7 +7,27 @@
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--navy:#1a2744;--navy-light:#243460;--gold:#c9a84c;--gold-light:#e8c97a;--gold-pale:#f7edd8;--cream:#fdf8f0;--white:#fff;--text:#1a1a2e;--muted:#5a6075;--success:#2e7d5e;--success-bg:#eaf4ef;--border:#ddd4bc;--red:#b91c1c;--red-bg:#fef2f2;}
-*{box-sizing:border-box;margin:0;padding:0;}
+/* === COURSE CARDS (Landing + Catalog) === */
+.course-card{background:white;border-radius:16px;padding:24px;border:2px solid var(--border);transition:all .2s ease;display:flex;flex-direction:column;}
+.course-card:hover{border-color:var(--gold);transform:translateY(-2px);box-shadow:0 8px 24px rgba(26,39,68,.08);}
+.course-card.disabled{opacity:.65;cursor:not-allowed;background:#f7f5f0;}
+.course-card.disabled:hover{transform:none;box-shadow:none;border-color:var(--border);}
+.cc-icon{font-size:48px;margin-bottom:12px;}
+.cc-title{font-family:'Noto Serif Thai',serif;color:var(--navy);font-size:19px;font-weight:700;line-height:1.45;margin-bottom:10px;}
+.cc-desc{color:var(--muted);font-size:13.5px;line-height:1.65;margin-bottom:16px;flex:1;}
+.cc-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+.cc-badge{font-size:11.5px;padding:4px 10px;border-radius:999px;font-weight:600;}
+.cc-badge.ok{background:var(--success-bg);color:var(--success);}
+.cc-badge.soon{background:#fef3c7;color:#92400e;}
+.cc-badge.progress{background:#dbeafe;color:#1e40af;}
+.cc-btn{width:100%;padding:11px 16px;border-radius:10px;border:none;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:opacity .2s;}
+.cc-btn.primary{background:var(--navy);color:white;}
+.cc-btn.primary:hover{opacity:.9;}
+.cc-btn.secondary{background:var(--gold);color:var(--navy);}
+.cc-btn.secondary:hover{opacity:.9;}
+.cc-btn:disabled{background:#cbd5e1;color:#64748b;cursor:not-allowed;}
+
+
 body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;}
 .top-banner{width:100%;display:block;line-height:0;}
 .top-banner img{width:100%;height:auto;display:block;}
@@ -388,8 +408,47 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
   </div>
 </header>
 
+<!-- LANDING - Course Catalog ก่อน Login -->
+<div class="page active" id="pageLanding">
+  <div style="max-width:1100px;margin:0 auto;padding:40px 24px;">
+    <div style="text-align:center;margin-bottom:40px;">
+      <h1 style="font-family:'Noto Serif Thai',serif;color:var(--navy);font-size:32px;font-weight:700;margin-bottom:12px;">
+        ระบบอบรมออนไลน์
+      </h1>
+      <p style="color:var(--muted);font-size:16px;">โดย สพป.นครพนม เขต 1</p>
+      <p style="color:var(--muted);font-size:14px;margin-top:8px;">เลือกหลักสูตรที่ต้องการเข้าอบรม</p>
+    </div>
+
+    <div id="landingCardGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px;margin-bottom:32px;">
+      <!-- การ์ดถูก render ด้วย JS ใน renderCourseCards() -->
+    </div>
+
+    <div style="text-align:center;margin-top:24px;">
+      <button onclick="showLoginFromLanding()" style="background:var(--navy);color:white;border:none;padding:10px 28px;border-radius:10px;font-family:'Sarabun',sans-serif;font-size:14px;cursor:pointer;font-weight:500;">
+        เข้าสู่ระบบ / สมัครสมาชิก
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- CATALOG - Course Catalog หลัง Login (สำหรับคนที่จบ ปพ.3 แล้ว) -->
+<div class="page" id="pageCatalog">
+  <div style="max-width:1100px;margin:0 auto;padding:40px 24px;">
+    <div style="text-align:center;margin-bottom:32px;">
+      <h1 style="font-family:'Noto Serif Thai',serif;color:var(--navy);font-size:28px;font-weight:700;margin-bottom:8px;">
+        ประวัติการอบรมของคุณ
+      </h1>
+      <p style="color:var(--muted);font-size:14px;">หลักสูตรที่เข้าร่วมอบรมและสถานะการเรียนรู้</p>
+    </div>
+
+    <div id="catalogCardGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px;">
+      <!-- การ์ดถูก render ด้วย JS ใน renderCourseCards('catalog') -->
+    </div>
+  </div>
+</div>
+
 <!-- AUTH - NEW UI -->
-<div class="page active" id="pageAuth">
+<div class="page" id="pageAuth">
   <div class="auth-wrap">
     <div class="auth-card" id="authCard">
 
@@ -484,6 +543,11 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
 <div class="page" id="pageTraining">
   <div class="training-layout">
     <div>
+      <div id="courseBreadcrumb" style="font-size:13px;color:var(--muted);margin-bottom:8px;">
+        <a href="#" onclick="event.preventDefault();showCatalogPage();" style="color:var(--navy);text-decoration:none;">📚 หลักสูตรทั้งหมด</a>
+        <span style="margin:0 6px;">›</span>
+        <span id="breadcrumbCourseName" style="color:var(--text);font-weight:600;">หลักสูตร</span>
+      </div>
       <div class="video-label" id="videoLabel">Part 1 จาก 4</div>
       <div class="video-title" id="videoTitle">กำลังโหลด...</div>
       <div class="video-wrapper">
@@ -591,6 +655,11 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
 <!-- CERT -->
 <div class="page" id="pageCert">
   <div class="cert-page-wrap">
+    <div id="certBreadcrumb" style="font-size:13px;color:var(--muted);margin-bottom:12px;text-align:center;">
+      <a href="#" onclick="event.preventDefault();showCatalogPage();" style="color:var(--navy);text-decoration:none;">📚 หลักสูตรทั้งหมด</a>
+      <span style="margin:0 6px;">›</span>
+      <span id="certBreadcrumbCourse" style="color:var(--text);font-weight:600;">หลักสูตร</span>
+    </div>
     <div class="cert-congrats">
       <div class="emoji">🎉</div>
       <h2>ยินดีด้วย! ท่านผ่านการอบรมเรียบร้อยแล้ว</h2>
@@ -601,6 +670,7 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
       <div id="certSummaryName" style="font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:var(--navy);margin-bottom:6px;">-</div>
       <div id="certSummaryNum" style="font-size:13px;color:var(--muted);margin-bottom:20px;">เลขที่ -</div>
       <button class="btn-print" onclick="openCertPrint()" style="width:100%;margin-bottom:10px;">🖨️ ดูและพิมพ์เกียรติบัตร (เปิดหน้าใหม่)</button>
+      <button onclick="showCatalogPage()" style="width:100%;margin-bottom:10px;background:var(--gold);color:var(--navy);border:none;padding:11px;border-radius:10px;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:600;cursor:pointer;">📚 ดูหลักสูตรอื่น</button>
       <div class="cert-pending-badge" id="certPendingBadge" style="display:none;margin-top:12px;">⏳ คำขอแก้ไขชื่ออยู่ระหว่างรอ Admin อนุมัติ</div>
       <button class="btn-request-edit" id="btnRequestEdit" onclick="toggleRequestEdit()" style="width:100%;margin-top:10px;">✏️ ขอแก้ไขชื่อ (ต้องรอ Admin)</button>
     </div>
@@ -721,12 +791,26 @@ const firebaseConfig = {
   appId: "1:166470680458:web:fbbf904b0d4f9a156d5273"
 };
 
-const TRAINING = {
-  courseName: 'ระบบอบรมการใช้งาน ปพ.3 ออนไลน์ ในรูปแบบ E-learning โดย สพป.นครพนม เขต 1',
-  totalHours: '4',
-  passPercent: 80,
-  videos: [
-    { title:'Part 1 : การเตรียมความพร้อมและขั้นตอนการลงทะเบียนเข้าใช้งานระบบ ปพ.3 ออนไลน์', vimeoId:'1184846225', minSeconds:600, durationLabel:'12:39 นาที',
+// ══════════════════════════════════════
+// COURSES — หลายหลักสูตร (เริ่มจาก ปพ.3, รองรับเพิ่มในอนาคต)
+// ══════════════════════════════════════
+const COURSES = {
+  pp3: {
+    id: 'pp3',
+    name: 'การใช้งานระบบ ปพ.3 ออนไลน์ ในรูปแบบ E-learning',
+    shortName: 'ระบบ ปพ.3 ออนไลน์',
+    description: 'เรียนรู้การใช้งานระบบ ปพ.3 ออนไลน์ ทุกขั้นตอน ตั้งแต่การลงทะเบียน จนถึงการอัปโหลดข้อมูลและจัดการข้อผิดพลาด',
+    icon: '📋',
+    color: '#1a2744',
+    status: 'active',
+    courseName: 'ระบบอบรมการใช้งาน ปพ.3 ออนไลน์ ในรูปแบบ E-learning โดย สพป.นครพนม เขต 1',
+    totalHours: '4',
+    passPercent: 80,
+    certCounterDoc: 'main',  // certCounters/main (เดิม - backward compat)
+    certNumberFormat: (n) => `${n}/2569`,
+    certNumberRange: { start: 11688, end: 12187, warn: 12088 },
+    videos: [
+      { title:'Part 1 : การเตรียมความพร้อมและขั้นตอนการลงทะเบียนเข้าใช้งานระบบ ปพ.3 ออนไลน์', vimeoId:'1184846225', minSeconds:600, durationLabel:'12:39 นาที',
       quiz:[
         {q:'ในคลิปวิดีโอ วิทยากรได้กล่าวถึงระบบ ปพ.3 ออนไลน์ว่ามีประวัติการใช้งานมาแล้วระยะหนึ่ง บริบทด้านเวลาใดที่อธิบายสถานการณ์การเข้าใช้งานของ "โรงเรียนประถมศึกษา" สังกัด สพป. ได้ถูกต้องที่สุด',opts:['โรงเรียนประถมศึกษาใช้งานระบบนี้มาตั้งแต่ปีการศึกษา 2563 อย่างต่อเนื่อง','โรงเรียนประถมศึกษาเพิ่งเริ่มถูกนำเข้าสู่ระบบ ปพ.3 ออนไลน์ หลังวันที่ 15 พฤศจิกายน ปีการศึกษา 2567','โรงเรียนประถมศึกษามีความคุ้นเคยกับระบบนี้มากกว่าโรงเรียนขยายโอกาส','ระบบนี้ถูกพัฒนาขึ้นใหม่ทั้งหมดในปีการศึกษา 2567'],ans:1,fb:['ระบบมีมาก่อน แต่โรงเรียนประถมยังไม่ได้เข้าใช้งาน','ถูกต้อง! เขตประถมเพิ่งเริ่มใช้หลังวันที่ 15 พ.ย. 2567','ตรงข้ามกับความจริง โรงเรียนขยายโอกาสคุ้นเคยมากกว่า','ระบบไม่ได้พัฒนาใหม่ทั้งหมด แต่ขยายผลมาสู่โรงเรียนประถม']},
         {q:'ตามโครงสร้างของระบบ ปพ.3 ออนไลน์ในปัจจุบัน คำสั่งแต่งตั้งคณะกรรมการวิชาการต้องประกอบด้วยตำแหน่งใดบ้าง',opts:['นายทะเบียน, ผู้ตรวจทาน, ผู้เขียน/ผู้พิมพ์','ผู้เขียน/ผู้พิมพ์, ผู้ทาน, นายทะเบียน, ผู้ตรวจทาน, ผู้อนุมัติ','นายทะเบียน, ผู้อำนวยการโรงเรียน, ผู้อนุมัติ','นายทะเบียน, ผู้ตรวจทาน, ผู้อนุมัติ'],ans:3,fb:['ตำแหน่งผู้เขียน/ผู้พิมพ์ถูกยกเลิกไปแล้ว','โครงสร้างแบบกระดาษเดิม 5 ตำแหน่ง ไม่ใช่ระบบออนไลน์','ขาดตำแหน่งผู้ตรวจทาน','ถูกต้อง! ปัจจุบันเหลือเพียง 3 ตำแหน่งหลัก']},
@@ -782,8 +866,31 @@ const TRAINING = {
         {q:'การเข้าสู่ระบบของ "ผู้ตรวจทาน" เพื่อตรวจสอบข้อมูล ปพ.3 ต้องดำเนินการอย่างไร',opts:['ล็อกอินผ่านบัญชีของนายทะเบียน แล้วสลับผู้ใช้งาน','เข้าสู่ระบบที่หน้าเว็บหลักด้วย ID ของผู้ตรวจทาน โดยสแกน QR Code ซึ่งมีเวลา 1 นาที','ผู้ตรวจทานไม่ต้องเข้าระบบ รับเอกสารกระดาษมาเซ็นชื่อ','เข้าสู่ระบบผ่าน School Miss'],ans:1,fb:['ผู้ตรวจทานไม่ได้อยู่ในระบบไอดีเดียวกับนายทะเบียน','ถูกต้อง! ผู้ตรวจทานสแกน QR Code ที่หน้าเว็บด้วย ID ของตนเอง โดย QR Code มีเวลา 1 นาที','การตรวจสอบต้องทำในระบบอิเล็กทรอนิกส์ทั้งหมด','ต้องเข้าผ่านหน้าเว็บ ปพ.3 ออนไลน์โดยตรง']}
       ]
     }
-  ]
+    ]
+  },
+  tzd: {
+    id: 'tzd',
+    name: 'การรายงานสถานะนักเรียนในระบบ Thailand Zero Dropout (กสศ.)',
+    shortName: 'Thailand Zero Dropout',
+    description: 'เรียนรู้วิธีการรายงานสถานะนักเรียนในระบบ Thailand Zero Dropout ของกองทุนเพื่อความเสมอภาคทางการศึกษา (กสศ.) สำหรับครู/บุคลากรในโรงเรียนสังกัด สพป.นครพนม เขต 1',
+    icon: '🎯',
+    color: '#059669',
+    status: 'coming_soon',  // ยังไม่พร้อม - การ์ดแสดง แต่ปุ่ม disabled
+    courseName: 'การรายงานสถานะนักเรียนในระบบ Thailand Zero Dropout โดย สพป.นครพนม เขต 1',
+    totalHours: '?',
+    passPercent: 80,
+    certCounterDoc: 'tzd',  // certCounters/tzd
+    certNumberFormat: (n) => `TZD-${String(n).padStart(4,'0')}`,
+    certNumberRange: { start: 1, end: 9999, warn: 9000 },
+    videos: []  // ยังไม่มี content
+  }
 };
+
+// Alias - backward compat กับ code เดิมที่อ้าง TRAINING
+const TRAINING = COURSES.pp3;
+
+// Course ปัจจุบันที่ user กำลังเรียน (default = pp3)
+let currentCourseId = 'pp3';
 // ══════════════════════════════════════
 
 const app = initializeApp(firebaseConfig);
@@ -797,6 +904,213 @@ let leaveCount=0, heartbeatTimer=null;
 let forgotUid=null, forgotUsername_=null;
 let isAdmin=false, allUsersCache=[];
 let quizIdx=0, quizVideoIdx=0, selectedOpt=null, answered=false, wrongAnswers=[], allAnswers=[];
+
+// ══════════════════════════════════════
+// COURSE HELPERS — multi-course support
+// ══════════════════════════════════════
+
+// อ่าน progress ของ course หนึ่ง — รองรับทั้งโครงสร้างเก่า (flat fields) และใหม่ (nested)
+function getCourseProgress(uData, courseId) {
+  if(!uData) return null;
+  // ใหม่: nested ใน .courses
+  if(uData.courses && uData.courses[courseId]) {
+    return uData.courses[courseId];
+  }
+  // เก่า: flat fields - เฉพาะ pp3 (เป็น default course เดิม)
+  if(courseId === 'pp3' && (uData.completedVideos !== undefined || uData.quizPassed !== undefined || uData.certNumber !== undefined)) {
+    return {
+      completedVideos: uData.completedVideos || [],
+      quizPassed: uData.quizPassed || [],
+      quizScores: uData.quizScores || {},
+      certNameConfirmed: uData.certNameConfirmed || false,
+      leaveCount: uData.leaveCount || 0,
+      certNumber: uData.certNumber || null,
+      certIssuedDate: uData.certIssuedDate || null,
+      pendingEdit: uData.pendingEdit || null,
+      _legacyFormat: true  // mark ว่าเป็น format เก่า
+    };
+  }
+  return null;
+}
+
+// เช็คว่า user จบ course นี้แล้วหรือยัง (= มีเลขเกียรติบัตรแล้ว)
+function hasCompletedCourse(uData, courseId) {
+  const prog = getCourseProgress(uData, courseId);
+  return !!(prog && prog.certNumber);
+}
+
+// Migration: ถ้า user ยังเป็น flat format → migrate ไป nested courses.pp3
+async function migrateUserSchema(uid, uData) {
+  if(uData.courses && uData.courses.pp3) return uData;  // migrate แล้ว
+  // ตรวจว่ามี flat fields ไหม
+  const hasLegacyData = (uData.completedVideos !== undefined || uData.quizPassed !== undefined ||
+                        uData.certNumber !== undefined || uData.certNameConfirmed !== undefined);
+  if(!hasLegacyData) {
+    // user ใหม่ที่ไม่มี progress เก่าเลย — สร้าง courses ว่างไว้
+    const updates = { courses: { pp3: {
+      completedVideos: [], quizPassed: [], quizScores: {},
+      certNameConfirmed: false, leaveCount: 0
+    }}};
+    try { await updateDoc(doc(db,'users',uid), updates); } catch(e){ console.error('migrate new user:', e); }
+    return { ...uData, ...updates };
+  }
+  // มี legacy data → copy ไป courses.pp3
+  const pp3Progress = {
+    completedVideos: uData.completedVideos || [],
+    quizPassed: uData.quizPassed || [],
+    quizScores: uData.quizScores || {},
+    certNameConfirmed: uData.certNameConfirmed || false,
+    leaveCount: uData.leaveCount || 0
+  };
+  if(uData.certNumber) pp3Progress.certNumber = uData.certNumber;
+  if(uData.certIssuedDate) pp3Progress.certIssuedDate = uData.certIssuedDate;
+  if(uData.pendingEdit) pp3Progress.pendingEdit = uData.pendingEdit;
+
+  const updates = { courses: { pp3: pp3Progress } };
+  try {
+    await updateDoc(doc(db,'users',uid), updates);
+    console.log('✅ Migrated user', uid, 'to nested courses schema');
+  } catch(e) { console.error('migrate legacy:', e); }
+  return { ...uData, ...updates };
+}
+
+// บันทึก progress ของ course ปัจจุบันลง Firestore (nested + backward compat)
+async function saveCourseProgress(updates) {
+  if(!currentUser) return;
+  const nested = {};
+  for(const [k, v] of Object.entries(updates)) {
+    nested[`courses.${currentCourseId}.${k}`] = v;
+    // เขียน flat field เก่าไปด้วย (เฉพาะ pp3) สำหรับ backward compat กับ admin dashboard / code อื่น
+    if(currentCourseId === 'pp3') {
+      nested[k] = v;
+    }
+  }
+  try { await updateDoc(doc(db,'users',currentUser.uid), nested); } catch(e){ console.error('saveCourseProgress:', e); }
+}
+
+// ── Render course cards (Landing + Catalog) ──
+function renderCourseCards(target) {
+  // target: 'landing' หรือ 'catalog'
+  const isCatalog = (target === 'catalog');
+  const gridId = isCatalog ? 'catalogCardGrid' : 'landingCardGrid';
+  const grid = document.getElementById(gridId);
+  if(!grid) return;
+  
+  const cards = Object.values(COURSES).map(course => {
+    const isActive = course.status === 'active';
+    const isSoon = course.status === 'coming_soon';
+    
+    // เช็ค progress ของ user (ถ้า login แล้ว = catalog mode)
+    let userStatus = null;
+    let certNumberDisplay = null;
+    if(isCatalog && userData && Object.keys(userData).length > 0) {
+      const prog = getCourseProgress(userData, course.id);
+      if(prog && prog.certNumber) {
+        userStatus = 'completed';
+        certNumberDisplay = prog.certNumber;
+      } else if(prog && (prog.quizPassed||[]).length > 0) {
+        userStatus = 'in_progress';
+      } else {
+        userStatus = 'not_started';
+      }
+    }
+    
+    // badge
+    let badgeHTML = '';
+    if(isSoon) {
+      badgeHTML = '<span class="cc-badge soon">⏳ เร็วๆ นี้</span>';
+    } else if(isCatalog && userStatus === 'completed') {
+      badgeHTML = '<span class="cc-badge ok">✅ ผ่านการอบรมแล้ว</span>';
+    } else if(isCatalog && userStatus === 'in_progress') {
+      badgeHTML = '<span class="cc-badge progress">📚 กำลังเรียน</span>';
+    } else if(isActive) {
+      badgeHTML = '<span class="cc-badge ok">🟢 เปิดอบรม</span>';
+    }
+    
+    // ปุ่ม
+    let btnHTML = '';
+    if(isSoon) {
+      btnHTML = '<button class="cc-btn primary" disabled>⏳ เร็วๆ นี้</button>';
+    } else if(isCatalog && userStatus === 'completed') {
+      btnHTML = `<button class="cc-btn secondary" onclick="enterCourse('${course.id}')">📜 ดูเกียรติบัตร</button>`;
+    } else if(isCatalog) {
+      btnHTML = `<button class="cc-btn primary" onclick="enterCourse('${course.id}')">เข้าอบรม</button>`;
+    } else {
+      // Landing mode (ก่อน login)
+      btnHTML = `<button class="cc-btn primary" onclick="selectCourseFromLanding('${course.id}')">เข้าอบรม</button>`;
+    }
+    
+    // extra info ตอนจบหลักสูตรแล้ว
+    let extraInfo = '';
+    if(isCatalog && userStatus === 'completed' && certNumberDisplay) {
+      extraInfo = `<div style="font-size:12px;color:var(--muted);margin-bottom:12px;">🔢 เลขที่: <strong>${certNumberDisplay}</strong></div>`;
+    }
+    
+    const cardClass = isSoon ? 'course-card disabled' : 'course-card';
+    return `
+      <div class="${cardClass}" style="border-top:4px solid ${course.color};">
+        <div class="cc-icon">${course.icon}</div>
+        <div class="cc-title">${course.name}</div>
+        <div class="cc-desc">${course.description}</div>
+        ${extraInfo}
+        <div class="cc-meta">${badgeHTML}</div>
+        ${btnHTML}
+      </div>
+    `;
+  }).join('');
+  
+  grid.innerHTML = cards;
+}
+
+// ── Page navigation functions ──
+window.showCatalogPage = () => {
+  renderCourseCards('catalog');
+  showPage('pageCatalog');
+};
+
+window.showLandingPage = () => {
+  renderCourseCards('landing');
+  showPage('pageLanding');
+};
+
+window.showLoginFromLanding = () => {
+  showPage('pageAuth');
+  showForm('login');
+};
+
+window.selectCourseFromLanding = (courseId) => {
+  // จำว่าเลือก course ไหน แล้วไปหน้า login
+  sessionStorage.setItem('pendingCourseId', courseId);
+  showPage('pageAuth');
+  showForm('login');
+};
+
+window.enterCourse = async (courseId) => {
+  if(!currentUser || !userData) return;
+  if(!COURSES[courseId] || COURSES[courseId].status !== 'active') return;
+  
+  currentCourseId = courseId;
+  
+  // โหลด progress ของ course นี้
+  const prog = getCourseProgress(userData, courseId) || {};
+  completed = new Set((prog.completedVideos||[]).map(Number));
+  quizPassed = new Set((prog.quizPassed||[]).map(Number));
+  quizScores = prog.quizScores||{};
+  leaveCount = prog.leaveCount||0;
+  updateProgress();
+  
+  // ถ้าจบแล้ว → ไปหน้า cert
+  if(prog.certNumber) {
+    showCert();
+  } else if(quizPassed.size >= COURSES[courseId].videos.length && COURSES[courseId].videos.length > 0) {
+    if(prog.certNameConfirmed){ showCert(); } else { showConfirmName(); }
+  } else {
+    // ยังไม่จบ → เข้า training
+    let resume=0;
+    for(let i=0;i<COURSES[courseId].videos.length;i++){ if(!quizPassed.has(i)){resume=i;break;} }
+    showPage('pageTraining'); loadVideo(resume); renderPlaylist();
+  }
+};
 
 // ══════════════════════════════════════
 // ANTI-TAB-SWITCH — หลายชั้น
@@ -818,7 +1132,11 @@ function handleLeave(reason) {
 
 async function saveLeaveCount() {
   if(!currentUser) return;
-  try { await updateDoc(doc(db,'users',currentUser.uid),{leaveCount}); } catch(e){}
+  try {
+    const updates = { [`courses.${currentCourseId}.leaveCount`]: leaveCount };
+    if(currentCourseId === 'pp3') updates.leaveCount = leaveCount;
+    await updateDoc(doc(db,'users',currentUser.uid), updates);
+  } catch(e){}
 }
 
 // Heartbeat — ถ้าขาด ping ถือว่าออก
@@ -857,20 +1175,44 @@ onAuthStateChanged(auth, async(user) => {
     const snap = await getDoc(doc(db,'users',user.uid));
     if(snap.exists()) {
       userData = snap.data();
-      completed = new Set((userData.completedVideos||[]).map(Number));
-      quizPassed = new Set((userData.quizPassed||[]).map(Number));
-      quizScores = userData.quizScores||{};
-      leaveCount = userData.leaveCount||0;
+      // Migration: ถ้ายังเป็น flat format → migrate ไป nested courses
+      userData = await migrateUserSchema(user.uid, userData);
+
+      // โหลด progress ของ course ปัจจุบัน (default = pp3)
+      const prog = getCourseProgress(userData, currentCourseId) || {};
+      completed = new Set((prog.completedVideos||[]).map(Number));
+      quizPassed = new Set((prog.quizPassed||[]).map(Number));
+      quizScores = prog.quizScores||{};
+      leaveCount = prog.leaveCount||0;
+
       document.getElementById('headerRight').style.display='flex';
       document.getElementById('headerProgress').style.display='flex';
       document.getElementById('headerUser').innerHTML=`สวัสดี <strong>${userData.prefix}${userData.firstName} ${userData.lastName}</strong>`;
       updateProgress();
-      if(userData.pendingEdit){ document.getElementById('certPendingBadge').style.display='block'; document.getElementById('btnRequestEdit').style.display='none'; }
-      if(quizPassed.size >= TRAINING.videos.length) {
-        if(userData.certNameConfirmed){ showCert(); } else { showConfirmName(); }  // showCert is async
+      if(prog.pendingEdit){ document.getElementById('certPendingBadge').style.display='block'; document.getElementById('btnRequestEdit').style.display='none'; }
+
+      // ตรวจว่าผู้ใช้เลือกหลักสูตรจาก landing page มาก่อนไหม
+      const pendingCourse = sessionStorage.getItem('pendingCourseId');
+      sessionStorage.removeItem('pendingCourseId');
+      if(pendingCourse && COURSES[pendingCourse] && COURSES[pendingCourse].status === 'active') {
+        // user เลือกหลักสูตรจาก landing → ไปหลักสูตรนั้น (ไม่ว่าจะจบ pp3 หรือยัง)
+        currentCourseId = pendingCourse;
+        await enterCourse(pendingCourse);
+        showLoading(false);
+        return;
+      }
+
+      // Routing logic — เช็คว่า "จบ ปพ.3" แล้วหรือยัง
+      if(hasCompletedCourse(userData, 'pp3')) {
+        // จบ ปพ.3 แล้ว → ไปหน้า Course Catalog
+        showCatalogPage();
+      } else if(quizPassed.size >= COURSES[currentCourseId].videos.length) {
+        // ผ่านข้อสอบครบ แต่ยังไม่มีเกียรติบัตร → continue flow เดิม
+        if(prog.certNameConfirmed){ showCert(); } else { showConfirmName(); }
       } else {
+        // ยังไม่จบ → เข้า training ต่อ
         let resume=0;
-        for(let i=0;i<TRAINING.videos.length;i++){ if(!quizPassed.has(i)){resume=i;break;} }
+        for(let i=0;i<COURSES[currentCourseId].videos.length;i++){ if(!quizPassed.has(i)){resume=i;break;} }
         showPage('pageTraining'); loadVideo(resume); renderPlaylist();
       }
     }
@@ -878,7 +1220,8 @@ onAuthStateChanged(auth, async(user) => {
   } else {
     currentUser=null; userData={};
     document.getElementById('headerRight').style.display='none';
-    showPage('pageAuth'); showLoading(false);
+    renderCourseCards('landing');
+    showPage('pageLanding'); showLoading(false);
   }
 });
 
@@ -933,7 +1276,13 @@ window.doRegister = async() => {
     const cred=await createUserWithEmailAndPassword(auth,uname+'@training-npk1.local',pass);
     await setDoc(doc(db,'users',cred.user.uid),{
       prefix,firstName:fn,lastName:ln,position:pos,school:sch,username:uname,
-      completedVideos:[],quizPassed:[],quizScores:{},certNameConfirmed:false,leaveCount:0,registeredAt:new Date().toISOString()
+      // backward compat flat fields (pp3)
+      completedVideos:[],quizPassed:[],quizScores:{},certNameConfirmed:false,leaveCount:0,
+      // nested courses (multi-course schema)
+      courses: {
+        pp3: { completedVideos:[], quizPassed:[], quizScores:{}, certNameConfirmed:false, leaveCount:0 }
+      },
+      registeredAt:new Date().toISOString()
     });
   }catch(e){showLoading(false);err.textContent='เกิดข้อผิดพลาด: '+e.message;err.classList.add('show');}
 };
@@ -1014,13 +1363,17 @@ window.doAdminLogin = () => {
 window.doLogout = async() => {
   clearInterval(timer); clearInterval(heartbeatTimer); isWatching=false;
   document.getElementById('vimeoPlayer').src='';
-  if(isAdmin){isAdmin=false;document.getElementById('headerRight').style.display='none';showPage('pageAuth');return;}
+  currentCourseId = 'pp3';  // reset
+  if(isAdmin){isAdmin=false;document.getElementById('headerRight').style.display='none';renderCourseCards('landing');showPage('pageLanding');return;}
   await signOut(auth);
 };
 
 // ── Video ──
 async function loadVideo(idx) {
   currentIdx=idx; watchedSec=0; isWatching=false; clearInterval(timer); clearInterval(heartbeatTimer);
+  // อัปเดต breadcrumb แสดงชื่อหลักสูตรปัจจุบัน
+  const bc = document.getElementById('breadcrumbCourseName');
+  if(bc) bc.textContent = COURSES[currentCourseId].shortName;
   // ซ่อน warning/paused overlay ทันทีเมื่อโหลดวิดีโอใหม่
   document.getElementById('warningBanner').classList.remove('show');
   document.getElementById('pausedOverlay').classList.remove('show');
@@ -1029,7 +1382,11 @@ async function loadVideo(idx) {
     try {
       const fresh = await getDoc(doc(db,'users',currentUser.uid));
       if(fresh.exists()){
-        const saved = fresh.data()['watchedSec_'+idx]||0;
+        const data = fresh.data();
+        // ลำดับ: nested ก่อน (ใหม่) → flat (เก่า)
+        const nestedKey = data.courses?.[currentCourseId]?.['watchedSec_'+idx];
+        const flatKey = data['watchedSec_'+idx];
+        const saved = nestedKey || (currentCourseId === 'pp3' ? flatKey : null) || 0;
         if(saved>0){ watchedSec=saved; }
       }
     } catch(e){ console.error(e); }
@@ -1085,15 +1442,36 @@ function startTimer() {
 
 async function saveProgress() {
   if(!currentUser) return;
-  try { await updateDoc(doc(db,'users',currentUser.uid),{completedVideos:[...completed].map(Number),quizPassed:[...quizPassed].map(Number),quizScores,lastUpdated:new Date().toISOString()}); }
-  catch(e){console.error(e);}
+  try {
+    const completedArr = [...completed].map(Number);
+    const passedArr = [...quizPassed].map(Number);
+    const updates = {
+      lastUpdated: new Date().toISOString(),
+      [`courses.${currentCourseId}.completedVideos`]: completedArr,
+      [`courses.${currentCourseId}.quizPassed`]: passedArr,
+      [`courses.${currentCourseId}.quizScores`]: quizScores,
+    };
+    // backward compat สำหรับ pp3
+    if(currentCourseId === 'pp3') {
+      updates.completedVideos = completedArr;
+      updates.quizPassed = passedArr;
+      updates.quizScores = quizScores;
+    }
+    await updateDoc(doc(db,'users',currentUser.uid), updates);
+  } catch(e){console.error(e);}
 }
 
 async function saveWatchedProgress() {
   if(!currentUser) return;
   try {
     const key='watchedSec_'+currentIdx;
-    await updateDoc(doc(db,'users',currentUser.uid),{[key]:watchedSec});
+    const updates = {
+      [`courses.${currentCourseId}.${key}`]: watchedSec,
+    };
+    if(currentCourseId === 'pp3') {
+      updates[key] = watchedSec;  // backward compat
+    }
+    await updateDoc(doc(db,'users',currentUser.uid), updates);
   } catch(e){console.error(e);}
 }
 
@@ -1298,8 +1676,17 @@ window.applyEditName = async() => {
 };
 window.confirmName = async() => {
   showLoading(true);
-  await updateDoc(doc(db,'users',currentUser.uid),{certNameConfirmed:true});
-  userData.certNameConfirmed=true; showLoading(false);
+  const updates = {
+    certNameConfirmed: true,  // backward compat (pp3 only)
+    [`courses.${currentCourseId}.certNameConfirmed`]: true
+  };
+  if(currentCourseId !== 'pp3') delete updates.certNameConfirmed;
+  await updateDoc(doc(db,'users',currentUser.uid), updates);
+  userData.certNameConfirmed = true;
+  if(!userData.courses) userData.courses = {};
+  if(!userData.courses[currentCourseId]) userData.courses[currentCourseId] = {};
+  userData.courses[currentCourseId].certNameConfirmed = true;
+  showLoading(false);
   showPage('pageFeedback');
 };
 
@@ -1328,30 +1715,58 @@ window.submitFeedback = async() => {
 
 window.skipFeedback = () => { showCert(); };
 
-// ── Cert Number System ──
-const CERT_START = 11688;
-const CERT_END   = 12187;
-const CERT_WARN  = 12088; // ใช้ครบ 400 ใบ → แจ้งเตือน Admin
+// ── Cert Number System (Multi-course) ──
+// ปพ.3 ใช้ certCounters/main, range 11688-12187, format "{n}/2569"
+// TZD ใช้ certCounters/tzd,  range 1-9999,       format "TZD-{NNNN}"
+// constants เก่า (CERT_START/END/WARN) เก็บไว้สำหรับ admin dashboard และ backward compat
+const CERT_START = COURSES.pp3.certNumberRange.start;
+const CERT_END   = COURSES.pp3.certNumberRange.end;
+const CERT_WARN  = COURSES.pp3.certNumberRange.warn;
 
 async function assignCertNumber() {
-  if(userData.certNumber) return userData.certNumber;
+  // เช็คว่า course นี้มี cert อยู่แล้วไหม
+  const prog = getCourseProgress(userData, currentCourseId);
+  if(prog && prog.certNumber) return prog.certNumber;
+
+  const course = COURSES[currentCourseId];
+  const { start, end } = course.certNumberRange;
+  const counterId = course.certCounterDoc;
+
   try {
-    const certRef = doc(db, 'certNumbers', 'main');
+    const certRef = doc(db, 'certNumbers', counterId);
     let assigned = null;
     await runTransaction(db, async(tx) => {
       const snap = await tx.get(certRef);
-      let last = snap.exists() ? (snap.data().lastUsed || CERT_START - 1) : CERT_START - 1;
-      if(last >= CERT_END) throw new Error('CERT_FULL');
+      let last = snap.exists() ? (snap.data().lastUsed || start - 1) : start - 1;
+      if(last >= end) throw new Error('CERT_FULL');
       assigned = last + 1;
       tx.set(certRef, { lastUsed: assigned }, { merge: true });
     });
-    const certNumStr = `${assigned}/2569`;
+    const certNumStr = course.certNumberFormat(assigned);
     const now = new Date();
     const thM = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
     const certDate = `${now.getDate()} ${thM[now.getMonth()]} พ.ศ. ${now.getFullYear()+543}`;
-    await updateDoc(doc(db,'users',currentUser.uid), { certNumber: certNumStr, certIssuedDate: certDate });
-    userData.certNumber = certNumStr;
-    userData.certIssuedDate = certDate;
+
+    const updates = {
+      [`courses.${currentCourseId}.certNumber`]: certNumStr,
+      [`courses.${currentCourseId}.certIssuedDate`]: certDate,
+    };
+    // backward compat: เขียน flat field สำหรับ pp3
+    if(currentCourseId === 'pp3') {
+      updates.certNumber = certNumStr;
+      updates.certIssuedDate = certDate;
+    }
+    await updateDoc(doc(db,'users',currentUser.uid), updates);
+
+    // update userData in memory
+    if(!userData.courses) userData.courses = {};
+    if(!userData.courses[currentCourseId]) userData.courses[currentCourseId] = {};
+    userData.courses[currentCourseId].certNumber = certNumStr;
+    userData.courses[currentCourseId].certIssuedDate = certDate;
+    if(currentCourseId === 'pp3') {
+      userData.certNumber = certNumStr;
+      userData.certIssuedDate = certDate;
+    }
     return certNumStr;
   } catch(e) {
     if(e.message === 'CERT_FULL') { showToast('⚠️ เลขเกียรติบัตรหมดแล้ว กรุณาติดต่อผู้ดูแลระบบ'); return null; }
@@ -1363,11 +1778,19 @@ async function assignCertNumber() {
 // ── Cert ──
 async function showCert() {
   showLoading(true);
-  if(!userData.certNumber) {
-    const certRef = doc(db, 'certNumbers', 'main');
+  const course = COURSES[currentCourseId];
+  const prog = getCourseProgress(userData, currentCourseId) || {};
+
+  // อัปเดต breadcrumb
+  const cbc = document.getElementById('certBreadcrumbCourse');
+  if(cbc) cbc.textContent = course.shortName;
+
+  if(!prog.certNumber) {
+    const certRef = doc(db, 'certNumbers', course.certCounterDoc);
     const snap = await getDoc(certRef);
-    const last = snap.exists() ? (snap.data().lastUsed || CERT_START - 1) : CERT_START - 1;
-    if(last >= CERT_END) {
+    const { start, end } = course.certNumberRange;
+    const last = snap.exists() ? (snap.data().lastUsed || start - 1) : start - 1;
+    if(last >= end) {
       showLoading(false);
       alert('⚠️ เลขเกียรติบัตรครบจำนวนแล้ว กรุณาติดต่อผู้ดูแลระบบ สพป.นครพนม เขต 1');
       return;
@@ -1377,17 +1800,20 @@ async function showCert() {
   showLoading(false);
   if(!certNum) return;
 
-  // แสดงหน้า pageCert สำหรับ UI (ปุ่มพิมพ์/แก้ไข)
   const fullName = `${userData.prefix}${userData.firstName} ${userData.lastName}`;
-  const certDate = userData.certIssuedDate || '';
+  const updatedProg = getCourseProgress(userData, currentCourseId) || {};
+  const certDate = updatedProg.certIssuedDate || '';
 
-  if(userData.pendingEdit){
+  if(updatedProg.pendingEdit){
     document.getElementById('certPendingBadge').style.display='block';
     document.getElementById('btnRequestEdit').style.display='none';
+  } else {
+    document.getElementById('certPendingBadge').style.display='none';
+    document.getElementById('btnRequestEdit').style.display='block';
   }
 
   // เก็บ data ไว้ใน window สำหรับปุ่มพิมพ์
-  window._certData = { name: fullName, num: certNum, date: certDate };
+  window._certData = { name: fullName, num: certNum, date: certDate, courseId: currentCourseId };
   // แสดงชื่อและเลขใน summary card
   const summaryName = document.getElementById('certSummaryName');
   const summaryNum = document.getElementById('certSummaryNum');
@@ -1399,8 +1825,8 @@ async function showCert() {
 // เปิดหน้าพิมพ์เกียรติบัตร (cert.html แยก)
 window.openCertPrint = () => {
   if(!window._certData) return;
-  const { name, num, date } = window._certData;
-  const params = new URLSearchParams({ name, num, date });
+  const { name, num, date, courseId } = window._certData;
+  const params = new URLSearchParams({ name, num, date, course: courseId || 'pp3' });
   window.open('cert.html?' + params.toString(), '_blank');
 };
 
@@ -1420,8 +1846,20 @@ window.submitRequestEdit = async() => {
   err.classList.remove('show'); suc.classList.remove('show');
   if(!prefix||!fn||!ln){err.textContent='กรุณากรอกชื่อให้ครบ';err.classList.add('show');return;}
   showLoading(true);
-  await updateDoc(doc(db,'users',currentUser.uid),{pendingEdit:{prefix,firstName:fn,lastName:ln,reason,requestedAt:new Date().toISOString(),oldName:`${userData.prefix}${userData.firstName} ${userData.lastName}`}});
-  userData.pendingEdit={prefix,firstName:fn,lastName:ln};
+  const pendingEditObj = {prefix,firstName:fn,lastName:ln,reason,requestedAt:new Date().toISOString(),oldName:`${userData.prefix}${userData.firstName} ${userData.lastName}`,courseId:currentCourseId};
+  const updates = {
+    [`courses.${currentCourseId}.pendingEdit`]: pendingEditObj
+  };
+  // backward compat: เขียน flat field สำหรับ pp3 (admin dashboard เก่ายังอ่านจากตรงนี้)
+  if(currentCourseId === 'pp3') updates.pendingEdit = pendingEditObj;
+  await updateDoc(doc(db,'users',currentUser.uid), updates);
+
+  // update in memory
+  if(!userData.courses) userData.courses = {};
+  if(!userData.courses[currentCourseId]) userData.courses[currentCourseId] = {};
+  userData.courses[currentCourseId].pendingEdit = pendingEditObj;
+  if(currentCourseId === 'pp3') userData.pendingEdit = pendingEditObj;
+
   showLoading(false);
   suc.textContent='✓ ส่งคำขอแล้ว รอ Admin อนุมัติครับ'; suc.classList.add('show');
   document.getElementById('certPendingBadge').style.display='block';
