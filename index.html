@@ -133,6 +133,12 @@
 .fab-item-icon{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:18px;flex-shrink:0;font-weight:700;}
 .fab-item-icon.line{background:linear-gradient(135deg,#00B900,#06C755);}
 .fab-item-icon.phone{background:linear-gradient(135deg,#1a2744,#243460);}
+.fab-item-icon.chat{background:linear-gradient(135deg,#1a2744,#c9a84c);}
+/* Badge บน fab-main (แจ้งข้อความใหม่จากแอดมิน) */
+.fab-main{position:relative;}
+.fab-main-badge{position:absolute;top:-2px;right:-2px;min-width:22px;height:22px;border-radius:11px;background:#e53935;color:white;font-size:11px;font-weight:700;display:none;align-items:center;justify-content:center;padding:0 6px;border:2.5px solid white;animation:badgePulse 1.5s ease-in-out infinite;}
+.fab-main-badge.show{display:flex;}
+@keyframes badgePulse{0%,100%{transform:scale(1);}50%{transform:scale(1.12);}}
 .fab-item-text{flex:1;text-align:left;}
 .fab-item-label{font-size:10.5px;color:var(--muted);font-weight:500;letter-spacing:.5px;text-transform:uppercase;}
 .fab-item-value{font-size:14px;color:var(--navy);font-weight:700;}
@@ -860,6 +866,54 @@ button[class*="btn-"],.quiz-actions button{position:relative;overflow:hidden;}
 @media(max-width:700px){.footer-inner{grid-template-columns:1fr;gap:24px;}.site-footer{padding:32px 20px 20px;margin-top:40px;}}
 
 
+
+
+/* ═══════════════════════════════════════════
+   COMMENTS PER VIDEO
+   ═══════════════════════════════════════════ */
+.comments-section{max-width:900px;margin:24px auto;padding:0 12px;}
+.comments-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:14px;border-bottom:2px solid var(--gold);margin-bottom:18px;}
+.comments-title{font-family:'Noto Serif Thai',serif;font-size:18px;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:8px;}
+.comments-count{background:var(--cream);color:var(--navy);padding:3px 12px;border-radius:14px;font-size:12px;font-weight:700;}
+.comments-which-video{font-size:12px;color:var(--muted);}
+
+.comment-form{background:white;border:1.5px solid var(--border);border-radius:14px;padding:14px;margin-bottom:18px;}
+.comment-form-user{font-size:12px;color:var(--muted);margin-bottom:6px;}
+.comment-form-user strong{color:var(--navy);}
+.comment-form textarea{width:100%;min-height:60px;border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-family:'Sarabun',sans-serif;font-size:14px;color:var(--text);background:var(--cream);outline:none;resize:vertical;max-height:200px;box-sizing:border-box;transition:border-color .2s ease;}
+.comment-form textarea:focus{border-color:var(--navy);background:white;}
+.comment-form-actions{display:flex;justify-content:space-between;align-items:center;margin-top:10px;gap:10px;}
+.comment-form-hint{font-size:11.5px;color:var(--muted);}
+.comment-form-btn{background:var(--navy);color:var(--gold-light);border:none;padding:8px 20px;border-radius:8px;font-family:'Sarabun',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s ease;}
+.comment-form-btn:hover:not(:disabled){background:#0f1a30;transform:translateY(-1px);}
+.comment-form-btn:disabled{opacity:.5;cursor:not-allowed;}
+
+.comment-login-prompt{background:var(--cream);border:1.5px dashed var(--border);border-radius:12px;padding:18px;text-align:center;margin-bottom:18px;color:var(--muted);font-size:13.5px;line-height:1.6;}
+.comment-login-prompt a{color:var(--navy);font-weight:600;text-decoration:underline;cursor:pointer;}
+
+.comment-list{display:flex;flex-direction:column;gap:12px;}
+.comment-empty{text-align:center;color:var(--muted);padding:24px 16px;font-size:13.5px;background:white;border:1.5px dashed var(--border);border-radius:12px;}
+.comment-empty-icon{font-size:32px;opacity:.5;margin-bottom:8px;}
+
+.comment-item{background:white;border:1.5px solid var(--border);border-radius:12px;padding:14px;display:flex;gap:12px;animation:commentIn .3s cubic-bezier(.2,.8,.2,1);}
+@keyframes commentIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.comment-item.mine{background:linear-gradient(135deg,#fdf8f0,white);border-color:var(--gold);}
+.comment-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--navy),var(--navy-light));color:var(--gold-light);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex-shrink:0;}
+.comment-content{flex:1;min-width:0;}
+.comment-meta{display:flex;align-items:baseline;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:4px;}
+.comment-author{font-size:13.5px;font-weight:600;color:var(--navy);}
+.comment-author .you-badge{font-size:10.5px;background:var(--gold);color:var(--navy);padding:1px 6px;border-radius:6px;margin-left:6px;font-weight:700;}
+.comment-school{font-size:11.5px;color:var(--muted);}
+.comment-time{font-size:11px;color:var(--muted);}
+.comment-text{font-size:14px;color:var(--text);line-height:1.55;word-wrap:break-word;white-space:pre-wrap;}
+.comment-actions{display:flex;gap:6px;margin-top:6px;}
+.comment-delete-btn{background:none;border:none;color:#dc2626;font-size:11.5px;cursor:pointer;padding:2px 6px;border-radius:6px;transition:background .15s ease;}
+.comment-delete-btn:hover{background:rgba(220,38,38,.08);}
+.comment-admin-badge{font-size:10px;background:#7f1d1d;color:white;padding:1px 6px;border-radius:6px;font-weight:700;letter-spacing:.3px;}
+
+@media (max-width:600px){.comments-section{padding:0 8px;}.comment-avatar{width:32px;height:32px;font-size:13px;}.comment-item{padding:10px;gap:8px;}}
+
+
 </style>
 </head>
 <body>
@@ -986,6 +1040,13 @@ button[class*="btn-"],.quiz-actions button{position:relative;overflow:hidden;}
 <div class="fab-backdrop" id="fabBackdrop" onclick="toggleFab()"></div>
 <div class="fab-contact" id="fabContact">
   <div class="fab-menu">
+    <a href="#" onclick="event.preventDefault();toggleFab();openChat();" class="fab-item">
+      <div class="fab-item-icon chat">💬</div>
+      <div class="fab-item-text">
+        <div class="fab-item-label">แชทสดกับแอดมิน</div>
+        <div class="fab-item-value">พิมพ์ถามได้เลย — ตอบไว</div>
+      </div>
+    </a>
     <a href="https://line.me/ti/p/~farmracha15" target="_blank" class="fab-item">
       <div class="fab-item-icon line">L</div>
       <div class="fab-item-text">
@@ -1001,22 +1062,26 @@ button[class*="btn-"],.quiz-actions button{position:relative;overflow:hidden;}
       </div>
     </a>
   </div>
-  <button class="fab-main" onclick="toggleFab()" aria-label="ติดต่อแอดมิน">💬</button>
+  <button class="fab-main" onclick="toggleFab()" aria-label="ติดต่อแอดมิน">
+    🤝
+    <span class="fab-main-badge" id="fabMainBadge">0</span>
+  </button>
 </div>
 
 <!-- AUTH - NEW UI -->
 <div class="page" id="pageAuth">
   <div class="auth-wrap">
-    <div class="page-nav" style="margin-top:8px;justify-content:center;">
-      <button class="btn-back" onclick="backFromAuth()" type="button">
-        <span class="btn-back-icon">←</span> กลับ
-      </button>
-      <div class="breadcrumb">
-        <a href="#" onclick="event.preventDefault();showLandingPage();">🏠 หน้าหลัก</a>
-        <span class="sep">›</span>
-        <span class="current" id="authBreadcrumbLabel">เข้าสู่ระบบ</span>
+    <div style="width:100%;max-width:480px;">
+      <div class="page-nav" style="margin-bottom:18px;">
+        <button class="btn-back" onclick="backFromAuth()" type="button">
+          <span class="btn-back-icon">←</span> กลับ
+        </button>
+        <div class="breadcrumb">
+          <a href="#" onclick="event.preventDefault();showLandingPage();">🏠 หน้าหลัก</a>
+          <span class="sep">›</span>
+          <span class="current" id="authBreadcrumbLabel">เข้าสู่ระบบ</span>
+        </div>
       </div>
-    </div>
     <div class="auth-card" id="authCard">
 
       <!-- LOGIN FORM -->
@@ -1103,6 +1168,7 @@ button[class*="btn-"],.quiz-actions button{position:relative;overflow:hidden;}
       </div>
 
     </div>
+    </div>
   </div>
 </div>
 
@@ -1173,6 +1239,39 @@ button[class*="btn-"],.quiz-actions button{position:relative;overflow:hidden;}
       </div>
     </div>
     <div class="info-grid" id="infoGrid"></div>
+  </div>
+
+  <!-- VIDEO COMMENTS SECTION -->
+  <div class="comments-section" id="commentsSection">
+    <div class="comments-header">
+      <div>
+        <div class="comments-title">💭 ความคิดเห็นของผู้เรียน <span class="comments-count" id="commentsCount">0</span></div>
+        <div class="comments-which-video" id="commentsWhichVideo">— Part 1</div>
+      </div>
+    </div>
+    
+    <!-- Form: post comment (or login prompt) -->
+    <div id="commentFormWrap">
+      <div class="comment-login-prompt" id="commentLoginPrompt" style="display:none;">
+        💬 <a onclick="closeChat();showPage('pageAuth');showForm('login');">เข้าสู่ระบบ</a> เพื่อแสดงความคิดเห็น
+      </div>
+      <div class="comment-form" id="commentForm" style="display:none;">
+        <div class="comment-form-user">กำลังโพสต์ในชื่อ: <strong id="commentFormUserName">-</strong></div>
+        <textarea id="commentInput" placeholder="พิมพ์ความคิดเห็น คำถาม หรือสิ่งที่ได้เรียนรู้ในวิดีโอนี้..." maxlength="500"></textarea>
+        <div class="comment-form-actions">
+          <div class="comment-form-hint"><span id="commentCharCount">0</span>/500 — กด Ctrl+Enter เพื่อโพสต์</div>
+          <button class="comment-form-btn" id="commentSubmitBtn" onclick="postComment()">โพสต์ความคิดเห็น</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- List of comments -->
+    <div class="comment-list" id="commentList">
+      <div class="comment-empty">
+        <div class="comment-empty-icon">💭</div>
+        <div>ยังไม่มีความคิดเห็น — เป็นคนแรกที่แชร์ความคิดเห็นในวิดีโอนี้!</div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1412,13 +1511,7 @@ button[class*="btn-"],.quiz-actions button{position:relative;overflow:hidden;}
   <a class="lightbox-download" id="lightboxDownload" download="infographic.jpg" href="#">⬇️ ดาวน์โหลดภาพ</a>
 </div>
 
-<!-- CHAT FAB (เพิ่มข้างปุ่มติดต่อเดิม) -->
-<button class="chat-fab" id="chatFab" onclick="openChat()" aria-label="แชทกับแอดมิน">
-  💬
-  <span class="chat-fab-badge" id="chatFabBadge">0</span>
-</button>
-
-<!-- CHAT WINDOW -->
+<!-- CHAT WINDOW (เปิดจาก fab-menu — "แชทสด") -->
 <div class="chat-window" id="chatWindow">
   <div class="chat-header">
     <div class="chat-header-info">
@@ -1452,7 +1545,7 @@ button[class*="btn-"],.quiz-actions button{position:relative;overflow:hidden;}
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, updateDoc, addDoc, query, collection, where, getDocs, runTransaction } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, getDoc, updateDoc, addDoc, deleteDoc, query, collection, where, getDocs, runTransaction, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
 // ══════════════════════════════════════
 // CONFIG
@@ -2521,6 +2614,8 @@ window.doLogout = async() => {
 // ── Video ──
 async function loadVideo(idx) {
   currentIdx=idx; watchedSec=0; isWatching=false; clearInterval(timer); clearInterval(heartbeatTimer);
+  // refresh comments เมื่อเปลี่ยน video
+  setTimeout(() => { if(typeof renderCommentsForCurrentVideo === 'function') renderCommentsForCurrentVideo(); }, 100);
   // อัปเดต breadcrumb แสดงชื่อหลักสูตรปัจจุบัน
   const bc = document.getElementById('breadcrumbCourseName');
   if(bc) bc.textContent = COURSES[currentCourseId].shortName;
@@ -3359,7 +3454,7 @@ window.openChat = () => {
   const win = document.getElementById('chatWindow');
   win.classList.add('show');
   // hide chat FAB while window open
-  document.getElementById('chatFab').style.display = 'none';
+  document.getElementById('chatWindow').classList.add('show');
   
   renderChatBody();
   
@@ -3376,7 +3471,6 @@ window.openChat = () => {
 
 window.closeChat = () => {
   document.getElementById('chatWindow').classList.remove('show');
-  document.getElementById('chatFab').style.display = 'flex';
 };
 
 function renderChatBody() {
@@ -3495,7 +3589,7 @@ function stopChatListener() {
 }
 
 function updateChatBadge(count) {
-  const badge = document.getElementById('chatFabBadge');
+  const badge = document.getElementById('fabMainBadge');
   if(!badge) return;
   if(count > 0) {
     badge.textContent = count > 9 ? '9+' : count;
@@ -3628,7 +3722,6 @@ window.openAdminChatDetail = (uid) => {
   
   // override send to admin mode
   win.classList.add('show');
-  document.getElementById('chatFab').style.display = 'none';
   
   // listen to messages
   if(adminCurrentMsgsUnsub) adminCurrentMsgsUnsub();
@@ -3912,6 +4005,213 @@ window.showLoading = (show) => {
     overlay.classList.remove('show');
   }
 };
+
+
+
+
+// ══════════════════════════════════════
+// VIDEO COMMENTS (ความคิดเห็นต่อวิดีโอ)
+// ══════════════════════════════════════
+let commentsUnsubscribe = null;
+let currentComments = [];
+let currentCommentVideoKey = null;
+
+function getCurrentVideoCommentKey() {
+  if(!currentCourseId || currentIdx == null) return null;
+  return `${currentCourseId}_part${currentIdx}`;
+}
+
+window.renderCommentsForCurrentVideo = () => {
+  const section = document.getElementById('commentsSection');
+  if(!section) return;
+  
+  const key = getCurrentVideoCommentKey();
+  if(!key) {
+    section.style.display = 'none';
+    return;
+  }
+  
+  // ถ้าเป็น video เดิม ไม่ต้อง reload listener
+  if(key === currentCommentVideoKey && commentsUnsubscribe) {
+    section.style.display = 'block';
+    return;
+  }
+  
+  // cleanup listener เก่า
+  if(commentsUnsubscribe) { commentsUnsubscribe(); commentsUnsubscribe = null; }
+  currentCommentVideoKey = key;
+  currentComments = [];
+  
+  section.style.display = 'block';
+  
+  // อัปเดต label
+  const whichVid = document.getElementById('commentsWhichVideo');
+  if(whichVid) whichVid.textContent = `— Part ${currentIdx + 1}`;
+  
+  // อัปเดต form (login/logout state)
+  updateCommentFormState();
+  
+  // start listening
+  try {
+    const commentsCol = collection(db, 'videoComments', key, 'comments');
+    commentsUnsubscribe = onSnapshot(commentsCol, (snap) => {
+      currentComments = [];
+      snap.forEach(d => currentComments.push({ id: d.id, ...d.data() }));
+      // sort by time desc (ใหม่บนสุด)
+      currentComments.sort((a, b) => {
+        const ta = a.time && a.time.toMillis ? a.time.toMillis() : 0;
+        const tb = b.time && b.time.toMillis ? b.time.toMillis() : 0;
+        return tb - ta;
+      });
+      renderCommentList();
+    }, (err) => console.warn('comments listener err:', err));
+  } catch(e) { console.warn('comments start err:', e); }
+};
+
+function updateCommentFormState() {
+  const loginPrompt = document.getElementById('commentLoginPrompt');
+  const form = document.getElementById('commentForm');
+  if(!loginPrompt || !form) return;
+  
+  if(currentUser && userData) {
+    loginPrompt.style.display = 'none';
+    form.style.display = 'block';
+    const nameEl = document.getElementById('commentFormUserName');
+    if(nameEl) {
+      const fullName = `${userData.prefix||''}${userData.firstName||''} ${userData.lastName||''}`.trim();
+      nameEl.textContent = isAdmin ? '👑 Admin' : (fullName || '-');
+    }
+  } else {
+    loginPrompt.style.display = 'block';
+    form.style.display = 'none';
+  }
+}
+
+function renderCommentList() {
+  const list = document.getElementById('commentList');
+  const countEl = document.getElementById('commentsCount');
+  if(!list) return;
+  
+  if(countEl) countEl.textContent = currentComments.length;
+  
+  if(currentComments.length === 0) {
+    list.innerHTML = `
+      <div class="comment-empty">
+        <div class="comment-empty-icon">💭</div>
+        <div>ยังไม่มีความคิดเห็น — เป็นคนแรกที่แชร์ความคิดเห็นในวิดีโอนี้!</div>
+      </div>
+    `;
+    return;
+  }
+  
+  list.innerHTML = currentComments.map(c => {
+    const mine = currentUser && c.userId === currentUser.uid;
+    const canDelete = mine || isAdmin;
+    const initial = (c.userName || '?').charAt(0).toUpperCase();
+    const t = c.time && c.time.toDate ? formatCommentTime(c.time.toDate()) : '';
+    return `
+      <div class="comment-item ${mine ? 'mine' : ''}">
+        <div class="comment-avatar">${initial}</div>
+        <div class="comment-content">
+          <div class="comment-meta">
+            <div>
+              <span class="comment-author">${escapeHtml(c.userName || '?')}${mine ? '<span class="you-badge">คุณ</span>' : ''}${c.isAdmin ? '<span class="comment-admin-badge">ADMIN</span>' : ''}</span>
+              <div class="comment-school">${escapeHtml(c.userSchool || '')}</div>
+            </div>
+            <span class="comment-time">${t}</span>
+          </div>
+          <div class="comment-text">${escapeHtml(c.text || '')}</div>
+          ${canDelete ? `<div class="comment-actions"><button class="comment-delete-btn" onclick="deleteComment('${c.id}')">🗑️ ลบความคิดเห็น</button></div>` : ''}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function formatCommentTime(d) {
+  const now = new Date();
+  const diffMs = now - d;
+  const diffMin = Math.floor(diffMs / 60000);
+  if(diffMin < 1) return 'เมื่อสักครู่';
+  if(diffMin < 60) return `${diffMin} นาทีที่แล้ว`;
+  const diffHr = Math.floor(diffMin / 60);
+  if(diffHr < 24) return `${diffHr} ชม.ที่แล้ว`;
+  const diffDay = Math.floor(diffHr / 24);
+  if(diffDay < 7) return `${diffDay} วันที่แล้ว`;
+  // older → show date
+  const dd = String(d.getDate()).padStart(2,'0');
+  const mo = String(d.getMonth()+1).padStart(2,'0');
+  return `${dd}/${mo}/${d.getFullYear()+543}`;
+}
+
+window.postComment = async () => {
+  if(!currentUser || !userData) return;
+  const key = getCurrentVideoCommentKey();
+  if(!key) return;
+  
+  const input = document.getElementById('commentInput');
+  const btn = document.getElementById('commentSubmitBtn');
+  const text = (input.value || '').trim();
+  if(!text) { showToast('⚠️ กรุณาพิมพ์ความคิดเห็น'); return; }
+  if(text.length > 500) { showToast('⚠️ ความคิดเห็นยาวเกินไป (สูงสุด 500 ตัวอักษร)'); return; }
+  
+  btn.disabled = true;
+  btn.textContent = 'กำลังโพสต์...';
+  
+  try {
+    const fullName = isAdmin ? '👑 Admin (สพป.นครพนม เขต 1)' : `${userData.prefix||''}${userData.firstName||''} ${userData.lastName||''}`.trim();
+    await addDoc(collection(db, 'videoComments', key, 'comments'), {
+      userId: currentUser.uid,
+      userName: fullName,
+      userSchool: isAdmin ? 'สพป.นครพนม เขต 1' : (userData.school || '-'),
+      text: text,
+      time: new Date(),
+      isAdmin: !!isAdmin
+    });
+    input.value = '';
+    document.getElementById('commentCharCount').textContent = '0';
+    showToast('✅ โพสต์ความคิดเห็นเรียบร้อย');
+  } catch(e) {
+    console.warn('post comment err:', e);
+    showToast('❌ โพสต์ไม่สำเร็จ ลองอีกครั้ง');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'โพสต์ความคิดเห็น';
+  }
+};
+
+window.deleteComment = async (commentId) => {
+  if(!commentId) return;
+  const key = getCurrentVideoCommentKey();
+  if(!key) return;
+  
+  if(!confirm('ลบความคิดเห็นนี้?')) return;
+  
+  try {
+    await deleteDoc(doc(db, 'videoComments', key, 'comments', commentId));
+    showToast('🗑️ ลบความคิดเห็นแล้ว');
+  } catch(e) {
+    console.warn('delete comment err:', e);
+    showToast('❌ ลบไม่สำเร็จ');
+  }
+};
+
+// Comment input — char count + Ctrl+Enter to post
+document.addEventListener('DOMContentLoaded', () => {
+  const input = document.getElementById('commentInput');
+  if(input) {
+    input.addEventListener('input', () => {
+      const cnt = document.getElementById('commentCharCount');
+      if(cnt) cnt.textContent = input.value.length;
+    });
+    input.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault();
+        postComment();
+      }
+    });
+  }
+});
 
 
 </script>
