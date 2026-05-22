@@ -1174,6 +1174,23 @@ button[class*="btn-"],.quiz-actions button{position:relative;overflow:hidden;}
 .admin-comments-stat-label{font-size:11px;color:var(--muted);margin-top:2px;}
 
 
+
+
+/* ─── HEADER: clickable user info ─── */
+.header-user-clickable{display:inline-flex;align-items:center;gap:8px;cursor:pointer;padding:4px 12px 4px 4px;border-radius:24px;transition:all .2s ease;background:rgba(255,255,255,.08);border:1px solid rgba(201,168,76,.2);}
+.header-user-clickable:hover{background:rgba(201,168,76,.18);border-color:rgba(201,168,76,.5);transform:translateY(-1px);}
+.header-user-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--navy);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;font-family:'Noto Serif Thai',serif;overflow:hidden;flex-shrink:0;}
+.header-user-avatar img{width:100%;height:100%;object-fit:cover;}
+.header-user-avatar.is-admin{background:linear-gradient(135deg,#7f1d1d,#dc2626);color:white;}
+.header-user-text{color:var(--gold-light);font-size:14px;line-height:1.2;}
+.header-user-text strong{display:block;font-weight:700;}
+.header-user-text small{font-size:11px;opacity:.75;}
+
+/* ─── ADMIN PROFILE BUTTON (in admin section) ─── */
+.admin-profile-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:rgba(255,255,255,.15);color:white;border:1px solid rgba(255,255,255,.3);border-radius:8px;font-family:'Sarabun',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s ease;}
+.admin-profile-btn:hover{background:rgba(255,255,255,.25);}
+
+
 </style>
 </head>
 <body>
@@ -2756,7 +2773,16 @@ onAuthStateChanged(auth, async(user) => {
 
       document.getElementById('headerRight').style.display='flex';
       document.getElementById('headerProgress').style.display='flex';
-      document.getElementById('headerUser').innerHTML=`สวัสดี <strong>${userData.prefix}${userData.firstName} ${userData.lastName}</strong>`;
+      const _hu = document.getElementById('headerUser');
+      const _initial = (userData.firstName||'?').charAt(0).toUpperCase();
+      _hu.innerHTML = `
+        <div class="header-user-clickable" onclick="openProfile('${currentUser.uid}')" title="ดูโปรไฟล์ของฉัน">
+          <div class="header-user-avatar" id="headerUserAvatar">${userData.photoBase64 ? `<img src="${userData.photoBase64}" alt="" />` : _initial}</div>
+          <div class="header-user-text">
+            สวัสดี<strong>${userData.prefix||''}${userData.firstName||''} ${userData.lastName||''}</strong>
+          </div>
+        </div>
+      `;
       updateProgress();
       if(prog.pendingEdit){ document.getElementById('certPendingBadge').style.display='block'; document.getElementById('btnRequestEdit').style.display='none'; }
 
@@ -2937,7 +2963,12 @@ window.doAdminLogin = () => {
   isAdmin=true;
   document.getElementById('headerRight').style.display='flex';
   document.getElementById('headerProgress').style.display='none';
-  document.getElementById('headerUser').innerHTML=`<strong style="color:var(--gold-light)">👑 Admin</strong>`;
+  document.getElementById('headerUser').innerHTML = `
+    <div class="header-user-clickable" onclick="openProfile('admin')" title="ดูโปรไฟล์ Admin">
+      <div class="header-user-avatar is-admin" id="headerUserAvatar">👑</div>
+      <div class="header-user-text"><strong>Admin</strong><small>สพป.นครพนม เขต ๑</small></div>
+    </div>
+  `;
   showPage('pageAdmin'); loadAdminDashboard(); renderAdminHubStats(); loadAdminChats(); loadAdminAllComments();
 };
 
@@ -4731,11 +4762,19 @@ window.openProfile = async (userId) => {
   
   try {
     const userDoc = await getDoc(doc(db, 'users', userId));
+    let u;
     if(!userDoc.exists()) {
-      body.innerHTML = '<div class="profile-loading">❌ ไม่พบข้อมูลผู้ใช้</div>';
-      return;
+      if(userId === 'admin') {
+        // สร้าง admin profile doc ถ้ายังไม่มี
+        u = { prefix:'', firstName:'Admin', lastName:'', position:'ผู้ดูแลระบบ', school:'สพป.นครพนม เขต ๑', registeredAt: new Date().toISOString(), isAdmin:true };
+        try { await setDoc(doc(db,'users','admin'), u); } catch(e) { console.warn('create admin doc err:', e); }
+      } else {
+        body.innerHTML = '<div class="profile-loading">❌ ไม่พบข้อมูลผู้ใช้</div>';
+        return;
+      }
+    } else {
+      u = userDoc.data();
     }
-    const u = userDoc.data();
     
     // นับ comments — เร็วๆ ดูจาก userId (อาจไม่ครบทุก video, จะเสิร์ชยาก ใช้ approximation)
     // skip: เพิ่มในอนาคต
@@ -4779,7 +4818,7 @@ window.openProfile = async (userId) => {
       <div class="profile-avatar-wrap">
         <div class="profile-avatar ${isAdminProfile ? 'is-admin' : ''}">${u.photoBase64 ? `<img src="${u.photoBase64}" alt="" />` : initial}</div>
       </div>
-      ${(currentUser && currentUser.uid === userId) ? `
+      ${((currentUser && currentUser.uid === userId) || (isAdmin && userId === 'admin')) ? `
         <div class="profile-photo-actions">
           <button class="profile-edit-btn" onclick="uploadProfilePhoto()">📷 ${u.photoBase64 ? 'เปลี่ยนรูป' : 'เพิ่มรูปโปรไฟล์'}</button>
           ${u.photoBase64 ? `<button class="profile-remove-btn" onclick="removeProfilePhoto()">🗑️ ลบรูป</button>` : ''}
@@ -4793,7 +4832,7 @@ window.openProfile = async (userId) => {
       <div class="profile-school"><span class="profile-school-icon">🏫</span>${escapeHtml(u.school || '—')}</div>
       <div class="profile-joined">📅 สมาชิกตั้งแต่ ${joinedDate}</div>
       
-      ${(currentUser && currentUser.uid === userId) ? `
+      ${((currentUser && currentUser.uid === userId) || (isAdmin && userId === 'admin')) ? `
         <div class="profile-edit-row">
           <button class="profile-action-btn" onclick="openEditProfileForm()">✏️ แก้ไขข้อมูล</button>
           ${certs.length > 0 ? `<button class="profile-action-btn primary" onclick="closeProfileModal();showPage('pageDashboard');">📊 แดชบอร์ดเกียรติบัตร</button>` : ''}
@@ -4816,7 +4855,7 @@ window.openProfile = async (userId) => {
         </div>
       </div>
       
-      ${(currentUser && currentUser.uid === userId) ? renderMyDashboard(u, enrolled, certs) : ''}
+      ${((currentUser && currentUser.uid === userId) && userId !== 'admin') ? renderMyDashboard(u, enrolled, certs) : ''}
       
       ${certs.length > 0 ? `
         <div class="profile-section">
@@ -4915,7 +4954,8 @@ function resizeImageFile(file, size = 200, quality = 0.75) {
 }
 
 window.uploadProfilePhoto = () => {
-  if(!currentUser) { showToast('⚠️ กรุณาเข้าสู่ระบบ'); return; }
+  if(!currentUser && !isAdmin) { showToast('⚠️ กรุณาเข้าสู่ระบบ'); return; }
+  const targetUid = isAdmin && !currentUser ? 'admin' : currentUser.uid;
   
   const fileInput = document.createElement('input');
   fileInput.type = 'file';
@@ -4950,20 +4990,26 @@ window.uploadProfilePhoto = () => {
     try {
       const base64 = await resizeImageFile(file, 200, 0.75);
       
-      // Save to Firestore
-      await updateDoc(doc(db, 'users', currentUser.uid), { photoBase64: base64 });
+      // Save to Firestore (รองรับ admin)
+      await updateDoc(doc(db, 'users', targetUid), { photoBase64: base64 });
       
       // Update local data
       if(userData) userData.photoBase64 = base64;
-      userPhotoCache[currentUser.uid] = base64;
+      userPhotoCache[targetUid] = base64;
+      // อัปเดต avatar ใน header ทันที
+      const hAv = document.getElementById('headerUserAvatar');
+      if(hAv && !hAv.classList.contains('is-admin')) hAv.innerHTML = `<img src="${base64}" alt="" />`;
+      if(hAv && hAv.classList.contains('is-admin')) hAv.innerHTML = `<img src="${base64}" alt="" />`;
       
       showToast('✅ อัปโหลดรูปโปรไฟล์เรียบร้อย');
       
       // Refresh profile modal
-      openProfile(currentUser.uid);
+      openProfile(targetUid);
       
       // Refresh comments (มี avatar ของตัวเอง)
       if(typeof renderCommentList === 'function') renderCommentList();
+      // Refresh admin comments ด้วย (ถ้าอยู่หน้า admin)
+      if(typeof renderAdminAllComments === 'function') renderAdminAllComments();
     } catch(err) {
       console.warn('upload photo err:', err);
       showToast('❌ อัปโหลดไม่สำเร็จ: ' + (err.message || 'unknown'));
@@ -4977,7 +5023,8 @@ window.uploadProfilePhoto = () => {
 };
 
 window.removeProfilePhoto = async () => {
-  if(!currentUser) return;
+  if(!currentUser && !isAdmin) return;
+  const targetUid = isAdmin && !currentUser ? 'admin' : currentUser.uid;
   const ok = await customConfirm('ลบรูปโปรไฟล์ของคุณ?', {
     title: 'ลบรูปโปรไฟล์',
     icon: '🗑️',
@@ -4987,12 +5034,19 @@ window.removeProfilePhoto = async () => {
   if(!ok) return;
   
   try {
-    await updateDoc(doc(db, 'users', currentUser.uid), { photoBase64: null });
+    await updateDoc(doc(db, 'users', targetUid), { photoBase64: null });
     if(userData) userData.photoBase64 = null;
-    userPhotoCache[currentUser.uid] = null;
+    userPhotoCache[targetUid] = null;
     showToast('✓ ลบรูปโปรไฟล์แล้ว');
-    openProfile(currentUser.uid);
+    // reset header avatar
+    const hAv = document.getElementById('headerUserAvatar');
+    if(hAv) {
+      if(targetUid === 'admin') hAv.innerHTML = '👑';
+      else if(userData) hAv.innerHTML = (userData.firstName||'?').charAt(0).toUpperCase();
+    }
+    openProfile(targetUid);
     if(typeof renderCommentList === 'function') renderCommentList();
+    if(typeof renderAdminAllComments === 'function') renderAdminAllComments();
   } catch(e) {
     console.warn('remove photo err:', e);
     showToast('❌ ลบไม่สำเร็จ');
@@ -5450,6 +5504,7 @@ function renderAdminCommentItem(c, replies) {
           </div>
           <div class="admin-comment-text">${escapeHtml(r.text || '')}</div>
           <div class="admin-comment-actions">
+            <button class="admin-comment-action-btn" onclick="adminOpenReply('${c.id}','${r.videoKey}','${escapeHtml(r.userName||'').replace(/'/g, "\\'")}','${r.id}')">↩️ ตอบกลับ</button>
             <button class="admin-comment-action-btn danger" onclick="adminDeleteComment('${r.id}','${r.videoKey}')">🗑️ ลบ</button>
           </div>
         </div>
@@ -5462,7 +5517,10 @@ function renderAdminCommentItem(c, replies) {
   return html;
 }
 
-window.adminOpenReply = (commentId, videoKey, parentUserName) => {
+window.adminOpenReply = (commentId, videoKey, replyToUserName, replyToId) => {
+  // commentId = ID ของ parent comment (เพื่อ thread)
+  // replyToUserName = ชื่อคนที่จะตอบกลับ (ใช้แสดงใน placeholder)
+  // replyToId = ID ของ comment ที่จะตอบ (ถ้าไม่ระบุ = parent เอง)
   const container = document.getElementById('adminReplyContainer_' + commentId);
   if(!container) return;
   
@@ -5478,10 +5536,10 @@ window.adminOpenReply = (commentId, videoKey, parentUserName) => {
   
   container.innerHTML = `
     <div class="admin-reply-form">
-      <textarea id="adminReplyText_${commentId}" placeholder="ตอบกลับในชื่อ Admin..." maxlength="500"></textarea>
+      <textarea id="adminReplyText_${commentId}" placeholder="ตอบกลับ ${replyToUserName ? escapeHtml(replyToUserName) : 'ในชื่อ Admin'}..." maxlength="500"></textarea>
       <div class="admin-reply-form-actions">
         <button class="admin-reply-cancel" onclick="document.getElementById('adminReplyContainer_${commentId}').innerHTML='';adminOpenReplyFormId=null;">ยกเลิก</button>
-        <button class="admin-reply-submit" onclick="adminPostReply('${commentId}','${videoKey}','${parentUserName.replace(/'/g, "\\'")}')">📤 ตอบกลับ</button>
+        <button class="admin-reply-submit" onclick="adminPostReply('${commentId}','${videoKey}','${(replyToUserName||'').replace(/'/g, "\\'")}')">📤 ตอบกลับ</button>
       </div>
     </div>
   `;
@@ -5497,13 +5555,13 @@ window.adminPostReply = async (parentId, videoKey, parentUserName) => {
   try {
     await addDoc(collection(db, 'videoComments', videoKey, 'comments'), {
       userId: 'admin',
-      userName: '👑 Admin (สพป.นครพนม เขต 1)',
-      userSchool: 'สพป.นครพนม เขต 1',
+      userName: '👑 Admin (สพป.นครพนม เขต ๑)',
+      userSchool: 'สพป.นครพนม เขต ๑',
       text: text,
       time: new Date(),
       isAdmin: true,
       parentId: parentId,
-      parentUserName: parentUserName
+      parentUserName: parentUserName || null
     });
     showToast('✅ ตอบกลับเรียบร้อย');
     // ปิด form
