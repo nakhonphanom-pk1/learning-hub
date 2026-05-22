@@ -914,6 +914,52 @@ button[class*="btn-"],.quiz-actions button{position:relative;overflow:hidden;}
 @media (max-width:600px){.comments-section{padding:0 8px;}.comment-avatar{width:32px;height:32px;font-size:13px;}.comment-item{padding:10px;gap:8px;}}
 
 
+
+
+/* ─── COMMENT REPLY (1-level nested, Twitter-style) ─── */
+.comment-reply-btn{background:none;border:none;color:var(--navy);font-size:11.5px;cursor:pointer;padding:2px 6px;border-radius:6px;transition:background .15s ease;font-family:'Sarabun',sans-serif;font-weight:600;}
+.comment-reply-btn:hover{background:rgba(26,39,68,.06);}
+.comment-replies{margin-top:10px;padding-left:14px;border-left:2px solid var(--border);display:flex;flex-direction:column;gap:8px;}
+.comment-item.reply{padding:10px 12px;background:#fafbfc;border:1px solid var(--border);border-radius:10px;}
+.comment-item.reply .comment-avatar{width:30px;height:30px;font-size:12px;}
+.comment-item.reply .comment-author{font-size:12.5px;}
+.comment-item.reply .comment-text{font-size:13px;}
+.comment-item.reply.mine{background:linear-gradient(135deg,#fdf8f0,#fafbfc);border-color:var(--gold-light);}
+.reply-to-tag{display:inline-block;font-size:11px;color:var(--muted);background:var(--cream);padding:1px 8px;border-radius:8px;margin-left:6px;font-weight:500;}
+
+/* Inline reply form */
+.reply-form{margin-top:10px;padding:10px 12px;background:#fafbfc;border:1px solid var(--border);border-radius:10px;display:none;}
+.reply-form.show{display:block;animation:commentIn .25s ease;}
+.reply-form textarea{width:100%;min-height:44px;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-family:'Sarabun',sans-serif;font-size:13px;color:var(--text);background:white;outline:none;resize:vertical;max-height:120px;box-sizing:border-box;}
+.reply-form-actions{display:flex;justify-content:flex-end;gap:6px;margin-top:8px;}
+.reply-form-cancel,.reply-form-submit{padding:6px 14px;border:none;border-radius:8px;font-family:'Sarabun',sans-serif;font-size:12px;font-weight:600;cursor:pointer;}
+.reply-form-cancel{background:var(--cream);color:var(--muted);}
+.reply-form-cancel:hover{background:#e8dfc7;}
+.reply-form-submit{background:var(--navy);color:var(--gold-light);}
+.reply-form-submit:hover{background:#0f1a30;}
+.reply-form-submit:disabled{opacity:.5;cursor:not-allowed;}
+
+
+
+
+/* ─── CUSTOM CONFIRM MODAL ─── */
+.confirm-modal{display:none;position:fixed;inset:0;background:rgba(15,26,48,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:10010;align-items:center;justify-content:center;padding:20px;opacity:0;transition:opacity .2s ease;}
+.confirm-modal.show{display:flex;opacity:1;}
+.confirm-modal-box{background:white;border-radius:18px;padding:28px 26px;max-width:400px;width:100%;text-align:center;box-shadow:0 24px 60px rgba(15,26,48,.35);transform:translateY(10px) scale(.96);transition:transform .25s cubic-bezier(.2,.8,.2,1);}
+.confirm-modal.show .confirm-modal-box{transform:translateY(0) scale(1);}
+.confirm-modal-icon{font-size:48px;margin-bottom:12px;}
+.confirm-modal-title{font-family:'Noto Serif Thai',serif;font-size:17px;font-weight:700;color:var(--navy);margin-bottom:10px;}
+.confirm-modal-message{font-size:14px;color:var(--text);line-height:1.65;margin-bottom:22px;}
+.confirm-modal-actions{display:flex;gap:10px;}
+.confirm-modal-btn{flex:1;padding:11px 18px;border:none;border-radius:10px;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s ease;}
+.confirm-modal-cancel{background:var(--cream);color:var(--text);}
+.confirm-modal-cancel:hover{background:#e8dfc7;}
+.confirm-modal-ok{background:var(--navy);color:var(--gold-light);}
+.confirm-modal-ok:hover{background:#0f1a30;transform:translateY(-2px);box-shadow:0 8px 20px rgba(26,39,68,.3);}
+.confirm-modal-ok.danger{background:#dc2626;color:white;}
+.confirm-modal-ok.danger:hover{background:#b91c1c;}
+
+
 </style>
 </head>
 <body>
@@ -1063,7 +1109,7 @@ button[class*="btn-"],.quiz-actions button{position:relative;overflow:hidden;}
     </a>
   </div>
   <button class="fab-main" onclick="toggleFab()" aria-label="ติดต่อแอดมิน">
-    🤝
+    💬
     <span class="fab-main-badge" id="fabMainBadge">0</span>
   </button>
 </div>
@@ -1428,7 +1474,7 @@ button[class*="btn-"],.quiz-actions button{position:relative;overflow:hidden;}
       </div>
     </div>
     <div class="admin-header">
-      <h2>แดชบอร์ด Admin</h2>
+      <h2>แดชบอร์ด Admin <span style="font-size:12px;font-weight:500;color:var(--muted);margin-left:6px;">— NKP1 Learning Hub</span></h2>
       <div class="admin-header-right">
         <button class="btn-qr" onclick="showQRCode()">📱 QR Code ลิงก์อบรม</button>
         <button class="btn-export" onclick="exportExcel()">📥 Export Excel</button>
@@ -1445,7 +1491,7 @@ button[class*="btn-"],.quiz-actions button{position:relative;overflow:hidden;}
       <div class="stat-card"><div class="stat-num" id="statPending">-</div><div class="stat-label">รออนุมัติแก้ไขชื่อ</div></div>
     </div>
     <div style="font-size:12px;color:#5a6075;margin-bottom:16px;padding:8px 12px;background:#f7edd8;border-radius:8px;border:1px solid #ddd4bc;">
-      🔢 <strong>เลขเกียรติบัตร:</strong> <span id="certNumberStat">กำลังโหลด...</span>
+      🔢 <strong>เลขเกียรติบัตร ปพ.3:</strong> <span id="certNumberStat">กำลังโหลด...</span>
     </div>
     <div class="pending-list">
       <div class="section-title">🔑 คำขอเปลี่ยนรหัสผ่าน (รอดำเนินการ)</div>
@@ -1460,7 +1506,12 @@ button[class*="btn-"],.quiz-actions button{position:relative;overflow:hidden;}
       <div id="feedbackList"><div class="empty-state">กำลังโหลด...</div></div>
     </div>
     <div>
-      <div class="section-title">👥 รายชื่อผู้เข้าอบรมทั้งหมด</div>
+      <div class="section-title">👥 รายชื่อผู้เข้าอบรม
+        <span style="font-size:12px;font-weight:500;color:var(--muted);margin-left:8px;background:var(--cream);padding:3px 10px;border-radius:10px;">📋 หลักสูตร: ปพ.3 ออนไลน์</span>
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.5;">
+        ℹ️ ตารางนี้แสดงข้อมูล progress quiz ของหลักสูตร ปพ.3 ออนไลน์ — หลักสูตรอื่นจะมี dashboard เฉพาะเมื่อเปิดเนื้อหา
+      </div>
       <div style="overflow-x:auto">
         <table class="user-table">
           <thead><tr><th>#</th><th>ชื่อ-นามสกุล</th><th>ตำแหน่ง</th><th>โรงเรียน/หน่วยงาน</th><th>Username</th><th>ความคืบหน้า</th><th>คะแนนเฉลี่ย</th><th>ออกจากหน้า</th><th>วันสมัคร</th><th>🔧</th></tr></thead>
@@ -2281,11 +2332,17 @@ window.goToAuthForm = (form) => {
 // ── Back Navigation Functions ──
 // กลับจากหน้า training (pageTraining/pageQuiz) → ไป catalog
 // ถ้ากำลังทำ quiz อยู่ → confirm ก่อน เพราะคำตอบจะหาย
-window.backFromTraining = () => {
+window.backFromTraining = async () => {
   const currentPageId = document.querySelector('.page.active')?.id;
   if(currentPageId === 'pageQuiz') {
     // กำลังทำข้อสอบ → confirm ก่อน
-    const ok = confirm('คุณกำลังทำแบบทดสอบอยู่\nออกตอนนี้คำตอบจะหายไป — ยืนยันออกหรือไม่?');
+    const ok = await customConfirm('คุณกำลังทำแบบทดสอบอยู่ — ออกตอนนี้คำตอบจะหายไป', {
+      title: 'ออกจากการทำแบบทดสอบ?',
+      icon: '⚠️',
+      okText: 'ออก',
+      cancelText: 'ทำต่อ',
+      danger: true
+    });
     if(!ok) return;
     // reset state quiz
     quizIdx = 0;
@@ -2615,7 +2672,10 @@ window.doLogout = async() => {
 async function loadVideo(idx) {
   currentIdx=idx; watchedSec=0; isWatching=false; clearInterval(timer); clearInterval(heartbeatTimer);
   // refresh comments เมื่อเปลี่ยน video
-  setTimeout(() => { if(typeof renderCommentsForCurrentVideo === 'function') renderCommentsForCurrentVideo(); }, 100);
+  setTimeout(() => { 
+    if(typeof renderCommentsForCurrentVideo === 'function') renderCommentsForCurrentVideo(); 
+    if(typeof renderInfographics === 'function') renderInfographics();
+  }, 100);
   // อัปเดต breadcrumb แสดงชื่อหลักสูตรปัจจุบัน
   const bc = document.getElementById('breadcrumbCourseName');
   if(bc) bc.textContent = COURSES[currentCourseId].shortName;
@@ -3478,8 +3538,8 @@ function renderChatBody() {
   const inputArea = document.getElementById('chatInputArea');
   const statusBar = document.getElementById('chatStatusBar');
   
-  // ถ้ายังไม่ login → prompt
-  if(!currentUser) {
+  // ถ้ายังไม่ login (และไม่ใช่ admin ที่เปิดดู chat ของ user) → prompt
+  if(!currentUser && !isAdmin) {
     body.innerHTML = `
       <div class="chat-login-prompt">
         <div class="chat-login-prompt-icon">🔐</div>
@@ -4104,29 +4164,134 @@ function renderCommentList() {
     return;
   }
   
-  list.innerHTML = currentComments.map(c => {
-    const mine = currentUser && c.userId === currentUser.uid;
-    const canDelete = mine || isAdmin;
-    const initial = (c.userName || '?').charAt(0).toUpperCase();
-    const t = c.time && c.time.toDate ? formatCommentTime(c.time.toDate()) : '';
-    return `
-      <div class="comment-item ${mine ? 'mine' : ''}">
-        <div class="comment-avatar">${initial}</div>
-        <div class="comment-content">
-          <div class="comment-meta">
-            <div>
-              <span class="comment-author">${escapeHtml(c.userName || '?')}${mine ? '<span class="you-badge">คุณ</span>' : ''}${c.isAdmin ? '<span class="comment-admin-badge">ADMIN</span>' : ''}</span>
-              <div class="comment-school">${escapeHtml(c.userSchool || '')}</div>
-            </div>
-            <span class="comment-time">${t}</span>
-          </div>
-          <div class="comment-text">${escapeHtml(c.text || '')}</div>
-          ${canDelete ? `<div class="comment-actions"><button class="comment-delete-btn" onclick="deleteComment('${c.id}')">🗑️ ลบความคิดเห็น</button></div>` : ''}
-        </div>
-      </div>
-    `;
-  }).join('');
+  // แยก parent / replies
+  const parents = currentComments.filter(c => !c.parentId);
+  const repliesByParent = {};
+  currentComments.filter(c => c.parentId).forEach(r => {
+    if(!repliesByParent[r.parentId]) repliesByParent[r.parentId] = [];
+    repliesByParent[r.parentId].push(r);
+  });
+  // sort replies by time asc (เก่าก่อนใหม่ภายใต้ parent — flow การสนทนา)
+  Object.keys(repliesByParent).forEach(pid => {
+    repliesByParent[pid].sort((a, b) => {
+      const ta = a.time && a.time.toMillis ? a.time.toMillis() : 0;
+      const tb = b.time && b.time.toMillis ? b.time.toMillis() : 0;
+      return ta - tb;
+    });
+  });
+  
+  list.innerHTML = parents.map(c => renderCommentItem(c, false, repliesByParent[c.id] || [])).join('');
 }
+
+function renderCommentItem(c, isReply, replies) {
+  const mine = currentUser && c.userId === currentUser.uid;
+  const canDelete = mine || isAdmin;
+  const initial = (c.userName || '?').charAt(0).toUpperCase();
+  const t = c.time && c.time.toDate ? formatCommentTime(c.time.toDate()) : '';
+  const canReply = !isReply && currentUser && userData;  // reply ได้แค่ระดับเดียว
+  
+  const repliesHtml = (replies && replies.length > 0) 
+    ? `<div class="comment-replies">${replies.map(r => renderCommentItem(r, true, [])).join('')}</div>`
+    : '';
+  
+  const replyFormHtml = canReply ? `
+    <div class="reply-form" id="replyForm_${c.id}">
+      <textarea id="replyInput_${c.id}" placeholder="ตอบกลับ ${escapeHtml(c.userName || '')}..." maxlength="500"></textarea>
+      <div class="reply-form-actions">
+        <button class="reply-form-cancel" onclick="toggleReplyForm('${c.id}', false)">ยกเลิก</button>
+        <button class="reply-form-submit" id="replySubmit_${c.id}" onclick="postReply('${c.id}', '${escapeHtml(c.userName || '').replace(/'/g, "\\'")}')">ตอบกลับ</button>
+      </div>
+    </div>
+  ` : '';
+  
+  return `
+    <div class="comment-item ${mine ? 'mine' : ''} ${isReply ? 'reply' : ''}">
+      <div class="comment-avatar">${initial}</div>
+      <div class="comment-content">
+        <div class="comment-meta">
+          <div>
+            <span class="comment-author">${escapeHtml(c.userName || '?')}${mine ? '<span class="you-badge">คุณ</span>' : ''}${c.isAdmin ? '<span class="comment-admin-badge">ADMIN</span>' : ''}</span>
+            <div class="comment-school">${escapeHtml(c.userSchool || '')}</div>
+          </div>
+          <span class="comment-time">${t}</span>
+        </div>
+        <div class="comment-text">${escapeHtml(c.text || '')}</div>
+        <div class="comment-actions">
+          ${canReply ? `<button class="comment-reply-btn" onclick="toggleReplyForm('${c.id}', true)">↩️ ตอบกลับ</button>` : ''}
+          ${canDelete ? `<button class="comment-delete-btn" onclick="deleteComment('${c.id}')">🗑️ ลบ</button>` : ''}
+        </div>
+        ${replyFormHtml}
+        ${repliesHtml}
+      </div>
+    </div>
+  `;
+}
+
+window.toggleReplyForm = (commentId, show) => {
+  // ปิด reply form อื่นๆ ก่อน (เปิดทีละอัน)
+  if(show) {
+    document.querySelectorAll('.reply-form.show').forEach(f => f.classList.remove('show'));
+  }
+  const form = document.getElementById('replyForm_' + commentId);
+  if(!form) return;
+  if(show) {
+    form.classList.add('show');
+    const input = document.getElementById('replyInput_' + commentId);
+    if(input) {
+      setTimeout(() => input.focus(), 50);
+      // Ctrl+Enter to submit
+      input.onkeydown = (e) => {
+        if(e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+          e.preventDefault();
+          document.getElementById('replySubmit_' + commentId).click();
+        }
+      };
+    }
+  } else {
+    form.classList.remove('show');
+    const input = document.getElementById('replyInput_' + commentId);
+    if(input) input.value = '';
+  }
+};
+
+window.postReply = async (parentId, parentUserName) => {
+  if(!currentUser || !userData) return;
+  const key = getCurrentVideoCommentKey();
+  if(!key) return;
+  
+  const input = document.getElementById('replyInput_' + parentId);
+  const btn = document.getElementById('replySubmit_' + parentId);
+  if(!input || !btn) return;
+  
+  const text = (input.value || '').trim();
+  if(!text) { showToast('⚠️ กรุณาพิมพ์ข้อความ'); return; }
+  if(text.length > 500) { showToast('⚠️ ข้อความยาวเกินไป (สูงสุด 500)'); return; }
+  
+  btn.disabled = true;
+  btn.textContent = 'กำลังโพสต์...';
+  
+  try {
+    const fullName = isAdmin ? '👑 Admin (สพป.นครพนม เขต 1)' : `${userData.prefix||''}${userData.firstName||''} ${userData.lastName||''}`.trim();
+    await addDoc(collection(db, 'videoComments', key, 'comments'), {
+      userId: currentUser.uid,
+      userName: fullName,
+      userSchool: isAdmin ? 'สพป.นครพนม เขต 1' : (userData.school || '-'),
+      text: text,
+      time: new Date(),
+      isAdmin: !!isAdmin,
+      parentId: parentId,
+      parentUserName: parentUserName
+    });
+    toggleReplyForm(parentId, false);
+    showToast('✅ ตอบกลับเรียบร้อย');
+  } catch(e) {
+    console.warn('post reply err:', e);
+    showToast('❌ ตอบกลับไม่สำเร็จ');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'ตอบกลับ';
+  }
+};
 
 function formatCommentTime(d) {
   const now = new Date();
@@ -4185,7 +4350,14 @@ window.deleteComment = async (commentId) => {
   const key = getCurrentVideoCommentKey();
   if(!key) return;
   
-  if(!confirm('ลบความคิดเห็นนี้?')) return;
+  const ok = await customConfirm('ความคิดเห็นนี้จะถูกลบถาวร — ดำเนินการต่อหรือไม่?', {
+    title: 'ลบความคิดเห็น',
+    icon: '🗑️',
+    okText: 'ลบเลย',
+    cancelText: 'ยกเลิก',
+    danger: true
+  });
+  if(!ok) return;
   
   try {
     await deleteDoc(doc(db, 'videoComments', key, 'comments', commentId));
@@ -4212,6 +4384,51 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+
+
+
+// ── Custom confirm modal — แทน native browser confirm() ──
+window.customConfirm = (message, options = {}) => {
+  return new Promise((resolve) => {
+    const modal = document.getElementById('confirmModal');
+    const icon = document.getElementById('confirmModalIcon');
+    const title = document.getElementById('confirmModalTitle');
+    const msg = document.getElementById('confirmModalMessage');
+    const okBtn = document.getElementById('confirmModalOk');
+    const cancelBtn = document.getElementById('confirmModalCancel');
+    
+    if(!modal) { resolve(window.confirm(message)); return; }
+    
+    icon.textContent = options.icon || '⚠️';
+    title.textContent = options.title || 'ยืนยันการดำเนินการ';
+    msg.textContent = message;
+    okBtn.textContent = options.okText || 'ยืนยัน';
+    cancelBtn.textContent = options.cancelText || 'ยกเลิก';
+    okBtn.className = 'confirm-modal-btn confirm-modal-ok' + (options.danger ? ' danger' : '');
+    
+    modal.classList.add('show');
+    
+    const cleanup = (result) => {
+      modal.classList.remove('show');
+      okBtn.onclick = null;
+      cancelBtn.onclick = null;
+      window.__confirmModalCancel = null;
+      document.removeEventListener('keydown', escHandler);
+      resolve(result);
+    };
+    
+    const escHandler = (e) => {
+      if(e.key === 'Escape') cleanup(false);
+      else if(e.key === 'Enter') cleanup(true);
+    };
+    document.addEventListener('keydown', escHandler);
+    
+    okBtn.onclick = () => cleanup(true);
+    cancelBtn.onclick = () => cleanup(false);
+    window.__confirmModalCancel = () => cleanup(false);
+  });
+};
 
 
 </script>
@@ -4248,6 +4465,20 @@ document.addEventListener('DOMContentLoaded', () => {
     © 2569 <span>NKP1 Learning Hub</span> · พัฒนาโดย สพป.นครพนม เขต 1 · ใช้ฟรีเพื่อการศึกษา
   </div>
 </footer>
+
+
+<!-- CUSTOM CONFIRM MODAL -->
+<div class="confirm-modal" id="confirmModal" onclick="if(event.target===this)window.__confirmModalCancel()">
+  <div class="confirm-modal-box">
+    <div class="confirm-modal-icon" id="confirmModalIcon">⚠️</div>
+    <div class="confirm-modal-title" id="confirmModalTitle">ยืนยันการดำเนินการ</div>
+    <div class="confirm-modal-message" id="confirmModalMessage"></div>
+    <div class="confirm-modal-actions">
+      <button class="confirm-modal-btn confirm-modal-cancel" id="confirmModalCancel">ยกเลิก</button>
+      <button class="confirm-modal-btn confirm-modal-ok" id="confirmModalOk">ยืนยัน</button>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
