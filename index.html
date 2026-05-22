@@ -960,6 +960,103 @@ button[class*="btn-"],.quiz-actions button{position:relative;overflow:hidden;}
 .confirm-modal-ok.danger:hover{background:#b91c1c;}
 
 
+
+
+/* ─── USER PROFILE MODAL ─── */
+.profile-modal{display:none;position:fixed;inset:0;background:rgba(15,26,48,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:10005;align-items:center;justify-content:center;padding:20px;opacity:0;transition:opacity .25s ease;overflow-y:auto;}
+.profile-modal.show{display:flex;opacity:1;}
+.profile-modal-box{background:white;border-radius:22px;max-width:480px;width:100%;overflow:hidden;box-shadow:0 24px 60px rgba(15,26,48,.4);transform:translateY(20px) scale(.95);transition:transform .3s cubic-bezier(.2,.8,.2,1);max-height:90vh;display:flex;flex-direction:column;}
+.profile-modal.show .profile-modal-box{transform:translateY(0) scale(1);}
+
+.profile-cover{height:90px;background:linear-gradient(135deg,var(--navy),var(--navy-light));position:relative;flex-shrink:0;}
+.profile-close{position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.18);color:white;border:none;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .2s ease;}
+.profile-close:hover{background:rgba(255,255,255,.32);transform:rotate(90deg);}
+
+.profile-body{padding:0 26px 26px;overflow-y:auto;flex:1;}
+.profile-avatar-wrap{display:flex;justify-content:center;margin-top:-44px;margin-bottom:12px;}
+.profile-avatar{width:88px;height:88px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--navy);display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:700;font-family:'Noto Serif Thai',serif;border:5px solid white;box-shadow:0 6px 16px rgba(26,39,68,.2);}
+.profile-avatar.is-admin{background:linear-gradient(135deg,#7f1d1d,#dc2626);color:white;}
+
+.profile-name{text-align:center;font-family:'Noto Serif Thai',serif;font-size:20px;font-weight:700;color:var(--navy);margin-bottom:4px;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;}
+.profile-name .admin-crown{font-size:18px;}
+.profile-position{text-align:center;font-size:13.5px;color:var(--text);margin-bottom:3px;}
+.profile-school{text-align:center;font-size:13px;color:var(--muted);margin-bottom:6px;display:flex;align-items:center;justify-content:center;gap:5px;flex-wrap:wrap;}
+.profile-school-icon{color:var(--gold);}
+.profile-joined{text-align:center;font-size:11.5px;color:var(--muted);margin-bottom:18px;}
+
+.profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px;}
+.profile-stat{background:var(--cream);border-radius:12px;padding:12px 8px;text-align:center;}
+.profile-stat-num{font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:var(--navy);line-height:1;}
+.profile-stat-label{font-size:11px;color:var(--muted);margin-top:4px;}
+
+.profile-section{margin-bottom:18px;}
+.profile-section-title{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:8px;display:flex;align-items:center;gap:6px;border-bottom:1.5px solid var(--gold);padding-bottom:6px;}
+.profile-cert-item{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#fef3c7;border:1px solid #fde68a;border-radius:10px;margin-bottom:6px;font-size:13px;}
+.profile-cert-name{font-weight:600;color:#92400e;display:flex;align-items:center;gap:6px;}
+.profile-cert-num{font-family:monospace;font-size:11.5px;color:#92400e;background:rgba(146,64,14,.1);padding:2px 8px;border-radius:6px;}
+.profile-course-item{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:white;border:1px solid var(--border);border-radius:10px;margin-bottom:6px;font-size:13px;}
+.profile-course-name{font-weight:500;color:var(--text);display:flex;align-items:center;gap:6px;}
+.profile-course-status{font-size:11px;font-weight:700;padding:3px 8px;border-radius:8px;}
+.profile-course-status.done{background:#d1fae5;color:#065f46;}
+.profile-course-status.in-progress{background:#dbeafe;color:#1e40af;}
+.profile-empty-line{font-size:12px;color:var(--muted);font-style:italic;padding:8px 12px;}
+
+.profile-admin-info{margin-top:12px;padding:12px;background:#fef2f2;border:1px solid #fecaca;border-radius:10px;font-size:12px;color:#7f1d1d;}
+.profile-admin-info-title{font-weight:700;margin-bottom:6px;}
+.profile-admin-row{display:flex;justify-content:space-between;padding:3px 0;font-family:monospace;font-size:11px;}
+
+.profile-loading{text-align:center;padding:40px 20px;color:var(--muted);}
+
+/* Make comment author clickable */
+.comment-author-link{cursor:pointer;color:inherit;transition:color .15s ease;text-decoration:none;display:inline-block;}
+.comment-author-link:hover{color:var(--gold) !important;}
+.comment-avatar{cursor:pointer;transition:transform .15s ease;}
+.comment-avatar:hover{transform:scale(1.08);}
+
+
+
+
+/* ─── PROFILE PHOTO ─── */
+.profile-avatar{position:relative;overflow:hidden;}
+.profile-avatar img{width:100%;height:100%;object-fit:cover;display:block;}
+.profile-photo-actions{display:flex;justify-content:center;gap:8px;margin-bottom:18px;margin-top:-4px;flex-wrap:wrap;}
+.profile-edit-btn{background:var(--navy);color:var(--gold-light);border:none;padding:7px 14px;border-radius:8px;font-family:'Sarabun',sans-serif;font-size:12.5px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .2s ease;}
+.profile-edit-btn:hover{background:#0f1a30;transform:translateY(-1px);box-shadow:0 4px 12px rgba(26,39,68,.25);}
+.profile-remove-btn{background:var(--cream);color:#dc2626;border:1px solid #fecaca;padding:7px 12px;border-radius:8px;font-family:'Sarabun',sans-serif;font-size:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:4px;transition:all .2s ease;}
+.profile-remove-btn:hover{background:#fef2f2;border-color:#dc2626;}
+
+/* Comment avatar — รองรับ img */
+.comment-avatar{position:relative;overflow:hidden;}
+.comment-avatar img{width:100%;height:100%;object-fit:cover;display:block;}
+
+/* Photo upload indicator overlay */
+.profile-photo-uploading{position:absolute;inset:0;background:rgba(15,26,48,.6);display:flex;align-items:center;justify-content:center;color:white;font-size:11px;border-radius:50%;}
+
+
+
+
+/* ─── FIX: avatar img ไม่ block click ของ parent ─── */
+.comment-avatar img,.profile-avatar img{pointer-events:none;}
+.comment-author-link{user-select:none;}
+
+/* ─── REGISTER FORM — Photo Upload (optional) ─── */
+.reg-photo-section{margin-bottom:20px;padding:14px;background:var(--cream);border-radius:12px;border:1.5px dashed var(--border);}
+.reg-photo-label{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:10px;display:block;}
+.reg-photo-label .optional{font-size:11px;font-weight:500;color:var(--muted);margin-left:6px;background:rgba(255,255,255,.6);padding:1px 6px;border-radius:6px;}
+.reg-photo-wrap{display:flex;align-items:center;gap:14px;}
+.reg-photo-preview{width:78px;height:78px;border-radius:50%;background:white;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;cursor:pointer;transition:all .2s ease;}
+.reg-photo-preview:hover{border-color:var(--gold);transform:scale(1.04);box-shadow:0 6px 18px rgba(201,168,76,.25);}
+.reg-photo-preview.has-photo{border-color:var(--gold);border-style:solid;}
+.reg-photo-preview img{width:100%;height:100%;object-fit:cover;}
+.reg-photo-placeholder{font-size:30px;color:var(--muted);font-weight:300;line-height:1;}
+.reg-photo-actions{flex:1;display:flex;flex-direction:column;gap:5px;align-items:flex-start;}
+.reg-photo-btn{background:var(--navy);color:var(--gold-light);border:none;padding:7px 14px;border-radius:8px;font-family:'Sarabun',sans-serif;font-size:12.5px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .2s ease;}
+.reg-photo-btn:hover{background:#0f1a30;}
+.reg-photo-btn.secondary{background:transparent;color:#dc2626;border:1px solid #fecaca;}
+.reg-photo-btn.secondary:hover{background:#fef2f2;}
+.reg-photo-hint{font-size:11px;color:var(--muted);line-height:1.5;}
+
+
 </style>
 </head>
 <body>
@@ -1164,6 +1261,22 @@ button[class*="btn-"],.quiz-actions button{position:relative;overflow:hidden;}
         </div>
         <div class="form-group"><label>ตำแหน่ง <span>*</span></label><input type="text" id="regPosition" placeholder="เช่น ครูชำนาญการพิเศษ, ผู้อำนวยการโรงเรียน"></div>
         <div class="form-group"><label>โรงเรียน / หน่วยงาน <span>*</span></label><input type="text" id="regSchool" placeholder="เช่น โรงเรียนบ้านนาคอกควาย"></div>
+        
+        <!-- Photo upload (optional) -->
+        <div class="reg-photo-section">
+          <label class="reg-photo-label">📷 รูปโปรไฟล์ <span class="optional">ไม่บังคับ</span></label>
+          <div class="reg-photo-wrap">
+            <div class="reg-photo-preview" id="regPhotoPreview" onclick="selectRegisterPhoto()">
+              <span class="reg-photo-placeholder">+</span>
+            </div>
+            <div class="reg-photo-actions">
+              <button type="button" class="reg-photo-btn" onclick="selectRegisterPhoto()">📷 เลือกรูป</button>
+              <button type="button" class="reg-photo-btn secondary" id="regPhotoRemoveBtn" onclick="clearRegisterPhoto()" style="display:none;">🗑️ ลบรูป</button>
+              <div class="reg-photo-hint">JPG/PNG/GIF<br>ระบบจะ crop สี่เหลี่ยมจัตุรัสกลางภาพ</div>
+            </div>
+          </div>
+        </div>
+        
         <div class="auth-divider"><hr><span>ข้อมูลสำหรับเข้าสู่ระบบ</span><hr></div>
         <div class="form-group"><label>Username <span>*</span></label><input type="text" id="regUsername" placeholder="ภาษาอังกฤษ/ตัวเลข ไม่มีช่องว่าง"></div>
         <div class="form-row">
@@ -2576,6 +2689,7 @@ window.doRegister = async() => {
     const cred=await createUserWithEmailAndPassword(auth,uname+'@training-npk1.local',pass);
     await setDoc(doc(db,'users',cred.user.uid),{
       prefix,firstName:fn,lastName:ln,position:pos,school:sch,username:uname,
+      photoBase64: registerPhotoBase64 || null,
       // backward compat flat fields (pp3)
       completedVideos:[],quizPassed:[],quizScores:{},certNameConfirmed:false,leaveCount:0,
       // nested courses (multi-course schema)
@@ -4181,6 +4295,8 @@ function renderCommentList() {
   });
   
   list.innerHTML = parents.map(c => renderCommentItem(c, false, repliesByParent[c.id] || [])).join('');
+  // Lazy-load avatars
+  if(typeof hydrateCommentAvatars === 'function') hydrateCommentAvatars();
 }
 
 function renderCommentItem(c, isReply, replies) {
@@ -4206,11 +4322,11 @@ function renderCommentItem(c, isReply, replies) {
   
   return `
     <div class="comment-item ${mine ? 'mine' : ''} ${isReply ? 'reply' : ''}">
-      <div class="comment-avatar">${initial}</div>
+      <div class="comment-avatar" data-uid="${c.userId}" onclick="openProfile('${c.userId}')" title="ดูโปรไฟล์">${initial}</div>
       <div class="comment-content">
         <div class="comment-meta">
           <div>
-            <span class="comment-author">${escapeHtml(c.userName || '?')}${mine ? '<span class="you-badge">คุณ</span>' : ''}${c.isAdmin ? '<span class="comment-admin-badge">ADMIN</span>' : ''}</span>
+            <span class="comment-author"><span class="comment-author-link" onclick="openProfile('${c.userId}')">${escapeHtml(c.userName || '?')}</span>${mine ? '<span class="you-badge">คุณ</span>' : ''}${c.isAdmin ? '<span class="comment-admin-badge">ADMIN</span>' : ''}</span>
             <div class="comment-school">${escapeHtml(c.userSchool || '')}</div>
           </div>
           <span class="comment-time">${t}</span>
@@ -4431,6 +4547,353 @@ window.customConfirm = (message, options = {}) => {
 };
 
 
+
+
+// ══════════════════════════════════════
+// USER PROFILE MODAL
+// ══════════════════════════════════════
+window.openProfile = async (userId) => {
+  if(!userId) return;
+  const modal = document.getElementById('profileModal');
+  const body = document.getElementById('profileBody');
+  if(!modal || !body) return;
+  
+  body.innerHTML = '<div class="profile-loading">⏳ กำลังโหลดข้อมูล...</div>';
+  modal.classList.add('show');
+  document.body.style.overflow = 'hidden';
+  
+  try {
+    const userDoc = await getDoc(doc(db, 'users', userId));
+    if(!userDoc.exists()) {
+      body.innerHTML = '<div class="profile-loading">❌ ไม่พบข้อมูลผู้ใช้</div>';
+      return;
+    }
+    const u = userDoc.data();
+    
+    // นับ comments — เร็วๆ ดูจาก userId (อาจไม่ครบทุก video, จะเสิร์ชยาก ใช้ approximation)
+    // skip: เพิ่มในอนาคต
+    
+    // หา certificates (ทุกหลักสูตร)
+    const certs = [];
+    // legacy pp3
+    if(u.certNumber) certs.push({ courseId: 'pp3', name: COURSES.pp3?.shortName || 'ปพ.3', certNum: u.certNumber, date: u.certIssuedDate });
+    // nested
+    if(u.courses) {
+      Object.entries(u.courses).forEach(([cid, c]) => {
+        if(c && c.certNumber && !(cid === 'pp3' && u.certNumber)) {
+          certs.push({ courseId: cid, name: COURSES[cid]?.shortName || cid, certNum: c.certNumber, date: c.certIssuedDate });
+        }
+      });
+    }
+    
+    // หา courses (ลงทะเบียน + progress)
+    const enrolled = [];
+    Object.keys(COURSES).forEach(cid => {
+      const c = u.courses?.[cid];
+      const legacyDone = (cid === 'pp3') && (u.quizPassed||[]).length === COURSES.pp3.videos.length;
+      const nestedDone = c && (c.quizPassed||[]).length === (COURSES[cid].videos?.length || 0);
+      const hasAnyActivity = c || (cid === 'pp3' && (u.watchedSeconds > 0 || (u.quizPassed||[]).length > 0));
+      if(hasAnyActivity) {
+        enrolled.push({
+          courseId: cid,
+          name: COURSES[cid].shortName || COURSES[cid].name,
+          icon: COURSES[cid].icon || '📘',
+          done: legacyDone || nestedDone
+        });
+      }
+    });
+    
+    const initial = (u.firstName || '?').charAt(0).toUpperCase();
+    const isAdminProfile = u.isAdmin || false;  // ในอนาคตอาจเช็ค field
+    const joinedDate = u.registeredAt ? new Date(u.registeredAt).toLocaleDateString('th-TH', {year:'numeric',month:'long',day:'numeric'}) : '-';
+    const fullName = `${u.prefix||''}${u.firstName||''} ${u.lastName||''}`.trim();
+    
+    body.innerHTML = `
+      <div class="profile-avatar-wrap">
+        <div class="profile-avatar ${isAdminProfile ? 'is-admin' : ''}">${u.photoBase64 ? `<img src="${u.photoBase64}" alt="" />` : initial}</div>
+      </div>
+      ${(currentUser && currentUser.uid === userId) ? `
+        <div class="profile-photo-actions">
+          <button class="profile-edit-btn" onclick="uploadProfilePhoto()">📷 ${u.photoBase64 ? 'เปลี่ยนรูป' : 'เพิ่มรูปโปรไฟล์'}</button>
+          ${u.photoBase64 ? `<button class="profile-remove-btn" onclick="removeProfilePhoto()">🗑️ ลบรูป</button>` : ''}
+        </div>
+      ` : ''}
+      <div class="profile-name">
+        ${escapeHtml(fullName || '-')}
+      </div>
+      <div class="profile-position">${escapeHtml(u.position || '—')}</div>
+      <div class="profile-school"><span class="profile-school-icon">🏫</span>${escapeHtml(u.school || '—')}</div>
+      <div class="profile-joined">📅 สมาชิกตั้งแต่ ${joinedDate}</div>
+      
+      <div class="profile-stats">
+        <div class="profile-stat">
+          <div class="profile-stat-num">${enrolled.length}</div>
+          <div class="profile-stat-label">หลักสูตร</div>
+        </div>
+        <div class="profile-stat">
+          <div class="profile-stat-num">${certs.length}</div>
+          <div class="profile-stat-label">เกียรติบัตร</div>
+        </div>
+        <div class="profile-stat">
+          <div class="profile-stat-num">${enrolled.filter(e => e.done).length}</div>
+          <div class="profile-stat-label">จบแล้ว</div>
+        </div>
+      </div>
+      
+      ${certs.length > 0 ? `
+        <div class="profile-section">
+          <div class="profile-section-title">🏆 เกียรติบัตร</div>
+          ${certs.map(c => `
+            <div class="profile-cert-item">
+              <div class="profile-cert-name">${COURSES[c.courseId]?.icon || '📘'} ${escapeHtml(c.name)}</div>
+              <div class="profile-cert-num">${escapeHtml(c.certNum)}</div>
+            </div>
+          `).join('')}
+        </div>
+      ` : ''}
+      
+      <div class="profile-section">
+        <div class="profile-section-title">📚 หลักสูตรที่อบรม</div>
+        ${enrolled.length > 0 ? enrolled.map(e => `
+          <div class="profile-course-item">
+            <div class="profile-course-name">${e.icon} ${escapeHtml(e.name)}</div>
+            <div class="profile-course-status ${e.done ? 'done' : 'in-progress'}">${e.done ? '✓ จบแล้ว' : '⏳ กำลังเรียน'}</div>
+          </div>
+        `).join('') : '<div class="profile-empty-line">ยังไม่มีกิจกรรมในหลักสูตรใด</div>'}
+      </div>
+      
+      ${isAdmin ? `
+        <div class="profile-admin-info">
+          <div class="profile-admin-info-title">👑 ข้อมูลสำหรับ Admin เท่านั้น</div>
+          <div class="profile-admin-row"><span>Username:</span><span>${escapeHtml(u.username || '-')}</span></div>
+          <div class="profile-admin-row"><span>Leave count:</span><span>${u.leaveCount || 0}</span></div>
+          <div class="profile-admin-row"><span>User ID:</span><span style="font-size:9px;">${escapeHtml(userId)}</span></div>
+        </div>
+      ` : ''}
+    `;
+  } catch(e) {
+    console.warn('profile load err:', e);
+    body.innerHTML = '<div class="profile-loading">❌ โหลดข้อมูลไม่สำเร็จ</div>';
+  }
+};
+
+window.closeProfileModal = () => {
+  document.getElementById('profileModal')?.classList.remove('show');
+  document.body.style.overflow = '';
+};
+
+// Esc to close profile modal
+document.addEventListener('keydown', (e) => {
+  if(e.key === 'Escape') {
+    const modal = document.getElementById('profileModal');
+    if(modal && modal.classList.contains('show')) closeProfileModal();
+  }
+});
+
+
+
+
+// ══════════════════════════════════════
+// PROFILE PHOTO
+// ══════════════════════════════════════
+// Cache: userId → base64 string | null (fetched)
+const userPhotoCache = {};
+
+async function getUserPhoto(userId) {
+  if(!userId) return null;
+  if(userId in userPhotoCache) return userPhotoCache[userId];
+  try {
+    const snap = await getDoc(doc(db, 'users', userId));
+    userPhotoCache[userId] = snap.exists() ? (snap.data().photoBase64 || null) : null;
+  } catch(e) {
+    userPhotoCache[userId] = null;
+  }
+  return userPhotoCache[userId];
+}
+
+// Resize image file → 200x200 center-crop → JPEG base64
+function resizeImageFile(file, size = 200, quality = 0.75) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error('อ่านไฟล์ไม่สำเร็จ'));
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onerror = () => reject(new Error('โหลดรูปไม่สำเร็จ'));
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = canvas.height = size;
+        const ctx = canvas.getContext('2d');
+        // center crop (cover)
+        const scale = Math.max(size / img.width, size / img.height);
+        const w = img.width * scale, h = img.height * scale;
+        const x = (size - w) / 2, y = (size - h) / 2;
+        ctx.drawImage(img, x, y, w, h);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+window.uploadProfilePhoto = () => {
+  if(!currentUser) { showToast('⚠️ กรุณาเข้าสู่ระบบ'); return; }
+  
+  const fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.accept = 'image/png,image/jpeg,image/jpg,image/webp,image/gif';
+  fileInput.style.display = 'none';
+  
+  fileInput.onchange = async (e) => {
+    const file = e.target.files && e.target.files[0];
+    if(!file) return;
+    
+    if(!file.type.startsWith('image/')) {
+      showToast('❌ กรุณาเลือกไฟล์รูปภาพ');
+      return;
+    }
+    
+    // ไฟล์ราคาสูงไม่ผ่าน 15MB (ก่อน resize)
+    if(file.size > 15 * 1024 * 1024) {
+      showToast('❌ ไฟล์ใหญ่เกิน 15MB');
+      return;
+    }
+    
+    // แสดง loading state ทับ avatar
+    const avatarEl = document.querySelector('.profile-avatar');
+    let overlay = null;
+    if(avatarEl) {
+      overlay = document.createElement('div');
+      overlay.className = 'profile-photo-uploading';
+      overlay.textContent = '⏳';
+      avatarEl.appendChild(overlay);
+    }
+    
+    try {
+      const base64 = await resizeImageFile(file, 200, 0.75);
+      
+      // Save to Firestore
+      await updateDoc(doc(db, 'users', currentUser.uid), { photoBase64: base64 });
+      
+      // Update local data
+      if(userData) userData.photoBase64 = base64;
+      userPhotoCache[currentUser.uid] = base64;
+      
+      showToast('✅ อัปโหลดรูปโปรไฟล์เรียบร้อย');
+      
+      // Refresh profile modal
+      openProfile(currentUser.uid);
+      
+      // Refresh comments (มี avatar ของตัวเอง)
+      if(typeof renderCommentList === 'function') renderCommentList();
+    } catch(err) {
+      console.warn('upload photo err:', err);
+      showToast('❌ อัปโหลดไม่สำเร็จ: ' + (err.message || 'unknown'));
+      if(overlay) overlay.remove();
+    }
+  };
+  
+  document.body.appendChild(fileInput);
+  fileInput.click();
+  setTimeout(() => fileInput.remove(), 1000);
+};
+
+window.removeProfilePhoto = async () => {
+  if(!currentUser) return;
+  const ok = await customConfirm('ลบรูปโปรไฟล์ของคุณ?', {
+    title: 'ลบรูปโปรไฟล์',
+    icon: '🗑️',
+    okText: 'ลบ',
+    danger: true
+  });
+  if(!ok) return;
+  
+  try {
+    await updateDoc(doc(db, 'users', currentUser.uid), { photoBase64: null });
+    if(userData) userData.photoBase64 = null;
+    userPhotoCache[currentUser.uid] = null;
+    showToast('✓ ลบรูปโปรไฟล์แล้ว');
+    openProfile(currentUser.uid);
+    if(typeof renderCommentList === 'function') renderCommentList();
+  } catch(e) {
+    console.warn('remove photo err:', e);
+    showToast('❌ ลบไม่สำเร็จ');
+  }
+};
+
+// Lazy-load photos for comment avatars
+async function hydrateCommentAvatars() {
+  const avatars = document.querySelectorAll('.comment-avatar[data-uid]');
+  const uniqueIds = new Set();
+  avatars.forEach(el => uniqueIds.add(el.dataset.uid));
+  
+  for(const uid of uniqueIds) {
+    const photo = await getUserPhoto(uid);
+    if(!photo) continue;
+    document.querySelectorAll(`.comment-avatar[data-uid="${uid}"]`).forEach(el => {
+      el.innerHTML = `<img src="${photo}" alt="" />`;
+    });
+  }
+}
+
+
+
+
+// ══════════════════════════════════════
+// REGISTER FORM — Profile Photo (optional)
+// ══════════════════════════════════════
+let registerPhotoBase64 = null;
+
+window.selectRegisterPhoto = () => {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/png,image/jpeg,image/jpg,image/webp,image/gif';
+  input.style.display = 'none';
+  
+  input.onchange = async (e) => {
+    const file = e.target.files && e.target.files[0];
+    if(!file) return;
+    if(!file.type.startsWith('image/')) {
+      showToast('❌ กรุณาเลือกไฟล์รูปภาพ');
+      return;
+    }
+    if(file.size > 15 * 1024 * 1024) {
+      showToast('❌ ไฟล์ใหญ่เกิน 15MB');
+      return;
+    }
+    try {
+      const base64 = await resizeImageFile(file, 200, 0.75);
+      registerPhotoBase64 = base64;
+      const preview = document.getElementById('regPhotoPreview');
+      const removeBtn = document.getElementById('regPhotoRemoveBtn');
+      if(preview) {
+        preview.innerHTML = `<img src="${base64}" alt="preview" />`;
+        preview.classList.add('has-photo');
+      }
+      if(removeBtn) removeBtn.style.display = 'inline-flex';
+    } catch(err) {
+      console.warn('register photo err:', err);
+      showToast('❌ โหลดรูปไม่สำเร็จ');
+    }
+  };
+  
+  document.body.appendChild(input);
+  input.click();
+  setTimeout(() => input.remove(), 1000);
+};
+
+window.clearRegisterPhoto = () => {
+  registerPhotoBase64 = null;
+  const preview = document.getElementById('regPhotoPreview');
+  const removeBtn = document.getElementById('regPhotoRemoveBtn');
+  if(preview) {
+    preview.innerHTML = '<span class="reg-photo-placeholder">+</span>';
+    preview.classList.remove('has-photo');
+  }
+  if(removeBtn) removeBtn.style.display = 'none';
+};
+
+
 </script>
 
 <!-- Confetti container (เกียรติบัตร celebration) -->
@@ -4476,6 +4939,19 @@ window.customConfirm = (message, options = {}) => {
     <div class="confirm-modal-actions">
       <button class="confirm-modal-btn confirm-modal-cancel" id="confirmModalCancel">ยกเลิก</button>
       <button class="confirm-modal-btn confirm-modal-ok" id="confirmModalOk">ยืนยัน</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- USER PROFILE MODAL -->
+<div class="profile-modal" id="profileModal" onclick="if(event.target===this)closeProfileModal()">
+  <div class="profile-modal-box">
+    <div class="profile-cover">
+      <button class="profile-close" onclick="closeProfileModal()" aria-label="ปิด">✕</button>
+    </div>
+    <div class="profile-body" id="profileBody">
+      <div class="profile-loading">⏳ กำลังโหลดข้อมูล...</div>
     </div>
   </div>
 </div>
