@@ -965,7 +965,12 @@ button[class*="btn-"],.quiz-actions button{position:relative;overflow:hidden;}
 /* ─── USER PROFILE MODAL ─── */
 .profile-modal{display:none;position:fixed;inset:0;background:rgba(15,26,48,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:10005;align-items:center;justify-content:center;padding:20px;opacity:0;transition:opacity .25s ease;overflow-y:auto;}
 .profile-modal.show{display:flex;opacity:1;}
-.profile-modal-box{background:white;border-radius:22px;max-width:480px;width:100%;overflow:hidden;box-shadow:0 24px 60px rgba(15,26,48,.4);transform:translateY(20px) scale(.95);transition:transform .3s cubic-bezier(.2,.8,.2,1);max-height:90vh;display:flex;flex-direction:column;}
+.profile-modal-box{background:white;border-radius:22px;max-width:600px;width:100%;overflow:hidden;box-shadow:0 24px 60px rgba(15,26,48,.4);transform:translateY(20px) scale(.95);transition:transform .3s cubic-bezier(.2,.8,.2,1);max-height:92vh;display:flex;flex-direction:column;}
+@media (max-width:600px){.profile-modal{padding:0;align-items:stretch;}.profile-modal-box{max-width:100%;max-height:100vh;border-radius:0;}}
+.profile-body::-webkit-scrollbar{width:8px;}
+.profile-body::-webkit-scrollbar-thumb{background:rgba(26,39,68,.2);border-radius:4px;}
+.profile-body::-webkit-scrollbar-thumb:hover{background:rgba(26,39,68,.35);}
+.profile-body{scroll-behavior:smooth;}
 .profile-modal.show .profile-modal-box{transform:translateY(0) scale(1);}
 
 .profile-cover{height:90px;background:linear-gradient(135deg,var(--navy),var(--navy-light));position:relative;flex-shrink:0;}
@@ -1063,6 +1068,110 @@ button[class*="btn-"],.quiz-actions button{position:relative;overflow:hidden;}
 .cc-icon-wrap img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;pointer-events:none;}
 /* override: เมื่อมี img → ไม่ต้องมี font-size สำหรับ emoji */
 .cc-icon-wrap:has(img){padding:0;overflow:hidden;}
+
+
+
+
+/* ─── PROFILE EDIT/DASHBOARD ─── */
+.profile-edit-row{display:flex;justify-content:center;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
+.profile-action-btn{background:white;color:var(--navy);border:1.5px solid var(--border);padding:8px 16px;border-radius:10px;font-family:'Sarabun',sans-serif;font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .2s ease;}
+.profile-action-btn:hover{border-color:var(--gold);background:var(--cream);transform:translateY(-1px);}
+.profile-action-btn.primary{background:var(--navy);color:var(--gold-light);border-color:var(--navy);}
+.profile-action-btn.primary:hover{background:#0f1a30;border-color:#0f1a30;color:white;}
+
+/* My Dashboard section */
+.profile-dashboard{margin-bottom:18px;padding:14px;background:linear-gradient(135deg,#fdf8f0,white);border:1.5px solid var(--gold-light);border-radius:14px;}
+.profile-dashboard-title{font-family:'Noto Serif Thai',serif;font-size:14px;font-weight:700;color:var(--navy);margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.dashboard-course-row{margin-bottom:12px;}
+.dashboard-course-row:last-child{margin-bottom:0;}
+.dashboard-course-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.dashboard-course-name{font-size:13px;font-weight:600;color:var(--navy);display:flex;align-items:center;gap:6px;}
+.dashboard-course-pct{font-size:12px;font-weight:700;color:var(--gold);font-family:monospace;}
+.dashboard-progbar{height:8px;background:var(--cream);border-radius:4px;overflow:hidden;position:relative;}
+.dashboard-progfill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-light));border-radius:4px;transition:width .6s ease;}
+.dashboard-progfill.done{background:linear-gradient(90deg,#10b981,#34d399);}
+.dashboard-course-detail{font-size:11px;color:var(--muted);margin-top:3px;}
+.dashboard-cta{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;}
+.dashboard-cta-btn{flex:1;min-width:140px;padding:9px 12px;border:none;border-radius:10px;font-family:'Sarabun',sans-serif;font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:all .2s ease;}
+.dashboard-cta-btn.primary{background:var(--navy);color:var(--gold-light);}
+.dashboard-cta-btn.primary:hover{background:#0f1a30;}
+.dashboard-cta-btn.secondary{background:var(--gold);color:var(--navy);}
+.dashboard-cta-btn.secondary:hover{background:var(--gold-light);}
+
+/* Edit profile form (inline) */
+.profile-edit-form{margin-bottom:18px;padding:16px;background:#f0f9ff;border:1.5px solid #bae6fd;border-radius:14px;animation:commentIn .3s ease;}
+.profile-edit-title{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.profile-edit-form .form-group{margin-bottom:12px;}
+.profile-edit-form label{font-size:12px;font-weight:600;color:var(--navy);display:block;margin-bottom:5px;}
+.profile-edit-form input{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:'Sarabun',sans-serif;font-size:13px;background:white;outline:none;box-sizing:border-box;}
+.profile-edit-form input:focus{border-color:var(--navy);}
+.profile-edit-note{font-size:11px;color:#0369a1;background:rgba(186,230,253,.4);padding:8px 10px;border-radius:8px;margin-bottom:12px;line-height:1.5;}
+.profile-edit-actions{display:flex;gap:8px;justify-content:flex-end;}
+.profile-edit-save{background:var(--navy);color:var(--gold-light);border:none;padding:8px 16px;border-radius:8px;font-family:'Sarabun',sans-serif;font-size:13px;font-weight:600;cursor:pointer;}
+.profile-edit-save:hover{background:#0f1a30;}
+.profile-edit-save:disabled{opacity:.5;cursor:not-allowed;}
+.profile-edit-cancel{background:var(--cream);color:var(--muted);border:1px solid var(--border);padding:8px 16px;border-radius:8px;font-family:'Sarabun',sans-serif;font-size:13px;font-weight:600;cursor:pointer;}
+
+/* Pending edit badge */
+.pending-edit-badge{background:#fef3c7;color:#92400e;font-size:11px;font-weight:700;padding:3px 10px;border-radius:8px;display:inline-flex;align-items:center;gap:4px;margin-top:6px;}
+
+
+
+
+/* ─── ADMIN: Section Dividers ─── */
+.admin-section-divider{margin:32px 0 18px;padding:14px 18px;background:linear-gradient(135deg,var(--navy),var(--navy-light));color:white;border-radius:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.admin-section-divider-title{font-family:'Noto Serif Thai',serif;font-size:17px;font-weight:700;color:var(--gold-light);display:flex;align-items:center;gap:8px;}
+.admin-section-divider-desc{font-size:12px;color:rgba(255,255,255,.75);}
+.admin-section-divider.course-pp3{background:linear-gradient(135deg,#1a2744,#2d3f73);}
+.admin-section-divider.course-tzd{background:linear-gradient(135deg,#065f46,#059669);}
+
+/* ─── ADMIN: All Comments ─── */
+.admin-all-comments-section{background:white;border:1.5px solid var(--border);border-radius:14px;padding:18px;margin-bottom:18px;}
+.admin-all-comments-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px;}
+.admin-all-comments-title{font-family:'Noto Serif Thai',serif;font-size:16px;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:8px;}
+.admin-comments-toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.admin-comments-filter{padding:6px 12px;background:var(--cream);border:1px solid var(--border);border-radius:8px;font-family:'Sarabun',sans-serif;font-size:12px;color:var(--navy);cursor:pointer;}
+.admin-comments-filter.active{background:var(--navy);color:var(--gold-light);border-color:var(--navy);}
+.admin-comments-list{max-height:600px;overflow-y:auto;padding-right:4px;}
+.admin-comments-list::-webkit-scrollbar{width:6px;}
+.admin-comments-list::-webkit-scrollbar-thumb{background:rgba(26,39,68,.2);border-radius:3px;}
+
+.admin-comment-item{padding:14px;background:var(--cream);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;}
+.admin-comment-item.is-reply{background:#f0f9ff;border-color:#bae6fd;margin-left:24px;}
+.admin-comment-item.has-replies{border-color:var(--gold);}
+.admin-comment-context{font-size:11.5px;color:var(--muted);margin-bottom:6px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.admin-comment-context-pill{background:white;padding:2px 8px;border-radius:6px;border:1px solid var(--border);font-weight:600;color:var(--navy);}
+.admin-comment-context-pill.tzd{background:#d1fae5;color:#065f46;border-color:#a7f3d0;}
+.admin-comment-context-pill.pp3{background:#dbeafe;color:#1e40af;border-color:#bfdbfe;}
+.admin-comment-context-pill.reply{background:#fef3c7;color:#92400e;border-color:#fde68a;}
+.admin-comment-author-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.admin-comment-mini-avatar{width:28px;height:28px;border-radius:50%;background:var(--navy);color:var(--gold-light);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;overflow:hidden;flex-shrink:0;}
+.admin-comment-mini-avatar img{width:100%;height:100%;object-fit:cover;}
+.admin-comment-author{font-size:13px;font-weight:600;color:var(--navy);flex:1;min-width:0;}
+.admin-comment-author small{font-weight:500;color:var(--muted);}
+.admin-comment-time{font-size:11px;color:var(--muted);flex-shrink:0;}
+.admin-comment-text{font-size:13.5px;color:var(--text);line-height:1.6;background:white;padding:10px 12px;border-radius:10px;border:1px solid var(--border);white-space:pre-wrap;word-wrap:break-word;}
+.admin-comment-actions{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;}
+.admin-comment-action-btn{background:white;border:1px solid var(--border);padding:5px 12px;border-radius:8px;font-family:'Sarabun',sans-serif;font-size:11.5px;font-weight:600;cursor:pointer;transition:all .15s ease;color:var(--navy);}
+.admin-comment-action-btn:hover{border-color:var(--navy);background:var(--navy);color:var(--gold-light);}
+.admin-comment-action-btn.danger{color:#dc2626;}
+.admin-comment-action-btn.danger:hover{background:#dc2626;color:white;border-color:#dc2626;}
+
+.admin-reply-form{margin-top:10px;padding:10px;background:white;border:1.5px solid var(--gold);border-radius:10px;}
+.admin-reply-form textarea{width:100%;min-height:50px;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-family:'Sarabun',sans-serif;font-size:13px;background:var(--cream);outline:none;resize:vertical;max-height:150px;box-sizing:border-box;}
+.admin-reply-form textarea:focus{border-color:var(--navy);background:white;}
+.admin-reply-form-actions{display:flex;justify-content:flex-end;gap:6px;margin-top:8px;}
+.admin-reply-cancel{background:transparent;color:var(--muted);border:1px solid var(--border);padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;}
+.admin-reply-submit{background:var(--navy);color:var(--gold-light);border:none;padding:6px 16px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;}
+.admin-reply-submit:hover{background:#0f1a30;}
+
+.admin-comments-empty{text-align:center;padding:30px 20px;color:var(--muted);}
+.admin-comments-empty-icon{font-size:40px;opacity:.4;margin-bottom:8px;}
+
+.admin-comments-stat{display:flex;gap:14px;margin-bottom:14px;flex-wrap:wrap;}
+.admin-comments-stat-item{flex:1;min-width:120px;background:var(--cream);padding:10px 14px;border-radius:10px;text-align:center;}
+.admin-comments-stat-num{font-family:'Noto Serif Thai',serif;font-size:20px;font-weight:700;color:var(--navy);}
+.admin-comments-stat-label{font-size:11px;color:var(--muted);margin-top:2px;}
 
 
 </style>
@@ -1580,6 +1689,15 @@ button[class*="btn-"],.quiz-actions button{position:relative;overflow:hidden;}
       </div>
     </div>
 
+    <!-- ═══ SECTION 1: Hub Overview ═══ -->
+    <div class="admin-section-divider">
+      <div>
+        <div class="admin-section-divider-title">📊 ภาพรวมระบบ NKP1 Learning Hub</div>
+        <div class="admin-section-divider-desc">สถิติรวมของทุกหลักสูตร · จัดการการสื่อสารและคำขอ</div>
+      </div>
+      <span style="background:rgba(201,168,76,.2);color:var(--gold-light);padding:5px 12px;border-radius:8px;font-size:12px;font-weight:700;">👑 Admin</span>
+    </div>
+    
     <!-- ADMIN HUB DASHBOARD (Stats summary + Course filter + Chat) -->
     <div class="admin-hub-stats" id="adminHubStats"></div>
     <div class="admin-course-tabs" id="adminCourseTabs"></div>
@@ -1587,20 +1705,44 @@ button[class*="btn-"],.quiz-actions button{position:relative;overflow:hidden;}
     <!-- ADMIN CHAT SECTION -->
     <div style="background:white;border:1.5px solid var(--border);border-radius:14px;padding:18px;margin-bottom:18px;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
-        <h3 style="font-family:'Noto Serif Thai',serif;font-size:16px;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:8px;">💬 ข้อความจากผู้ใช้</h3>
+        <h3 style="font-family:'Noto Serif Thai',serif;font-size:16px;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:8px;">💬 แชทสดกับผู้ใช้</h3>
         <button onclick="loadAdminChats()" style="padding:6px 14px;background:var(--cream);border:1px solid var(--border);border-radius:8px;font-size:12px;cursor:pointer;color:var(--navy);">🔄 รีเฟรช</button>
       </div>
       <div class="admin-chat-list" id="adminChatList">
         <div class="empty-state">กดรีเฟรชเพื่อโหลดรายการแชท</div>
       </div>
     </div>
-    <div class="admin-header">
-      <h2>แดชบอร์ด Admin <span style="font-size:12px;font-weight:500;color:var(--muted);margin-left:6px;">— NKP1 Learning Hub</span></h2>
+    
+    <!-- ADMIN ALL COMMENTS SECTION (รวมจากทุก video) -->
+    <div class="admin-all-comments-section">
+      <div class="admin-all-comments-header">
+        <div class="admin-all-comments-title">💬 ความคิดเห็นจากผู้เรียน (รวมทุกคลิป)</div>
+        <div class="admin-comments-toolbar">
+          <button class="admin-comments-filter active" data-filter="all" onclick="setAdminCommentFilter('all')">🌐 ทั้งหมด</button>
+          <button class="admin-comments-filter" data-filter="pp3" onclick="setAdminCommentFilter('pp3')">📋 ปพ.3</button>
+          <button class="admin-comments-filter" data-filter="tzd" onclick="setAdminCommentFilter('tzd')">🎯 TZD</button>
+          <button class="admin-comments-filter" data-filter="unanswered" onclick="setAdminCommentFilter('unanswered')">❓ ยังไม่ตอบ</button>
+          <button onclick="loadAdminAllComments()" style="padding:6px 12px;background:var(--cream);border:1px solid var(--border);border-radius:8px;font-size:12px;cursor:pointer;color:var(--navy);">🔄</button>
+        </div>
+      </div>
+      <div class="admin-comments-stat" id="adminCommentsStat"></div>
+      <div class="admin-comments-list" id="adminAllCommentsList">
+        <div class="empty-state">กำลังโหลด...</div>
+      </div>
+    </div>
+    
+    <!-- ═══ SECTION 1: Hub Overview (แต่อันนี้อยู่บนสุดอยู่แล้ว) ═══ -->
+    
+    <!-- ═══ SECTION 2: Course-specific (ปพ.3 ออนไลน์) ═══ -->
+    <div class="admin-section-divider course-pp3">
+      <div>
+        <div class="admin-section-divider-title">📋 หลักสูตร: ปพ.3 ออนไลน์</div>
+        <div class="admin-section-divider-desc">เลขเกียรติบัตร, ความก้าวหน้าผู้เรียน, ปุ่ม Bypass — เฉพาะหลักสูตรนี้</div>
+      </div>
       <div class="admin-header-right">
-        <button class="btn-qr" onclick="showQRCode()">📱 QR Code ลิงก์อบรม</button>
+        <button class="btn-qr" onclick="showQRCode()">📱 QR Code</button>
         <button class="btn-export" onclick="exportExcel()">📥 Export Excel</button>
-        <button class="btn-bypass" onclick="adminBypassAll()" style="padding:7px 14px;font-size:12px;">🧪 Bypass ทุกคน (เทสต์)</button>
-        <span class="admin-badge">Admin เขตพื้นที่</span>
+        <button class="btn-bypass" onclick="adminBypassAll()" style="padding:7px 14px;font-size:12px;">🧪 Bypass ทุกคน</button>
       </div>
     </div>
     <!-- แบนเนอร์แจ้งเตือนเลขเกียรติบัตร -->
@@ -1614,6 +1756,14 @@ button[class*="btn-"],.quiz-actions button{position:relative;overflow:hidden;}
     <div style="font-size:12px;color:#5a6075;margin-bottom:16px;padding:8px 12px;background:#f7edd8;border-radius:8px;border:1px solid #ddd4bc;">
       🔢 <strong>เลขเกียรติบัตร ปพ.3:</strong> <span id="certNumberStat">กำลังโหลด...</span>
     </div>
+    <!-- ═══ SECTION 3: Cross-course Requests ═══ -->
+    <div class="admin-section-divider">
+      <div>
+        <div class="admin-section-divider-title">👤 คำขอจากผู้ใช้ (ทุกหลักสูตร)</div>
+        <div class="admin-section-divider-desc">คำขอเปลี่ยนรหัสผ่าน, แก้ไขชื่อในเกียรติบัตร, แบบสอบถามความคิดเห็น</div>
+      </div>
+    </div>
+    
     <div class="pending-list">
       <div class="section-title">🔑 คำขอเปลี่ยนรหัสผ่าน (รอดำเนินการ)</div>
       <div id="pendingResetList"><div class="empty-state">กำลังโหลด...</div></div>
@@ -1717,7 +1867,7 @@ button[class*="btn-"],.quiz-actions button{position:relative;overflow:hidden;}
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, updateDoc, addDoc, deleteDoc, query, collection, where, getDocs, runTransaction, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, getDoc, updateDoc, addDoc, deleteDoc, query, collection, collectionGroup, where, getDocs, runTransaction, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
 // ══════════════════════════════════════
 // CONFIG
@@ -2788,7 +2938,7 @@ window.doAdminLogin = () => {
   document.getElementById('headerRight').style.display='flex';
   document.getElementById('headerProgress').style.display='none';
   document.getElementById('headerUser').innerHTML=`<strong style="color:var(--gold-light)">👑 Admin</strong>`;
-  showPage('pageAdmin'); loadAdminDashboard(); renderAdminHubStats(); loadAdminChats();
+  showPage('pageAdmin'); loadAdminDashboard(); renderAdminHubStats(); loadAdminChats(); loadAdminAllComments();
 };
 
 window.doLogout = async() => {
@@ -4635,12 +4785,21 @@ window.openProfile = async (userId) => {
           ${u.photoBase64 ? `<button class="profile-remove-btn" onclick="removeProfilePhoto()">🗑️ ลบรูป</button>` : ''}
         </div>
       ` : ''}
+      ${u.pendingEdit ? `<div style="text-align:center;margin-bottom:10px;"><span class="pending-edit-badge">⏳ คำขอแก้ชื่อ-สกุลรอ Admin อนุมัติ</span></div>` : ''}
       <div class="profile-name">
         ${escapeHtml(fullName || '-')}
       </div>
       <div class="profile-position">${escapeHtml(u.position || '—')}</div>
       <div class="profile-school"><span class="profile-school-icon">🏫</span>${escapeHtml(u.school || '—')}</div>
       <div class="profile-joined">📅 สมาชิกตั้งแต่ ${joinedDate}</div>
+      
+      ${(currentUser && currentUser.uid === userId) ? `
+        <div class="profile-edit-row">
+          <button class="profile-action-btn" onclick="openEditProfileForm()">✏️ แก้ไขข้อมูล</button>
+          ${certs.length > 0 ? `<button class="profile-action-btn primary" onclick="closeProfileModal();showPage('pageDashboard');">📊 แดชบอร์ดเกียรติบัตร</button>` : ''}
+        </div>
+        <div id="editProfileFormContainer"></div>
+      ` : ''}
       
       <div class="profile-stats">
         <div class="profile-stat">
@@ -4656,6 +4815,8 @@ window.openProfile = async (userId) => {
           <div class="profile-stat-label">จบแล้ว</div>
         </div>
       </div>
+      
+      ${(currentUser && currentUser.uid === userId) ? renderMyDashboard(u, enrolled, certs) : ''}
       
       ${certs.length > 0 ? `
         <div class="profile-section">
@@ -4909,6 +5070,485 @@ window.clearRegisterPhoto = () => {
   }
   if(removeBtn) removeBtn.style.display = 'none';
 };
+
+
+
+
+// ══════════════════════════════════════
+// MY DASHBOARD (ใน profile modal — เฉพาะของตัวเอง)
+// ══════════════════════════════════════
+function renderMyDashboard(u, enrolled, certs) {
+  if(enrolled.length === 0) {
+    return `
+      <div class="profile-dashboard">
+        <div class="profile-dashboard-title">📊 Dashboard ของฉัน</div>
+        <div style="text-align:center;padding:14px;color:var(--muted);font-size:13px;">
+          ยังไม่ได้เริ่มเรียนหลักสูตรใด<br>
+          <button class="dashboard-cta-btn primary" style="margin-top:10px;" onclick="closeProfileModal();showLandingPage();">
+            🚀 เลือกหลักสูตรเริ่มเรียน
+          </button>
+        </div>
+      </div>
+    `;
+  }
+  
+  let html = '<div class="profile-dashboard"><div class="profile-dashboard-title">📊 Dashboard ของฉัน</div>';
+  
+  enrolled.forEach(e => {
+    const courseId = e.courseId;
+    const course = COURSES[courseId];
+    if(!course) return;
+    const totalParts = (course.videos || []).length || 1;
+    
+    // คำนวณ progress
+    let progressData;
+    if(courseId === 'pp3') {
+      // legacy + nested
+      const c = u.courses?.[courseId] || {};
+      const legacyQuiz = u.quizPassed || [];
+      const nestedQuiz = c.quizPassed || [];
+      const quizPassed = Math.max(legacyQuiz.length, nestedQuiz.length);
+      const pct = Math.round((quizPassed / totalParts) * 100);
+      progressData = { quizPassed, totalParts, pct };
+    } else {
+      const c = u.courses?.[courseId] || {};
+      const quizPassed = (c.quizPassed || []).length;
+      const pct = Math.round((quizPassed / totalParts) * 100);
+      progressData = { quizPassed, totalParts, pct };
+    }
+    
+    const done = e.done;
+    
+    html += `
+      <div class="dashboard-course-row">
+        <div class="dashboard-course-head">
+          <div class="dashboard-course-name">${e.icon} ${escapeHtml(e.name)}</div>
+          <div class="dashboard-course-pct">${done ? '✅ จบแล้ว' : progressData.pct + '%'}</div>
+        </div>
+        <div class="dashboard-progbar">
+          <div class="dashboard-progfill ${done ? 'done' : ''}" style="width:${done ? 100 : progressData.pct}%;"></div>
+        </div>
+        <div class="dashboard-course-detail">
+          ${done 
+            ? '🏆 ผ่านครบทุก Part — รับเกียรติบัตรแล้ว' 
+            : `Quiz ผ่านแล้ว ${progressData.quizPassed} / ${progressData.totalParts} Part`
+          }
+        </div>
+      </div>
+    `;
+  });
+  
+  // CTA buttons
+  const hasIncomplete = enrolled.some(e => !e.done);
+  html += '<div class="dashboard-cta">';
+  if(hasIncomplete) {
+    const incompleteCourse = enrolled.find(e => !e.done);
+    html += `<button class="dashboard-cta-btn primary" onclick="closeProfileModal();selectCourseFromLanding('${incompleteCourse.courseId}');">▶️ เรียนต่อ ${escapeHtml(incompleteCourse.name)}</button>`;
+  }
+  if(certs.length > 0) {
+    html += `<button class="dashboard-cta-btn secondary" onclick="closeProfileModal();showPage('pageDashboard');">🏆 ดูเกียรติบัตร</button>`;
+  }
+  html += '</div></div>';
+  
+  return html;
+}
+
+// ══════════════════════════════════════
+// EDIT PROFILE (inline form ใน profile modal)
+// ══════════════════════════════════════
+window.openEditProfileForm = () => {
+  if(!currentUser || !userData) return;
+  const container = document.getElementById('editProfileFormContainer');
+  if(!container) return;
+  
+  // toggle: ถ้าเปิดอยู่ → ปิด
+  if(container.querySelector('.profile-edit-form')) {
+    container.innerHTML = '';
+    return;
+  }
+  
+  container.innerHTML = `
+    <div class="profile-edit-form">
+      <div class="profile-edit-title">✏️ แก้ไขข้อมูลส่วนตัว</div>
+      
+      <div class="profile-edit-note">
+        💡 <strong>หมายเหตุ:</strong> การแก้ไข <strong>ชื่อ–นามสกุล</strong> ต้องรอ Admin อนุมัติ (เพราะใช้ในเกียรติบัตร) ส่วน <strong>ตำแหน่ง</strong> และ <strong>โรงเรียน</strong> แก้ไขได้ทันที
+      </div>
+      
+      <div class="form-group">
+        <label>คำนำหน้า</label>
+        <input type="text" id="editProfilePrefix" value="${escapeHtml(userData.prefix||'')}" placeholder="เช่น นาย, นาง, ดร.">
+      </div>
+      <div class="form-group">
+        <label>ชื่อ <span style="color:#dc2626;">* (ต้องอนุมัติ)</span></label>
+        <input type="text" id="editProfileFirstName" value="${escapeHtml(userData.firstName||'')}">
+      </div>
+      <div class="form-group">
+        <label>นามสกุล <span style="color:#dc2626;">* (ต้องอนุมัติ)</span></label>
+        <input type="text" id="editProfileLastName" value="${escapeHtml(userData.lastName||'')}">
+      </div>
+      <div class="form-group">
+        <label>ตำแหน่ง</label>
+        <input type="text" id="editProfilePosition" value="${escapeHtml(userData.position||'')}" placeholder="เช่น ครูชำนาญการพิเศษ">
+      </div>
+      <div class="form-group">
+        <label>โรงเรียน / หน่วยงาน</label>
+        <input type="text" id="editProfileSchool" value="${escapeHtml(userData.school||'')}" placeholder="เช่น โรงเรียนบ้านนาคอกควาย">
+      </div>
+      
+      <div class="profile-edit-actions">
+        <button class="profile-edit-cancel" onclick="document.getElementById('editProfileFormContainer').innerHTML='';">ยกเลิก</button>
+        <button class="profile-edit-save" id="editProfileSaveBtn" onclick="saveProfileEdits()">💾 บันทึก</button>
+      </div>
+    </div>
+  `;
+};
+
+window.saveProfileEdits = async () => {
+  if(!currentUser || !userData) return;
+  const btn = document.getElementById('editProfileSaveBtn');
+  if(!btn) return;
+  
+  const prefix = document.getElementById('editProfilePrefix').value.trim();
+  const fn = document.getElementById('editProfileFirstName').value.trim();
+  const ln = document.getElementById('editProfileLastName').value.trim();
+  const pos = document.getElementById('editProfilePosition').value.trim();
+  const sch = document.getElementById('editProfileSchool').value.trim();
+  
+  if(!fn || !ln) {
+    showToast('⚠️ กรอกชื่อ-นามสกุลให้ครบ');
+    return;
+  }
+  
+  btn.disabled = true;
+  btn.textContent = 'กำลังบันทึก...';
+  
+  try {
+    const updates = {};
+    let hasNameChange = false;
+    let hasOtherChange = false;
+    
+    // ตรวจการเปลี่ยน ชื่อ-นามสกุล (ต้องผ่าน admin)
+    if(prefix !== userData.prefix || fn !== userData.firstName || ln !== userData.lastName) {
+      hasNameChange = true;
+      updates.pendingEdit = {
+        prefix, firstName: fn, lastName: ln,
+        oldName: `${userData.prefix||''}${userData.firstName||''} ${userData.lastName||''}`.trim(),
+        requestedAt: new Date().toISOString(),
+        reason: 'แก้ไขจากหน้าโปรไฟล์'
+      };
+    }
+    
+    // ตำแหน่ง/โรงเรียน — แก้ได้ทันที
+    if(pos !== userData.position) { updates.position = pos; hasOtherChange = true; }
+    if(sch !== userData.school) { updates.school = sch; hasOtherChange = true; }
+    
+    if(!hasNameChange && !hasOtherChange) {
+      showToast('ℹ️ ไม่มีการเปลี่ยนแปลง');
+      btn.disabled = false;
+      btn.textContent = '💾 บันทึก';
+      return;
+    }
+    
+    await updateDoc(doc(db, 'users', currentUser.uid), updates);
+    
+    // update local
+    if(hasOtherChange) {
+      userData.position = pos;
+      userData.school = sch;
+    }
+    if(hasNameChange) {
+      userData.pendingEdit = updates.pendingEdit;
+    }
+    
+    if(hasNameChange && hasOtherChange) {
+      showToast('✅ บันทึก ตำแหน่ง/โรงเรียน เรียบร้อย • คำขอแก้ชื่อรอ Admin อนุมัติ');
+    } else if(hasNameChange) {
+      showToast('✅ ส่งคำขอแก้ชื่อให้ Admin แล้ว');
+    } else {
+      showToast('✅ บันทึกข้อมูลเรียบร้อย');
+    }
+    
+    // refresh modal
+    openProfile(currentUser.uid);
+  } catch(e) {
+    console.warn('save profile err:', e);
+    showToast('❌ บันทึกไม่สำเร็จ: ' + (e.message || ''));
+    btn.disabled = false;
+    btn.textContent = '💾 บันทึก';
+  }
+};
+
+
+
+
+// ══════════════════════════════════════
+// ADMIN — All Comments (รวมจากทุก video)
+// ══════════════════════════════════════
+let adminAllComments = [];
+let adminCommentsUnsub = null;
+let adminCommentFilter = 'all';
+let adminOpenReplyFormId = null;
+
+window.loadAdminAllComments = () => {
+  if(adminCommentsUnsub) { adminCommentsUnsub(); adminCommentsUnsub = null; }
+  
+  // ใช้ collectionGroup query 'comments' ทุก document ในระบบ
+  try {
+    const q = collectionGroup(db, 'comments');
+    adminCommentsUnsub = onSnapshot(q, (snap) => {
+      adminAllComments = [];
+      snap.forEach(d => {
+        const data = d.data();
+        // ดึง video key จาก path parent (videoComments/{key}/comments/{id})
+        const videoKey = d.ref.parent.parent.id;
+        adminAllComments.push({
+          id: d.id,
+          videoKey,
+          ref: d.ref,
+          ...data
+        });
+      });
+      // sort by time desc
+      adminAllComments.sort((a, b) => {
+        const ta = a.time && a.time.toMillis ? a.time.toMillis() : 0;
+        const tb = b.time && b.time.toMillis ? b.time.toMillis() : 0;
+        return tb - ta;
+      });
+      renderAdminAllComments();
+    }, (err) => {
+      console.warn('admin comments listener err:', err);
+      document.getElementById('adminAllCommentsList').innerHTML = '<div class="admin-comments-empty"><div class="admin-comments-empty-icon">⚠️</div>โหลดไม่สำเร็จ — อาจต้องเปิด Firestore index (ดู console)</div>';
+    });
+  } catch(e) {
+    console.warn('loadAdminAllComments err:', e);
+  }
+};
+
+window.setAdminCommentFilter = (filter) => {
+  adminCommentFilter = filter;
+  document.querySelectorAll('.admin-comments-filter').forEach(b => {
+    b.classList.toggle('active', b.dataset.filter === filter);
+  });
+  renderAdminAllComments();
+};
+
+function renderAdminAllComments() {
+  const list = document.getElementById('adminAllCommentsList');
+  const statEl = document.getElementById('adminCommentsStat');
+  if(!list) return;
+  
+  // คำนวณ stat
+  const total = adminAllComments.length;
+  const parents = adminAllComments.filter(c => !c.parentId);
+  const replies = adminAllComments.filter(c => c.parentId);
+  // ยังไม่ตอบ = parent comment ที่ไม่มี admin reply
+  const repliesByParent = {};
+  replies.forEach(r => {
+    if(!repliesByParent[r.parentId]) repliesByParent[r.parentId] = [];
+    repliesByParent[r.parentId].push(r);
+  });
+  const unanswered = parents.filter(p => {
+    const rs = repliesByParent[p.id] || [];
+    return !rs.some(r => r.isAdmin);
+  });
+  
+  // Stats display
+  if(statEl) {
+    statEl.innerHTML = `
+      <div class="admin-comments-stat-item">
+        <div class="admin-comments-stat-num">${total}</div>
+        <div class="admin-comments-stat-label">ทั้งหมด</div>
+      </div>
+      <div class="admin-comments-stat-item">
+        <div class="admin-comments-stat-num">${parents.length}</div>
+        <div class="admin-comments-stat-label">คอมเมนต์หลัก</div>
+      </div>
+      <div class="admin-comments-stat-item">
+        <div class="admin-comments-stat-num">${replies.length}</div>
+        <div class="admin-comments-stat-label">การตอบกลับ</div>
+      </div>
+      <div class="admin-comments-stat-item" style="background:${unanswered.length>0?'#fef3c7':'#d1fae5'};">
+        <div class="admin-comments-stat-num" style="color:${unanswered.length>0?'#92400e':'#065f46'};">${unanswered.length}</div>
+        <div class="admin-comments-stat-label">รอตอบ</div>
+      </div>
+    `;
+  }
+  
+  // Filter
+  let filtered = parents;
+  if(adminCommentFilter !== 'all') {
+    if(adminCommentFilter === 'unanswered') {
+      filtered = unanswered;
+    } else {
+      // กรองตาม courseId จาก videoKey (e.g. "pp3_part0")
+      filtered = parents.filter(c => (c.videoKey || '').startsWith(adminCommentFilter + '_'));
+    }
+  }
+  
+  if(filtered.length === 0) {
+    list.innerHTML = '<div class="admin-comments-empty"><div class="admin-comments-empty-icon">💬</div>ยังไม่มีคอมเมนต์ที่ตรงเงื่อนไข</div>';
+    return;
+  }
+  
+  list.innerHTML = filtered.map(c => renderAdminCommentItem(c, repliesByParent[c.id] || [])).join('');
+  // hydrate avatars
+  hydrateAdminCommentAvatars();
+}
+
+function renderAdminCommentItem(c, replies) {
+  const videoKey = c.videoKey || '';
+  const [courseId, partStr] = videoKey.split('_');
+  const partN = (partStr || '').replace('part', '');
+  const courseLabel = COURSES[courseId]?.shortName || COURSES[courseId]?.name || courseId;
+  const courseIcon = COURSES[courseId]?.icon || '📘';
+  const courseCls = courseId === 'tzd' ? 'tzd' : (courseId === 'pp3' ? 'pp3' : '');
+  const initial = (c.userName || '?').charAt(0).toUpperCase();
+  const t = c.time && c.time.toDate ? formatCommentTime(c.time.toDate()) : '';
+  
+  const hasAdminReply = replies.some(r => r.isAdmin);
+  
+  let html = `
+    <div class="admin-comment-item ${replies.length > 0 ? 'has-replies' : ''}">
+      <div class="admin-comment-context">
+        <span class="admin-comment-context-pill ${courseCls}">${courseIcon} ${escapeHtml(courseLabel)}</span>
+        <span class="admin-comment-context-pill">Part ${parseInt(partN) + 1}</span>
+        ${hasAdminReply ? '<span class="admin-comment-context-pill" style="background:#d1fae5;color:#065f46;border-color:#a7f3d0;">✓ ตอบแล้ว</span>' : '<span class="admin-comment-context-pill" style="background:#fef3c7;color:#92400e;border-color:#fde68a;">⏳ ยังไม่ตอบ</span>'}
+      </div>
+      <div class="admin-comment-author-row">
+        <div class="admin-comment-mini-avatar" data-admin-uid="${c.userId}">${initial}</div>
+        <div class="admin-comment-author">
+          ${escapeHtml(c.userName || '?')}
+          <small>· ${escapeHtml(c.userSchool || '-')}</small>
+        </div>
+        <div class="admin-comment-time">${t}</div>
+      </div>
+      <div class="admin-comment-text">${escapeHtml(c.text || '')}</div>
+      <div class="admin-comment-actions">
+        <button class="admin-comment-action-btn" onclick="adminOpenReply('${c.id}','${c.videoKey}','${escapeHtml(c.userName||'').replace(/'/g, "\\'")}')">↩️ ตอบกลับ</button>
+        <button class="admin-comment-action-btn danger" onclick="adminDeleteComment('${c.id}','${c.videoKey}')">🗑️ ลบ</button>
+      </div>
+      <div id="adminReplyContainer_${c.id}"></div>
+  `;
+  
+  // แสดง replies
+  if(replies.length > 0) {
+    html += '<div style="margin-top:10px;display:flex;flex-direction:column;gap:8px;">';
+    replies.forEach(r => {
+      const rInit = (r.userName || '?').charAt(0).toUpperCase();
+      const rT = r.time && r.time.toDate ? formatCommentTime(r.time.toDate()) : '';
+      html += `
+        <div class="admin-comment-item is-reply" style="margin-left:0;">
+          <div class="admin-comment-context">
+            <span class="admin-comment-context-pill reply">↩️ ตอบกลับ</span>
+            ${r.isAdmin ? '<span class="admin-comment-context-pill" style="background:#7f1d1d;color:white;border:none;">👑 ADMIN</span>' : ''}
+          </div>
+          <div class="admin-comment-author-row">
+            <div class="admin-comment-mini-avatar" data-admin-uid="${r.userId}">${rInit}</div>
+            <div class="admin-comment-author">${escapeHtml(r.userName || '?')} <small>· ${escapeHtml(r.userSchool || '-')}</small></div>
+            <div class="admin-comment-time">${rT}</div>
+          </div>
+          <div class="admin-comment-text">${escapeHtml(r.text || '')}</div>
+          <div class="admin-comment-actions">
+            <button class="admin-comment-action-btn danger" onclick="adminDeleteComment('${r.id}','${r.videoKey}')">🗑️ ลบ</button>
+          </div>
+        </div>
+      `;
+    });
+    html += '</div>';
+  }
+  
+  html += '</div>';
+  return html;
+}
+
+window.adminOpenReply = (commentId, videoKey, parentUserName) => {
+  const container = document.getElementById('adminReplyContainer_' + commentId);
+  if(!container) return;
+  
+  if(adminOpenReplyFormId === commentId) {
+    container.innerHTML = '';
+    adminOpenReplyFormId = null;
+    return;
+  }
+  
+  // ปิด form อื่นๆ
+  document.querySelectorAll('[id^="adminReplyContainer_"]').forEach(c => c.innerHTML = '');
+  adminOpenReplyFormId = commentId;
+  
+  container.innerHTML = `
+    <div class="admin-reply-form">
+      <textarea id="adminReplyText_${commentId}" placeholder="ตอบกลับในชื่อ Admin..." maxlength="500"></textarea>
+      <div class="admin-reply-form-actions">
+        <button class="admin-reply-cancel" onclick="document.getElementById('adminReplyContainer_${commentId}').innerHTML='';adminOpenReplyFormId=null;">ยกเลิก</button>
+        <button class="admin-reply-submit" onclick="adminPostReply('${commentId}','${videoKey}','${parentUserName.replace(/'/g, "\\'")}')">📤 ตอบกลับ</button>
+      </div>
+    </div>
+  `;
+  setTimeout(() => document.getElementById('adminReplyText_' + commentId)?.focus(), 50);
+};
+
+window.adminPostReply = async (parentId, videoKey, parentUserName) => {
+  const ta = document.getElementById('adminReplyText_' + parentId);
+  if(!ta) return;
+  const text = (ta.value || '').trim();
+  if(!text) { showToast('⚠️ พิมพ์ข้อความก่อน'); return; }
+  
+  try {
+    await addDoc(collection(db, 'videoComments', videoKey, 'comments'), {
+      userId: 'admin',
+      userName: '👑 Admin (สพป.นครพนม เขต 1)',
+      userSchool: 'สพป.นครพนม เขต 1',
+      text: text,
+      time: new Date(),
+      isAdmin: true,
+      parentId: parentId,
+      parentUserName: parentUserName
+    });
+    showToast('✅ ตอบกลับเรียบร้อย');
+    // ปิด form
+    document.getElementById('adminReplyContainer_' + parentId).innerHTML = '';
+    adminOpenReplyFormId = null;
+  } catch(e) {
+    console.warn('admin reply err:', e);
+    showToast('❌ ตอบไม่สำเร็จ');
+  }
+};
+
+window.adminDeleteComment = async (commentId, videoKey) => {
+  const ok = await customConfirm('ลบคอมเมนต์นี้?', {
+    title: 'ยืนยันการลบ',
+    icon: '🗑️',
+    danger: true,
+    okText: 'ลบ'
+  });
+  if(!ok) return;
+  
+  try {
+    await deleteDoc(doc(db, 'videoComments', videoKey, 'comments', commentId));
+    showToast('🗑️ ลบเรียบร้อย');
+  } catch(e) {
+    console.warn('admin delete err:', e);
+    showToast('❌ ลบไม่สำเร็จ');
+  }
+};
+
+async function hydrateAdminCommentAvatars() {
+  const avatars = document.querySelectorAll('.admin-comment-mini-avatar[data-admin-uid]');
+  const uniqueIds = new Set();
+  avatars.forEach(el => {
+    const uid = el.dataset.adminUid;
+    if(uid && uid !== 'admin') uniqueIds.add(uid);
+  });
+  
+  for(const uid of uniqueIds) {
+    const photo = await getUserPhoto(uid);
+    if(!photo) continue;
+    document.querySelectorAll(`.admin-comment-mini-avatar[data-admin-uid="${uid}"]`).forEach(el => {
+      el.innerHTML = `<img src="${photo}" alt="" />`;
+    });
+  }
+}
 
 
 </script>
