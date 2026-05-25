@@ -838,7 +838,7 @@ button[class*="btn-"],.quiz-actions button{position:relative;overflow:hidden;}
 .loading-text{color:rgba(255,255,255,.7);font-size:13px;margin-top:14px;}
 
 /* 6) HERO STATS BANNER (landing — เด่นๆ ด้านบน) */
-.hero-stats-banner{max-width:900px;margin:24px auto 36px;padding:0 16px;}
+.hero-stats-banner{max-width:900px;margin:18px auto 18px;padding:0 16px;}
 .hero-stats-card{background:linear-gradient(135deg,var(--navy),var(--navy-light));border-radius:20px;padding:24px 28px;color:white;display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;box-shadow:0 12px 32px rgba(26,39,68,.25);position:relative;overflow:hidden;}
 .hero-stats-card::before{content:'';position:absolute;top:-50%;right:-20%;width:300px;height:300px;background:radial-gradient(circle,rgba(201,168,76,.15),transparent 70%);pointer-events:none;}
 .hero-stats-title{font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:var(--gold-light);margin-bottom:6px;}
@@ -965,8 +965,8 @@ button[class*="btn-"],.quiz-actions button{position:relative;overflow:hidden;}
 /* ─── USER PROFILE MODAL ─── */
 .profile-modal{display:none;position:fixed;inset:0;background:rgba(15,26,48,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:10005;align-items:center;justify-content:center;padding:20px;opacity:0;transition:opacity .25s ease;overflow-y:auto;}
 .profile-modal.show{display:flex;opacity:1;}
-.profile-modal-box{background:white;border-radius:22px;max-width:600px;width:100%;overflow:hidden;box-shadow:0 24px 60px rgba(15,26,48,.4);transform:translateY(20px) scale(.95);transition:transform .3s cubic-bezier(.2,.8,.2,1);max-height:92vh;display:flex;flex-direction:column;}
-@media (max-width:600px){.profile-modal{padding:0;align-items:stretch;}.profile-modal-box{max-width:100%;max-height:100vh;border-radius:0;}}
+.profile-modal-box{background:white;border-radius:22px;max-width:600px;width:100%;overflow:hidden;box-shadow:0 24px 60px rgba(15,26,48,.4);transform:translateY(20px) scale(.95);transition:transform .3s cubic-bezier(.2,.8,.2,1);max-height:90vh;display:flex;flex-direction:column;position:relative;}
+@media (max-width:600px){.profile-modal{padding:0;align-items:stretch;}.profile-modal-box{max-width:100%;max-height:100vh;height:100vh;border-radius:0;}}
 .profile-body::-webkit-scrollbar{width:8px;}
 .profile-body::-webkit-scrollbar-thumb{background:rgba(26,39,68,.2);border-radius:4px;}
 .profile-body::-webkit-scrollbar-thumb:hover{background:rgba(26,39,68,.35);}
@@ -1324,12 +1324,7 @@ html{scroll-behavior:smooth;}
 
 /* ─── 9. Section divider with shine ─── */
 .section-divider{
-  text-align:center;padding:30px 0;color:var(--gold);font-size:24px;letter-spacing:8px;
-  animation:dividerPulse 4s ease-in-out infinite;
-}
-@keyframes dividerPulse{
-  0%,100%{opacity:.4;}
-  50%{opacity:1;}
+  text-align:center;padding:14px 0;color:var(--gold);font-size:18px;letter-spacing:6px;opacity:.5;
 }
 
 /* ─── 10. Card icon glow on hover ─── */
@@ -1363,7 +1358,7 @@ body{transition:background .8s ease;}
 .webgl-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;border-radius:20px;opacity:.5;}
 
 /* ─── 3. Spotlight cursor follow ─── */
-.spotlight{position:fixed;pointer-events:none;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,.08) 0%,transparent 60%);transform:translate(-50%,-50%);z-index:1;mix-blend-mode:plus-lighter;transition:opacity .3s ease;opacity:0;}
+.spotlight{position:fixed;left:-500px;top:-500px;pointer-events:none;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,.08) 0%,transparent 60%);transform:translate(-50%,-50%);z-index:1;mix-blend-mode:plus-lighter;transition:opacity .3s ease;opacity:0;}
 .spotlight.visible{opacity:1;}
 
 /* ─── 4. Magnetic buttons (smooth follow cursor on hover) ─── */
@@ -1403,7 +1398,7 @@ body{transition:background .8s ease;}
 /* ─── 7. Custom cursor (Gold ring follower) — desktop only ─── */
 @media (min-width:768px) and (hover:hover) {
   .cursor-ring{
-    position:fixed;width:30px;height:30px;border:2px solid rgba(201,168,76,.6);
+    position:fixed;left:-100px;top:-100px;width:30px;height:30px;border:2px solid rgba(201,168,76,.6);
     border-radius:50%;pointer-events:none;z-index:10080;
     transform:translate(-50%,-50%);
     transition:transform .15s ease-out,width .25s ease,height .25s ease,border-color .25s ease,opacity .3s ease;
@@ -1496,6 +1491,276 @@ body{transition:background .8s ease;}
 @keyframes fabRotate{from{--fab-angle:0deg;}to{--fab-angle:360deg;}}
 
 
+
+
+/* ─── BETA BADGE ─── */
+.beta-badge{display:inline-block;background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#451a03;font-family:'Sarabun',sans-serif;font-size:11px;font-weight:800;padding:3px 10px;border-radius:8px;margin-left:10px;vertical-align:middle;letter-spacing:1.5px;box-shadow:0 4px 12px rgba(245,158,11,.4);position:relative;top:-4px;animation:betaPulse 2s ease-in-out infinite;}
+@keyframes betaPulse{0%,100%{box-shadow:0 4px 12px rgba(245,158,11,.4);}50%{box-shadow:0 4px 20px rgba(245,158,11,.7);}}
+
+/* Beta banner ใต้ logo (เล็กกว่าและบอกชัด) */
+.beta-notice{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1px solid #fde68a;border-radius:12px;padding:10px 16px;margin:0 auto 14px;max-width:760px;text-align:center;font-size:12.5px;color:#92400e;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;}
+.beta-notice strong{color:#78350f;font-weight:700;}
+.beta-notice .beta-icon{font-size:16px;}
+
+/* Header ชื่อ — Beta tag */
+.header-title-wrap{display:inline-flex;align-items:center;gap:8px;}
+.header-title-wrap .beta-badge{font-size:9px;padding:2px 7px;margin:0;top:-8px;}
+
+
+
+
+/* ─── FULL PROFILE PAGE (เด้งจาก header) ─── */
+.page-profile-hero{
+  background:linear-gradient(135deg,var(--navy),var(--navy-light));
+  padding:40px 20px 80px;
+  position:relative;
+  overflow:hidden;
+  margin-bottom:-60px;
+}
+.page-profile-hero::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(circle at 20% 30%,rgba(201,168,76,.15),transparent 40%),
+    radial-gradient(circle at 80% 70%,rgba(232,201,122,.1),transparent 45%);
+  animation:heroFloat 12s ease-in-out infinite;
+}
+.page-profile-container{
+  max-width:800px;margin:0 auto;padding:0 16px;
+  position:relative;z-index:2;
+}
+.page-profile-avatar{
+  width:140px;height:140px;border-radius:50%;
+  background:linear-gradient(135deg,var(--gold),var(--gold-light));
+  color:var(--navy);display:flex;align-items:center;justify-content:center;
+  font-size:56px;font-weight:700;font-family:'Noto Serif Thai',serif;
+  border:6px solid white;box-shadow:0 12px 30px rgba(0,0,0,.3);
+  margin:0 auto 16px;overflow:hidden;position:relative;
+}
+.page-profile-avatar.is-admin{background:linear-gradient(135deg,#7f1d1d,#dc2626);color:white;}
+.page-profile-avatar img{width:100%;height:100%;object-fit:cover;}
+.page-profile-name{font-family:'Noto Serif Thai',serif;font-size:28px;font-weight:700;color:var(--gold-light);text-align:center;margin-bottom:6px;}
+.page-profile-position{font-size:15px;color:rgba(255,255,255,.85);text-align:center;margin-bottom:4px;}
+.page-profile-school{font-size:13px;color:rgba(255,255,255,.65);text-align:center;display:flex;align-items:center;justify-content:center;gap:5px;flex-wrap:wrap;margin-bottom:8px;}
+.page-profile-joined{font-size:12px;color:rgba(255,255,255,.5);text-align:center;}
+
+.page-profile-photo-row{display:flex;justify-content:center;gap:8px;margin:14px 0 4px;flex-wrap:wrap;}
+
+.page-profile-content{
+  background:white;border-radius:24px 24px 0 0;
+  padding:32px 24px;
+  box-shadow:0 -8px 30px rgba(0,0,0,.08);
+  position:relative;z-index:1;
+}
+.page-profile-content-inner{max-width:700px;margin:0 auto;}
+
+
+
+
+/* ═══════════════════════════════════════════════ */
+/* LEADERBOARD                                     */
+/* ═══════════════════════════════════════════════ */
+.leaderboard-section{max-width:900px;margin:18px auto 32px;padding:0 16px;}
+.leaderboard-card{background:white;border:1px solid var(--border);border-radius:18px;padding:22px 24px;box-shadow:0 8px 28px rgba(26,39,68,.06);}
+.leaderboard-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:12px;flex-wrap:wrap;}
+.leaderboard-title{font-family:'Noto Serif Thai',serif;font-size:18px;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:8px;}
+.leaderboard-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+.lb-tab{padding:6px 12px;background:var(--cream);border:1px solid var(--border);border-radius:8px;font-family:'Sarabun',sans-serif;font-size:12px;font-weight:600;color:var(--navy);cursor:pointer;transition:all .2s ease;display:inline-flex;align-items:center;gap:5px;}
+.lb-tab:hover{border-color:var(--gold);}
+.lb-tab.active{background:var(--navy);color:var(--gold-light);border-color:var(--navy);}
+.lb-list{display:flex;flex-direction:column;gap:8px;}
+.lb-item{display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--cream);border-radius:12px;border:1px solid transparent;transition:all .2s ease;cursor:pointer;}
+.lb-item:hover{border-color:var(--gold);background:#fdf8f0;transform:translateX(4px);}
+.lb-rank{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Noto Serif Thai',serif;font-weight:700;font-size:14px;flex-shrink:0;}
+.lb-rank.rank-1{background:linear-gradient(135deg,#fbbf24,#f59e0b);color:white;box-shadow:0 4px 12px rgba(245,158,11,.4);}
+.lb-rank.rank-2{background:linear-gradient(135deg,#d1d5db,#9ca3af);color:white;}
+.lb-rank.rank-3{background:linear-gradient(135deg,#fb923c,#ea580c);color:white;}
+.lb-rank.rank-other{background:white;color:var(--muted);border:1px solid var(--border);}
+.lb-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--navy);display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;overflow:hidden;font-size:13px;}
+.lb-avatar img{width:100%;height:100%;object-fit:cover;}
+.lb-info{flex:1;min-width:0;}
+.lb-name{font-size:13.5px;font-weight:600;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.lb-meta{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.lb-value{font-family:'Noto Serif Thai',serif;font-weight:700;color:var(--gold);font-size:15px;flex-shrink:0;}
+.lb-value small{color:var(--muted);font-size:10px;font-weight:500;margin-left:2px;}
+.lb-empty{text-align:center;padding:24px;color:var(--muted);font-size:13px;}
+.lb-loading{text-align:center;padding:24px;color:var(--muted);font-size:13px;}
+.lb-footnote{font-size:11px;color:var(--muted);text-align:center;margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);}
+
+/* You highlight */
+.lb-item.is-you{background:linear-gradient(135deg,#fef3c7,#fde68a);border-color:var(--gold);}
+.lb-item.is-you .lb-name::after{content:' (คุณ)';color:var(--gold);font-weight:700;font-size:11px;}
+
+/* ═══════════════════════════════════════════════ */
+/* LIVE PRESENCE (X กำลังเรียนอยู่)                */
+/* ═══════════════════════════════════════════════ */
+.live-presence{display:inline-flex;align-items:center;gap:10px;padding:8px 14px;background:linear-gradient(135deg,#dcfce7,#bbf7d0);border:1px solid #86efac;border-radius:20px;font-size:12.5px;font-weight:600;color:#166534;margin:8px 0;}
+.live-dot{width:8px;height:8px;border-radius:50%;background:#22c55e;position:relative;}
+.live-dot::after{content:'';position:absolute;inset:-4px;border-radius:50%;background:rgba(34,197,94,.4);animation:livePulse 1.5s ease-out infinite;}
+@keyframes livePulse{0%{transform:scale(.8);opacity:1;}100%{transform:scale(2);opacity:0;}}
+.live-avatars{display:inline-flex;align-items:center;}
+.live-avatar{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--navy);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;border:2px solid white;margin-left:-8px;overflow:hidden;}
+.live-avatar:first-child{margin-left:0;}
+.live-avatar img{width:100%;height:100%;object-fit:cover;}
+.live-avatar.more{background:var(--navy);color:var(--gold-light);font-size:9px;}
+
+/* Inline presence ใน video page */
+.video-presence{margin:12px 0;padding:10px 14px;background:#f0fdf4;border:1px solid #86efac;border-radius:12px;display:flex;align-items:center;gap:10px;font-size:13px;color:#166534;}
+
+
+
+
+/* ═══════════════════════════════════════════════ */
+/* VIRTUAL CLASSROOM (Showroom-style)              */
+/* ═══════════════════════════════════════════════ */
+
+.classroom{
+  margin:14px 0;
+  padding:18px 16px 14px;
+  background:linear-gradient(180deg,#fef9ec 0%,#fef3c7 50%,#fde68a 100%);
+  border:1.5px solid #fde68a;
+  border-radius:16px;
+  position:relative;
+  overflow:hidden;
+}
+.classroom-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px;}
+.classroom-title{font-size:13px;font-weight:700;color:#78350f;display:flex;align-items:center;gap:6px;}
+.classroom-count{font-size:11.5px;color:#92400e;background:rgba(254,243,199,.8);padding:3px 10px;border-radius:10px;font-weight:700;border:1px solid rgba(146,64,14,.2);}
+
+/* Floor — ไม้ลาย */
+.classroom-floor{
+  position:relative;
+  height:90px;
+  background:linear-gradient(180deg,transparent 0%,transparent 55%,#92400e 55%,#78350f 70%,#451a03 100%);
+  border-radius:10px;
+  overflow:visible;
+}
+.classroom-floor::before{
+  content:'';position:absolute;left:0;right:0;top:55%;height:2px;background:rgba(0,0,0,.2);
+}
+
+/* Avatar row */
+.classroom-avatars{
+  position:absolute;
+  bottom:5px;
+  left:0;right:0;
+  display:flex;
+  justify-content:center;
+  align-items:flex-end;
+  gap:4px;
+  padding:0 8px;
+  flex-wrap:nowrap;
+  overflow-x:auto;
+  scrollbar-width:none;
+  -ms-overflow-style:none;
+}
+.classroom-avatars::-webkit-scrollbar{display:none;}
+
+.classroom-person{
+  position:relative;
+  width:46px;
+  height:70px;
+  flex-shrink:0;
+  cursor:pointer;
+  transition:transform .25s cubic-bezier(.2,.8,.2,1);
+  animation:personEnter .5s cubic-bezier(.2,.8,.2,1);
+}
+.classroom-person:hover{transform:translateY(-6px);}
+.classroom-person.is-you{animation:personEnter .5s cubic-bezier(.2,.8,.2,1),personYou 2.5s ease-in-out infinite;}
+@keyframes personYou{0%,100%{filter:drop-shadow(0 0 0 rgba(201,168,76,0));}50%{filter:drop-shadow(0 0 10px rgba(201,168,76,.7));}}
+@keyframes personEnter{
+  0%{opacity:0;transform:translateY(20px) scale(.8);}
+  60%{transform:translateY(-3px) scale(1.05);}
+  100%{opacity:1;transform:translateY(0) scale(1);}
+}
+.classroom-person svg{width:100%;height:100%;display:block;}
+
+/* tooltip name */
+.classroom-person::after{
+  content:attr(data-name);
+  position:absolute;
+  bottom:100%;left:50%;transform:translateX(-50%);
+  background:var(--navy);
+  color:var(--gold-light);
+  padding:4px 10px;
+  border-radius:8px;
+  font-size:11px;
+  font-weight:700;
+  white-space:nowrap;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .2s ease;
+  margin-bottom:6px;
+  box-shadow:0 4px 12px rgba(0,0,0,.2);
+  z-index:10;
+}
+.classroom-person:hover::after{opacity:1;}
+
+/* Empty state */
+.classroom-empty{text-align:center;padding:20px 10px;color:#92400e;font-size:13px;}
+.classroom-empty-icon{font-size:36px;opacity:.4;margin-bottom:6px;}
+
+/* Reactions bar */
+.classroom-reactions{
+  margin-top:12px;
+  display:flex;
+  gap:6px;
+  justify-content:center;
+  flex-wrap:wrap;
+  position:relative;
+  z-index:2;
+}
+.reaction-btn{
+  display:inline-flex;align-items:center;gap:4px;
+  background:white;
+  border:1.5px solid #fde68a;
+  border-radius:18px;
+  padding:5px 12px;
+  font-family:'Sarabun',sans-serif;
+  font-size:13px;font-weight:600;
+  color:#78350f;
+  cursor:pointer;
+  transition:all .2s ease;
+  user-select:none;
+}
+.reaction-btn:hover{transform:translateY(-2px) scale(1.05);background:#fef3c7;border-color:#fbbf24;}
+.reaction-btn:active{transform:translateY(0) scale(.95);}
+.reaction-emoji{font-size:16px;}
+.reaction-count{font-size:11px;color:#92400e;font-weight:700;}
+
+/* Floating reaction animation */
+.reaction-float{
+  position:fixed;
+  font-size:24px;
+  pointer-events:none;
+  z-index:9999;
+  animation:reactionFloat 2s cubic-bezier(.2,.8,.2,1) forwards;
+}
+@keyframes reactionFloat{
+  0%{opacity:0;transform:translateY(0) scale(.5);}
+  10%{opacity:1;transform:translateY(-20px) scale(1.2);}
+  100%{opacity:0;transform:translateY(-150px) scale(.8) rotate(20deg);}
+}
+
+/* Background sparkles in classroom */
+.classroom-sparkle{
+  position:absolute;
+  font-size:14px;
+  opacity:.3;
+  pointer-events:none;
+  animation:sparkleFloat 6s ease-in-out infinite;
+}
+@keyframes sparkleFloat{
+  0%,100%{transform:translateY(0) rotate(0);opacity:.2;}
+  50%{transform:translateY(-12px) rotate(15deg);opacity:.5;}
+}
+
+/* Mobile */
+@media (max-width:600px){
+  .classroom-floor{height:80px;}
+  .classroom-person{width:38px;height:58px;}
+}
+
+
 </style>
 </head>
 <body>
@@ -1509,7 +1774,7 @@ body{transition:background .8s ease;}
 <!-- CINEMATIC LOADER -->
 <div class="cinematic-loader" id="cinematicLoader">
   <div class="cinematic-logo">📚</div>
-  <div class="cinematic-title">NKP1 Learning Hub</div>
+  <div class="cinematic-title">NKP1 Learning Hub <span style="display:inline-block;background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#451a03;font-size:10px;font-weight:800;padding:2px 8px;border-radius:6px;margin-left:8px;vertical-align:middle;letter-spacing:1.5px;">BETA</span></div>
   <div class="cinematic-subtitle">ศูนย์อบรมออนไลน์ สพป.นครพนม เขต ๑</div>
   <div class="cinematic-bar"><div class="cinematic-bar-fill"></div></div>
 </div>
@@ -1538,7 +1803,14 @@ body{transition:background .8s ease;}
 <div class="page active" id="pageLanding">
 
   <!-- HERO STATS BANNER -->
-  <div class="hero-stats-banner">
+  
+    <!-- BETA NOTICE -->
+    <div class="beta-notice">
+      <span class="beta-icon">🧪</span>
+      <span><strong>ระบบอยู่ระหว่างการทดสอบ (Beta)</strong> — ยังไม่ใช่เวอร์ชันทางการ อาจมีการปรับปรุงเพิ่มเติม</span>
+    </div>
+
+    <div class="hero-stats-banner">
     <div class="hero-stats-card">
         <canvas class="webgl-canvas" id="heroCanvas"></canvas>
         <div class="hero-particles">
@@ -1554,8 +1826,9 @@ body{transition:background .8s ease;}
           <div class="hero-particle"></div>
         </div>
       <div>
-        <div class="hero-stats-title">✨ ยินดีต้อนรับสู่ NKP1 Learning Hub</div>
-        <div class="hero-stats-subtitle">ศูนย์อบรมออนไลน์ครบวงจร — เรียนได้ทุกที่ ออกเกียรติบัตรอัตโนมัติ<br>เลือกหลักสูตรด้านล่างเพื่อเริ่มเรียน</div>
+        <div class="hero-stats-title">NKP1 Learning Hub <span class="beta-badge">BETA</span></div>
+        <div class="hero-stats-subtitle">ศูนย์อบรมออนไลน์ สำหรับครูและบุคลากรในสังกัด<br>เลือกหลักสูตรด้านล่างเพื่อเริ่มเรียน</div>
+        <div id="globalClassroomWidget" style="margin-top:12px;"></div>
       </div>
       <div class="hero-stats-nums">
         <div class="hero-stat">
@@ -1585,7 +1858,7 @@ body{transition:background .8s ease;}
           <div class="hub-title">NKP1 Learning Hub</div>
           <div class="hub-title-en">สำนักงานเขตพื้นที่การศึกษาประถมศึกษานครพนม เขต 1</div>
           <div class="hub-divider"></div>
-          <div class="hub-sub">ศูนย์รวมหลักสูตรอบรมออนไลน์สำหรับครูและบุคลากรทางการศึกษา เรียนรู้ได้ทุกที่ทุกเวลา พร้อมรับเกียรติบัตรหลังจบหลักสูตร</div>
+          <div class="hub-sub">ศูนย์อบรมออนไลน์สำหรับครูและบุคลากรทางการศึกษาในสังกัด</div>
           <div class="hub-stats">
             <div class="hub-stat">
               <div class="hub-stat-num" id="statCourses" data-count="2" data-target="0">0</div>
@@ -1611,19 +1884,42 @@ body{transition:background .8s ease;}
       <!-- MARQUEE strip -->
       <div class="marquee" id="topMarquee">
         <div class="marquee-track">
-          <span class="marquee-item">✨ NKP1 Learning Hub</span>
+          <span class="marquee-item">NKP1 Learning Hub</span>
           <span class="marquee-item"><span class="dot">●</span> ศูนย์อบรมออนไลน์ สพป.นครพนม เขต ๑</span>
-          <span class="marquee-item"><span class="dot">●</span> เรียนรู้ตลอด ๒๔ ชั่วโมง</span>
-          <span class="marquee-item"><span class="dot">●</span> 🏆 รับเกียรติบัตรอิเล็กทรอนิกส์</span>
-          <span class="marquee-item"><span class="dot">●</span> 💎 หลักสูตรคุณภาพ</span>
-          <span class="marquee-item">✨ NKP1 Learning Hub</span>
+          <span class="marquee-item"><span class="dot">●</span> เปิดให้บริการตลอด ๒๔ ชั่วโมง</span>
+          <span class="marquee-item"><span class="dot">●</span> เกียรติบัตรอิเล็กทรอนิกส์</span>
+          <span class="marquee-item"><span class="dot">●</span> หลักสูตรประจำปี พ.ศ. ๒๕๖๙</span>
+          <span class="marquee-item">NKP1 Learning Hub</span>
           <span class="marquee-item"><span class="dot">●</span> ศูนย์อบรมออนไลน์ สพป.นครพนม เขต ๑</span>
-          <span class="marquee-item"><span class="dot">●</span> เรียนรู้ตลอด ๒๔ ชั่วโมง</span>
-          <span class="marquee-item"><span class="dot">●</span> 🏆 รับเกียรติบัตรอิเล็กทรอนิกส์</span>
-          <span class="marquee-item"><span class="dot">●</span> 💎 หลักสูตรคุณภาพ</span>
+          <span class="marquee-item"><span class="dot">●</span> เปิดให้บริการตลอด ๒๔ ชั่วโมง</span>
+          <span class="marquee-item"><span class="dot">●</span> เกียรติบัตรอิเล็กทรอนิกส์</span>
+          <span class="marquee-item"><span class="dot">●</span> หลักสูตรประจำปี พ.ศ. ๒๕๖๙</span>
         </div>
       </div>
       
+      
+    <!-- LEADERBOARD SECTION -->
+    <div class="leaderboard-section">
+      <div class="leaderboard-card">
+        <div class="leaderboard-header">
+          <div class="leaderboard-title">🏆 อันดับผู้เข้าอบรม</div>
+          <button onclick="loadLeaderboard()" style="padding:6px 12px;background:var(--cream);border:1px solid var(--border);border-radius:8px;font-size:11.5px;cursor:pointer;color:var(--navy);">🔄 รีเฟรช</button>
+        </div>
+        <div class="leaderboard-tabs" id="leaderboardTabs">
+          <button class="lb-tab active" data-lb="first" onclick="setLeaderboardTab('first')">🥇 First Finishers</button>
+          <button class="lb-tab" data-lb="courses" onclick="setLeaderboardTab('courses')">📚 จบหลักสูตร</button>
+          <button class="lb-tab" data-lb="score" onclick="setLeaderboardTab('score')">💯 คะแนนสูงสุด</button>
+          <button class="lb-tab" data-lb="comments" onclick="setLeaderboardTab('comments')">💬 นักสื่อสาร</button>
+          <button class="lb-tab" data-lb="school" onclick="setLeaderboardTab('school')">🏫 โรงเรียนยอดนิยม</button>
+          <button class="lb-tab" data-lb="recent" onclick="setLeaderboardTab('recent')">🆕 สมาชิกใหม่</button>
+        </div>
+        <div class="lb-list" id="leaderboardList">
+          <div class="lb-loading">⏳ กำลังโหลด...</div>
+        </div>
+        <div class="lb-footnote">อัปเดตอัตโนมัติเมื่อรีเฟรช · แสดง 10 อันดับแรก</div>
+      </div>
+    </div>
+
       <div class="cc-grid" id="landingCardGrid">
         <!-- การ์ดถูก render ด้วย JS ใน renderCourseCards() -->
       </div>
@@ -1670,7 +1966,7 @@ body{transition:background .8s ease;}
       <div class="fab-item-icon chat">💬</div>
       <div class="fab-item-text">
         <div class="fab-item-label">แชทสดกับแอดมิน</div>
-        <div class="fab-item-value">พิมพ์ถามได้เลย — ตอบไว</div>
+        <div class="fab-item-value">สอบถามผ่านระบบแชท</div>
       </div>
     </a>
     <a href="https://line.me/ti/p/~farmracha15" target="_blank" class="fab-item">
@@ -1882,6 +2178,8 @@ body{transition:background .8s ease;}
     </div>
     <div class="info-grid" id="infoGrid"></div>
   </div>
+
+  <div id="videoClassroomWidget"></div>
 
   <!-- VIDEO COMMENTS SECTION -->
   <div class="comments-section" id="commentsSection">
@@ -3125,7 +3423,7 @@ onAuthStateChanged(auth, async(user) => {
       const _hu = document.getElementById('headerUser');
       const _initial = (userData.firstName||'?').charAt(0).toUpperCase();
       _hu.innerHTML = `
-        <div class="header-user-clickable" onclick="openProfile('${currentUser.uid}')" title="ดูโปรไฟล์ของฉัน">
+        <div class="header-user-clickable" onclick="openProfilePage('${currentUser.uid}')" title="ดูโปรไฟล์ของฉัน">
           <div class="header-user-avatar" id="headerUserAvatar">${userData.photoBase64 ? `<img src="${userData.photoBase64}" alt="" />` : _initial}</div>
           <div class="header-user-text">
             สวัสดี<strong>${userData.prefix||''}${userData.firstName||''} ${userData.lastName||''}</strong>
@@ -3313,7 +3611,7 @@ window.doAdminLogin = () => {
   document.getElementById('headerRight').style.display='flex';
   document.getElementById('headerProgress').style.display='none';
   document.getElementById('headerUser').innerHTML = `
-    <div class="header-user-clickable" onclick="openProfile('admin')" title="ดูโปรไฟล์ Admin">
+    <div class="header-user-clickable" onclick="openProfilePage('admin')" title="ดูโปรไฟล์ Admin">
       <div class="header-user-avatar is-admin" id="headerUserAvatar">👑</div>
       <div class="header-user-text"><strong>Admin</strong><small>สพป.นครพนม เขต ๑</small></div>
     </div>
@@ -3336,6 +3634,16 @@ async function loadVideo(idx) {
   setTimeout(() => { 
     if(typeof renderCommentsForCurrentVideo === 'function') renderCommentsForCurrentVideo(); 
     if(typeof renderInfographics === 'function') renderInfographics();
+    // Live presence — แสดง + heartbeat
+    const vKey = getCurrentVideoCommentKey?.();
+    if(vKey) {
+      window.__currentVideoKey = vKey;
+      if(currentUser) startPresenceHeartbeat(vKey);
+      loadReactions('rx_' + vKey); renderClassroom('videoClassroomWidget', vKey);
+      // refresh every 45s
+      if(window.__presenceRefresh) clearInterval(window.__presenceRefresh);
+      window.__presenceRefresh = setInterval(() => renderClassroom('videoClassroomWidget', vKey), 45000);
+    }
   }, 100);
   // อัปเดต breadcrumb แสดงชื่อหลักสูตรปัจจุบัน
   const bc = document.getElementById('breadcrumbCourseName');
@@ -4220,7 +4528,7 @@ function renderChatBody() {
     body.innerHTML = `
       <div class="chat-empty">
         <div class="chat-empty-icon">💬</div>
-        <div>สวัสดีค่ะ! มีคำถามเกี่ยวกับ<br>การอบรมไหมคะ?</div>
+        <div>สอบถามเจ้าหน้าที่<br>ผ่านระบบแชทได้ที่นี่</div>
         <div style="margin-top:8px;font-size:11.5px;">พิมพ์คำถามด้านล่างได้เลย<br>แอดมินจะตอบกลับโดยเร็ว</div>
       </div>
     `;
@@ -4869,11 +5177,11 @@ function renderCommentItem(c, isReply, replies) {
   
   return `
     <div class="comment-item ${mine ? 'mine' : ''} ${isReply ? 'reply' : ''}">
-      <div class="comment-avatar" data-uid="${c.userId}" onclick="openProfile('${c.userId}')" title="ดูโปรไฟล์">${initial}</div>
+      <div class="comment-avatar" data-uid="${c.userId}" onclick="openProfilePage('${c.userId}')" title="ดูโปรไฟล์">${initial}</div>
       <div class="comment-content">
         <div class="comment-meta">
           <div>
-            <span class="comment-author"><span class="comment-author-link" onclick="openProfile('${c.userId}')">${escapeHtml(c.userName || '?')}</span>${mine ? '<span class="you-badge">คุณ</span>' : ''}${c.isAdmin ? '<span class="comment-admin-badge">ADMIN</span>' : ''}</span>
+            <span class="comment-author"><span class="comment-author-link" onclick="openProfilePage('${c.userId}')">${escapeHtml(c.userName || '?')}</span>${mine ? '<span class="you-badge">คุณ</span>' : ''}${c.isAdmin ? '<span class="comment-admin-badge">ADMIN</span>' : ''}</span>
             <div class="comment-school">${escapeHtml(c.userSchool || '')}</div>
           </div>
           <span class="comment-time">${t}</span>
@@ -5108,6 +5416,8 @@ window.openProfile = async (userId) => {
   body.innerHTML = '<div class="profile-loading">⏳ กำลังโหลดข้อมูล...</div>';
   modal.classList.add('show');
   document.body.style.overflow = 'hidden';
+  // scroll modal content to top
+  setTimeout(() => { body.scrollTop = 0; }, 50);
   
   try {
     const userDoc = await getDoc(doc(db, 'users', userId));
@@ -6296,12 +6606,811 @@ window.smoothCountUp = (el, target, duration = 1500) => {
 })();
 
 
+
+
+// ══════════════════════════════════════════════════
+// FULL PAGE PROFILE (ไม่ใช่ modal — เด้งหน้าใหม่)
+// ══════════════════════════════════════════════════
+window.openProfilePage = async (userId) => {
+  if(!userId) return;
+  
+  const heroEl = document.getElementById('pageProfileHeroContent');
+  const innerEl = document.getElementById('pageProfileContentInner');
+  if(!heroEl || !innerEl) {
+    // fallback ไป modal
+    if(typeof openProfile === 'function') openProfile(userId);
+    return;
+  }
+  
+  // แสดง page + scroll top
+  showPage('pageProfile');
+  window.scrollTo({top:0, behavior:'instant'});
+  
+  heroEl.innerHTML = '<div style="color:white;text-align:center;padding:40px;">⏳ กำลังโหลด...</div>';
+  innerEl.innerHTML = '';
+  
+  try {
+    const userDoc = await getDoc(doc(db, 'users', userId));
+    let u;
+    if(!userDoc.exists()) {
+      if(userId === 'admin') {
+        u = { prefix:'', firstName:'Admin', lastName:'', position:'ผู้ดูแลระบบ', school:'สพป.นครพนม เขต ๑', registeredAt: new Date().toISOString(), isAdmin:true };
+        try { await setDoc(doc(db,'users','admin'), u); } catch(e) {}
+      } else {
+        heroEl.innerHTML = '<div style="color:white;text-align:center;padding:40px;">❌ ไม่พบข้อมูลผู้ใช้</div>';
+        return;
+      }
+    } else {
+      u = userDoc.data();
+    }
+    
+    // ดึง certs, enrolled (same logic as openProfile)
+    const certs = [];
+    if(u.certNumber) certs.push({ courseId:'pp3', name:COURSES.pp3?.shortName||'ปพ.๓', certNum:u.certNumber, date:u.certIssuedDate });
+    if(u.courses) {
+      Object.entries(u.courses).forEach(([cid, c]) => {
+        if(c && c.certNumber && !(cid==='pp3' && u.certNumber)) {
+          certs.push({ courseId:cid, name:COURSES[cid]?.shortName||cid, certNum:c.certNumber, date:c.certIssuedDate });
+        }
+      });
+    }
+    const enrolled = [];
+    Object.keys(COURSES).forEach(cid => {
+      const c = u.courses?.[cid];
+      const legacyDone = (cid==='pp3') && (u.quizPassed||[]).length === COURSES.pp3.videos.length;
+      const nestedDone = c && (c.quizPassed||[]).length === (COURSES[cid].videos?.length || 0);
+      const hasAct = c || (cid==='pp3' && (u.watchedSeconds > 0 || (u.quizPassed||[]).length > 0));
+      if(hasAct) enrolled.push({courseId:cid, name:COURSES[cid].shortName||COURSES[cid].name, icon:COURSES[cid].icon||'📘', done:legacyDone||nestedDone});
+    });
+    
+    const initial = (u.firstName||'?').charAt(0).toUpperCase();
+    const isAdminProf = u.isAdmin || userId === 'admin';
+    const joinedDate = u.registeredAt ? new Date(u.registeredAt).toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'}) : '-';
+    const fullName = `${u.prefix||''}${u.firstName||''} ${u.lastName||''}`.trim();
+    const isOwn = (currentUser && currentUser.uid === userId) || (isAdmin && userId === 'admin');
+    
+    // HERO
+    heroEl.innerHTML = `
+      <div class="page-profile-avatar ${isAdminProf ? 'is-admin' : ''}">${u.photoBase64 ? `<img src="${u.photoBase64}" alt="" />` : (isAdminProf ? '👑' : initial)}</div>
+      <div class="page-profile-name">${escapeHtml(fullName || (isAdminProf ? 'Admin' : '-'))}</div>
+      <div class="page-profile-position">${escapeHtml(u.position || '—')}</div>
+      <div class="page-profile-school">🏫 ${escapeHtml(u.school || '—')}</div>
+      <div class="page-profile-joined">📅 สมาชิกตั้งแต่ ${joinedDate}</div>
+      ${isOwn ? `
+        <div class="page-profile-photo-row">
+          <button class="profile-edit-btn" onclick="uploadProfilePhoto()">📷 ${u.photoBase64 ? 'เปลี่ยนรูป' : 'เพิ่มรูปโปรไฟล์'}</button>
+          ${u.photoBase64 ? `<button class="profile-remove-btn" onclick="removeProfilePhoto()">🗑️ ลบรูป</button>` : ''}
+        </div>
+      ` : ''}
+      ${u.pendingEdit ? `<div style="text-align:center;margin-top:10px;"><span class="pending-edit-badge">⏳ คำขอแก้ชื่อ-สกุลรอ Admin อนุมัติ</span></div>` : ''}
+    `;
+    
+    // CONTENT
+    innerEl.innerHTML = `
+      <div class="profile-stats">
+        <div class="profile-stat"><div class="profile-stat-num">${enrolled.length}</div><div class="profile-stat-label">หลักสูตร</div></div>
+        <div class="profile-stat"><div class="profile-stat-num">${certs.length}</div><div class="profile-stat-label">เกียรติบัตร</div></div>
+        <div class="profile-stat"><div class="profile-stat-num">${enrolled.filter(e=>e.done).length}</div><div class="profile-stat-label">จบแล้ว</div></div>
+      </div>
+      
+      ${isOwn ? `
+        <div class="profile-edit-row">
+          <button class="profile-action-btn" onclick="openEditProfileFormFull()">✏️ แก้ไขข้อมูล</button>
+          ${certs.length > 0 ? `<button class="profile-action-btn primary" onclick="showPage('pageDashboard');">📊 แดชบอร์ดเกียรติบัตร</button>` : ''}
+        </div>
+        <div id="editProfileFormContainerFull"></div>
+      ` : ''}
+      
+      ${userId !== 'admin' ? renderAchievements(u, certs, enrolled) : ''}
+      
+      ${(isOwn && userId !== 'admin') ? renderMyDashboard(u, enrolled, certs) : ''}
+      
+      ${certs.length > 0 ? `
+        <div class="profile-section">
+          <div class="profile-section-title">🏆 เกียรติบัตร</div>
+          ${certs.map(c => `
+            <div class="profile-cert-item">
+              <div class="profile-cert-name">${COURSES[c.courseId]?.icon || '📘'} ${escapeHtml(c.name)}</div>
+              <div class="profile-cert-num">${escapeHtml(c.certNum)}</div>
+            </div>
+          `).join('')}
+        </div>
+      ` : ''}
+      
+      <div class="profile-section">
+        <div class="profile-section-title">📚 หลักสูตรที่อบรม</div>
+        ${enrolled.length > 0 ? enrolled.map(e => `
+          <div class="profile-course-item">
+            <div class="profile-course-name">${e.icon} ${escapeHtml(e.name)}</div>
+            <div class="profile-course-status ${e.done ? 'done' : 'in-progress'}">${e.done ? '✓ จบแล้ว' : '⏳ กำลังเรียน'}</div>
+          </div>
+        `).join('') : '<div class="profile-empty-line">ยังไม่มีกิจกรรมในหลักสูตรใด</div>'}
+      </div>
+      
+      ${isAdmin ? `
+        <div class="profile-admin-info">
+          <div class="profile-admin-info-title">👑 ข้อมูลสำหรับ Admin เท่านั้น</div>
+          <div class="profile-admin-row"><span>Username:</span><span>${escapeHtml(u.username || '-')}</span></div>
+          <div class="profile-admin-row"><span>Leave count:</span><span>${u.leaveCount || 0}</span></div>
+          <div class="profile-admin-row"><span>User ID:</span><span style="font-size:9px;">${escapeHtml(userId)}</span></div>
+        </div>
+      ` : ''}
+      
+      <div style="text-align:center;margin-top:30px;padding-top:20px;border-top:1px solid var(--border);">
+        <button class="profile-action-btn" onclick="history.back()">← กลับ</button>
+      </div>
+    `;
+  } catch(e) {
+    console.warn('openProfilePage err:', e);
+    heroEl.innerHTML = '<div style="color:white;text-align:center;padding:40px;">❌ โหลดข้อมูลไม่สำเร็จ</div>';
+  }
+};
+
+// Edit form full (same logic) — เพื่อให้ pageProfile ก็ edit ได้
+window.openEditProfileFormFull = () => {
+  if(!currentUser || !userData) return;
+  const container = document.getElementById('editProfileFormContainerFull');
+  if(!container) return;
+  if(container.querySelector('.profile-edit-form')) { container.innerHTML = ''; return; }
+  
+  container.innerHTML = `
+    <div class="profile-edit-form">
+      <div class="profile-edit-title">✏️ แก้ไขข้อมูลส่วนตัว</div>
+      <div class="profile-edit-note">
+        💡 <strong>หมายเหตุ:</strong> การแก้ไข <strong>ชื่อ–นามสกุล</strong> ต้องรอ Admin อนุมัติ ส่วน <strong>ตำแหน่ง</strong> และ <strong>โรงเรียน</strong> แก้ได้ทันที
+      </div>
+      <div class="form-group"><label>คำนำหน้า</label><input type="text" id="editProfilePrefix" value="${escapeHtml(userData.prefix||'')}"></div>
+      <div class="form-group"><label>ชื่อ <span style="color:#dc2626;">* (ต้องอนุมัติ)</span></label><input type="text" id="editProfileFirstName" value="${escapeHtml(userData.firstName||'')}"></div>
+      <div class="form-group"><label>นามสกุล <span style="color:#dc2626;">* (ต้องอนุมัติ)</span></label><input type="text" id="editProfileLastName" value="${escapeHtml(userData.lastName||'')}"></div>
+      <div class="form-group"><label>ตำแหน่ง</label><input type="text" id="editProfilePosition" value="${escapeHtml(userData.position||'')}"></div>
+      <div class="form-group"><label>โรงเรียน / หน่วยงาน</label><input type="text" id="editProfileSchool" value="${escapeHtml(userData.school||'')}"></div>
+      <div class="profile-edit-actions">
+        <button class="profile-edit-cancel" onclick="document.getElementById('editProfileFormContainerFull').innerHTML='';">ยกเลิก</button>
+        <button class="profile-edit-save" id="editProfileSaveBtn" onclick="saveProfileEditsFull()">💾 บันทึก</button>
+      </div>
+    </div>
+  `;
+};
+
+window.saveProfileEditsFull = async () => {
+  // ใช้ logic เดียวกับ saveProfileEdits แล้ว refresh เป็น openProfilePage
+  if(!currentUser || !userData) return;
+  const btn = document.getElementById('editProfileSaveBtn');
+  if(!btn) return;
+  const prefix = document.getElementById('editProfilePrefix').value.trim();
+  const fn = document.getElementById('editProfileFirstName').value.trim();
+  const ln = document.getElementById('editProfileLastName').value.trim();
+  const pos = document.getElementById('editProfilePosition').value.trim();
+  const sch = document.getElementById('editProfileSchool').value.trim();
+  if(!fn || !ln) { showToast('⚠️ กรอกชื่อ-นามสกุลให้ครบ'); return; }
+  btn.disabled = true; btn.textContent = 'กำลังบันทึก...';
+  try {
+    const updates = {};
+    let nameChange = false, otherChange = false;
+    if(prefix !== userData.prefix || fn !== userData.firstName || ln !== userData.lastName) {
+      nameChange = true;
+      updates.pendingEdit = { prefix, firstName:fn, lastName:ln, oldName:`${userData.prefix||''}${userData.firstName||''} ${userData.lastName||''}`.trim(), requestedAt:new Date().toISOString(), reason:'แก้ไขจากหน้าโปรไฟล์' };
+    }
+    if(pos !== userData.position) { updates.position = pos; otherChange = true; }
+    if(sch !== userData.school) { updates.school = sch; otherChange = true; }
+    if(!nameChange && !otherChange) { showToast('ℹ️ ไม่มีการเปลี่ยนแปลง'); btn.disabled=false; btn.textContent='💾 บันทึก'; return; }
+    await updateDoc(doc(db,'users',currentUser.uid), updates);
+    if(otherChange) { userData.position = pos; userData.school = sch; }
+    if(nameChange) userData.pendingEdit = updates.pendingEdit;
+    showToast(nameChange ? '✅ บันทึก • คำขอแก้ชื่อรอ Admin' : '✅ บันทึกเรียบร้อย');
+    openProfilePage(currentUser.uid);
+  } catch(e) {
+    showToast('❌ บันทึกไม่สำเร็จ');
+    btn.disabled = false; btn.textContent = '💾 บันทึก';
+  }
+};
+
+
+
+
+// ══════════════════════════════════════════════════
+// LEADERBOARD — 6 categories
+// ══════════════════════════════════════════════════
+let leaderboardCache = { users: null, comments: null, fetchedAt: 0 };
+let currentLbTab = 'first';
+
+async function fetchLeaderboardData(force = false) {
+  const TTL = 60000; // 1 min cache
+  if(!force && leaderboardCache.users && (Date.now() - leaderboardCache.fetchedAt < TTL)) {
+    return leaderboardCache;
+  }
+  try {
+    const usersSnap = await getDocs(collection(db, 'users'));
+    const users = [];
+    usersSnap.forEach(d => users.push({ id: d.id, ...d.data() }));
+    
+    // comments (collectionGroup)
+    let comments = [];
+    try {
+      const cSnap = await getDocs(collectionGroup(db, 'comments'));
+      cSnap.forEach(d => comments.push({ id: d.id, ...d.data() }));
+    } catch(e) {
+      console.warn('comments fetch err:', e);
+    }
+    
+    leaderboardCache = { users, comments, fetchedAt: Date.now() };
+    return leaderboardCache;
+  } catch(e) {
+    console.warn('fetchLeaderboard err:', e);
+    return { users: [], comments: [], fetchedAt: Date.now() };
+  }
+}
+
+window.loadLeaderboard = async () => {
+  const list = document.getElementById('leaderboardList');
+  if(!list) return;
+  list.innerHTML = '<div class="lb-loading">⏳ กำลังโหลด...</div>';
+  await fetchLeaderboardData(true);
+  renderLeaderboard();
+};
+
+window.setLeaderboardTab = (tab) => {
+  currentLbTab = tab;
+  document.querySelectorAll('.lb-tab').forEach(b => b.classList.toggle('active', b.dataset.lb === tab));
+  renderLeaderboard();
+};
+
+function renderLeaderboard() {
+  const list = document.getElementById('leaderboardList');
+  if(!list) return;
+  const { users, comments } = leaderboardCache;
+  if(!users) { list.innerHTML = '<div class="lb-loading">⏳ กำลังโหลด...</div>'; return; }
+  
+  let items = [];
+  let unit = '';
+  let metaFn = null;
+  
+  if(currentLbTab === 'first') {
+    // First Finishers — เลข cert น้อยสุด (ทุก course รวม)
+    items = users.filter(u => u.certNumber).sort((a,b) => {
+      const aN = parseInt((a.certNumber||'').split('/')[0]) || 9999;
+      const bN = parseInt((b.certNumber||'').split('/')[0]) || 9999;
+      return aN - bN;
+    });
+    unit = '#';
+    metaFn = u => `📋 เกียรติบัตร ${u.certNumber || '-'}`;
+  } else if(currentLbTab === 'courses') {
+    // นับ cert ในทุกหลักสูตร
+    items = users.map(u => {
+      let count = 0;
+      if(u.certNumber) count++;
+      if(u.courses) Object.entries(u.courses).forEach(([cid, c]) => {
+        if(c.certNumber && !(cid === 'pp3' && u.certNumber)) count++;
+      });
+      return { ...u, _val: count };
+    }).filter(u => u._val > 0).sort((a,b) => b._val - a._val);
+    unit = 'หลักสูตร';
+    metaFn = u => `🎓 จบ ${u._val} หลักสูตร`;
+  } else if(currentLbTab === 'score') {
+    // average quiz score
+    items = users.map(u => {
+      const scores = [];
+      Object.values(u.quizScores || {}).forEach(s => { if(typeof s === 'number') scores.push(s); });
+      Object.values(u.courses || {}).forEach(c => {
+        Object.values(c.quizScores || {}).forEach(s => { if(typeof s === 'number') scores.push(s); });
+      });
+      if(scores.length === 0) return null;
+      const avg = scores.reduce((a,b)=>a+b, 0) / scores.length;
+      return { ...u, _val: avg, _count: scores.length };
+    }).filter(Boolean).filter(u => u._count >= 1).sort((a,b) => b._val - a._val);
+    unit = '%';
+    metaFn = u => `📊 ${u._count} ครั้ง`;
+  } else if(currentLbTab === 'comments') {
+    // นับ comments ต่อ user
+    const countByUid = {};
+    comments.forEach(c => {
+      if(c.isAdmin) return; // skip admin
+      countByUid[c.userId] = (countByUid[c.userId] || 0) + 1;
+    });
+    items = users.map(u => ({ ...u, _val: countByUid[u.id] || 0 })).filter(u => u._val > 0).sort((a,b) => b._val - a._val);
+    unit = 'ครั้ง';
+    metaFn = u => `💬 โพสต์/ตอบ ${u._val} ครั้ง`;
+  } else if(currentLbTab === 'school') {
+    // โรงเรียนยอดนิยม — นับ user ต่อโรงเรียน
+    const bySchool = {};
+    users.forEach(u => {
+      const s = (u.school || '').trim() || 'ไม่ระบุ';
+      if(!bySchool[s]) bySchool[s] = { name: s, count: 0, certs: 0 };
+      bySchool[s].count++;
+      if(u.certNumber) bySchool[s].certs++;
+      if(u.courses) Object.values(u.courses).forEach(c => { if(c.certNumber) bySchool[s].certs++; });
+    });
+    items = Object.values(bySchool).filter(s => s.name !== 'ไม่ระบุ').sort((a,b) => b.certs - a.certs || b.count - a.count);
+    unit = 'เกียรติบัตร';
+    metaFn = s => `👥 ${s.count} ผู้เรียน`;
+    // render school differently
+    list.innerHTML = items.slice(0, 10).map((s, i) => {
+      const rank = i + 1;
+      const rankCls = rank === 1 ? 'rank-1' : rank === 2 ? 'rank-2' : rank === 3 ? 'rank-3' : 'rank-other';
+      const initial = s.name.charAt(0);
+      return `
+        <div class="lb-item">
+          <div class="lb-rank ${rankCls}">${rank}</div>
+          <div class="lb-avatar" style="background:linear-gradient(135deg,#1a2744,#2d3f73);color:white;">${initial}</div>
+          <div class="lb-info">
+            <div class="lb-name">${escapeHtml(s.name)}</div>
+            <div class="lb-meta">${metaFn(s)}</div>
+          </div>
+          <div class="lb-value">${s.certs}<small>${unit}</small></div>
+        </div>
+      `;
+    }).join('') || '<div class="lb-empty">ยังไม่มีข้อมูล</div>';
+    return;
+  } else if(currentLbTab === 'recent') {
+    // สมาชิกใหม่ล่าสุด
+    items = users.filter(u => u.registeredAt).sort((a,b) => {
+      const aT = new Date(a.registeredAt).getTime();
+      const bT = new Date(b.registeredAt).getTime();
+      return bT - aT;
+    });
+    unit = '';
+    metaFn = u => {
+      const d = new Date(u.registeredAt);
+      const dStr = d.toLocaleDateString('th-TH', { day:'numeric', month:'short' });
+      return `📅 สมัคร ${dStr}`;
+    };
+  }
+  
+  if(items.length === 0) {
+    list.innerHTML = '<div class="lb-empty">ยังไม่มีข้อมูล — เป็นคนแรกได้!</div>';
+    return;
+  }
+  
+  list.innerHTML = items.slice(0, 10).map((u, i) => {
+    const rank = i + 1;
+    const rankCls = rank === 1 ? 'rank-1' : rank === 2 ? 'rank-2' : rank === 3 ? 'rank-3' : 'rank-other';
+    const initial = (u.firstName || '?').charAt(0).toUpperCase();
+    const isYou = currentUser && u.id === currentUser.uid;
+    const fullName = `${u.prefix||''}${u.firstName||''} ${u.lastName||''}`.trim() || '-';
+    
+    let valDisplay = '';
+    if(currentLbTab === 'first') {
+      valDisplay = `#${parseInt((u.certNumber||'').split('/')[0]) || '?'}`;
+    } else if(currentLbTab === 'recent') {
+      valDisplay = '✨';
+    } else if(currentLbTab === 'score') {
+      valDisplay = u._val.toFixed(1) + '<small>%</small>';
+    } else {
+      valDisplay = u._val + '<small>' + unit + '</small>';
+    }
+    
+    return `
+      <div class="lb-item ${isYou ? 'is-you' : ''}" onclick="openProfilePage('${u.id}')">
+        <div class="lb-rank ${rankCls}">${rank}</div>
+        <div class="lb-avatar">${u.photoBase64 ? `<img src="${u.photoBase64}" alt="" />` : initial}</div>
+        <div class="lb-info">
+          <div class="lb-name">${escapeHtml(fullName)}</div>
+          <div class="lb-meta">${metaFn(u)} · ${escapeHtml(u.school || '-')}</div>
+        </div>
+        <div class="lb-value">${valDisplay}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+// auto-load on page show
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => loadLeaderboard(), 2000);
+});
+
+// ══════════════════════════════════════════════════
+// LIVE PRESENCE — "X กำลังเรียนอยู่"
+// ══════════════════════════════════════════════════
+const PRESENCE_TTL = 90 * 1000; // 90s = "online"
+let presenceUnsubs = {};
+let presenceHeartbeat = null;
+
+// Update มี currentUser + อยู่หน้า video
+function startPresenceHeartbeat(videoKey) {
+  stopPresenceHeartbeat();
+  if(!currentUser || !videoKey) return;
+  const update = async () => {
+    try {
+      await setDoc(doc(db, 'presence', currentUser.uid), {
+        userId: currentUser.uid,
+        userName: userData ? `${userData.prefix||''}${userData.firstName||''} ${userData.lastName||''}`.trim() : '?',
+        photoBase64: userData?.photoBase64 || null,
+        videoKey: videoKey,
+        courseId: videoKey.split('_')[0],
+        lastSeen: Date.now()
+      });
+    } catch(e) { /* silent */ }
+  };
+  update();
+  presenceHeartbeat = setInterval(update, 30000); // every 30s
+}
+
+function stopPresenceHeartbeat() {
+  if(presenceHeartbeat) { clearInterval(presenceHeartbeat); presenceHeartbeat = null; }
+  if(currentUser) {
+    deleteDoc(doc(db, 'presence', currentUser.uid)).catch(()=>{});
+  }
+}
+
+// Render presence widget — counts online + avatars
+window.renderPresenceWidget = async (videoKey, containerId) => {
+  const container = document.getElementById(containerId);
+  if(!container) return;
+  
+  try {
+    const snap = await getDocs(collection(db, 'presence'));
+    const now = Date.now();
+    const online = [];
+    snap.forEach(d => {
+      const data = d.data();
+      if(data.lastSeen && (now - data.lastSeen) < PRESENCE_TTL) {
+        // filter by videoKey if provided
+        if(!videoKey || data.videoKey === videoKey) {
+          // exclude self
+          if(!currentUser || data.userId !== currentUser.uid) online.push(data);
+        }
+      }
+    });
+    
+    if(online.length === 0) {
+      container.innerHTML = '';
+      return;
+    }
+    
+    const avatars = online.slice(0, 4).map(u => {
+      const init = (u.userName||'?').charAt(0).toUpperCase();
+      return `<div class="live-avatar">${u.photoBase64 ? `<img src="${u.photoBase64}" alt="" />` : init}</div>`;
+    }).join('');
+    const moreCount = online.length - 4;
+    const moreBadge = moreCount > 0 ? `<div class="live-avatar more">+${moreCount}</div>` : '';
+    
+    container.innerHTML = `
+      <div class="video-presence">
+        <span class="live-dot"></span>
+        <div class="live-avatars">${avatars}${moreBadge}</div>
+        <span>มี <strong>${online.length}</strong> คนกำลังเรียน Part นี้อยู่</span>
+      </div>
+    `;
+  } catch(e) {
+    container.innerHTML = '';
+  }
+};
+
+// Page-level presence (landing — รวมทั้งระบบ)
+window.renderGlobalPresence = async (containerId) => {
+  const container = document.getElementById(containerId);
+  if(!container) return;
+  try {
+    const snap = await getDocs(collection(db, 'presence'));
+    const now = Date.now();
+    const online = [];
+    snap.forEach(d => {
+      const data = d.data();
+      if(data.lastSeen && (now - data.lastSeen) < PRESENCE_TTL) {
+        online.push(data);
+      }
+    });
+    if(online.length === 0) { container.innerHTML = ''; return; }
+    const avatars = online.slice(0, 5).map(u => {
+      const init = (u.userName||'?').charAt(0).toUpperCase();
+      return `<div class="live-avatar">${u.photoBase64 ? `<img src="${u.photoBase64}" alt="" />` : init}</div>`;
+    }).join('');
+    const moreCount = online.length - 5;
+    const moreBadge = moreCount > 0 ? `<div class="live-avatar more">+${moreCount}</div>` : '';
+    container.innerHTML = `
+      <div class="live-presence">
+        <span class="live-dot"></span>
+        <div class="live-avatars">${avatars}${moreBadge}</div>
+        <span><strong>${online.length}</strong> คนกำลังเรียนอยู่ในระบบ</span>
+      </div>
+    `;
+  } catch(e) {}
+};
+
+// Cleanup on page hide/unload
+window.addEventListener('beforeunload', () => stopPresenceHeartbeat());
+document.addEventListener('visibilitychange', () => {
+  if(document.hidden) stopPresenceHeartbeat();
+  else if(window.__currentVideoKey) startPresenceHeartbeat(window.__currentVideoKey);
+});
+
+// Auto-load global presence on landing
+setInterval(() => {
+  if(document.getElementById('pageLanding')?.classList.contains('active')) {
+    renderClassroom('globalClassroomWidget', null);
+  }
+}, 45000);
+setTimeout(() => {
+  loadReactions('rx_global');
+  renderClassroom('globalClassroomWidget', null);
+}, 1500);
+
+
+
+
+// ══════════════════════════════════════════════════
+// VIRTUAL CLASSROOM — SVG avatars + reactions
+// ══════════════════════════════════════════════════
+
+// Color palettes สำหรับ silhouette ครู (ชุดข้าราชการไทย)
+const TEACHER_PALETTES = [
+  { skin:'#fce4c4', hair:'#2d1b0e', outfit:'#7c8f5e', tie:'#1a2744' }, // ครูชาย ชุดกากี
+  { skin:'#fce4c4', hair:'#1a1a1a', outfit:'#1a2744', tie:'#c9a84c' }, // ครูชาย สูทน้ำเงิน
+  { skin:'#fce4c4', hair:'#4a2c1a', outfit:'#94a880', tie:'#7c2d12' }, // ครูชาย กากี-น้ำตาล
+  { skin:'#fce4c4', hair:'#2d1b0e', outfit:'#dcc89e', tie:'#1a2744' }, // ครูหญิง ครีม
+  { skin:'#fce4c4', hair:'#1a1a1a', outfit:'#a8b894', tie:'#c9a84c' }, // ครูหญิง เขียวอ่อน
+  { skin:'#fce4c4', hair:'#3d2618', outfit:'#bfa572', tie:'#451a03' }, // ครูหญิง เบจ
+  { skin:'#fce4c4', hair:'#1a1a1a', outfit:'#2d3f73', tie:'#fbbf24' }, // ครู ผ้าไหม
+  { skin:'#fce4c4', hair:'#5c3a1e', outfit:'#9ca3af', tie:'#1a2744' }, // ครู สีเทา
+];
+
+// Avatar SVG — ครูชาย (suit/กากี)
+function avatarMaleSVG(palette, isYou) {
+  const p = palette || TEACHER_PALETTES[0];
+  return `
+    <svg viewBox="0 0 60 90" xmlns="http://www.w3.org/2000/svg">
+      <!-- ขา -->
+      <rect x="22" y="65" width="7" height="18" rx="2" fill="${p.outfit}" opacity=".85"/>
+      <rect x="31" y="65" width="7" height="18" rx="2" fill="${p.outfit}" opacity=".85"/>
+      <!-- รองเท้า -->
+      <ellipse cx="25.5" cy="84" rx="5" ry="2.5" fill="#0f1a30"/>
+      <ellipse cx="34.5" cy="84" rx="5" ry="2.5" fill="#0f1a30"/>
+      <!-- ตัว (สูท/เสื้อ) -->
+      <path d="M 16 38 L 16 68 Q 16 70 18 70 L 42 70 Q 44 70 44 68 L 44 38 Z" fill="${p.outfit}"/>
+      <!-- ปกเสื้อ -->
+      <path d="M 22 38 L 30 50 L 38 38 L 38 42 L 30 52 L 22 42 Z" fill="${p.outfit}" stroke="rgba(0,0,0,.15)" stroke-width=".5"/>
+      <!-- เนคไท / ผ้าผูกคอ -->
+      <path d="M 28 42 L 30 50 L 32 42 L 31.5 56 L 30 60 L 28.5 56 Z" fill="${p.tie}"/>
+      <!-- แขน -->
+      <rect x="11" y="40" width="6" height="22" rx="3" fill="${p.outfit}"/>
+      <rect x="43" y="40" width="6" height="22" rx="3" fill="${p.outfit}"/>
+      <!-- มือ -->
+      <circle cx="14" cy="63" r="3" fill="${p.skin}"/>
+      <circle cx="46" cy="63" r="3" fill="${p.skin}"/>
+      <!-- คอ -->
+      <rect x="27" y="32" width="6" height="8" fill="${p.skin}"/>
+      <!-- หัว -->
+      <circle cx="30" cy="22" r="11" fill="${p.skin}"/>
+      <!-- ผม (ชายตัดสั้น) -->
+      <path d="M 19 19 Q 19 10 30 10 Q 41 10 41 19 L 41 22 Q 36 18 30 18 Q 24 18 19 22 Z" fill="${p.hair}"/>
+      <!-- ตา -->
+      <ellipse cx="26.5" cy="22" rx="1" ry="1.5" fill="#0f0a05"/>
+      <ellipse cx="33.5" cy="22" rx="1" ry="1.5" fill="#0f0a05"/>
+      <!-- ยิ้ม -->
+      <path d="M 27 27 Q 30 29 33 27" stroke="#0f0a05" stroke-width="1" fill="none" stroke-linecap="round"/>
+    </svg>
+  `;
+}
+
+// Avatar SVG — ครูหญิง (ผมยาว)
+function avatarFemaleSVG(palette, isYou) {
+  const p = palette || TEACHER_PALETTES[3];
+  return `
+    <svg viewBox="0 0 60 90" xmlns="http://www.w3.org/2000/svg">
+      <!-- ขา (กระโปรง/สแล็ค) -->
+      <path d="M 19 65 L 17 84 L 28 84 L 29 65 Z" fill="${p.outfit}" opacity=".9"/>
+      <path d="M 31 65 L 32 84 L 43 84 L 41 65 Z" fill="${p.outfit}" opacity=".9"/>
+      <!-- รองเท้า -->
+      <ellipse cx="22.5" cy="85" rx="5" ry="2" fill="#451a03"/>
+      <ellipse cx="37.5" cy="85" rx="5" ry="2" fill="#451a03"/>
+      <!-- ตัว (เสื้อ) -->
+      <path d="M 17 38 L 16 68 Q 16 70 18 70 L 42 70 Q 44 70 44 68 L 43 38 Z" fill="${p.outfit}"/>
+      <!-- คอเสื้อ V-neck -->
+      <path d="M 25 38 L 30 50 L 35 38 Z" fill="${p.skin}"/>
+      <!-- เครื่องประดับ/ผ้าผูกคอ -->
+      <ellipse cx="30" cy="44" rx="3" ry="2" fill="${p.tie}"/>
+      <!-- แขน -->
+      <rect x="11" y="40" width="6" height="22" rx="3" fill="${p.outfit}"/>
+      <rect x="43" y="40" width="6" height="22" rx="3" fill="${p.outfit}"/>
+      <!-- มือ -->
+      <circle cx="14" cy="63" r="3" fill="${p.skin}"/>
+      <circle cx="46" cy="63" r="3" fill="${p.skin}"/>
+      <!-- คอ -->
+      <rect x="27" y="32" width="6" height="8" fill="${p.skin}"/>
+      <!-- หัว -->
+      <circle cx="30" cy="22" r="11" fill="${p.skin}"/>
+      <!-- ผม (หญิงยาว) -->
+      <path d="M 18 19 Q 17 8 30 8 Q 43 8 42 19 L 43 35 Q 39 32 41 25 Q 36 19 30 19 Q 24 19 19 25 Q 21 32 17 35 Z" fill="${p.hair}"/>
+      <!-- ผมเปียด้านข้าง -->
+      <ellipse cx="18" cy="28" rx="2.5" ry="5" fill="${p.hair}"/>
+      <ellipse cx="42" cy="28" rx="2.5" ry="5" fill="${p.hair}"/>
+      <!-- ตา -->
+      <ellipse cx="26.5" cy="22" rx="1" ry="1.5" fill="#0f0a05"/>
+      <ellipse cx="33.5" cy="22" rx="1" ry="1.5" fill="#0f0a05"/>
+      <!-- ปาก (ยิ้ม + ลิปสติก) -->
+      <path d="M 27 27 Q 30 29 33 27" stroke="#9c2a4a" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+    </svg>
+  `;
+}
+
+// เลือก avatar SVG จาก userId (deterministic)
+function getAvatarSVG(userId, isYou) {
+  if(!userId) return avatarMaleSVG(TEACHER_PALETTES[0], false);
+  // hash userId → index
+  let h = 0;
+  for(let i = 0; i < userId.length; i++) h = (h * 31 + userId.charCodeAt(i)) & 0x7fffffff;
+  const palette = TEACHER_PALETTES[h % TEACHER_PALETTES.length];
+  const isFemale = (h % 2) === 0;
+  return isFemale ? avatarFemaleSVG(palette, isYou) : avatarMaleSVG(palette, isYou);
+}
+
+// ══════════════════════════════════════════════════
+// Render Classroom
+// ══════════════════════════════════════════════════
+window.renderClassroom = async (containerId, videoKey, opts = {}) => {
+  const container = document.getElementById(containerId);
+  if(!container) return;
+  
+  try {
+    const snap = await getDocs(collection(db, 'presence'));
+    const now = Date.now();
+    const online = [];
+    snap.forEach(d => {
+      const data = d.data();
+      if(data.lastSeen && (now - data.lastSeen) < 90000) {
+        if(!videoKey || data.videoKey === videoKey) {
+          online.push(data);
+        }
+      }
+    });
+    
+    // เรียง: ตัวเองก่อน แล้วตามชื่อ
+    online.sort((a, b) => {
+      const selfA = currentUser && a.userId === currentUser.uid ? -1 : 0;
+      const selfB = currentUser && b.userId === currentUser.uid ? -1 : 0;
+      return selfA - selfB;
+    });
+    
+    const isVideo = !!videoKey;
+    const titleText = isVideo ? '🏫 ห้องเรียนเสมือน — Part นี้' : '🪑 เพื่อนเรียนในระบบ';
+    
+    if(online.length === 0) {
+      container.innerHTML = `
+        <div class="classroom">
+          <div class="classroom-header">
+            <div class="classroom-title">${titleText}</div>
+            <div class="classroom-count">0 คน</div>
+          </div>
+          <div class="classroom-empty">
+            <div class="classroom-empty-icon">🪑</div>
+            <div>ยังไม่มีใครเรียนพร้อมกัน${isVideo ? 'ใน Part นี้' : ''}<br><small>เริ่มเรียนเลย — เพื่อนอาจมาเรียนพร้อมคุณ!</small></div>
+          </div>
+        </div>
+      `;
+      return;
+    }
+    
+    const visiblePeople = online.slice(0, 12); // จำกัด 12 คน
+    const more = online.length - 12;
+    
+    const peopleHtml = visiblePeople.map(p => {
+      const isYou = currentUser && p.userId === currentUser.uid;
+      const displayName = isYou ? `${p.userName} (คุณ)` : p.userName;
+      return `
+        <div class="classroom-person ${isYou ? 'is-you' : ''}" data-name="${escapeHtml(displayName)}" onclick="openProfilePage('${p.userId}')">
+          ${getAvatarSVG(p.userId, isYou)}
+        </div>
+      `;
+    }).join('');
+    
+    // Reactions (counter cache in window)
+    const rxKey = `rx_${videoKey || 'global'}`;
+    if(!window.__reactions) window.__reactions = {};
+    if(!window.__reactions[rxKey]) window.__reactions[rxKey] = { '👍':0, '❤️':0, '🎉':0, '👏':0 };
+    const rx = window.__reactions[rxKey];
+    
+    container.innerHTML = `
+      <div class="classroom">
+        <span class="classroom-sparkle" style="top:10px;left:8%;">✨</span>
+        <span class="classroom-sparkle" style="top:18px;right:12%;animation-delay:1s;">⭐</span>
+        <span class="classroom-sparkle" style="top:8px;left:65%;animation-delay:2s;">✨</span>
+        
+        <div class="classroom-header">
+          <div class="classroom-title">${titleText}</div>
+          <div class="classroom-count">🟢 ${online.length} คน${more > 0 ? ` (แสดง ${visiblePeople.length})` : ''}</div>
+        </div>
+        
+        <div class="classroom-floor">
+          <div class="classroom-avatars">
+            ${peopleHtml}
+            ${more > 0 ? `<div class="classroom-person" style="display:flex;align-items:center;justify-content:center;font-weight:700;color:#78350f;background:rgba(255,255,255,.7);border-radius:50%;width:46px;height:46px;margin-bottom:8px;border:2px solid #fbbf24;" data-name="+${more} คน">+${more}</div>` : ''}
+          </div>
+        </div>
+        
+        <div class="classroom-reactions">
+          <button class="reaction-btn" onclick="sendReaction('${rxKey}', '👍', this)">
+            <span class="reaction-emoji">👍</span>
+            <span class="reaction-count">${rx['👍']}</span>
+          </button>
+          <button class="reaction-btn" onclick="sendReaction('${rxKey}', '❤️', this)">
+            <span class="reaction-emoji">❤️</span>
+            <span class="reaction-count">${rx['❤️']}</span>
+          </button>
+          <button class="reaction-btn" onclick="sendReaction('${rxKey}', '🎉', this)">
+            <span class="reaction-emoji">🎉</span>
+            <span class="reaction-count">${rx['🎉']}</span>
+          </button>
+          <button class="reaction-btn" onclick="sendReaction('${rxKey}', '👏', this)">
+            <span class="reaction-emoji">👏</span>
+            <span class="reaction-count">${rx['👏']}</span>
+          </button>
+        </div>
+      </div>
+    `;
+  } catch(e) {
+    console.warn('classroom err:', e);
+  }
+};
+
+// Send reaction (local + Firestore counter)
+window.sendReaction = async (rxKey, emoji, btn) => {
+  // Local counter
+  if(!window.__reactions[rxKey]) window.__reactions[rxKey] = { '👍':0, '❤️':0, '🎉':0, '👏':0 };
+  window.__reactions[rxKey][emoji] = (window.__reactions[rxKey][emoji] || 0) + 1;
+  
+  // Update display
+  const countEl = btn.querySelector('.reaction-count');
+  if(countEl) countEl.textContent = window.__reactions[rxKey][emoji];
+  
+  // Floating animation
+  const rect = btn.getBoundingClientRect();
+  for(let i = 0; i < 3; i++) {
+    setTimeout(() => {
+      const float = document.createElement('div');
+      float.className = 'reaction-float';
+      float.textContent = emoji;
+      float.style.left = (rect.left + rect.width/2 + (Math.random()-0.5)*30) + 'px';
+      float.style.top = rect.top + 'px';
+      document.body.appendChild(float);
+      setTimeout(() => float.remove(), 2000);
+    }, i * 100);
+  }
+  
+  // Save to Firestore (counter — best effort, no transaction)
+  try {
+    const docId = rxKey.replace(/[^a-zA-Z0-9_]/g, '_');
+    const ref = doc(db, 'reactions', docId);
+    const snap = await getDoc(ref);
+    const current = snap.exists() ? snap.data() : {};
+    current[emoji] = (current[emoji] || 0) + 1;
+    current.lastUpdated = Date.now();
+    await setDoc(ref, current);
+  } catch(e) { /* silent */ }
+};
+
+// Load reactions count on mount
+async function loadReactions(rxKey) {
+  try {
+    const docId = rxKey.replace(/[^a-zA-Z0-9_]/g, '_');
+    const snap = await getDoc(doc(db, 'reactions', docId));
+    if(snap.exists()) {
+      if(!window.__reactions) window.__reactions = {};
+      window.__reactions[rxKey] = { '👍':0, '❤️':0, '🎉':0, '👏':0, ...snap.data() };
+    }
+  } catch(e) {}
+}
+
+
 </script>
 
 <!-- Confetti container (เกียรติบัตร celebration) -->
 <div class="confetti-container" id="confettiContainer"></div>
 
 <!-- FOOTER -->
+
+<!-- FULL PROFILE PAGE -->
+<div class="page" id="pageProfile" style="display:none;">
+  <div class="page-profile-hero">
+    <div class="page-profile-container" id="pageProfileHeroContent">
+      <div class="profile-loading" style="color:white;text-align:center;padding:40px;">⏳ กำลังโหลด...</div>
+    </div>
+  </div>
+  <div class="page-profile-content">
+    <div class="page-profile-content-inner" id="pageProfileContentInner"></div>
+  </div>
+</div>
+
+
 <footer class="site-footer">
   <div class="footer-inner">
     <div class="footer-col">
