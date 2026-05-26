@@ -839,7 +839,7 @@ button[class*="btn-"],.quiz-actions button{position:relative;overflow:hidden;}
 
 /* 6) HERO STATS BANNER (landing — เด่นๆ ด้านบน) */
 .hero-stats-banner{max-width:900px;margin:18px auto 18px;padding:0 16px;}
-.hero-stats-card{background:linear-gradient(135deg,var(--navy),var(--navy-light));border-radius:20px;padding:24px 28px;color:white;display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;box-shadow:0 12px 32px rgba(26,39,68,.25);position:relative;overflow:hidden;}
+.hero-stats-card{background:linear-gradient(135deg,var(--navy),var(--navy-light));border-radius:20px;padding:18px 24px;color:white;display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;box-shadow:0 12px 32px rgba(26,39,68,.25);position:relative;overflow:hidden;min-height:auto;}
 .hero-stats-card::before{content:'';position:absolute;top:-50%;right:-20%;width:300px;height:300px;background:radial-gradient(circle,rgba(201,168,76,.15),transparent 70%);pointer-events:none;}
 .hero-stats-title{font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:var(--gold-light);margin-bottom:6px;}
 .hero-stats-subtitle{font-size:14px;color:rgba(255,255,255,.82);line-height:1.6;}
@@ -1809,8 +1809,17 @@ body{transition:background .8s ease;}
   border-radius:8px 8px 0 0;
   display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
   padding:8px 6px;
-  box-shadow:0 -4px 12px rgba(0,0,0,.1);
+  box-shadow:0 -4px 12px rgba(0,0,0,.15), inset 0 -3px 8px rgba(0,0,0,.2);
+  transform-style:preserve-3d;
 }
+.podium-block.rank-1 .podium-avatar{animation:podium1Bounce 2s ease-in-out infinite;}
+.podium-block.rank-2 .podium-avatar{animation:podium2Sway 2.4s ease-in-out infinite;}
+.podium-block.rank-3 .podium-avatar{animation:podium3Wave 2.8s ease-in-out infinite;}
+@keyframes podium1Bounce{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(-6px);}}
+@keyframes podium2Sway{0%,100%{transform:translateX(-50%) rotate(-3deg);}50%{transform:translateX(-50%) rotate(3deg);}}
+@keyframes podium3Wave{0%,100%{transform:translateX(-50%) translateY(0) rotate(0);}25%{transform:translateX(-50%) translateY(-3px) rotate(-2deg);}75%{transform:translateX(-50%) translateY(-3px) rotate(2deg);}}
+.podium-block.is-empty{opacity:.15 !important;}
+.podium-block.is-empty .podium-avatar,.podium-block.is-empty .podium-medal,.podium-block.is-empty .podium-name,.podium-block.is-empty .podium-value{display:none;}
 .podium-block.rank-1{
   --block-color:#f59e0b;
   --block-color-light:#fbbf24;
@@ -2309,7 +2318,16 @@ body{transition:background .8s ease;}
       </div>
     </div>
 
-      <div class="cc-grid" id="landingCardGrid">
+
+      
+      <!-- Admin login quick link -->
+      <div style="text-align:center;margin:8px 0 4px;">
+        <button onclick="showPage('pageAuth');showForm('admin');" style="background:transparent;border:1px solid rgba(122,68,68,.4);color:#7f1d1d;padding:5px 14px;border-radius:8px;font-family:'Sarabun',sans-serif;font-size:11.5px;font-weight:600;cursor:pointer;transition:all .2s ease;">
+          🔐 เข้าสู่ระบบผู้ดูแล
+        </button>
+      </div>
+
+            <div class="cc-grid" id="landingCardGrid">
         <!-- การ์ดถูก render ด้วย JS ใน renderCourseCards() -->
       </div>
 
@@ -4041,7 +4059,7 @@ async function loadVideo(idx) {
       loadReactions('rx_' + vKey); renderClassroom('videoClassroomWidget', vKey); quickRefreshClassroom(vKey);
       // refresh every 45s
       if(window.__presenceRefresh) clearInterval(window.__presenceRefresh);
-      window.__presenceRefresh = setInterval(() => renderClassroom('videoClassroomWidget', vKey), 45000);
+      window.__presenceRefresh = setInterval(() => renderClassroom('videoClassroomWidget', vKey), 20000); // 20s
     }
   }, 100);
   // อัปเดต breadcrumb แสดงชื่อหลักสูตรปัจจุบัน
@@ -5588,11 +5606,11 @@ function renderCommentItem(c, isReply, replies) {
   
   return `
     <div class="comment-item ${mine ? 'mine' : ''} ${isReply ? 'reply' : ''}">
-      <div class="comment-avatar" data-uid="${c.userId}" onclick="openProfilePage('${c.userId}')" title="ดูโปรไฟล์">${initial}</div>
+      <div class="comment-avatar" data-uid="${c.userId}" onclick="openProfileSmart('${c.userId}')" title="ดูโปรไฟล์">${initial}</div>
       <div class="comment-content">
         <div class="comment-meta">
           <div>
-            <span class="comment-author"><span class="comment-author-link" onclick="openProfilePage('${c.userId}')">${escapeHtml(c.userName || '?')}</span>${mine ? '<span class="you-badge">คุณ</span>' : ''}${c.isAdmin ? '<span class="comment-admin-badge">ADMIN</span>' : ''}</span>
+            <span class="comment-author"><span class="comment-author-link" onclick="openProfileSmart('${c.userId}')">${escapeHtml(c.userName || '?')}</span>${mine ? '<span class="you-badge">คุณ</span>' : ''}${c.isAdmin ? '<span class="comment-admin-badge">ADMIN</span>' : ''}</span>
             <div class="comment-school">${escapeHtml(c.userSchool || '')}</div>
           </div>
           <span class="comment-time">${t}</span>
@@ -7276,7 +7294,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // ══════════════════════════════════════════════════
 // LIVE PRESENCE — "X กำลังเรียนอยู่"
 // ══════════════════════════════════════════════════
-const PRESENCE_TTL = 90 * 1000; // 90s = "online"
+const PRESENCE_TTL = 45 * 1000; // 45s = "online" (เร็วขึ้น)
 let presenceUnsubs = {};
 let presenceHeartbeat = null;
 
@@ -7300,7 +7318,8 @@ function startPresenceHeartbeat(videoKey) {
     }
   };
   update();
-  presenceHeartbeat = setInterval(update, 30000); // every 30s
+  presenceHeartbeat = setInterval(update, 15000); // every 15s (แม่นยำ)
+  console.log('[presence] heartbeat started for videoKey:', videoKey);
 }
 
 function stopPresenceHeartbeat() {
@@ -7706,14 +7725,15 @@ async function loadReactions(rxKey) {
 // FILTER TEST USERS — exclude จาก leaderboard
 // ══════════════════════════════════════════════════
 const TEST_USER_PATTERNS = [
-  'ทดสอบ', 'เทส', 'ทดสอบระบบ', 'ทดสอบคอมเมนต์',
+  'ทดสอบ', 'เทส', 'ทดสอบระบบ', 'ทดสอบคอมเมนต์', 'คอมเมนต์',
   'test', 'Test', 'TEST',
   'ไม่รู้', 'demo', 'Demo', 'DEMO',
   'dummy', 'Dummy',
   'สวัสดี', // user "นายสวัสดี ครับ"
   'admin', 'Admin', 'ADMIN',
-  'สอบทด', 'ทด สอบ', 'ทด.สอบ',  // เพิ่มจากภาพล่าสุด
+  'สอบทด', 'ทด สอบ', 'ทด.สอบ',
   'อะไรก็ไม่รู้', 'ครังสุดท้าย', 'ครั้งสุดท้าย',
+  'สอบ', 'ทดลอง', 'มั่ว', // เพิ่ม
 ];
 
 function isTestUser(u) {
@@ -7849,7 +7869,7 @@ window.renderLeaderboard = function() {
   
   // Helper: render podium block สำหรับ rank N
   function renderBlock(rank, item) {
-    if(!item) return `<div class="podium-block rank-${rank}" style="opacity:.3;"><div class="podium-rank-label">${rank}</div></div>`;
+    if(!item) return `<div class="podium-block rank-${rank} is-empty"><div class="podium-rank-label">${rank}</div></div>`;
     const isYou = !isSchool && currentUser && item.id === currentUser.uid;
     const displayName = isSchool ? item.name : `${item.prefix||''}${item.firstName||''} ${item.lastName||''}`.trim();
     const shortName = displayName.length > 14 ? displayName.substring(0, 13) + '…' : displayName;
@@ -8006,6 +8026,26 @@ function scheduleSpeechBubbles(people) {
   }, 6000 + Math.random() * 4000);
   speechTimers.push(interval);
 }
+
+
+
+
+// ══════════════════════════════════════════════════
+// SMART PROFILE OPENER
+// ตัวเอง → เด้งหน้าใหม่
+// คนอื่น → modal
+// ══════════════════════════════════════════════════
+window.openProfileSmart = (userId) => {
+  if(!userId) return;
+  const isOwnProfile = (currentUser && currentUser.uid === userId) || (isAdmin && userId === 'admin');
+  if(isOwnProfile) {
+    // ตัวเอง → full page
+    if(typeof openProfilePage === 'function') openProfilePage(userId);
+  } else {
+    // คนอื่น → modal (preview, stay in context)
+    if(typeof openProfile === 'function') openProfile(userId);
+  }
+};
 
 
 </script>
