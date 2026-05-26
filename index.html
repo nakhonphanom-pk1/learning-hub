@@ -839,15 +839,15 @@ button[class*="btn-"],.quiz-actions button{position:relative;overflow:hidden;}
 
 /* 6) HERO STATS BANNER (landing — เด่นๆ ด้านบน) */
 .hero-stats-banner{max-width:900px;margin:18px auto 18px;padding:0 16px;}
-.hero-stats-card{background:linear-gradient(135deg,var(--navy),var(--navy-light));border-radius:20px;padding:18px 24px;color:white;display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;box-shadow:0 12px 32px rgba(26,39,68,.25);position:relative;overflow:hidden;min-height:auto;}
+.hero-stats-card{background:linear-gradient(135deg,var(--navy),var(--navy-light));border-radius:20px;padding:16px 22px;color:white;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;box-shadow:0 12px 32px rgba(26,39,68,.25);position:relative;overflow:hidden;min-height:auto;}
 .hero-stats-card::before{content:'';position:absolute;top:-50%;right:-20%;width:300px;height:300px;background:radial-gradient(circle,rgba(201,168,76,.15),transparent 70%);pointer-events:none;}
 .hero-stats-title{font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:var(--gold-light);margin-bottom:6px;}
 .hero-stats-subtitle{font-size:14px;color:rgba(255,255,255,.82);line-height:1.6;}
-.hero-stats-nums{display:flex;gap:20px;}
+.hero-stats-nums{display:flex;gap:16px;flex-shrink:0;}
 .hero-stat{text-align:center;padding:0 8px;}
 .hero-stat-num{font-family:'Noto Serif Thai',serif;font-size:28px;font-weight:700;color:var(--gold);line-height:1;}
 .hero-stat-label{font-size:11px;color:rgba(255,255,255,.7);margin-top:4px;letter-spacing:.3px;}
-@media(max-width:700px){.hero-stats-card{grid-template-columns:1fr;text-align:center;}.hero-stats-nums{justify-content:center;}}
+@media(max-width:700px){.hero-stats-card{flex-direction:column;text-align:center;padding:16px;}.hero-stats-nums{justify-content:center;width:100%;}}
 
 /* 7) FOOTER */
 .site-footer{background:linear-gradient(135deg,#0a1226,#1a2744);color:rgba(255,255,255,.85);padding:40px 24px 22px;margin-top:60px;position:relative;overflow:hidden;}
@@ -1796,9 +1796,10 @@ body{transition:background .8s ease;}
 
 /* Podium blocks */
 .podium-blocks{
-  position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  position:absolute;bottom:0;left:0;right:0;
   display:flex;align-items:flex-end;gap:6px;
-  width:100%;max-width:500px;justify-content:center;
+  justify-content:center;
+  padding:0 12px;
 }
 .podium-block{
   position:relative;
@@ -2435,8 +2436,7 @@ body{transition:background .8s ease;}
         <div style="text-align:right;margin-bottom:12px;"><button class="btn-text-link" onclick="showForm('forgot')">ลืมรหัสผ่าน?</button></div>
         <button class="btn-auth" onclick="doLogin()">เข้าสู่ระบบ →</button>
         <div class="auth-switch">ยังไม่มีบัญชีใช่ไหม? <a onclick="showForm('register')">สมัครสมาชิกที่นี่</a></div>
-        <div class="auth-divider"><hr><span>หรือ</span><hr></div>
-        <div style="text-align:center;"><button class="btn-text-link" onclick="showForm('admin')">🔐 เข้าสู่ระบบ Admin</button></div>
+
       </div>
 
       <!-- REGISTER FORM -->
@@ -7742,7 +7742,12 @@ const TEST_USER_PATTERNS = [
   'admin', 'Admin', 'ADMIN',
   'สอบทด', 'ทด สอบ', 'ทด.สอบ',
   'อะไรก็ไม่รู้', 'ครังสุดท้าย', 'ครั้งสุดท้าย',
-  'สอบ', 'ทดลอง', 'มั่ว', // เพิ่ม
+  'สอบ', 'ทดลอง', 'มั่ว',
+];
+
+// Specific full-name test users — ผู้ทดสอบของฟาร์ม (เก็บ user ไว้ แต่ไม่นับใน stats)
+const TEST_USER_FULLNAMES = [
+  'อมรรัตน์ สุทธิสาร', // test user ของฟาร์ม
 ];
 
 function isTestUser(u) {
@@ -7752,10 +7757,14 @@ function isTestUser(u) {
   // username = test
   const uname = (u.username||'').toLowerCase();
   if(['admin','test','demo','dummy'].includes(uname)) return true;
-  // ชื่อตรงกับ pattern
-  const fullName = `${u.firstName||''} ${u.lastName||''}`.toLowerCase();
+  // ชื่อตรงกับ pattern (เช่น "ทดสอบ", "เทส")
+  const fullName = `${u.firstName||''} ${u.lastName||''}`.trim().toLowerCase();
   for(const pat of TEST_USER_PATTERNS) {
     if(fullName.includes(pat.toLowerCase())) return true;
+  }
+  // ตรง full-name (เช่น "อมรรัตน์ สุทธิสาร")
+  for(const tn of TEST_USER_FULLNAMES) {
+    if(fullName === tn.toLowerCase()) return true;
   }
   return false;
 }
@@ -8049,6 +8058,55 @@ window.openProfileSmart = (userId) => {
   // ใช้ full page เสมอ — UX consistent + scroll ได้สุด
   if(typeof openProfilePage === 'function') openProfilePage(userId);
 };
+
+
+
+
+// ══════════════════════════════════════════════════
+// Filter test users from hero stats
+// ══════════════════════════════════════════════════
+(async function patchHeroStats() {
+  // Wait for window.isTestUser to be ready
+  let attempts = 0;
+  while(typeof isTestUser !== 'function' && attempts < 50) {
+    await new Promise(r => setTimeout(r, 100));
+    attempts++;
+  }
+  if(typeof isTestUser !== 'function') return;
+  
+  // Recompute hero stats by querying users + filtering
+  async function recomputeStats() {
+    try {
+      const snap = await getDocs(collection(db, 'users'));
+      let userCount = 0;
+      let certCount = 0;
+      snap.forEach(d => {
+        const u = { id: d.id, ...d.data() };
+        if(isTestUser(u)) return; // skip test users
+        userCount++;
+        if(u.certNumber) certCount++;
+        if(u.courses) {
+          Object.values(u.courses).forEach(c => {
+            if(c.certNumber) certCount++;
+          });
+        }
+      });
+      const usersEl = document.getElementById('heroStatUsers');
+      const certsEl = document.getElementById('heroStatCerts');
+      if(usersEl) usersEl.textContent = userCount;
+      if(certsEl) certsEl.textContent = certCount;
+    } catch(e) { console.warn('hero stats recompute:', e); }
+  }
+  
+  // Run on landing visible
+  setTimeout(recomputeStats, 2000);
+  // Refresh every 60s
+  setInterval(() => {
+    if(document.getElementById('pageLanding')?.classList.contains('active')) {
+      recomputeStats();
+    }
+  }, 60000);
+})();
 
 
 </script>
