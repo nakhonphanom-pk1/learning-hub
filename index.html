@@ -2174,6 +2174,183 @@ body{transition:background .8s ease;}
 }
 
 
+
+
+/* ═══════════════════════════════════════════════ */
+/* PODIUM 2.0 — รูปโปรไฟล์ + คนรอบโพเดียม           */
+/* ═══════════════════════════════════════════════ */
+
+/* Stage ใหญ่ขึ้นเพื่อรองรับคนรอบโพเดียม */
+.podium-stage{
+  min-height:420px !important;
+  height:auto !important;
+  padding:24px 20px 80px !important;
+}
+
+/* Block — ปรับความกว้างให้กว้างขึ้นนิด เพื่อรองรับชื่อยาว */
+.podium-block{
+  width:160px !important;
+  flex:0 0 160px !important;
+}
+.podium-block.rank-1{height:200px !important;}
+.podium-block.rank-2{height:165px !important;}
+.podium-block.rank-3{height:135px !important;}
+
+/* ชื่อแสดงเต็ม — wrap หลายบรรทัด */
+.podium-name{
+  white-space:normal !important;
+  overflow:visible !important;
+  text-overflow:initial !important;
+  font-size:11px !important;
+  line-height:1.25 !important;
+  padding:0 4px 2px !important;
+  word-break:break-word;
+  max-height:42px;
+  overflow:hidden !important;
+}
+.podium-school-line{
+  font-size:9.5px;
+  color:rgba(255,255,255,.85);
+  font-weight:600;
+  text-align:center;
+  line-height:1.2;
+  padding:0 4px 2px;
+  text-shadow:0 1px 2px rgba(0,0,0,.3);
+  margin-top:2px;
+  max-height:24px;
+  overflow:hidden;
+}
+
+/* รูปโปรไฟล์วงกลมบน avatar */
+.podium-photo-circle{
+  position:absolute;
+  top:-8px; right:-6px;
+  width:32px; height:32px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--gold),var(--gold-light));
+  color:var(--navy);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:800;
+  font-family:'Noto Serif Thai',serif;
+  border:2.5px solid white;
+  box-shadow:0 4px 10px rgba(0,0,0,.25);
+  z-index:5;
+  overflow:hidden;
+  animation:photoCirclePulse 2.5s ease-in-out infinite;
+}
+.podium-photo-circle img{width:100%;height:100%;object-fit:cover;display:block;}
+@keyframes photoCirclePulse{
+  0%,100%{transform:scale(1);}
+  50%{transform:scale(1.08);}
+}
+
+/* คนรอบโพเดียม (อันดับ 4-10) */
+.podium-bystanders{
+  position:absolute;
+  bottom:6px;
+  left:0;right:0;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  padding:0 14px;
+  pointer-events:none;
+  z-index:1;
+}
+.podium-bystanders-left, .podium-bystanders-right{
+  display:flex;
+  align-items:flex-end;
+  gap:2px;
+  pointer-events:auto;
+}
+.podium-bystander{
+  position:relative;
+  width:54px;
+  height:78px;
+  cursor:pointer;
+  transition:transform .2s ease;
+  flex-shrink:0;
+}
+.podium-bystander:hover{transform:translateY(-6px) scale(1.06);}
+.podium-bystander svg{width:100%;height:100%;display:block;filter:drop-shadow(0 3px 6px rgba(0,0,0,.18));}
+.podium-bystander-rank{
+  position:absolute;
+  top:-4px;left:-4px;
+  background:white;
+  border:1.5px solid #fde68a;
+  color:#92400e;
+  width:22px;height:22px;
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10.5px;font-weight:800;
+  box-shadow:0 2px 4px rgba(0,0,0,.15);
+  z-index:3;
+}
+.podium-bystander-name{
+  position:absolute;
+  bottom:-22px;left:50%;
+  transform:translateX(-50%);
+  font-size:9px;
+  font-weight:700;
+  color:var(--navy);
+  white-space:nowrap;
+  max-width:70px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  background:rgba(255,255,255,.85);
+  padding:1px 5px;
+  border-radius:6px;
+  backdrop-filter:blur(4px);
+}
+.podium-bystander-photo{
+  position:absolute;
+  top:-3px; right:-3px;
+  width:22px; height:22px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--gold),var(--gold-light));
+  color:var(--navy);
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:800;
+  border:2px solid white;
+  box-shadow:0 2px 4px rgba(0,0,0,.2);
+  z-index:4;
+  overflow:hidden;
+}
+.podium-bystander-photo img{width:100%;height:100%;object-fit:cover;display:block;}
+
+/* Animations - random เคลื่อนไหวทุกคน */
+.podium-bystander.anim-walk{animation:bystanderWalk 3s ease-in-out infinite;}
+.podium-bystander.anim-wave2{animation:bystanderWave 2.5s ease-in-out infinite;}
+.podium-bystander.anim-cheer{animation:bystanderCheer 2s ease-in-out infinite;}
+.podium-bystander.anim-bobby{animation:bystanderBob 2.8s ease-in-out infinite;}
+.podium-bystander.anim-sway2{animation:bystanderSway 3.2s ease-in-out infinite;}
+
+@keyframes bystanderWalk{0%,100%{transform:translateY(0);}50%{transform:translateY(-3px) rotate(-2deg);}}
+@keyframes bystanderWave{0%,100%{transform:rotate(0);}25%{transform:rotate(4deg) translateY(-2px);}75%{transform:rotate(-4deg) translateY(-2px);}}
+@keyframes bystanderCheer{0%,100%{transform:translateY(0) scale(1);}40%,60%{transform:translateY(-5px) scale(1.05);}}
+@keyframes bystanderBob{0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);}}
+@keyframes bystanderSway{0%,100%{transform:rotate(-3deg);}50%{transform:rotate(3deg);}}
+
+/* ซ่อน runners section เก่า */
+.podium-runners{display:none !important;}
+
+/* Mobile */
+@media (max-width:600px){
+  .podium-stage{padding:20px 12px 70px !important;min-height:380px !important;}
+  .podium-block{width:100px !important;flex:0 0 100px !important;}
+  .podium-block.rank-1{height:170px !important;}
+  .podium-block.rank-2{height:140px !important;}
+  .podium-block.rank-3{height:115px !important;}
+  .podium-bystander{width:42px;height:64px;}
+  .podium-bystander-name{font-size:8px;max-width:50px;}
+  .podium-bystander-photo{width:18px;height:18px;font-size:9px;}
+  .podium-name{font-size:9.5px !important;max-height:38px;}
+  .podium-school-line{font-size:8.5px;max-height:20px;}
+  .podium-photo-circle{width:26px;height:26px;font-size:11px;}
+  .podium-bystanders{padding:0 6px;}
+  .podium-bystanders-left, .podium-bystanders-right{gap:0;}
+}
+
+
 </style>
 </head>
 <body>
@@ -7888,20 +8065,32 @@ window.renderLeaderboard = function() {
   // Podium blocks
   html += '<div class="podium-blocks">';
   
+  // Helper: photo circle (รูปจริงถ้ามี, ไม่มีก็ใช้พยัญชนะตัวแรก)
+  function renderPhotoCircle(item, cls) {
+    if(isSchool) return '';
+    const initial = (item.firstName || '?').charAt(0);
+    const photo = item.photoBase64;
+    if(photo) return `<div class="${cls}"><img src="${photo}" alt=""/></div>`;
+    return `<div class="${cls}">${escapeHtml(initial)}</div>`;
+  }
+  
   // Helper: render podium block สำหรับ rank N
   function renderBlock(rank, item) {
     if(!item) return `<div class="podium-block rank-${rank} is-empty"><div class="podium-rank-label">${rank}</div></div>`;
     const isYou = !isSchool && currentUser && item.id === currentUser.uid;
-    const displayName = isSchool ? item.name : `${item.prefix||''}${item.firstName||''} ${item.lastName||''}`.trim();
-    const shortName = displayName.length > 14 ? displayName.substring(0, 13) + '…' : displayName;
+    const fullName = isSchool ? item.name : `${item.prefix||''}${item.firstName||''} ${item.lastName||''}`.trim();
+    const school = isSchool ? '' : (item.school || '');
     const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : '🥉';
     const isFirst = rank === 1 ? 'is-first' : '';
     
     let avatarHtml;
     if(isSchool) {
-      avatarHtml = '<div class="podium-avatar podium-school-icon" data-name="' + escapeHtml(displayName) + '">🏫</div>';
+      avatarHtml = '<div class="podium-avatar podium-school-icon" data-name="' + escapeHtml(fullName) + '">🏫</div>';
     } else {
-      avatarHtml = `<div class="podium-avatar ${isYou ? 'is-you' : ''} ${isFirst}" data-name="${escapeHtml(displayName)}" onclick="openProfilePage('${item.id}')">${getAvatarSVG(item.id, isYou, item.prefix)}</div>`;
+      avatarHtml = `<div class="podium-avatar ${isYou ? 'is-you' : ''} ${isFirst}" data-name="${escapeHtml(fullName)}" onclick="openProfilePage('${item.id}')">
+        ${renderPhotoCircle(item, 'podium-photo-circle')}
+        ${getAvatarSVG(item.id, isYou, item.prefix)}
+      </div>`;
     }
     
     return `
@@ -7909,7 +8098,8 @@ window.renderLeaderboard = function() {
         <div class="podium-rank-label">${rank}</div>
         <div class="podium-medal">${medal}</div>
         ${avatarHtml}
-        <div class="podium-name">${escapeHtml(shortName)}</div>
+        <div class="podium-name">${escapeHtml(fullName)}</div>
+        ${school ? `<div class="podium-school-line">${escapeHtml(school)}</div>` : ''}
         <div class="podium-value">${valueFn(item)}</div>
       </div>
     `;
@@ -7919,37 +8109,45 @@ window.renderLeaderboard = function() {
   html += renderBlock(1, top3[0]);  // กลาง (สูงสุด)
   html += renderBlock(3, top3[2]);  // ขวา
   
-  html += '</div></div>'; // close blocks + stage
+  html += '</div>'; // close blocks
   
-  // Runners 4-10
+  // คน 4-10 ยืนรอบ podium (แทน runners section เก่า)
   if(runners.length > 0) {
-    html += '<div class="podium-runners">';
-    html += `<div class="podium-runners-title">🏃 อันดับ 4–${3 + runners.length}</div>`;
-    html += '<div class="podium-runners-list">';
-    runners.forEach((item, i) => {
-      const rank = i + 4;
-      const isYou = !isSchool && currentUser && item.id === currentUser.uid;
-      const displayName = isSchool ? item.name : `${item.prefix||''}${item.firstName||''} ${item.lastName||''}`.trim();
-      const shortName = displayName.length > 12 ? displayName.substring(0, 11) + '…' : displayName;
-      
-      let avatarHtml;
-      if(isSchool) {
-        avatarHtml = '<div class="podium-runner-avatar" style="display:flex;align-items:center;justify-content:center;font-size:30px;">🏫</div>';
-      } else {
-        avatarHtml = `<div class="podium-runner-avatar">${getAvatarSVG(item.id, isYou, item.prefix)}</div>`;
-      }
-      
-      html += `
-        <div class="podium-runner ${isYou ? 'is-you' : ''}" onclick="${isSchool ? '' : `openProfilePage('${item.id}')`}">
-          <div class="podium-runner-rank">${rank}</div>
-          ${avatarHtml}
-          <div class="podium-runner-name" title="${escapeHtml(displayName)}">${escapeHtml(shortName)}${isYou ? ' ⭐' : ''}</div>
-          <div class="podium-runner-value">${valueFn(item)}</div>
+    const ANIMS = ['anim-walk','anim-wave2','anim-cheer','anim-bobby','anim-sway2'];
+    // แบ่งครึ่ง — ซ้าย/ขวา
+    const half = Math.ceil(runners.length / 2);
+    const leftSide = runners.slice(0, half);
+    const rightSide = runners.slice(half);
+    
+    function renderBystander(item, rank) {
+      if(isSchool) return '';
+      const isYou = currentUser && item.id === currentUser.uid;
+      const fullName = `${item.prefix||''}${item.firstName||''} ${item.lastName||''}`.trim();
+      const shortName = fullName.length > 12 ? fullName.substring(0, 11) + '…' : fullName;
+      // pick animation deterministic
+      let h = 0; for(let i=0;i<item.id.length;i++) h = (h*31+item.id.charCodeAt(i)) & 0x7fffffff;
+      const anim = ANIMS[h % ANIMS.length];
+      return `
+        <div class="podium-bystander ${anim}" onclick="openProfilePage('${item.id}')" title="${escapeHtml(fullName)}" style="animation-delay:${(rank * 0.15).toFixed(2)}s;">
+          <div class="podium-bystander-rank">${rank}</div>
+          ${renderPhotoCircle(item, 'podium-bystander-photo')}
+          ${getAvatarSVG(item.id, isYou, item.prefix)}
+          <div class="podium-bystander-name">${escapeHtml(shortName)}</div>
         </div>
       `;
-    });
-    html += '</div></div>';
+    }
+    
+    html += '<div class="podium-bystanders">';
+    html += '<div class="podium-bystanders-left">';
+    leftSide.forEach((item, i) => { html += renderBystander(item, i + 4); });
+    html += '</div>';
+    html += '<div class="podium-bystanders-right">';
+    rightSide.forEach((item, i) => { html += renderBystander(item, half + i + 4); });
+    html += '</div>';
+    html += '</div>';
   }
+  
+  html += '</div>'; // close stage
   
   list.innerHTML = html;
 };
