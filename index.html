@@ -2070,7 +2070,6 @@ body{transition:background .8s ease;}
       <div>
         <div class="hero-stats-title">NKP1 Learning Hub <span class="beta-badge">BETA</span></div>
         <div class="hero-stats-subtitle">ศูนย์อบรมออนไลน์ สำหรับครูและบุคลากรในสังกัด<br>เลือกหลักสูตรด้านล่างเพื่อเริ่มเรียน</div>
-        <div id="globalClassroomWidget" style="margin-top:12px;"></div>
       </div>
       <div class="hero-stats-nums">
         <div class="hero-stat">
@@ -2568,6 +2567,14 @@ body{transition:background .8s ease;}
 <!-- USER DASHBOARD -->
 <div class="page" id="pageDashboard">
   <div class="dashboard-wrap">
+    <div class="page-nav">
+      <button class="btn-back" onclick="goBack()" type="button">
+        ← กลับ
+      </button>
+      <a href="#" onclick="event.preventDefault();showLandingPage();">🏠 หน้าหลัก</a>
+      <span>›</span>
+      <span style="color:var(--navy);font-weight:600;">📊 ความคืบหน้า</span>
+    </div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
       <h2 style="font-family:'Noto Serif Thai',serif;font-size:20px;font-weight:700;color:var(--navy);">ความคืบหน้าของฉัน</h2>
       <button class="btn-auth" style="width:auto;padding:8px 20px;font-size:13px;" onclick="goToTraining()">ดูต่อ →</button>
@@ -4608,7 +4615,19 @@ window.showQRCode = () => {
   }
 };
 
+// ─── Page history stack สำหรับ smart back ─── 
+window.__pageHistory = window.__pageHistory || ['pageLanding'];
+
 function showPage(id){
+  // track history (ไม่นับถ้าซ้ำกับ top หรือเป็น goBack)
+  const stack = window.__pageHistory;
+  if(!window.__isGoingBack && stack[stack.length-1] !== id) {
+    stack.push(id);
+    // จำกัด stack 10 รายการ
+    if(stack.length > 10) stack.shift();
+  }
+  window.__isGoingBack = false;
+  
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   window.scrollTo(0,0);
@@ -6868,7 +6887,7 @@ window.openProfilePage = async (userId) => {
   
   // แสดง page + scroll top
   showPage('pageProfile');
-  window.scrollTo({top:0, behavior:'instant'});
+  window.scrollTo(0, 0);
   
   heroEl.innerHTML = '<div style="color:white;text-align:center;padding:40px;">⏳ กำลังโหลด...</div>';
   innerEl.innerHTML = '';
@@ -6981,7 +7000,7 @@ window.openProfilePage = async (userId) => {
       ` : ''}
       
       <div style="text-align:center;margin-top:30px;padding-top:20px;border-top:1px solid var(--border);">
-        <button class="profile-action-btn" onclick="history.back()">← กลับ</button>
+        <button class="profile-action-btn" onclick="goBack()">← กลับ</button>
       </div>
     `;
   } catch(e) {
@@ -7099,143 +7118,7 @@ window.setLeaderboardTab = (tab) => {
   renderLeaderboard();
 };
 
-function renderLeaderboard() {
-  const list = document.getElementById('leaderboardList');
-  if(!list) return;
-  const { users, comments } = leaderboardCache;
-  if(!users) { list.innerHTML = '<div class="lb-loading">⏳ กำลังโหลด...</div>'; return; }
-  
-  let items = [];
-  let unit = '';
-  let metaFn = null;
-  
-  if(currentLbTab === 'first') {
-    // First Finishers — เลข cert น้อยสุด (ทุก course รวม)
-    items = users.filter(u => u.certNumber).sort((a,b) => {
-      const aN = parseInt((a.certNumber||'').split('/')[0]) || 9999;
-      const bN = parseInt((b.certNumber||'').split('/')[0]) || 9999;
-      return aN - bN;
-    });
-    unit = '#';
-    metaFn = u => `📋 เกียรติบัตร ${u.certNumber || '-'}`;
-  } else if(currentLbTab === 'courses') {
-    // นับ cert ในทุกหลักสูตร
-    items = users.map(u => {
-      let count = 0;
-      if(u.certNumber) count++;
-      if(u.courses) Object.entries(u.courses).forEach(([cid, c]) => {
-        if(c.certNumber && !(cid === 'pp3' && u.certNumber)) count++;
-      });
-      return { ...u, _val: count };
-    }).filter(u => u._val > 0).sort((a,b) => b._val - a._val);
-    unit = 'หลักสูตร';
-    metaFn = u => `🎓 จบ ${u._val} หลักสูตร`;
-  } else if(currentLbTab === 'score') {
-    // average quiz score
-    items = users.map(u => {
-      const scores = [];
-      Object.values(u.quizScores || {}).forEach(s => { if(typeof s === 'number') scores.push(s); });
-      Object.values(u.courses || {}).forEach(c => {
-        Object.values(c.quizScores || {}).forEach(s => { if(typeof s === 'number') scores.push(s); });
-      });
-      if(scores.length === 0) return null;
-      const avg = scores.reduce((a,b)=>a+b, 0) / scores.length;
-      return { ...u, _val: avg, _count: scores.length };
-    }).filter(Boolean).filter(u => u._count >= 1).sort((a,b) => b._val - a._val);
-    unit = '%';
-    metaFn = u => `📊 ${u._count} ครั้ง`;
-  } else if(currentLbTab === 'comments') {
-    // นับ comments ต่อ user
-    const countByUid = {};
-    comments.forEach(c => {
-      if(c.isAdmin) return; // skip admin
-      countByUid[c.userId] = (countByUid[c.userId] || 0) + 1;
-    });
-    items = users.map(u => ({ ...u, _val: countByUid[u.id] || 0 })).filter(u => u._val > 0).sort((a,b) => b._val - a._val);
-    unit = 'ครั้ง';
-    metaFn = u => `💬 โพสต์/ตอบ ${u._val} ครั้ง`;
-  } else if(currentLbTab === 'school') {
-    // โรงเรียนยอดนิยม — นับ user ต่อโรงเรียน
-    const bySchool = {};
-    users.forEach(u => {
-      const s = (u.school || '').trim() || 'ไม่ระบุ';
-      if(!bySchool[s]) bySchool[s] = { name: s, count: 0, certs: 0 };
-      bySchool[s].count++;
-      if(u.certNumber) bySchool[s].certs++;
-      if(u.courses) Object.values(u.courses).forEach(c => { if(c.certNumber) bySchool[s].certs++; });
-    });
-    items = Object.values(bySchool).filter(s => s.name !== 'ไม่ระบุ').sort((a,b) => b.certs - a.certs || b.count - a.count);
-    unit = 'เกียรติบัตร';
-    metaFn = s => `👥 ${s.count} ผู้เรียน`;
-    // render school differently
-    list.innerHTML = items.slice(0, 10).map((s, i) => {
-      const rank = i + 1;
-      const rankCls = rank === 1 ? 'rank-1' : rank === 2 ? 'rank-2' : rank === 3 ? 'rank-3' : 'rank-other';
-      const initial = s.name.charAt(0);
-      return `
-        <div class="lb-item">
-          <div class="lb-rank ${rankCls}">${rank}</div>
-          <div class="lb-avatar" style="background:linear-gradient(135deg,#1a2744,#2d3f73);color:white;">${initial}</div>
-          <div class="lb-info">
-            <div class="lb-name">${escapeHtml(s.name)}</div>
-            <div class="lb-meta">${metaFn(s)}</div>
-          </div>
-          <div class="lb-value">${s.certs}<small>${unit}</small></div>
-        </div>
-      `;
-    }).join('') || '<div class="lb-empty">ยังไม่มีข้อมูล</div>';
-    return;
-  } else if(currentLbTab === 'recent') {
-    // สมาชิกใหม่ล่าสุด
-    items = users.filter(u => u.registeredAt).sort((a,b) => {
-      const aT = new Date(a.registeredAt).getTime();
-      const bT = new Date(b.registeredAt).getTime();
-      return bT - aT;
-    });
-    unit = '';
-    metaFn = u => {
-      const d = new Date(u.registeredAt);
-      const dStr = d.toLocaleDateString('th-TH', { day:'numeric', month:'short' });
-      return `📅 สมัคร ${dStr}`;
-    };
-  }
-  
-  if(items.length === 0) {
-    list.innerHTML = '<div class="lb-empty">ยังไม่มีข้อมูล — เป็นคนแรกได้!</div>';
-    return;
-  }
-  
-  list.innerHTML = items.slice(0, 10).map((u, i) => {
-    const rank = i + 1;
-    const rankCls = rank === 1 ? 'rank-1' : rank === 2 ? 'rank-2' : rank === 3 ? 'rank-3' : 'rank-other';
-    const initial = (u.firstName || '?').charAt(0).toUpperCase();
-    const isYou = currentUser && u.id === currentUser.uid;
-    const fullName = `${u.prefix||''}${u.firstName||''} ${u.lastName||''}`.trim() || '-';
-    
-    let valDisplay = '';
-    if(currentLbTab === 'first') {
-      valDisplay = `#${parseInt((u.certNumber||'').split('/')[0]) || '?'}`;
-    } else if(currentLbTab === 'recent') {
-      valDisplay = '✨';
-    } else if(currentLbTab === 'score') {
-      valDisplay = u._val.toFixed(1) + '<small>%</small>';
-    } else {
-      valDisplay = u._val + '<small>' + unit + '</small>';
-    }
-    
-    return `
-      <div class="lb-item ${isYou ? 'is-you' : ''}" onclick="openProfilePage('${u.id}')">
-        <div class="lb-rank ${rankCls}">${rank}</div>
-        <div class="lb-avatar">${u.photoBase64 ? `<img src="${u.photoBase64}" alt="" />` : initial}</div>
-        <div class="lb-info">
-          <div class="lb-name">${escapeHtml(fullName)}</div>
-          <div class="lb-meta">${metaFn(u)} · ${escapeHtml(u.school || '-')}</div>
-        </div>
-        <div class="lb-value">${valDisplay}</div>
-      </div>
-    `;
-  }).join('');
-}
+// (legacy renderLeaderboard ถูกแทนด้วย window.renderLeaderboard ด้านล่าง)
 
 // auto-load on page show
 document.addEventListener('DOMContentLoaded', () => {
@@ -7360,16 +7243,7 @@ document.addEventListener('visibilitychange', () => {
   else if(window.__currentVideoKey) startPresenceHeartbeat(window.__currentVideoKey);
 });
 
-// Auto-load global presence on landing
-setInterval(() => {
-  if(document.getElementById('pageLanding')?.classList.contains('active')) {
-    renderClassroom('globalClassroomWidget', null);
-  }
-}, 45000);
-setTimeout(() => {
-  loadReactions('rx_global');
-  renderClassroom('globalClassroomWidget', null);
-}, 1500);
+// (ลบ classroom จากหน้าแรกแล้ว — เก็บไว้เฉพาะใต้วิดีโอ)
 
 
 
@@ -7860,6 +7734,31 @@ function quickRefreshClassroom(vKey) {
 }
 
 
+
+
+// ══════════════════════════════════════════════════
+// SMART BACK NAVIGATION
+// ══════════════════════════════════════════════════
+window.goBack = () => {
+  const stack = window.__pageHistory || ['pageLanding'];
+  
+  // pop current page
+  if(stack.length > 1) {
+    stack.pop();
+    const prev = stack[stack.length - 1];
+    window.__isGoingBack = true;
+    showPage(prev);
+  } else {
+    // ถ้า stack ว่าง → กลับ landing
+    if(typeof showLandingPage === 'function') {
+      showLandingPage();
+    } else {
+      showPage('pageLanding');
+    }
+  }
+};
+
+
 </script>
 
 <!-- Confetti container (เกียรติบัตร celebration) -->
@@ -7870,6 +7769,10 @@ function quickRefreshClassroom(vKey) {
 <!-- FULL PROFILE PAGE -->
 <div class="page" id="pageProfile">
   <div class="page-profile-hero">
+    <div style="position:absolute;top:14px;left:14px;z-index:5;display:flex;gap:8px;">
+      <button onclick="goBack()" style="background:rgba(255,255,255,.15);color:white;border:1px solid rgba(255,255,255,.3);padding:6px 12px;border-radius:8px;font-family:'Sarabun',sans-serif;font-size:12px;font-weight:600;cursor:pointer;backdrop-filter:blur(10px);">← กลับ</button>
+      <button onclick="showLandingPage()" style="background:rgba(255,255,255,.15);color:white;border:1px solid rgba(255,255,255,.3);padding:6px 12px;border-radius:8px;font-family:'Sarabun',sans-serif;font-size:12px;font-weight:600;cursor:pointer;backdrop-filter:blur(10px);">🏠 หน้าหลัก</button>
+    </div>
     <div class="page-profile-container" id="pageProfileHeroContent">
       <div class="profile-loading" style="color:white;text-align:center;padding:40px;">⏳ กำลังโหลด...</div>
     </div>
