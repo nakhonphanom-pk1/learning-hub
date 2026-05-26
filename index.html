@@ -1803,6 +1803,8 @@ body{transition:background .8s ease;}
 .podium-block{
   position:relative;
   width:130px;
+  flex:0 0 130px;
+  flex-shrink:0;
   background:linear-gradient(180deg,var(--block-color-light),var(--block-color));
   border-radius:8px 8px 0 0;
   display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
@@ -2001,6 +2003,152 @@ body{transition:background .8s ease;}
 #videoClassroomWidget .classroom-person{width:38px;height:58px;}
 #videoClassroomWidget .classroom-reactions{margin-top:10px;}
 #videoClassroomWidget .reaction-btn{padding:4px 10px;font-size:12px;}
+
+
+
+
+/* ═══════════════════════════════════════════════ */
+/* VIRTUAL CLASSROOM 2.0 — Showroom style          */
+/* ═══════════════════════════════════════════════ */
+
+/* Showroom — ติดใต้วิดีโอ ไม่มี border */
+#videoClassroomWidget .classroom{
+  margin:0 !important;
+  padding:0 !important;
+  background:transparent !important;
+  border:none !important;
+  border-radius:0 !important;
+  position:relative;
+}
+#videoClassroomWidget .classroom-header{display:none !important;}
+#videoClassroomWidget .classroom-floor{
+  background:none !important;
+  height:auto !important;
+  min-height:90px;
+  margin-top:-8px;
+  padding-top:10px;
+}
+#videoClassroomWidget .classroom-floor::before{display:none;}
+#videoClassroomWidget .classroom-empty{padding:14px 10px;background:transparent;color:var(--muted);}
+#videoClassroomWidget .classroom-sparkle{display:none;}
+
+/* Avatar row — 3D perspective */
+#videoClassroomWidget .classroom-avatars{
+  position:relative !important;
+  padding:0 8px;
+  perspective:600px;
+  bottom:auto !important;
+  display:flex !important;
+  align-items:flex-end;
+  justify-content:center;
+  gap:0 !important;
+  flex-wrap:nowrap;
+  overflow-x:auto;
+  overflow-y:visible;
+  padding-top:6px;
+  min-height:80px;
+}
+
+/* Person animations */
+#videoClassroomWidget .classroom-person{
+  width:50px;
+  height:75px;
+  margin:0 -3px;
+  transform-style:preserve-3d;
+  animation-fill-mode:forwards;
+}
+#videoClassroomWidget .classroom-person.anim-bob{animation:bobAnim 2.5s ease-in-out infinite;}
+#videoClassroomWidget .classroom-person.anim-wave{animation:waveAnim 3s ease-in-out infinite;}
+#videoClassroomWidget .classroom-person.anim-dance{animation:danceAnim 1.8s ease-in-out infinite;}
+#videoClassroomWidget .classroom-person.anim-jump{animation:jumpAnim 2.2s ease-out infinite;}
+#videoClassroomWidget .classroom-person.anim-lean{animation:leanAnim 3.5s ease-in-out infinite;}
+
+@keyframes bobAnim{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-4px) rotate(-2deg);}}
+@keyframes waveAnim{0%,100%{transform:translateY(0) rotate(0deg);}25%{transform:translateY(-2px) rotate(3deg);}50%{transform:translateY(-3px) rotate(-3deg);}75%{transform:translateY(-1px) rotate(2deg);}}
+@keyframes danceAnim{0%,100%{transform:translateY(0) rotate(-3deg) translateX(-2px);}50%{transform:translateY(-3px) rotate(3deg) translateX(2px);}}
+@keyframes jumpAnim{0%,90%,100%{transform:translateY(0);}45%,50%{transform:translateY(-12px);}}
+@keyframes leanAnim{0%,100%{transform:rotate(0deg);}50%{transform:rotate(4deg);}}
+
+/* แถวหลังตัวเล็ก, แถวหน้าตัวใหญ่ (3D depth) */
+#videoClassroomWidget .classroom-person.row-back{transform:scale(.75);opacity:.7;filter:blur(.3px);margin:0 -8px;}
+#videoClassroomWidget .classroom-person.row-mid{transform:scale(.9);opacity:.92;margin:0 -5px;}
+#videoClassroomWidget .classroom-person.row-front{transform:scale(1.05);}
+
+/* You highlight - กระพริบทอง */
+#videoClassroomWidget .classroom-person.is-you{
+  filter:drop-shadow(0 0 8px rgba(251,191,36,.7));
+}
+#videoClassroomWidget .classroom-person.is-you::before{
+  content:'คุณ';
+  position:absolute;
+  top:-12px;left:50%;transform:translateX(-50%);
+  background:linear-gradient(135deg,#fbbf24,#f59e0b);
+  color:white;
+  padding:1px 8px;
+  border-radius:8px;
+  font-size:9px;font-weight:800;
+  white-space:nowrap;
+  box-shadow:0 2px 6px rgba(245,158,11,.4);
+  z-index:5;
+}
+
+/* Speech bubble random */
+.speech-bubble{
+  position:absolute;
+  top:-22px;left:50%;
+  transform:translateX(-50%) translateY(8px);
+  background:white;
+  border:1.5px solid var(--border);
+  border-radius:12px;
+  padding:3px 10px;
+  font-size:10px;
+  font-weight:600;
+  color:var(--navy);
+  white-space:nowrap;
+  box-shadow:0 4px 12px rgba(0,0,0,.15);
+  pointer-events:none;
+  z-index:10;
+  opacity:0;
+  animation:speechPop 4s ease-out forwards;
+}
+.speech-bubble::after{
+  content:'';
+  position:absolute;
+  bottom:-5px;left:50%;
+  transform:translateX(-50%);
+  width:0;height:0;
+  border:5px solid transparent;
+  border-top-color:white;
+  border-bottom:0;
+}
+@keyframes speechPop{
+  0%{opacity:0;transform:translateX(-50%) translateY(8px) scale(.5);}
+  10%{opacity:1;transform:translateX(-50%) translateY(0) scale(1);}
+  90%{opacity:1;transform:translateX(-50%) translateY(0) scale(1);}
+  100%{opacity:0;transform:translateX(-50%) translateY(-4px) scale(.9);}
+}
+
+/* Counter row หลังจาก avatar */
+#videoClassroomWidget .classroom-reactions{
+  margin-top:0;
+  padding:6px 0 12px;
+  border-top:1px dashed var(--border);
+  background:linear-gradient(180deg,rgba(254,243,199,.15),transparent);
+}
+#videoClassroomWidget .classroom-info-line{
+  text-align:center;
+  font-size:11px;
+  color:var(--muted);
+  margin-top:6px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+}
+#videoClassroomWidget .classroom-info-line .live-dot-mini{
+  display:inline-block;width:6px;height:6px;border-radius:50%;background:#22c55e;animation:dotPulse 1.5s ease-in-out infinite;
+}
+@keyframes dotPulse{0%,100%{opacity:1;}50%{opacity:.4;}}
 
 
 </style>
@@ -7141,6 +7289,7 @@ function startPresenceHeartbeat(videoKey) {
       await setDoc(doc(db, 'presence', currentUser.uid), {
         userId: currentUser.uid,
         userName: userData ? `${userData.prefix||''}${userData.firstName||''} ${userData.lastName||''}`.trim() : '?',
+        prefix: userData?.prefix || '',
         photoBase64: userData?.photoBase64 || null,
         videoKey: videoKey,
         courseId: videoKey.split('_')[0],
@@ -7344,13 +7493,34 @@ function avatarFemaleSVG(palette, isYou) {
 }
 
 // เลือก avatar SVG จาก userId (deterministic)
-function getAvatarSVG(userId, isYou) {
+// Detect gender from Thai prefix
+function genderFromPrefix(prefix) {
+  if(!prefix) return null;
+  const p = prefix.replace(/\.|\s/g, '').toLowerCase();
+  // หญิง
+  const female = ['นาง', 'นางสาว', 'น.ส', 'น.ส.', 'ดญ', 'ด.ญ', 'ด.ญ.', 'นางสาว.', 'ms', 'mrs', 'miss'];
+  // ชาย
+  const male = ['นาย', 'ดช', 'ด.ช', 'ด.ช.', 'นาย.', 'mr'];
+  for(const f of female) { if(p === f || p === f.replace(/\./g,'')) return 'female'; }
+  for(const m of male) { if(p === m || p === m.replace(/\./g,'')) return 'male'; }
+  // partial match (มี "นาง" ใน prefix แต่ไม่ตรง 100%)
+  if(p.startsWith('นางสาว') || p.startsWith('นาง')) return 'female';
+  if(p.startsWith('นาย')) return 'male';
+  return null;
+}
+
+function getAvatarSVG(userId, isYou, prefix) {
   if(!userId) return avatarMaleSVG(TEACHER_PALETTES[0], false);
-  // hash userId → index
+  // hash userId → index for palette
   let h = 0;
   for(let i = 0; i < userId.length; i++) h = (h * 31 + userId.charCodeAt(i)) & 0x7fffffff;
   const palette = TEACHER_PALETTES[h % TEACHER_PALETTES.length];
-  const isFemale = (h % 2) === 0;
+  // เพศ — ใช้ prefix ก่อน fallback hash
+  let isFemale;
+  const gender = genderFromPrefix(prefix);
+  if(gender === 'female') isFemale = true;
+  else if(gender === 'male') isFemale = false;
+  else isFemale = (h % 2) === 0;
   return isFemale ? avatarFemaleSVG(palette, isYou) : avatarMaleSVG(palette, isYou);
 }
 
@@ -7385,30 +7555,47 @@ window.renderClassroom = async (containerId, videoKey, opts = {}) => {
     const titleText = isVideo ? '🏫 ห้องเรียนเสมือน — Part นี้' : '🪑 เพื่อนเรียนในระบบ';
     
     if(online.length === 0) {
-      container.innerHTML = `
-        <div class="classroom">
-          <div class="classroom-header">
-            <div class="classroom-title">${titleText}</div>
-            <div class="classroom-count">0 คน</div>
+      // ถ้าอยู่ใน video page → minimal empty
+      if(isVideo) {
+        container.innerHTML = `
+          <div class="classroom">
+            <div class="classroom-empty">
+              <div class="classroom-empty-icon" style="font-size:24px;">🪑</div>
+              <div style="font-size:11px;">ยังไม่มีใครเรียน Part นี้พร้อมคุณ — เริ่มดูเลย!</div>
+            </div>
           </div>
-          <div class="classroom-empty">
-            <div class="classroom-empty-icon">🪑</div>
-            <div>ยังไม่มีใครเรียนพร้อมกัน${isVideo ? 'ใน Part นี้' : ''}<br><small>เริ่มเรียนเลย — เพื่อนอาจมาเรียนพร้อมคุณ!</small></div>
+        `;
+      } else {
+        container.innerHTML = `
+          <div class="classroom">
+            <div class="classroom-header"><div class="classroom-title">${titleText}</div><div class="classroom-count">0 คน</div></div>
+            <div class="classroom-empty">
+              <div class="classroom-empty-icon">🪑</div>
+              <div>ยังไม่มีใครเรียนพร้อมกัน<br><small>เริ่มเรียนเลย — เพื่อนอาจมาเรียนพร้อมคุณ!</small></div>
+            </div>
           </div>
-        </div>
-      `;
+        `;
+      }
       return;
     }
     
     const visiblePeople = online.slice(0, 12); // จำกัด 12 คน
     const more = online.length - 12;
     
-    const peopleHtml = visiblePeople.map(p => {
+    // Random animation + row positions (Showroom 2.0)
+    const ANIMS = ['anim-bob','anim-wave','anim-dance','anim-jump','anim-lean'];
+    const ROWS = ['row-back','row-mid','row-front','row-mid','row-front','row-mid','row-back','row-front'];
+    const peopleHtml = visiblePeople.map((p, idx) => {
       const isYou = currentUser && p.userId === currentUser.uid;
       const displayName = isYou ? `${p.userName} (คุณ)` : p.userName;
+      // pick animation deterministically per user (so it doesn't jump-cut on refresh)
+      let h = 0; for(let i=0;i<p.userId.length;i++) h = (h*31+p.userId.charCodeAt(i)) & 0x7fffffff;
+      const anim = ANIMS[h % ANIMS.length];
+      // row position deterministic but spread out
+      const row = ROWS[idx % ROWS.length];
       return `
-        <div class="classroom-person ${isYou ? 'is-you' : ''}" data-name="${escapeHtml(displayName)}" onclick="openProfilePage('${p.userId}')">
-          ${getAvatarSVG(p.userId, isYou)}
+        <div class="classroom-person ${row} ${anim} ${isYou ? 'is-you' : ''}" data-name="${escapeHtml(displayName)}" data-uid="${p.userId}" onclick="openProfilePage('${p.userId}')" style="animation-delay:${(idx * 0.3).toFixed(1)}s;">
+          ${getAvatarSVG(p.userId, isYou, p.prefix)}
         </div>
       `;
     }).join('');
@@ -7419,44 +7606,46 @@ window.renderClassroom = async (containerId, videoKey, opts = {}) => {
     if(!window.__reactions[rxKey]) window.__reactions[rxKey] = { '👍':0, '❤️':0, '🎉':0, '👏':0 };
     const rx = window.__reactions[rxKey];
     
-    container.innerHTML = `
-      <div class="classroom">
-        <span class="classroom-sparkle" style="top:10px;left:8%;">✨</span>
-        <span class="classroom-sparkle" style="top:18px;right:12%;animation-delay:1s;">⭐</span>
-        <span class="classroom-sparkle" style="top:8px;left:65%;animation-delay:2s;">✨</span>
-        
-        <div class="classroom-header">
-          <div class="classroom-title">${titleText}</div>
-          <div class="classroom-count">🟢 ${online.length} คน${more > 0 ? ` (แสดง ${visiblePeople.length})` : ''}</div>
-        </div>
-        
-        <div class="classroom-floor">
-          <div class="classroom-avatars">
-            ${peopleHtml}
-            ${more > 0 ? `<div class="classroom-person" style="display:flex;align-items:center;justify-content:center;font-weight:700;color:#78350f;background:rgba(255,255,255,.7);border-radius:50%;width:46px;height:46px;margin-bottom:8px;border:2px solid #fbbf24;" data-name="+${more} คน">+${more}</div>` : ''}
+    if(isVideo) {
+      // Showroom 2.0 — minimal, ติดใต้วิดีโอ
+      container.innerHTML = `
+        <div class="classroom">
+          <div class="classroom-floor">
+            <div class="classroom-avatars">
+              ${peopleHtml}
+              ${more > 0 ? `<div class="classroom-person row-front" style="display:flex;align-items:center;justify-content:center;font-weight:700;color:#78350f;background:rgba(254,243,199,.9);border-radius:50%;width:42px;height:42px;border:2px solid #fbbf24;" data-name="+${more} คน">+${more}</div>` : ''}
+            </div>
+            <div class="classroom-info-line">
+              <span class="live-dot-mini"></span>
+              กำลังเรียน Part นี้พร้อมคุณ <strong style="color:var(--navy);">${online.length}</strong> คน
+            </div>
+          </div>
+          
+          <div class="classroom-reactions">
+            <button class="reaction-btn" onclick="sendReaction('${rxKey}', '👍', this)"><span class="reaction-emoji">👍</span><span class="reaction-count">${rx['👍']}</span></button>
+            <button class="reaction-btn" onclick="sendReaction('${rxKey}', '❤️', this)"><span class="reaction-emoji">❤️</span><span class="reaction-count">${rx['❤️']}</span></button>
+            <button class="reaction-btn" onclick="sendReaction('${rxKey}', '🎉', this)"><span class="reaction-emoji">🎉</span><span class="reaction-count">${rx['🎉']}</span></button>
+            <button class="reaction-btn" onclick="sendReaction('${rxKey}', '👏', this)"><span class="reaction-emoji">👏</span><span class="reaction-count">${rx['👏']}</span></button>
           </div>
         </div>
-        
-        <div class="classroom-reactions">
-          <button class="reaction-btn" onclick="sendReaction('${rxKey}', '👍', this)">
-            <span class="reaction-emoji">👍</span>
-            <span class="reaction-count">${rx['👍']}</span>
-          </button>
-          <button class="reaction-btn" onclick="sendReaction('${rxKey}', '❤️', this)">
-            <span class="reaction-emoji">❤️</span>
-            <span class="reaction-count">${rx['❤️']}</span>
-          </button>
-          <button class="reaction-btn" onclick="sendReaction('${rxKey}', '🎉', this)">
-            <span class="reaction-emoji">🎉</span>
-            <span class="reaction-count">${rx['🎉']}</span>
-          </button>
-          <button class="reaction-btn" onclick="sendReaction('${rxKey}', '👏', this)">
-            <span class="reaction-emoji">👏</span>
-            <span class="reaction-count">${rx['👏']}</span>
-          </button>
+      `;
+      // Schedule random speech bubbles
+      scheduleSpeechBubbles(visiblePeople);
+    } else {
+      // Landing — เก็บแบบเก่า (มี header)
+      container.innerHTML = `
+        <div class="classroom">
+          <span class="classroom-sparkle" style="top:10px;left:8%;">✨</span>
+          <div class="classroom-header">
+            <div class="classroom-title">${titleText}</div>
+            <div class="classroom-count">🟢 ${online.length} คน</div>
+          </div>
+          <div class="classroom-floor">
+            <div class="classroom-avatars">${peopleHtml}</div>
+          </div>
         </div>
-      </div>
-    `;
+      `;
+    }
   } catch(e) {
     console.warn('classroom err:', e);
   }
@@ -7522,7 +7711,9 @@ const TEST_USER_PATTERNS = [
   'ไม่รู้', 'demo', 'Demo', 'DEMO',
   'dummy', 'Dummy',
   'สวัสดี', // user "นายสวัสดี ครับ"
-  'admin', 'Admin', 'ADMIN'
+  'admin', 'Admin', 'ADMIN',
+  'สอบทด', 'ทด สอบ', 'ทด.สอบ',  // เพิ่มจากภาพล่าสุด
+  'อะไรก็ไม่รู้', 'ครังสุดท้าย', 'ครั้งสุดท้าย',
 ];
 
 function isTestUser(u) {
@@ -7669,7 +7860,7 @@ window.renderLeaderboard = function() {
     if(isSchool) {
       avatarHtml = '<div class="podium-avatar podium-school-icon" data-name="' + escapeHtml(displayName) + '">🏫</div>';
     } else {
-      avatarHtml = `<div class="podium-avatar ${isYou ? 'is-you' : ''} ${isFirst}" data-name="${escapeHtml(displayName)}" onclick="openProfilePage('${item.id}')">${getAvatarSVG(item.id, isYou)}</div>`;
+      avatarHtml = `<div class="podium-avatar ${isYou ? 'is-you' : ''} ${isFirst}" data-name="${escapeHtml(displayName)}" onclick="openProfilePage('${item.id}')">${getAvatarSVG(item.id, isYou, item.prefix)}</div>`;
     }
     
     return `
@@ -7704,7 +7895,7 @@ window.renderLeaderboard = function() {
       if(isSchool) {
         avatarHtml = '<div class="podium-runner-avatar" style="display:flex;align-items:center;justify-content:center;font-size:30px;">🏫</div>';
       } else {
-        avatarHtml = `<div class="podium-runner-avatar">${getAvatarSVG(item.id, isYou)}</div>`;
+        avatarHtml = `<div class="podium-runner-avatar">${getAvatarSVG(item.id, isYou, item.prefix)}</div>`;
       }
       
       html += `
@@ -7757,6 +7948,64 @@ window.goBack = () => {
     }
   }
 };
+
+
+
+
+// ══════════════════════════════════════════════════
+// Speech bubbles random (Showroom 2.0)
+// ══════════════════════════════════════════════════
+const SPEECH_PHRASES = [
+  'เข้าใจแล้ว! 💡',
+  'ว้าว! 🤩',
+  '👍',
+  'น่าสนใจ',
+  'จดไว้แล้ว 📝',
+  '🤔',
+  'ดีจัง',
+  '❤️',
+  'เก่ง!',
+  'อ๋อ ! 💭',
+  '👏👏',
+  'ต้องลองทำ',
+  '✨',
+  'เป็นประโยชน์',
+];
+
+let speechTimers = [];
+function scheduleSpeechBubbles(people) {
+  // clear old
+  speechTimers.forEach(t => clearTimeout(t));
+  speechTimers = [];
+  if(!people || people.length === 0) return;
+  
+  // ทุก 5-12 วินาที สุ่ม 1 คนพูด
+  function fire() {
+    const eligible = people.filter(p => Math.random() > 0.5); // 50% chance per person
+    if(eligible.length === 0) return;
+    const person = eligible[Math.floor(Math.random() * eligible.length)];
+    const personEl = document.querySelector(`[data-uid="${person.userId}"]`);
+    if(personEl) {
+      const phrase = SPEECH_PHRASES[Math.floor(Math.random() * SPEECH_PHRASES.length)];
+      const bubble = document.createElement('div');
+      bubble.className = 'speech-bubble';
+      bubble.textContent = phrase;
+      personEl.appendChild(bubble);
+      setTimeout(() => bubble.remove(), 4000);
+    }
+  }
+  
+  // schedule first bubble after 3s, then every 6-10s
+  speechTimers.push(setTimeout(fire, 3000));
+  const interval = setInterval(() => {
+    if(!document.getElementById('videoClassroomWidget')?.querySelector('.classroom-person')) {
+      clearInterval(interval);
+      return;
+    }
+    fire();
+  }, 6000 + Math.random() * 4000);
+  speechTimers.push(interval);
+}
 
 
 </script>
