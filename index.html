@@ -2180,11 +2180,11 @@ body{transition:background .8s ease;}
 /* PODIUM 2.0 — รูปโปรไฟล์ + คนรอบโพเดียม           */
 /* ═══════════════════════════════════════════════ */
 
-/* Stage normal — bystanders ย้ายไปข้างล่าง */
+/* Stage — height ปกติ, bystanders แยก section ด้านล่าง */
 .podium-stage{
-  min-height:340px !important;
+  min-height:320px !important;
   height:auto !important;
-  padding:24px 20px 20px !important;
+  padding:24px 20px 0 !important;
 }
 
 /* Block — ปรับความกว้างให้กว้างขึ้นนิด เพื่อรองรับชื่อยาว */
@@ -2244,57 +2244,54 @@ body{transition:background .8s ease;}
   50%{transform:scale(1.08);}
 }
 
-/* คนรอบโพเดียม (อันดับ 4-10) — เป็น section ใต้ stage */
+/* คนรอบโพเดียม (อันดับ 4-10) — section ใต้ stage แยกจากกันชัดเจน */
 .podium-bystanders{
   position:relative;
-  margin:14px auto 0;
+  margin:20px auto 0;
   max-width:680px;
-  background:linear-gradient(180deg,#fef3c7 0%,#fde68a 100%);
+  background:linear-gradient(180deg,#fef9ec 0%,#fef3c7 100%);
   border-radius:14px;
-  padding:30px 16px 18px;
+  padding:14px 16px 20px;
   border:1.5px solid #fde68a;
-  border-top:none;
-  margin-top:-12px;
-  z-index:2;
-  /* ทำพื้นไม้ด้านล่าง */
-  background:linear-gradient(180deg,transparent 0%,transparent 35%,#92400e 35%,#78350f 65%,#451a03 100%),linear-gradient(180deg,#fef3c7,#fde68a);
+}
+.podium-bystanders-label{
+  font-size:12px;
+  color:#78350f;
+  font-weight:800;
+  text-align:center;
+  margin-bottom:14px;
+  letter-spacing:.5px;
 }
 .podium-bystanders-row{
   display:flex;
   justify-content:center;
-  align-items:flex-end;
+  align-items:flex-start;
   flex-wrap:wrap;
-  gap:8px;
-  position:relative;
-  z-index:2;
-}
-.podium-bystanders-label{
-  position:absolute;
-  top:6px;left:50%;
-  transform:translateX(-50%);
-  font-size:11px;
-  color:#78350f;
-  font-weight:700;
-  background:rgba(255,255,255,.7);
-  padding:2px 10px;
-  border-radius:8px;
+  gap:10px 8px;
 }
 .podium-bystander{
   position:relative;
-  width:60px;
+  width:118px;
   cursor:pointer;
   transition:transform .2s ease;
   flex-shrink:0;
   display:flex;
   flex-direction:column;
   align-items:center;
+  padding:6px 4px;
+  border-radius:10px;
 }
-.podium-bystander > svg{width:54px;height:78px;}
-.podium-bystander:hover{transform:translateY(-6px) scale(1.06);}
-.podium-bystander svg{width:100%;height:100%;display:block;filter:drop-shadow(0 3px 6px rgba(0,0,0,.18));}
+.podium-bystander:hover{transform:translateY(-4px);background:rgba(254,243,199,.5);}
+.podium-bystander-avatar-wrap{
+  position:relative;
+  width:50px;
+  height:72px;
+  margin-bottom:4px;
+}
+.podium-bystander svg{width:50px;height:72px;display:block;filter:drop-shadow(0 3px 6px rgba(0,0,0,.15));}
 .podium-bystander-rank{
   position:absolute;
-  top:-4px;left:-4px;
+  top:-6px;left:-6px;
   background:white;
   border:1.5px solid #fde68a;
   color:#92400e;
@@ -2306,17 +2303,35 @@ body{transition:background .8s ease;}
   z-index:3;
 }
 .podium-bystander-name{
-  font-size:9.5px;
+  font-size:10px;
   font-weight:700;
-  color:white;
-  white-space:nowrap;
-  max-width:80px;
-  overflow:hidden;
-  text-overflow:ellipsis;
+  color:var(--navy);
   text-align:center;
-  text-shadow:0 1px 2px rgba(0,0,0,.5);
+  line-height:1.2;
+  margin-top:2px;
+  word-break:break-word;
+  max-height:24px;
+  overflow:hidden;
+}
+.podium-bystander-school{
+  font-size:8.5px;
+  color:var(--muted);
+  text-align:center;
+  line-height:1.15;
+  margin-top:2px;
+  max-height:20px;
+  overflow:hidden;
+  word-break:break-word;
+}
+.podium-bystander-value{
+  font-size:9.5px;
+  color:var(--gold);
+  font-weight:700;
+  text-align:center;
   margin-top:2px;
 }
+.podium-bystander.is-you{background:linear-gradient(135deg,rgba(251,191,36,.18),rgba(245,158,11,.15));border:1px solid rgba(251,191,36,.4);}
+.podium-bystander.is-you .podium-bystander-name{color:#92400e;}
 .podium-bystander-photo{
   position:absolute;
   top:-3px; right:-3px;
@@ -2356,14 +2371,29 @@ body{transition:background .8s ease;}
   .podium-block.rank-1{height:170px !important;}
   .podium-block.rank-2{height:140px !important;}
   .podium-block.rank-3{height:115px !important;}
-  .podium-bystander{width:42px;height:64px;}
-  .podium-bystander-name{font-size:8px;max-width:50px;}
+  .podium-bystander{width:100px;}
+  .podium-bystander-avatar-wrap{width:44px;height:62px;}
+  .podium-bystander svg{width:44px;height:62px;}
+  .podium-bystander-name{font-size:9px;max-height:22px;}
+  .podium-bystander-school{font-size:8px;max-height:18px;}
+  .podium-bystander-value{font-size:8.5px;}
   .podium-bystander-photo{width:18px;height:18px;font-size:9px;}
   .podium-name{font-size:9.5px !important;max-height:38px;}
   .podium-school-line{font-size:8.5px;max-height:20px;}
   .podium-photo-circle{width:26px;height:26px;font-size:11px;}
   .podium-bystanders{padding:0 6px;}
   .podium-bystanders-left, .podium-bystanders-right{gap:0;}
+}
+
+
+
+
+/* BETA ใน hero card — contrast ชัดบนพื้นน้ำเงิน */
+.hero-beta{
+  background:linear-gradient(135deg,#fbbf24,#f59e0b) !important;
+  color:#1a2744 !important;
+  border:1.5px solid #fbbf24 !important;
+  box-shadow:0 4px 12px rgba(251,191,36,.5), 0 0 0 2px rgba(255,255,255,.2) !important;
 }
 
 
@@ -2432,7 +2462,7 @@ body{transition:background .8s ease;}
           <div class="hero-particle"></div>
         </div>
       <div>
-        <div class="hero-stats-title">NKP1 Learning Hub <span class="beta-badge">BETA</span></div>
+        <div class="hero-stats-title">NKP1 Learning Hub <span class="beta-badge hero-beta">BETA</span></div>
         <div class="hero-stats-subtitle">ศูนย์อบรมออนไลน์ สำหรับครูและบุคลากรในสังกัด<br>เลือกหลักสูตรด้านล่างเพื่อเริ่มเรียน</div>
       </div>
       <div class="hero-stats-nums">
@@ -8139,16 +8169,20 @@ window.renderLeaderboard = function() {
       if(isSchool) return '';
       const isYou = currentUser && item.id === currentUser.uid;
       const fullName = `${item.prefix||''}${item.firstName||''} ${item.lastName||''}`.trim();
-      const shortName = fullName.length > 12 ? fullName.substring(0, 11) + '…' : fullName;
+      const school = item.school || '';
       // pick animation deterministic
       let h = 0; for(let i=0;i<item.id.length;i++) h = (h*31+item.id.charCodeAt(i)) & 0x7fffffff;
       const anim = ANIMS[h % ANIMS.length];
       return `
-        <div class="podium-bystander ${anim}" onclick="openProfilePage('${item.id}')" title="${escapeHtml(fullName)}" style="animation-delay:${(rank * 0.15).toFixed(2)}s;">
-          <div class="podium-bystander-rank">${rank}</div>
-          ${renderPhotoCircle(item, 'podium-bystander-photo')}
-          ${getAvatarSVG(item.id, isYou, item.prefix)}
-          <div class="podium-bystander-name">${escapeHtml(shortName)}</div>
+        <div class="podium-bystander ${anim} ${isYou ? 'is-you' : ''}" onclick="openProfilePage('${item.id}')" title="${escapeHtml(fullName)}" style="animation-delay:${(rank * 0.15).toFixed(2)}s;">
+          <div class="podium-bystander-avatar-wrap">
+            <div class="podium-bystander-rank">${rank}</div>
+            ${renderPhotoCircle(item, 'podium-bystander-photo')}
+            ${getAvatarSVG(item.id, isYou, item.prefix)}
+          </div>
+          <div class="podium-bystander-name">${escapeHtml(fullName)}${isYou ? ' ⭐' : ''}</div>
+          ${school ? `<div class="podium-bystander-school">${escapeHtml(school)}</div>` : ''}
+          <div class="podium-bystander-value">${valueFn(item)}</div>
         </div>
       `;
     }
