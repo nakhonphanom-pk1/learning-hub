@@ -5266,8 +5266,15 @@ function showPage(id){
     stack.push(id);
     // จำกัด stack 10 รายการ
     if(stack.length > 10) stack.shift();
+    // 🔙 sync กับ browser history (เฉพาะ navigation ปกติ ไม่ใช่ popstate)
+    if(!window.__isPopState && window.history && window.history.pushState) {
+      try {
+        window.history.pushState({ pageId: id, stackLen: stack.length }, '', '#' + id);
+      } catch(e) { /* ignore */ }
+    }
   }
   window.__isGoingBack = false;
+  window.__isPopState = false;
   
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById(id).classList.add('active');
@@ -5298,6 +5305,8 @@ function showPage(id){
     setTimeout(() => updateHeroStats(), 300);
   }
 }
+// expose showPage ไป global ทันที (ให้ inline onclick + wrapper หาเจอ)
+window.showPage = showPage;
 function showLoading(s){document.getElementById('loadingOverlay').classList.toggle('show',s);}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3500);}
 
@@ -8469,6 +8478,7 @@ window.goBack = () => {
     stack.pop();
     const prev = stack[stack.length - 1];
     window.__isGoingBack = true;
+    // ใช้ browser back ด้วย เพื่อ sync history (ถ้ามี entry)
     showPage(prev);
   } else {
     // ถ้า stack ว่าง → กลับ landing
@@ -8479,6 +8489,62 @@ window.goBack = () => {
     }
   }
 };
+
+// ══════════════════════════════════════════════════
+// 🔙 BROWSER BACK BUTTON SYNC
+// ผูกปุ่ม Back/Forward ของ browser กับ JS navigation
+// ══════════════════════════════════════════════════
+(function initBrowserHistorySync() {
+  // ตั้ง initial state ตอนโหลดหน้า
+  function setupInitialState() {
+    const stack = window.__pageHistory || ['pageLanding'];
+    const current = stack[stack.length - 1] || 'pageLanding';
+    try {
+      // replace state แรก เพื่อให้มี baseline
+      window.history.replaceState({ pageId: current, stackLen: stack.length, isBase: true }, '', '#' + current);
+    } catch(e) { /* ignore */ }
+  }
+  
+  // ฟัง popstate (กด Back/Forward ของ browser)
+  window.addEventListener('popstate', function(event) {
+    const stack = window.__pageHistory || ['pageLanding'];
+    
+    // หา target page จาก state หรือ hash
+    let targetId = null;
+    if(event.state && event.state.pageId) {
+      targetId = event.state.pageId;
+    } else if(window.location.hash) {
+      targetId = window.location.hash.replace('#', '');
+    }
+    
+    // ถ้าไม่มี target หรือ page ไม่มีจริง → กลับ landing
+    if(!targetId || !document.getElementById(targetId)) {
+      targetId = 'pageLanding';
+    }
+    
+    // sync stack ภายใน: pop จนกว่าจะตรงกับ target
+    const idx = stack.lastIndexOf(targetId);
+    if(idx >= 0) {
+      // ตัด stack ให้เหลือถึง target
+      stack.length = idx + 1;
+    } else {
+      // ถ้าไม่เจอใน stack (forward ไปหน้าใหม่) → push
+      stack.push(targetId);
+    }
+    
+    // แสดงหน้า โดยไม่ pushState ซ้ำ (ป้องกัน loop)
+    window.__isPopState = true;
+    window.__isGoingBack = true;
+    showPage(targetId);
+  });
+  
+  // ตั้ง initial state เมื่อ DOM พร้อม
+  if(document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupInitialState);
+  } else {
+    setupInitialState();
+  }
+})();
 
 
 
