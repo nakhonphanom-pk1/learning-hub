@@ -839,9 +839,12 @@ button[class*="btn-"],.quiz-actions button{position:relative;overflow:hidden;}
 
 /* 6) HERO STATS BANNER (landing — เด่นๆ ด้านบน) */
 .hero-stats-banner{max-width:900px;margin:18px auto 18px;padding:0 16px;}
-.hero-stats-card{background:linear-gradient(135deg,var(--navy),var(--navy-light));border-radius:20px;padding:16px 22px;color:white;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;box-shadow:0 12px 32px rgba(26,39,68,.25);position:relative;overflow:hidden;min-height:auto;}
-.hero-stats-card::before{content:'';position:absolute;top:-50%;right:-20%;width:300px;height:300px;background:radial-gradient(circle,rgba(201,168,76,.15),transparent 70%);pointer-events:none;}
-.hero-stats-title{font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:var(--gold-light);margin-bottom:6px;}
+.hero-stats-card{background:linear-gradient(135deg,var(--navy),var(--navy-light));border-radius:20px;padding:16px 22px;color:white;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;box-shadow:0 12px 32px rgba(26,39,68,.25),0 0 0 1px rgba(201,168,76,.3),inset 0 1px 0 rgba(255,255,255,.08);position:relative;overflow:hidden;min-height:auto;}
+.hero-stats-card::before{content:'';position:absolute;top:-50%;right:-20%;width:300px;height:300px;background:radial-gradient(circle,rgba(201,168,76,.18),transparent 70%);pointer-events:none;animation:heroGlowPulse 5s ease-in-out infinite;}
+.hero-stats-card::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(232,201,122,.12),transparent);pointer-events:none;animation:heroSweep 6s ease-in-out infinite;}
+@keyframes heroGlowPulse{0%,100%{opacity:.6;transform:scale(1);}50%{opacity:1;transform:scale(1.15);}}
+@keyframes heroSweep{0%{left:-100%;}40%,100%{left:160%;}}
+.hero-stats-title{font-family:'Noto Serif Thai',serif;font-size:22px;font-weight:700;color:var(--gold-light);margin-bottom:6px;position:relative;z-index:2;}
 .hero-stats-subtitle{font-size:14px;color:rgba(255,255,255,.82);line-height:1.6;}
 .hero-stats-nums{display:flex;gap:16px;flex-shrink:0;}
 .hero-stat{text-align:center;padding:0 8px;}
@@ -2404,6 +2407,234 @@ body{transition:background .8s ease;}
   font-weight:900 !important;
   text-shadow:0 1px 0 rgba(255,255,255,.4) !important;
 }
+
+
+
+
+/* ═══════════════════════════════════════════════════════ */
+/* 💎 LUXURY LAYER — ยกระดับทั้งเว็บให้หรูหรา                 */
+/* ═══════════════════════════════════════════════════════ */
+
+/* --- Gold shimmer keyframes (ใช้ร่วมกันทั้งเว็บ) --- */
+@keyframes goldShimmer{
+  0%{background-position:-200% center;}
+  100%{background-position:200% center;}
+}
+@keyframes luxSweep{
+  0%{left:-150%;}
+  45%,100%{left:150%;}
+}
+@keyframes luxGlowPulse{
+  0%,100%{opacity:.5;}
+  50%{opacity:1;}
+}
+@keyframes borderRotate{
+  0%{--angle:0deg;}
+  100%{--angle:360deg;}
+}
+
+/* --- 1. HERO หน้าแรก — เส้นทองเรืองรอบ + แสงกวาด --- */
+.hub-hero{
+  box-shadow:0 24px 60px rgba(26,39,68,.4),
+             0 0 0 1px rgba(201,168,76,.4),
+             0 0 80px rgba(201,168,76,.15),
+             inset 0 1px 0 rgba(255,255,255,.12) !important;
+}
+.hub-hero::after{
+  content:'';
+  position:absolute;
+  top:0;left:-150%;
+  width:50%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(232,201,122,.15),transparent);
+  pointer-events:none;
+  z-index:2;
+  animation:luxSweep 8s ease-in-out infinite;
+}
+
+/* --- 2. การ์ดหลักสูตร — gold border glow on hover --- */
+.course-card{
+  box-shadow:0 8px 32px rgba(26,39,68,.1),
+             0 2px 8px rgba(26,39,68,.05),
+             0 0 0 1px rgba(201,168,76,.12) !important;
+}
+.course-card::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  border-radius:24px;
+  padding:1.5px;
+  background:linear-gradient(135deg,
+    rgba(201,168,76,0) 0%,
+    rgba(201,168,76,.6) 25%,
+    rgba(232,201,122,.9) 50%,
+    rgba(201,168,76,.6) 75%,
+    rgba(201,168,76,0) 100%);
+  background-size:200% 200%;
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  opacity:0;
+  transition:opacity .4s ease;
+  pointer-events:none;
+  animation:goldShimmer 3s linear infinite;
+}
+.course-card:hover::after{opacity:1;}
+.course-card:hover{
+  box-shadow:0 20px 48px rgba(26,39,68,.18),
+             0 0 0 1px rgba(201,168,76,.3),
+             0 0 40px rgba(201,168,76,.2) !important;
+}
+
+/* --- 3. ปุ่มหลัก (CTA) — แสงกวาด + glow --- */
+.hub-cta-btn, .cc-btn-primary{
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 6px 18px rgba(26,39,68,.3),
+             0 0 0 1px rgba(201,168,76,.2) !important;
+}
+.hub-cta-btn::before, .cc-btn-primary::before{
+  content:'';
+  position:absolute;
+  top:0;left:-150%;
+  width:60%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);
+  transition:none;
+  animation:luxSweep 4.5s ease-in-out infinite;
+  pointer-events:none;
+}
+.hub-cta-btn:hover, .cc-btn-primary:hover{
+  box-shadow:0 12px 28px rgba(26,39,68,.4),
+             0 0 30px rgba(201,168,76,.35),
+             0 0 0 1px rgba(232,201,122,.5) !important;
+  transform:translateY(-2px);
+}
+
+/* --- 4. Welcome bar — เส้นทองเรือง + แสงกวาด --- */
+.welcome-bar{
+  box-shadow:0 12px 32px rgba(26,39,68,.3),
+             0 0 0 1px rgba(201,168,76,.3),
+             inset 0 1px 0 rgba(255,255,255,.1) !important;
+}
+.welcome-bar::after{
+  content:'';
+  position:absolute;
+  top:0;left:-150%;
+  width:45%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(232,201,122,.12),transparent);
+  pointer-events:none;
+  animation:luxSweep 7s ease-in-out infinite;
+}
+
+/* --- 5. Section label — ออร์นาเมนต์ทอง --- */
+.hub-section-label h2::after{
+  content:'';
+  display:block;
+  width:60px;height:3px;
+  margin:10px auto 0;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  border-radius:2px;
+}
+
+/* --- 6. ปุ่ม auth — premium --- */
+.btn-auth{
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(135deg,var(--navy),var(--navy-light)) !important;
+  box-shadow:0 6px 18px rgba(26,39,68,.3),
+             0 0 0 1px rgba(201,168,76,.25) !important;
+  transition:all .3s ease !important;
+}
+.btn-auth::before{
+  content:'';
+  position:absolute;
+  top:0;left:-150%;
+  width:60%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);
+  animation:luxSweep 5s ease-in-out infinite;
+  pointer-events:none;
+}
+.btn-auth:hover{
+  box-shadow:0 10px 26px rgba(26,39,68,.42),
+             0 0 26px rgba(201,168,76,.3),
+             0 0 0 1px rgba(232,201,122,.5) !important;
+  transform:translateY(-2px);
+}
+
+/* --- 7. Leaderboard tabs — active glow --- */
+.lb-tab.active, [class*="lb-tab"][class*="active"]{
+  box-shadow:0 4px 14px rgba(26,39,68,.3),
+             0 0 18px rgba(201,168,76,.3),
+             0 0 0 1px rgba(232,201,122,.4) !important;
+}
+
+/* --- 8. Profile stats — gold accent --- */
+.profile-stat{
+  background:linear-gradient(135deg,var(--cream),#fdfaf3) !important;
+  box-shadow:inset 0 0 0 1px rgba(201,168,76,.15),
+             0 2px 8px rgba(26,39,68,.04) !important;
+  transition:all .3s ease;
+}
+.profile-stat:hover{
+  box-shadow:inset 0 0 0 1px rgba(201,168,76,.4),
+             0 6px 16px rgba(201,168,76,.15) !important;
+  transform:translateY(-2px);
+}
+
+/* --- 9. Podium stage — luxury glow รอบกรอบ --- */
+.podium-stage{
+  box-shadow:0 16px 48px rgba(201,168,76,.2),
+             0 0 0 1.5px rgba(201,168,76,.35),
+             0 0 60px rgba(232,201,122,.12),
+             inset 0 1px 0 rgba(255,255,255,.5) !important;
+}
+
+/* --- 10. Modal — premium border --- */
+.profile-modal-box{
+  box-shadow:0 24px 60px rgba(15,26,48,.5),
+             0 0 0 1px rgba(201,168,76,.25),
+             0 0 80px rgba(201,168,76,.1) !important;
+}
+
+/* --- 11. Cards ทั่วไป (hub-cta, etc.) — subtle gold ring --- */
+.hub-cta{
+  box-shadow:0 8px 32px rgba(26,39,68,.08),
+             0 0 0 1px rgba(201,168,76,.15) !important;
+}
+
+/* --- 12. Achievement badges glow --- */
+.achievement-badge.earned, [class*="achievement"][class*="earned"]{
+  box-shadow:0 4px 14px rgba(201,168,76,.3),
+             0 0 18px rgba(232,201,122,.25) !important;
+}
+
+/* --- 13. Scrollbar หรู (ทอง) --- */
+::-webkit-scrollbar{width:12px;height:12px;}
+::-webkit-scrollbar-track{background:rgba(26,39,68,.04);}
+::-webkit-scrollbar-thumb{
+  background:linear-gradient(180deg,var(--gold-light),var(--gold));
+  border-radius:10px;
+  border:2px solid transparent;
+  background-clip:padding-box;
+}
+::-webkit-scrollbar-thumb:hover{
+  background:linear-gradient(180deg,var(--gold),#b8943f);
+  background-clip:padding-box;
+}
+
+/* --- 14. Text selection สีทอง --- */
+::selection{background:rgba(201,168,76,.3);color:var(--navy);}
+
+/* --- 15. Marquee — gold shimmer text --- */
+.marquee-track, [class*="marquee"]{
+  text-shadow:0 0 12px rgba(232,201,122,.3);
+}
+
+/* --- Mobile: ลด animation เพื่อ performance --- */
+@media (max-width:600px){
+  .hub-hero::after, .welcome-bar::after{animation-duration:10s;}
+}
+
+/* === END LUXURY LAYER === */
 
 
 </style>
