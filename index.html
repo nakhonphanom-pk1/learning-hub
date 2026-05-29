@@ -8190,16 +8190,19 @@ window.renderLeaderboard = function() {
       `;
     }
     
-    // bystanders เป็น row เดียว ใต้ stage
+    // bystanders เป็น row เดียว ใต้ stage (นอก stage!)
+    html += '</div>'; // ปิด stage ก่อน
     html += '<div class="podium-bystanders">';
     html += '<div class="podium-bystanders-label">🏃 อันดับ 4–' + (3 + runners.length) + '</div>';
     html += '<div class="podium-bystanders-row">';
     runners.forEach((item, i) => { html += renderBystander(item, i + 4); });
     html += '</div>';
     html += '</div>';
+  } else {
+    html += '</div>'; // ปิด stage (กรณีไม่มี runners)
   }
   
-  html += '</div>'; // close stage
+  // (stage ถูกปิดในแต่ละ branch ข้างบนแล้ว)
   
   list.innerHTML = html;
 };
