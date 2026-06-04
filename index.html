@@ -4443,6 +4443,105 @@ window.doRegister = async() => {
   }catch(e){showLoading(false);err.textContent='เกิดข้อผิดพลาด: '+e.message;err.classList.add('show');}
 };
 
+// ════════════════════════════════════════════════════════════
+// เปรียบเทียบชื่อโรงเรียนแบบยืดหยุ่นสูง
+// รองรับ: คำนำหน้า (โรงเรียน/รร./ร.ร.) • วงเล็บสร้อย () （） • เครื่องหมาย ฯ
+//         เลขไทย ๐-๙ • เว้นวรรคไม่ตรง • พิมพ์ผิดเล็กน้อย • กรอกเฉพาะชื่อสร้อย
+const SCHOOLS=[{n:"ดอนนางหงส์บูรพาสงเคราะห์",d:"ธาตุพนม"},{n:"นาถ่อนท่าวิทยาคาร",d:"ธาตุพนม"},{n:"นาถ่อนวิทยานุกูล",d:"ธาตุพนม"},{n:"บ้านกุดฉิม",d:"ธาตุพนม"},{n:"บ้านขอนกองโพนทอง",d:"ธาตุพนม"},{n:"บ้านขอนขว้าง",d:"ธาตุพนม"},{n:"บ้านคับพวง",d:"ธาตุพนม"},{n:"บ้านคำชะอี",d:"ธาตุพนม"},{n:"บ้านชาติพัฒนาสันติสุข",d:"ธาตุพนม"},{n:"บ้านดงป่ายูง",d:"ธาตุพนม"},{n:"บ้านดงยอ",d:"ธาตุพนม"},{n:"บ้านดอนข้าวหลาม",d:"ธาตุพนม"},{n:"บ้านดอนนางหงส์(หงส์ทองวิทยาคาร)",d:"ธาตุพนม"},{n:"บ้านดอนสวรรค์",d:"ธาตุพนม"},{n:"บ้านดอนแดง",d:"ธาตุพนม"},{n:"บ้านตาลกุดยางเดี่ยวโนนสมบูรณ์",d:"ธาตุพนม"},{n:"บ้านต้อง(ศรีบัวบานวิทยาคาร)",d:"ธาตุพนม"},{n:"บ้านทรายมูลคำผักแพว",d:"ธาตุพนม"},{n:"บ้านทู้(สามัคคีวิทยา)",d:"ธาตุพนม"},{n:"บ้านธาตุน้อยศรีบุญเรือง(พระราชฯ)",d:"ธาตุพนม"},{n:"บ้านนาคำ",d:"ธาตุพนม"},{n:"บ้านนาหนาด",d:"ธาตุพนม"},{n:"บ้านนาแกบึงเหล็ก",d:"ธาตุพนม"},{n:"บ้านน้ำก่ำ (สิทธิผลนุกูล)",d:"ธาตุพนม"},{n:"บ้านน้ำก่ำ(ล้ำประชาอุปถัมภ์)",d:"ธาตุพนม"},{n:"บ้านฝั่งแดง (พระเทพวรมุนีอุปถัมภ์)",d:"ธาตุพนม"},{n:"บ้านสร้างแห่",d:"ธาตุพนม"},{n:"บ้านหนองกุดแคน",d:"ธาตุพนม"},{n:"บ้านหนองสะโน",d:"ธาตุพนม"},{n:"บ้านหนองหญ้าม้า",d:"ธาตุพนม"},{n:"บ้านหัวดอน(สำนักงานฯ)",d:"ธาตุพนม"},{n:"บ้านหัวบึงทุ่ง\"เขตการฯ\"",d:"ธาตุพนม"},{n:"บ้านห้วยทราย",d:"ธาตุพนม"},{n:"บ้านแก่งโพธิ์",d:"ธาตุพนม"},{n:"บ้านแสนพันหมันหย่อน",d:"ธาตุพนม"},{n:"บ้านโคกสว่าง(เรืองศิษย์วิทยานุกูล)",d:"ธาตุพนม"},{n:"บ้านโปร่งหนองเปงใหม่จำปา",d:"ธาตุพนม"},{n:"บ้านโพนบกหัวขัววิทยาคาร",d:"ธาตุพนม"},{n:"บ้านโพนแพง",d:"ธาตุพนม"},{n:"บ้านโสกแมว",d:"ธาตุพนม"},{n:"พระกลางวิทยาคาร",d:"ธาตุพนม"},{n:"มรุกขนคร",d:"ธาตุพนม"},{n:"อนุบาลวัดพระธาตุพนมฯ",d:"ธาตุพนม"},{n:"อุ่มเหม้าวิทยาคาร",d:"ธาตุพนม"},{n:"ชุมชนบ้านพิมาน",d:"นาแก"},{n:"ชุมชนบ้านพุ่มแก",d:"นาแก"},{n:"ดอนเหลืองทองวิทยา",d:"นาแก"},{n:"ต้นแหนสร้างติ่ววิทยานุกูล",d:"นาแก"},{n:"ธารน้ำใจ",d:"นาแก"},{n:"นาผือบอนราษฎร์นุกูล",d:"นาแก"},{n:"นาฮุมอุดมสวรรค์สามัคคี",d:"นาแก"},{n:"นาเหนือทุ่งทองวิทยา",d:"นาแก"},{n:"บ่อดอกซ้อนท่าวัด",d:"นาแก"},{n:"บ้านกลางมูลอ้น",d:"นาแก"},{n:"บ้านคำเม็ก",d:"นาแก"},{n:"บ้านจอมมณี",d:"นาแก"},{n:"บ้านจำปา",d:"นาแก"},{n:"บ้านดงดู่งาม",d:"นาแก"},{n:"บ้านดงน้อยพัฒนา",d:"นาแก"},{n:"บ้านดงอินำ",d:"นาแก"},{n:"บ้านดอนโทน",d:"นาแก"},{n:"บ้านดินดำหมากเฟือง",d:"นาแก"},{n:"บ้านตับเต่าโนนจันทร์",d:"นาแก"},{n:"บ้านนากุงยางคำ",d:"นาแก"},{n:"บ้านนาคู่",d:"นาแก"},{n:"บ้านนางเลิศ",d:"นาแก"},{n:"บ้านนาทุ่งมั่ง",d:"นาแก"},{n:"บ้านนาป่งคอง",d:"นาแก"},{n:"บ้านนามนดงติ้ววิทยา",d:"นาแก"},{n:"บ้านนาเลียง",d:"นาแก"},{n:"บ้านนาแกน้อย (นทพ.อุปถัมภ์)",d:"นาแก"},{n:"บ้านนาโสก",d:"นาแก"},{n:"บ้านน้ำบ่อ",d:"นาแก"},{n:"บ้านปากบัง",d:"นาแก"},{n:"บ้านพระซองเหนือ",d:"นาแก"},{n:"บ้านพิมานท่า",d:"นาแก"},{n:"บ้านสีชมพูมิตรภาพที่ 164",d:"นาแก"},{n:"บ้านหนองกุง",d:"นาแก"},{n:"บ้านหนองกุง \"ฮินดูสมาช\"",d:"นาแก"},{n:"บ้านหนองคอง",d:"นาแก"},{n:"บ้านหนองบ่อ",d:"นาแก"},{n:"บ้านหนองยอโพนแพง",d:"นาแก"},{n:"บ้านหนองหญ้าปล้องขัวสูง",d:"นาแก"},{n:"บ้านหนองหอยคำอ้อม",d:"นาแก"},{n:"บ้านหนองหอยใหญ่",d:"นาแก"},{n:"บ้านหนองห้าง",d:"นาแก"},{n:"บ้านเหล่าทุ่ง",d:"นาแก"},{n:"บ้านแก้งสีลารมณ์สามัคคี",d:"นาแก"},{n:"บ้านแขนนาง",d:"นาแก"},{n:"บ้านโคกกลางแก้งน้อย(กัลยาฯ)",d:"นาแก"},{n:"บ้านโพธิ์ศรี",d:"นาแก"},{n:"บ้านโพนดู่โคกสวัสดิ์",d:"นาแก"},{n:"พระซองวิทยาคาร",d:"นาแก"},{n:"ศรีโพนทองวิทยา",d:"นาแก"},{n:"หนองสังข์ราษฎร์บำรุง",d:"นาแก"},{n:"อนุบาลนาแกผดุงราชกิจเจริญ",d:"นาแก"},{n:"ไทยรัฐวิทยา 50 (บ้านคำพี้)",d:"นาแก"},{n:"ชุมชนหนองฮีสามัคคี",d:"ปลาปาก"},{n:"บ้านกอก",d:"ปลาปาก"},{n:"บ้านกุงโกน",d:"ปลาปาก"},{n:"บ้านกุตาไก้",d:"ปลาปาก"},{n:"บ้านจรุกเตย",d:"ปลาปาก"},{n:"บ้านดอนกลาง",d:"ปลาปาก"},{n:"บ้านดอนดู่",d:"ปลาปาก"},{n:"บ้านตับเต่าหนองเทาสามัคคี",d:"ปลาปาก"},{n:"บ้านถาวรนาอุดม",d:"ปลาปาก"},{n:"บ้านทันสมัย",d:"ปลาปาก"},{n:"บ้านนกเหาะ",d:"ปลาปาก"},{n:"บ้านนาขาม",d:"ปลาปาก"},{n:"บ้านนางาม",d:"ปลาปาก"},{n:"บ้านนาดอกไม้",d:"ปลาปาก"},{n:"บ้านนามะเขือ",d:"ปลาปาก"},{n:"บ้านนาสะเดา",d:"ปลาปาก"},{n:"บ้านนาสีนวล",d:"ปลาปาก"},{n:"บ้านนาเชือก",d:"ปลาปาก"},{n:"บ้านปลาปากน้อย",d:"ปลาปาก"},{n:"บ้านมหาชัย",d:"ปลาปาก"},{n:"บ้านม่วง",d:"ปลาปาก"},{n:"บ้านวังกะเบา",d:"ปลาปาก"},{n:"บ้านวังม่วง",d:"ปลาปาก"},{n:"บ้านวังยาง",d:"ปลาปาก"},{n:"บ้านวังสิม",d:"ปลาปาก"},{n:"บ้านวังโพธิ์",d:"ปลาปาก"},{n:"บ้านศรีธน",d:"ปลาปาก"},{n:"บ้านสว่างสำราญ",d:"ปลาปาก"},{n:"บ้านหนองกกคูณ",d:"ปลาปาก"},{n:"บ้านหนองบัว",d:"ปลาปาก"},{n:"บ้านหนองบัวคำ",d:"ปลาปาก"},{n:"บ้านหนองบัวราษฎร์รัฐบำรุง",d:"ปลาปาก"},{n:"บ้านหนองแสง",d:"ปลาปาก"},{n:"บ้านห้วยไหล่",d:"ปลาปาก"},{n:"บ้านโคกกลาง",d:"ปลาปาก"},{n:"บ้านโคกสว่าง",d:"ปลาปาก"},{n:"บ้านโคกสูง",d:"ปลาปาก"},{n:"บ้านโพนทัน",d:"ปลาปาก"},{n:"บ้านโพนทา",d:"ปลาปาก"},{n:"บ้านใหม่วังเซือม",d:"ปลาปาก"},{n:"ปลาปากราษฎร์บำรุง",d:"ปลาปาก"},{n:"โพนสวางนางิ้ววิทยา",d:"ปลาปาก"},{n:"บ้านนาขามส้มป่อย",d:"วังยาง"},{n:"บ้านผักขะย่านาคอยโนนแดง",d:"วังยาง"},{n:"บ้านยอดชาดวิทยา",d:"วังยาง"},{n:"บ้านวังยาง",d:"วังยาง"},{n:"บ้านสามแยกหัวภูธร",d:"วังยาง"},{n:"บ้านหนองนางด่อน",d:"วังยาง"},{n:"บ้านหนองบึง",d:"วังยาง"},{n:"บ้านหนองสะโนนาสมบูรณ์",d:"วังยาง"},{n:"บ้านหนองแคน",d:"วังยาง"},{n:"บ้านหนองโพธิ์วังโน",d:"วังยาง"},{n:"บ้านโคกสีมิตรภาพที่ 87",d:"วังยาง"},{n:"บ้านโนนหอม",d:"วังยาง"},{n:"บ้านโพนสวางหนองแหน",d:"วังยาง"},{n:"หนองผักแว่นโนนฮังหนองบัวสามัคคี",d:"วังยาง"},{n:"ชุมชนนามนวิทยาคาร",d:"เมืองนครพนม"},{n:"ดงสว่างเจริญวิทย์",d:"เมืองนครพนม"},{n:"บ้านกกไฮ",d:"เมืองนครพนม"},{n:"บ้านกลางน้อย",d:"เมืองนครพนม"},{n:"บ้านกลางบ้านหนาด",d:"เมืองนครพนม"},{n:"บ้านกล้วย",d:"เมืองนครพนม"},{n:"บ้านกุรุคุ",d:"เมืองนครพนม"},{n:"บ้านขามเฒ่ากุดข้าวปุ้น(ราษฎร์อุทิศ)",d:"เมืองนครพนม"},{n:"บ้านคำพอก",d:"เมืองนครพนม"},{n:"บ้านคำสว่าง",d:"เมืองนครพนม"},{n:"บ้านคำเตย(คำเตยราษฎร์ร่วมจิต)",d:"เมืองนครพนม"},{n:"บ้านชะโงมนาโดน",d:"เมืองนครพนม"},{n:"บ้านชะโนต",d:"เมืองนครพนม"},{n:"บ้านดงติ้ว",d:"เมืองนครพนม"},{n:"บ้านดงต้อง(ดงขวางราษฎร์บำรุง)",d:"เมืองนครพนม"},{n:"บ้านดงยอ",d:"เมืองนครพนม"},{n:"บ้านดงโชค",d:"เมืองนครพนม"},{n:"บ้านดอนม่วง",d:"เมืองนครพนม"},{n:"บ้านดอนยานาง",d:"เมืองนครพนม"},{n:"บ้านดอนแดงเจริญทอง",d:"เมืองนครพนม"},{n:"บ้านทุ่งมน",d:"เมืองนครพนม"},{n:"บ้านท่าค้อ(ชุณห์ประสาทศิลป์)",d:"เมืองนครพนม"},{n:"บ้านนาคอกควาย",d:"เมืองนครพนม"},{n:"บ้านนาคำโนนขาม",d:"เมืองนครพนม"},{n:"บ้านนาทราย",d:"เมืองนครพนม"},{n:"บ้านนาป่ง",d:"เมืองนครพนม"},{n:"บ้านนามูลฮิ้น",d:"เมืองนครพนม"},{n:"บ้านนาราชควาย",d:"เมืองนครพนม"},{n:"บ้านนาราชควายน้อย",d:"เมืองนครพนม"},{n:"บ้านนาหลวง",d:"เมืองนครพนม"},{n:"บ้านนาหัวบ่อ",d:"เมืองนครพนม"},{n:"บ้านน้อยใต้",d:"เมืองนครพนม"},{n:"บ้านผึ้ง",d:"เมืองนครพนม"},{n:"บ้านวังกระแส",d:"เมืองนครพนม"},{n:"บ้านวังตามัว",d:"เมืองนครพนม"},{n:"บ้านวังไฮหนองกุง",d:"เมืองนครพนม"},{n:"บ้านสร้างหิน",d:"เมืองนครพนม"},{n:"บ้านสุขเกษม",d:"เมืองนครพนม"},{n:"บ้านสุขเจริญ",d:"เมืองนครพนม"},{n:"บ้านสําราญ",d:"เมืองนครพนม"},{n:"บ้านหนองค้าโคกกุง",d:"เมืองนครพนม"},{n:"บ้านหนองจันทน์",d:"เมืองนครพนม"},{n:"บ้านหนองญาติ",d:"เมืองนครพนม"},{n:"บ้านหนองดินแดง",d:"เมืองนครพนม"},{n:"บ้านหนองบัวด่านเก่า",d:"เมืองนครพนม"},{n:"บ้านหนองบัวหนองแวง",d:"เมืองนครพนม"},{n:"บ้านหนองบัวหน้าฐานบิน",d:"เมืองนครพนม"},{n:"บ้านหนองปลาดุก",d:"เมืองนครพนม"},{n:"บ้านหนองยาว",d:"เมืองนครพนม"},{n:"บ้านหนองหญ้าไซ",d:"เมืองนครพนม"},{n:"บ้านหนองแซง",d:"เมืองนครพนม"},{n:"บ้านเนินสะอาด",d:"เมืองนครพนม"},{n:"บ้านเหล่าภูมีคำธาตุ",d:"เมืองนครพนม"},{n:"บ้านโคกก่อง",d:"เมืองนครพนม"},{n:"บ้านโชคอํานวย",d:"เมืองนครพนม"},{n:"บ้านโพธิ์ตาก",d:"เมืองนครพนม"},{n:"บ้านโพนค้อโพนสวรรค์",d:"เมืองนครพนม"},{n:"บ้านโพนป่าหว้าน",d:"เมืองนครพนม"},{n:"บ้านไทยสามัคคี",d:"เมืองนครพนม"},{n:"รอดโพธิ์ทองวิทยาสรรค์",d:"เมืองนครพนม"},{n:"สุนทรวิจิตร(บำรุงวิทยา)",d:"เมืองนครพนม"},{n:"อนุบาลนครพนม",d:"เมืองนครพนม"},{n:"ชุมชนบ้านหนองย่างซี้น",d:"เรณูนคร"},{n:"นางามวิทยาคาร",d:"เรณูนคร"},{n:"บ้านคำผาสุก",d:"เรณูนคร"},{n:"บ้านดงบาก",d:"เรณูนคร"},{n:"บ้านดงมะเอก",d:"เรณูนคร"},{n:"บ้านดอนกกโพธิ์ค่ายเสรีวิทยา",d:"เรณูนคร"},{n:"บ้านดอนขาว",d:"เรณูนคร"},{n:"บ้านทุ่งสว่าง",d:"เรณูนคร"},{n:"บ้านท่าลาด (ราษฎร์วิทยานุกูล)",d:"เรณูนคร"},{n:"บ้านนาขาม",d:"เรณูนคร"},{n:"บ้านนาดี",d:"เรณูนคร"},{n:"บ้านนาบัว",d:"เรณูนคร"},{n:"บ้านนาบั่ว",d:"เรณูนคร"},{n:"บ้านนาม่วง",d:"เรณูนคร"},{n:"บ้านนายอ",d:"เรณูนคร"},{n:"บ้านนายอน้อย",d:"เรณูนคร"},{n:"บ้านนาโดนเก่า",d:"เรณูนคร"},{n:"บ้านนาโดนใหม่",d:"เรณูนคร"},{n:"บ้านสร้างเม็ก",d:"เรณูนคร"},{n:"บ้านสร้างแป้น",d:"เรณูนคร"},{n:"บ้านหนองกุง",d:"เรณูนคร"},{n:"บ้านหนองแซง",d:"เรณูนคร"},{n:"บ้านหัวขัวใต้",d:"เรณูนคร"},{n:"บ้านเหล่าสำราญ",d:"เรณูนคร"},{n:"บ้านเหิบ",d:"เรณูนคร"},{n:"บ้านโคกกลาง",d:"เรณูนคร"},{n:"บ้านโคกหินแฮ่",d:"เรณูนคร"},{n:"บ้านโนนสวรรค์",d:"เรณูนคร"},{n:"บ้านโนนสังข์",d:"เรณูนคร"},{n:"บ้านโพนสาวเอ้",d:"เรณูนคร"},{n:"ลาดสว่างวิทยา",d:"เรณูนคร"},{n:"เรณูวิทยาคาร",d:"เรณูนคร"},{n:"โพนทองวิทยาคาร",d:"เรณูนคร"}];
+// ── Autocomplete เลือกโรงเรียนจากรายชื่อจริง (กันพิมพ์ไม่ตรง ตั้งแต่ต้นทาง) ──
+function attachSchoolAutocomplete(inputId){
+  const input = document.getElementById(inputId);
+  if(!input || input._acAttached) return;
+  input._acAttached = true;
+  input.setAttribute('autocomplete','off');
+  const wrap = input.parentElement; wrap.style.position = 'relative';
+  const box = document.createElement('div');
+  box.style.cssText = 'position:absolute;left:0;right:0;top:100%;z-index:60;background:#fff;border:1px solid #e6e2d6;border-radius:10px;box-shadow:0 10px 28px rgba(0,0,0,.14);max-height:260px;overflow-y:auto;display:none;margin-top:4px;';
+  wrap.appendChild(box);
+  const norm = s => (s||'').toString().toLowerCase().replace(/[\(\uff08][^\)\uff09]*[\)\uff09]/g,'').replace(/\s+/g,'').replace(/^(\u0e42\u0e23\u0e07\u0e40\u0e23\u0e35\u0e22\u0e19|\u0e23\.?\u0e23\.?)/,'');
+  let active = -1, shown = [];
+  function render(list){
+    shown = list.slice(0,40); active = -1;
+    if(!shown.length){ box.style.display='none'; return; }
+    box.innerHTML = '';
+    shown.forEach((s,i)=>{
+      const item = document.createElement('div');
+      item.dataset.i = i;
+      item.style.cssText = 'padding:10px 12px;cursor:pointer;border-bottom:1px solid #f3f1ea;font-size:.95rem;line-height:1.35;';
+      item.innerHTML = '<span style="color:#222;">'+s.n+'</span> <span style="color:#b08d57;font-size:.78rem;">\u2022 '+s.d+'</span>';
+      item.addEventListener('mousedown', e=>{ e.preventDefault(); input.value = s.n; box.style.display='none'; });
+      item.addEventListener('mouseenter', ()=>{ active=i; paint(); });
+      box.appendChild(item);
+    });
+    box.style.display='block';
+  }
+  function paint(){ [...box.children].forEach((c,i)=>{ c.style.background = i===active ? '#faf6ec' : '#fff'; }); }
+  function search(){
+    const v = input.value.trim();
+    const q = norm(v);
+    if(!q){ box.style.display='none'; return; }
+    const dq = v.toLowerCase();
+    const m = SCHOOLS.filter(s => norm(s.n).includes(q) || s.d.toLowerCase().includes(dq));
+    render(m);
+  }
+  input.addEventListener('input', search);
+  input.addEventListener('focus', ()=>{ if(input.value.trim()) search(); });
+  input.addEventListener('blur', ()=> setTimeout(()=>{ box.style.display='none'; }, 160));
+  input.addEventListener('keydown', e=>{
+    if(box.style.display==='none') return;
+    if(e.key==='ArrowDown'){ e.preventDefault(); active=Math.min(active+1,shown.length-1); paint(); box.children[active]&&box.children[active].scrollIntoView({block:'nearest'}); }
+    else if(e.key==='ArrowUp'){ e.preventDefault(); active=Math.max(active-1,0); paint(); box.children[active]&&box.children[active].scrollIntoView({block:'nearest'}); }
+    else if(e.key==='Enter'){ if(active>=0){ e.preventDefault(); input.value=shown[active].n; box.style.display='none'; } }
+    else if(e.key==='Escape'){ box.style.display='none'; }
+  });
+}
+function initSchoolAutocomplete(){ ['regSchool','forgotSchool'].forEach(attachSchoolAutocomplete); }
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', initSchoolAutocomplete);
+else initSchoolAutocomplete();
+
+// ════════════════════════════════════════════════════════════
+function _schoolCore(s){
+  let x = (s||'').toString().toLowerCase();
+  x = x.replace(/[๐-๙]/g, d => String('๐๑๒๓๔๕๖๗๘๙'.indexOf(d)));   // เลขไทย → อารบิก
+  x = x.replace(/[\(（][^\)）]*[\)）]/g, '');                          // ตัดเนื้อหาในวงเล็บ
+  x = x.replace(/\s+/g,'')                                            // ตัดช่องว่าง
+       .replace(/^(โรงเรียน|ร\.?ร\.?)/,'')                            // ตัดคำนำหน้า
+       .replace(/[ฯ.\-,_/'"’]/g,'');                                  // ตัดเครื่องหมาย + ฯ
+  return x;
+}
+function _schoolParen(s){
+  const m = (s||'').toString().match(/[\(（]([^\)）]+)[\)）]/);
+  return m ? _schoolCore(m[1]) : '';
+}
+function _editDist(a,b){
+  const m=a.length,n=b.length; if(!m) return n; if(!n) return m;
+  let prev=Array.from({length:n+1},(_,i)=>i), cur=new Array(n+1);
+  for(let i=1;i<=m;i++){ cur[0]=i;
+    for(let j=1;j<=n;j++){ cur[j]=Math.min(prev[j]+1, cur[j-1]+1, prev[j-1]+(a[i-1]===b[j-1]?0:1)); }
+    [prev,cur]=[cur,prev];
+  }
+  return prev[n];
+}
+function schoolMatches(stored, input){
+  const A=_schoolCore(stored), B=_schoolCore(input);
+  if(!A||!B) return false;
+  if(A===B) return true;
+  // เลขประจำโรงเรียนต่างกัน = คนละโรงเรียน (กัน 50 vs 51 หลุดผ่าน fuzzy)
+  const digA=(A.match(/\d+/g)||[]).join(''), digB=(B.match(/\d+/g)||[]).join('');
+  if(digA && digB && digA!==digB) return false;
+  // ชื่อหนึ่งเป็นส่วนหนึ่งของอีกชื่อ (กรอกมี/ไม่มีสร้อย หรือสั้น-ยาวต่างกัน)
+  const short=A.length<=B.length?A:B, long=A.length<=B.length?B:A;
+  if(short.length>=4 && long.includes(short)) return true;
+  // เทียบกับชื่อสร้อยในวงเล็บ (กรณีกรอกเฉพาะชื่อบ้าน)
+  const pA=_schoolParen(stored), pB=_schoolParen(input);
+  if(pA && (pA===B || B.includes(pA) || pA.includes(B))) return true;
+  if(pB && (pB===A || A.includes(pB) || pB.includes(A))) return true;
+  // เผื่อพิมพ์ผิดเล็กน้อย: edit distance ≤ 20% ของความยาว (อย่างน้อย 1 ไม่เกิน 3)
+  const tol = Math.min(3, Math.max(1, Math.floor(Math.max(A.length,B.length)*0.2)));
+  if(_editDist(A,B) <= tol) return true;
+  return false;
+}
+
 window.doForgotVerify = async() => {
   const u=document.getElementById('forgotUsername').value.trim().toLowerCase();
   const fn=document.getElementById('forgotFirstName').value.trim();
@@ -4457,7 +4556,9 @@ window.doForgotVerify = async() => {
   showLoading(false);
   if(snap.empty){err.textContent='ไม่พบ Username นี้ในระบบ';err.classList.add('show');return;}
   const d=snap.docs[0].data();
-  const ok=d.firstName.trim().toLowerCase()===fn.toLowerCase()&&d.lastName.trim().toLowerCase()===ln.toLowerCase()&&d.school.trim().toLowerCase()===sch.toLowerCase();
+  const normName = s => (s||'').toString().trim().toLowerCase().replace(/\s+/g,'').replace(/^(นาย|นางสาว|นาง|น\.ส\.|ด\.ช\.|ด\.ญ\.|เด็กชาย|เด็กหญิง)/,'');
+  const nameOk = normName(d.firstName)===normName(fn) && normName(d.lastName)===normName(ln);
+  const ok = nameOk && schoolMatches(d.school, sch);
   if(!ok){err.textContent='ข้อมูลไม่ตรงกับที่สมัครไว้';err.classList.add('show');return;}
   forgotUid=snap.docs[0].id; forgotUsername_=u;
   document.getElementById('forgotStep1').style.display='none';
@@ -4481,27 +4582,60 @@ window.doResetPassword = async() => {
     await signInWithEmailAndPassword(auth,chkEmail,newPass);
     showLoading(false); suc.textContent='✓ รหัสผ่านถูกต้องอยู่แล้ว กำลังเข้าสู่ระบบ...'; suc.classList.add('show');
   } catch(loginErr) {
-    // ดึงข้อมูล user เดิมจาก Firestore
+    // รหัสใหม่เข้าไม่ได้ → รีเซ็ตอัตโนมัติทันที (ไม่ต้องรอ Admin)
+    // สร้างบัญชี Auth ใหม่ + ย้ายประวัติทั้งหมด + login ให้เลย โดยคง username เดิม
+    let secondaryApp = null;
     try {
       const snapOld = await getDoc(doc(db,'users',forgotUid));
       if(!snapOld.exists()){showLoading(false);err.textContent='ไม่พบข้อมูลผู้ใช้';err.classList.add('show');return;}
       const oldData = snapOld.data();
-      const oldEmail = forgotUsername_+'@training-npk1.local';
-      // ลองเข้าด้วยรหัสเก่า (ต้องการ re-auth เพื่อ delete)
-      // เนื่องจาก client SDK ไม่สามารถ reset password โดยตรงได้
-      // วิธีที่ดีที่สุด: ลบ account เดิม แล้วสร้างใหม่พร้อม migrate data
-      // แต่ต้องการ re-auth ก่อน delete — ซึ่งเราไม่รู้รหัสเก่า
-      // ดังนั้นใช้วิธี: บันทึก pending และ Admin approve ผ่าน dashboard (กด 1 ครั้ง)
-      await updateDoc(doc(db,'users',forgotUid),{
-        pendingPasswordReset: newPass,
-        pendingResetAt: new Date().toISOString()
+
+      // 1) สร้างบัญชี Auth ใหม่บน secondary app (ไม่กระทบ auth หลัก)
+      const newEmail = forgotUsername_ + '_reset_' + Date.now() + '@training-npk1.local';
+      secondaryApp = initializeApp(firebaseConfig, 'pwreset-' + Date.now());
+      const secondaryAuth = getAuth(secondaryApp);
+      const cred = await createUserWithEmailAndPassword(secondaryAuth, newEmail, newPass);
+      const newUid = cred.user.uid;
+
+      // 2) ย้ายข้อมูลทั้งหมด → doc ใหม่ (คง username เดิม + ประวัติครบทุก field)
+      await setDoc(doc(db,'users',newUid), {
+        ...oldData,
+        username: forgotUsername_,
+        authEmail: newEmail,
+        pendingPasswordReset: null,
+        pendingResetAt: null,
+        passwordResetAt: new Date().toISOString(),
+        previousUid: forgotUid,
+        previousAuthEmail: oldData.authEmail || (forgotUsername_ + '@training-npk1.local')
       });
-      showLoading(false);
-      suc.textContent='✓ ส่งคำขอเปลี่ยนรหัสผ่านแล้ว ระบบจะดำเนินการให้อัตโนมัติภายในไม่กี่นาที กรุณารอสักครู่แล้วลองเข้าสู่ระบบใหม่ครับ';
-      suc.classList.add('show');
+
+      // 3) ลบ doc เดิม
+      await deleteDoc(doc(db,'users',forgotUid));
+
+      // 4) บันทึก log ให้ Admin ตรวจย้อนหลัง (กันการสวมรอย — ไม่ขวางผู้ใช้)
+      try {
+        await addDoc(collection(db,'passwordResetLog'), {
+          username: forgotUsername_,
+          firstName: oldData.firstName || '', lastName: oldData.lastName || '',
+          school: oldData.school || '',
+          oldUid: forgotUid, newUid: newUid,
+          userAgent: navigator.userAgent || '',
+          at: new Date().toISOString()
+        });
+      } catch(_) { /* log ล้มเหลวก็ไม่บล็อกการรีเซ็ต */ }
+
+      // 5) ปิด secondary app
+      await signOut(secondaryAuth);
+      await deleteApp(secondaryApp); secondaryApp = null;
+
+      // 6) เข้าสู่ระบบด้วยบัญชีใหม่บน auth หลัก → onAuthStateChanged พาเข้าหน้าเรียนต่อพร้อมประวัติครบ
+      suc.textContent='✓ เปลี่ยนรหัสผ่านสำเร็จ กำลังเข้าสู่ระบบ...'; suc.classList.add('show');
       document.getElementById('forgotStep2').style.display='none';
+      await signInWithEmailAndPassword(auth, newEmail, newPass);
     } catch(e2) {
-      showLoading(false); err.textContent='เกิดข้อผิดพลาด: '+e2.message; err.classList.add('show');
+      if(secondaryApp){ try{ await deleteApp(secondaryApp); }catch(_){} }
+      showLoading(false);
+      err.textContent='เกิดข้อผิดพลาด: '+(e2 && e2.message ? e2.message : e2); err.classList.add('show');
     }
   }
 };
@@ -6869,6 +7003,7 @@ window.openEditProfileForm = () => {
       </div>
     </div>
   `;
+  attachSchoolAutocomplete('editProfileSchool');
 };
 
 window.saveProfileEdits = async () => {
@@ -7723,6 +7858,7 @@ window.openEditProfileFormFull = () => {
       </div>
     </div>
   `;
+  attachSchoolAutocomplete('editProfileSchool');
 };
 
 window.saveProfileEditsFull = async () => {
