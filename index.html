@@ -3421,7 +3421,7 @@ body{transition:background .8s ease;}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+import { initializeApp, deleteApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc, updateDoc, addDoc, deleteDoc, query, collection, collectionGroup, where, getDocs, runTransaction, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
@@ -4391,7 +4391,16 @@ window.doLogin = async() => {
   err.classList.remove('show');
   if(!u||!p){err.textContent='กรุณากรอกข้อมูลให้ครบ';err.classList.add('show');return;}
   showLoading(true);
-  try { await signInWithEmailAndPassword(auth, u+'@training-npk1.local', p); }
+  try {
+    // หา email จริงของบัญชีจาก Firestore ก่อน — เผื่อเคยรีเซ็ตรหัส (authEmail จะไม่ใช่ค่า default)
+    let loginEmail = u + '@training-npk1.local';
+    try {
+      const qx = query(collection(db,'users'), where('username','==',u));
+      const sx = await getDocs(qx);
+      if(!sx.empty && sx.docs[0].data().authEmail) loginEmail = sx.docs[0].data().authEmail;
+    } catch(_) { /* หา mapping ไม่ได้ → ใช้ค่า default */ }
+    await signInWithEmailAndPassword(auth, loginEmail, p);
+  }
   catch(e){ showLoading(false); err.textContent='Username หรือรหัสผ่านไม่ถูกต้อง'; err.classList.add('show'); }
 };
 
@@ -4421,6 +4430,7 @@ window.doRegister = async() => {
     const cred=await createUserWithEmailAndPassword(auth,uname+'@training-npk1.local',pass);
     await setDoc(doc(db,'users',cred.user.uid),{
       prefix,firstName:fn,lastName:ln,position:pos,school:sch,username:uname,
+      authEmail: uname+'@training-npk1.local',
       photoBase64: registerPhotoBase64 || null,
       // backward compat flat fields (pp3)
       completedVideos:[],quizPassed:[],quizScores:{},certNameConfirmed:false,leaveCount:0,
@@ -4465,8 +4475,10 @@ window.doResetPassword = async() => {
   if(newPass!==newPass2){err.textContent='รหัสผ่านไม่ตรงกัน';err.classList.add('show');return;}
   showLoading(true);
   try {
-    // ลองเข้าด้วยรหัสใหม่ก่อน (กรณีจำผิดแต่จริงๆ ถูก)
-    await signInWithEmailAndPassword(auth,forgotUsername_+'@training-npk1.local',newPass);
+    // ลองเข้าด้วยรหัสใหม่ก่อน (กรณีจำผิดแต่จริงๆ ถูก) — ใช้ authEmail จริง
+    let chkEmail = forgotUsername_+'@training-npk1.local';
+    try { const cs = await getDoc(doc(db,'users',forgotUid)); if(cs.exists() && cs.data().authEmail) chkEmail = cs.data().authEmail; } catch(_){}
+    await signInWithEmailAndPassword(auth,chkEmail,newPass);
     showLoading(false); suc.textContent='✓ รหัสผ่านถูกต้องอยู่แล้ว กำลังเข้าสู่ระบบ...'; suc.classList.add('show');
   } catch(loginErr) {
     // ดึงข้อมูล user เดิมจาก Firestore
@@ -5182,25 +5194,53 @@ window.adminBypassAll = async() => {
 };
 
 window.approvePasswordReset = async(uid,username,newPass) => {
-  if(!confirm('เปลี่ยนรหัสผ่านสำหรับ @'+username+' เป็นรหัสใหม่?')) return;
+  if(!confirm('อนุมัติเปลี่ยนรหัสผ่านของ @'+username+' ?\n\n• ประวัติการอบรมทั้งหมดจะถูกย้ายมาให้ครบ\n• ผู้ใช้เข้าด้วย username เดิม + รหัสใหม่ได้ทันที')) return;
   showLoading(true);
-  // Re-authenticate as admin then change user password
-  // Firebase client SDK ไม่รองรับการเปลี่ยน password ของ user อื่นโดยตรง
-  // วิธี workaround: ใช้ signIn ด้วย email เดิม → updatePassword
-  // แต่เราไม่รู้รหัสเก่า → ต้องใช้ deleteUser+createUser พร้อม migrate data
+  let secondaryApp = null;
   try {
-    // สร้าง account ใหม่ด้วย email เดิม + รหัสใหม่ (จะ error ถ้า account ยังอยู่)
-    // วิธีที่ถูกต้องคือต้องใช้ Firebase Admin SDK (Cloud Function)
-    // เนื่องจากไม่มี Cloud Function ในโปรเจกต์นี้ → บันทึก log ไว้ก่อน
-    await updateDoc(doc(db,'users',uid),{
+    // 1) อ่านข้อมูลเดิมทั้งหมดของผู้ใช้
+    const snapOld = await getDoc(doc(db,'users',uid));
+    if(!snapOld.exists()){ showLoading(false); showToast('✕ ไม่พบข้อมูลผู้ใช้'); return; }
+    const oldData = snapOld.data();
+
+    // 2) สร้างบัญชี Auth ใหม่บน secondary app — เพื่อไม่ให้ session ของ Admin หลัก หลุด
+    //    (createUserWithEmailAndPassword จะ auto sign-in; ทำบน instance แยกจึงไม่กระทบ auth หลัก)
+    const newEmail = username + '_reset_' + Date.now() + '@training-npk1.local';
+    secondaryApp = initializeApp(firebaseConfig, 'pwreset-' + Date.now());
+    const secondaryAuth = getAuth(secondaryApp);
+    const cred = await createUserWithEmailAndPassword(secondaryAuth, newEmail, newPass);
+    const newUid = cred.user.uid;
+
+    // 3) ย้ายข้อมูลทั้งหมดไป doc ใหม่ — คง username เดิม + ประวัติครบทุก field
+    await setDoc(doc(db,'users',newUid), {
+      ...oldData,
+      username: username,            // คง username เดิม → paranee เข้าด้วยชื่อเดิมได้
+      authEmail: newEmail,           // login flow จะ map username เดิม → email ใหม่นี้
       pendingPasswordReset: null,
+      pendingResetAt: null,
       passwordResetApprovedAt: new Date().toISOString(),
-      passwordResetNote: 'Approved by admin — manual reset required via Firebase Console'
+      previousUid: uid,
+      previousAuthEmail: oldData.authEmail || (username + '@training-npk1.local')
     });
+
+    // 4) ลบ doc เดิม (บัญชี Auth เดิมจะค้างใน Firebase Console แต่ login ไม่วิ่งไปหาแล้ว
+    //    เพราะ map ผ่าน authEmail ใหม่ — ลบ orphan ทีหลังผ่าน Console ได้ ไม่กระทบการใช้งาน)
+    await deleteDoc(doc(db,'users',uid));
+
+    // 5) ออกจาก secondary auth + ทำลาย instance ทิ้ง (auth หลัก/Admin ไม่ถูกแตะ)
+    await signOut(secondaryAuth);
+    await deleteApp(secondaryApp); secondaryApp = null;
+
     showLoading(false);
-    showToast('⚠️ บันทึกแล้ว — กรุณาเปลี่ยนรหัสใน Firebase Console > Authentication > Users ด้วยตนเองครับ');
+    showToast('✓ เปลี่ยนรหัสให้ @'+username+' สำเร็จ — เข้าด้วย username เดิม + รหัสใหม่ได้เลย ประวัติอบรมครบ');
     loadAdminDashboard();
-  } catch(e) { showLoading(false); showToast('Error: '+e.message); }
+  } catch(e) {
+    if(secondaryApp){ try{ await deleteApp(secondaryApp); }catch(_){} }
+    showLoading(false);
+    const msg = (e && e.message) ? e.message : String(e);
+    showToast('Error: ' + msg);
+    console.error('approvePasswordReset failed:', e);
+  }
 };
 window.rejectPasswordReset = async(uid) => {
   if(!confirm('ปฏิเสธคำขอเปลี่ยนรหัสผ่าน?')) return;
