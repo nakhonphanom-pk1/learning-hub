@@ -2786,6 +2786,7 @@ body{transition:background .8s ease;}
           <button class="lb-tab" data-lb="score" onclick="setLeaderboardTab('score')">💯 คะแนนสูงสุด</button>
           <button class="lb-tab" data-lb="comments" onclick="setLeaderboardTab('comments')">💬 นักสื่อสาร</button>
           <button class="lb-tab" data-lb="school" onclick="setLeaderboardTab('school')">🏫 โรงเรียนยอดนิยม</button>
+          <button class="lb-tab" data-lb="district" onclick="setLeaderboardTab('district')">🗺️ อำเภอยอดนิยม</button>
           <button class="lb-tab" data-lb="recent" onclick="setLeaderboardTab('recent')">🆕 สมาชิกใหม่</button>
         </div>
         <div class="lb-list" id="leaderboardList">
@@ -8442,6 +8443,7 @@ window.renderLeaderboard = function() {
   let metaFn = null;
   let valueFn = null;
   let isSchool = false;
+  const aggIcon = currentLbTab === 'district' ? '🗺️' : '🏫';
   
   if(currentLbTab === 'first') {
     items = users.filter(u => u.certNumber).sort((a,b) => {
@@ -8501,6 +8503,24 @@ window.renderLeaderboard = function() {
     items = Object.values(bySchool).filter(s => s.name !== 'ไม่ระบุ').sort((a,b) => b._val - a._val);
     valueFn = s => s._val + ' ใบ';
     metaFn = s => `${s.count} ผู้เรียน`;
+  } else if(currentLbTab === 'district') {
+    isSchool = true; // โหมด aggregate เดียวกับโรงเรียน (ใช้ไอคอน ไม่มีรูปคน)
+    // map ชื่อโรงเรียน (normalize) → อำเภอ จากรายชื่อจริง 248 โรงเรียน
+    const schoolToDistrict = {};
+    (typeof SCHOOLS !== 'undefined' ? SCHOOLS : []).forEach(s => {
+      const k = _schoolCore(s.n); if(k && !schoolToDistrict[k]) schoolToDistrict[k] = s.d;
+    });
+    const byDist = {};
+    users.forEach(u => {
+      const d = schoolToDistrict[_schoolCore(u.school)] || 'ไม่ระบุ';
+      if(!byDist[d]) byDist[d] = { id:d, name:'อำเภอ'+d, count:0, certs:0, _val:0 };
+      byDist[d].count++;
+      if(u.certNumber) { byDist[d].certs++; byDist[d]._val++; }
+      if(u.courses) Object.values(u.courses).forEach(c => { if(c.certNumber) { byDist[d].certs++; byDist[d]._val++; }});
+    });
+    items = Object.values(byDist).filter(s => s.name !== 'อำเภอไม่ระบุ').sort((a,b) => b._val - a._val);
+    valueFn = s => s._val + ' ใบ';
+    metaFn = s => `${s.count} ผู้เรียน`;
   } else if(currentLbTab === 'recent') {
     items = users.filter(u => u.registeredAt).sort((a,b) => {
       const aT = new Date(a.registeredAt).getTime();
@@ -8556,7 +8576,7 @@ window.renderLeaderboard = function() {
     
     let avatarHtml;
     if(isSchool) {
-      avatarHtml = '<div class="podium-avatar podium-school-icon" data-name="' + escapeHtml(fullName) + '">🏫</div>';
+      avatarHtml = '<div class="podium-avatar podium-school-icon" data-name="' + escapeHtml(fullName) + '">' + aggIcon + '</div>';
     } else {
       avatarHtml = `<div class="podium-avatar ${isYou ? 'is-you' : ''} ${isFirst}" data-name="${escapeHtml(fullName)}" onclick="openProfilePage('${item.id}')">
         ${renderPhotoCircle(item, 'podium-photo-circle')}
