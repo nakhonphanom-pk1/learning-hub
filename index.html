@@ -3106,7 +3106,10 @@ body{transition:background .8s ease;}
     <div class="quiz-card">
       <div class="quiz-progress-row">
         <span class="quiz-part" id="quizPartLabel">Part 1</span>
-        <span class="quiz-counter" id="quizCounter">ข้อ 1 / 12</span>
+        <span style="display:flex;align-items:center;gap:12px;">
+          <button id="btnQuizSound" onclick="toggleQuizSound()" title="เปิด/ปิดเสียงตอบถูก-ผิด" style="background:none;border:none;cursor:pointer;font-size:17px;line-height:1;padding:2px 4px;opacity:.85;">🔊</button>
+          <span class="quiz-counter" id="quizCounter">ข้อ 1 / 12</span>
+        </span>
       </div>
       <div class="quiz-prog-bar"><div class="quiz-prog-fill" id="quizProgFill"></div></div>
       <div class="quiz-pass-note" id="quizPassNote">✏️ ต้องได้คะแนน 80% ขึ้นไปถึงจะผ่าน — ทำใหม่ได้ไม่จำกัดครั้ง</div>
@@ -4903,6 +4906,7 @@ function startQuiz(videoIdx) {
 
 function renderQuestion() {
   const qs=TRAINING.videos[quizVideoIdx].quiz, total=qs.length;
+  if(typeof _initQuizSoundBtn==='function') _initQuizSoundBtn();
   document.getElementById('quizCounter').textContent=`ข้อ ${quizIdx+1} / ${total}`;
   document.getElementById('quizProgFill').style.width=((quizIdx)/total*100)+'%';
   selectedOpt=null; answered=false;
@@ -4927,6 +4931,58 @@ window.selectOpt = (idx) => {
   document.getElementById('btnCheck').classList.add('ready');
 };
 
+// ── เสียงตอบถูก/ผิด (Web Audio API — สังเคราะห์ในเบราว์เซอร์ ไม่ต้องโหลดไฟล์) ──
+let _quizAudioCtx = null;
+let _quizSoundOn = (localStorage.getItem('quizSoundOn') !== 'off');  // ค่าเริ่มต้น = เปิด
+
+// ปลดล็อก AudioContext ตั้งแต่ user แตะ/กดครั้งแรก — กันเสียง "ข้อแรก" หายเพราะ autoplay policy
+function _ensureQuizAudio() {
+  try {
+    if(!_quizAudioCtx) _quizAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if(_quizAudioCtx.state === 'suspended') _quizAudioCtx.resume();
+  } catch(e) {}
+  return _quizAudioCtx;
+}
+['pointerdown','keydown','touchstart'].forEach(ev =>
+  window.addEventListener(ev, _ensureQuizAudio, { passive:true }));
+
+function playQuizSound(isCorrect) {
+  if(!_quizSoundOn) return;
+  try {
+    const ctx = _ensureQuizAudio();
+    if(!ctx) return;
+    const now = ctx.currentTime;
+    // ถูก: C5–E5–G5 อาร์เพจจิโอสดใส | ผิด: G3 → Eb3 ทุ้มตกลง
+    const notes = isCorrect ? [523.25, 659.25, 783.99] : [196.00, 155.56];
+    const dur   = isCorrect ? 0.10 : 0.20;
+    const peak  = isCorrect ? 0.40 : 0.32;   // ดังขึ้นกว่าเดิม
+    const master = ctx.createGain();
+    master.gain.value = 1; master.connect(ctx.destination);
+    notes.forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = isCorrect ? 'sine' : 'sawtooth';
+      osc.frequency.value = freq;
+      const t0 = now + i * dur;
+      gain.gain.setValueAtTime(0.0001, t0);
+      gain.gain.exponentialRampToValueAtTime(peak, t0 + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur + 0.05);
+      osc.connect(gain); gain.connect(master);
+      osc.start(t0); osc.stop(t0 + dur + 0.08);
+    });
+  } catch(e) { /* เงียบไว้ ไม่ให้ error เสียงไปขัด flow ข้อสอบ */ }
+}
+
+window.toggleQuizSound = () => {
+  _quizSoundOn = !_quizSoundOn;
+  localStorage.setItem('quizSoundOn', _quizSoundOn ? 'on' : 'off');
+  const btn = document.getElementById('btnQuizSound');
+  if(btn) btn.textContent = _quizSoundOn ? '🔊' : '🔇';
+  if(_quizSoundOn) playQuizSound(true);   // เปิดแล้วเล่นตัวอย่างให้ได้ยินทันที
+};
+function _initQuizSoundBtn(){ const b=document.getElementById('btnQuizSound'); if(b) b.textContent = _quizSoundOn ? '🔊' : '🔇'; }
+_initQuizSoundBtn();
+
 window.checkAnswer = () => {
   if(selectedOpt===null||answered) return;
   answered=true;
@@ -4947,6 +5003,8 @@ window.checkAnswer = () => {
   }
   // ✨ Quiz feedback emoji
   showQuizFeedbackEmoji(isCorrect);
+  // 🔊 เสียงตอบถูก/ผิด
+  playQuizSound(isCorrect);
   document.getElementById('btnCheck').style.display='none';
   const btnNext=document.getElementById('btnNextQ');
   btnNext.classList.add('show');
