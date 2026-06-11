@@ -4214,6 +4214,7 @@ window.addEventListener('resize', () => {
 });
 
 window.showCatalogPage = () => {
+  sessionStorage.removeItem('activeCourseId');  // ออกจากคอร์สแล้ว ไม่ต้อง resume ตอน refresh
   renderCourseCards('catalog');
   showPage('pageCatalog');
 };
@@ -4319,6 +4320,7 @@ window.enterCourse = async (courseId) => {
   if(COURSES[courseId].status !== 'active' && !isAdmin) return;   // admin ยกเว้น coming_soon
   
   currentCourseId = courseId;
+  sessionStorage.setItem('activeCourseId', courseId);  // จำคอร์สไว้ resume ตอน refresh (F5)
   TRAINING = COURSES[courseId];  // ให้ระบบเล่นวิดีโอ/แบบทดสอบ follow คอร์สนี้
   
   // โหลด progress ของ course นี้
@@ -4348,12 +4350,20 @@ window.enterCourse = async (courseId) => {
 // ══════════════════════════════════════
 // ANTI-TAB-SWITCH — หลายชั้น
 // ══════════════════════════════════════
+// สั่งหยุดวิดีโอใน Vimeo iframe ผ่าน postMessage API (fire-and-forget)
+function pauseVimeo() {
+  try {
+    const f = document.getElementById('vimeoPlayer');
+    if(f && f.contentWindow) f.contentWindow.postMessage(JSON.stringify({method:'pause'}), 'https://player.vimeo.com');
+  } catch(e){}
+}
 function handleLeave(reason) {
   if(!isWatching) return;
   isWatching=false; clearInterval(timer); clearInterval(heartbeatTimer);
   // บันทึกเวลาที่ดูค้างไว้ทันทีที่ออก
   saveWatchedProgress();
   if(reason==='unload'||reason==='pagehide') return; // ปิดแท็บจริงๆ ไม่ต้องแสดง UI
+  pauseVimeo();   // หยุดคลิปด้วย ไม่ใช่แค่หยุดนับเวลา — กันคลิปวิ่งทิ้งตอนผู้ใช้สลับแท็บ
   leaveCount++;
   saveLeaveCount();
   document.getElementById('statusDot').className='status-dot paused';
@@ -4440,6 +4450,14 @@ onAuthStateChanged(auth, async(user) => {
         // user เลือกหลักสูตรจาก landing → ไปหลักสูตรนั้น (ไม่ว่าจะจบ pp3 หรือยัง)
         currentCourseId = pendingCourse;
         await enterCourse(pendingCourse);
+        showLoading(false);
+        return;
+      }
+
+      // Resume: รีเฟรช (F5) ระหว่างอยู่ในคอร์สใด → กลับเข้าคอร์สนั้นต่อทันที
+      const activeCourse = sessionStorage.getItem('activeCourseId');
+      if(activeCourse && COURSES[activeCourse] && COURSES[activeCourse].status === 'active') {
+        await enterCourse(activeCourse);
         showLoading(false);
         return;
       }
@@ -4768,6 +4786,8 @@ window.doAdminLogin = () => {
 window.doLogout = async() => {
   clearInterval(timer); clearInterval(heartbeatTimer); isWatching=false;
   document.getElementById('vimeoPlayer').src='';
+  sessionStorage.removeItem('activeCourseId');
+  sessionStorage.removeItem('pendingCourseId');
   currentCourseId = 'pp3';  // reset
   TRAINING = COURSES.pp3;   // reset alias
   if(isAdmin){isAdmin=false;document.getElementById('headerRight').style.display='none';renderCourseCards('landing');showPage('pageLanding');return;}
