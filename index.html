@@ -4809,7 +4809,7 @@ async function loadVideo(idx) {
       loadReactions('rx_' + vKey); renderClassroom('videoClassroomWidget', vKey); quickRefreshClassroom(vKey);
       // refresh every 45s
       if(window.__presenceRefresh) clearInterval(window.__presenceRefresh);
-      window.__presenceRefresh = setInterval(() => renderClassroom('videoClassroomWidget', vKey), 20000); // 20s
+      window.__presenceRefresh = setInterval(() => renderClassroom('videoClassroomWidget', vKey), 60000); // 60s — ลดการอ่านลง 3 เท่า (ตอนเข้าใหม่มี quick refresh 1.5/3.5/6s อยู่แล้ว ยังรู้สึกสด)
     }
   }, 100);
   // อัปเดต breadcrumb แสดงชื่อหลักสูตรปัจจุบัน
@@ -8203,7 +8203,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // ══════════════════════════════════════════════════
 // LIVE PRESENCE — "X กำลังเรียนอยู่"
 // ══════════════════════════════════════════════════
-const PRESENCE_TTL = 45 * 1000; // 45s = "online" (เร็วขึ้น)
+const PRESENCE_TTL = 75 * 1000; // 75s = เกณฑ์ออนไลน์ (heartbeat 30s × 2.5 — สมดุลความแม่น/โควตา Firestore)
 let presenceUnsubs = {};
 let presenceHeartbeat = null;
 
@@ -8220,14 +8220,15 @@ function startPresenceHeartbeat(videoKey) {
         photoBase64: userData?.photoBase64 || null,
         videoKey: videoKey,
         courseId: videoKey.split('_')[0],
-        lastSeen: Date.now()
+        lastSeen: Date.now(),
+        expireAt: new Date(Date.now() + 10*60*1000)  // ให้ Firestore TTL policy ลบเอกสารผีอัตโนมัติ
       });
     } catch(e) {
       console.warn('presence heartbeat err:', e);
     }
   };
   update();
-  presenceHeartbeat = setInterval(update, 15000); // every 15s (แม่นยำ)
+  presenceHeartbeat = setInterval(update, 30000); // every 30s — ลดการเขียน Firestore ลงครึ่งหนึ่ง
   console.log('[presence] heartbeat started for videoKey:', videoKey);
 }
 
@@ -8465,7 +8466,7 @@ window.renderClassroom = async (containerId, videoKey, opts = {}) => {
     const online = [];
     snap.forEach(d => {
       const data = d.data();
-      if(data.lastSeen && (now - data.lastSeen) < 90000) {
+      if(data.lastSeen && (now - data.lastSeen) < PRESENCE_TTL) {
         if(!videoKey || data.videoKey === videoKey) {
           online.push(data);
         }
