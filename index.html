@@ -5141,26 +5141,41 @@ window.applyEditName = async() => {
   err.classList.remove('show');
   if(!prefix||!fn||!ln){err.textContent='กรุณากรอกข้อมูลให้ครบ';err.classList.add('show');return;}
   showLoading(true);
-  userData.prefix=prefix; userData.firstName=fn; userData.lastName=ln;
-  await updateDoc(doc(db,'users',currentUser.uid),{prefix,firstName:fn,lastName:ln});
-  document.getElementById('namePreview').textContent=`${prefix}${fn} ${ln}`;
-  document.getElementById('editNameForm').classList.remove('show');
-  showLoading(false); showToast('✓ แก้ไขชื่อแล้ว');
+  try {
+    userData.prefix=prefix; userData.firstName=fn; userData.lastName=ln;
+    if(currentUser) await updateDoc(doc(db,'users',currentUser.uid),{prefix,firstName:fn,lastName:ln});
+    document.getElementById('namePreview').textContent=`${prefix}${fn} ${ln}`;
+    document.getElementById('editNameForm').classList.remove('show');
+    showToast('✓ แก้ไขชื่อแล้ว');
+  } catch(e) {
+    console.error('applyEditName error:', e);
+    showToast('⚠️ บันทึกไม่สำเร็จ: ' + (e.code || e.message));
+  } finally {
+    showLoading(false);
+  }
 };
 window.confirmName = async() => {
   showLoading(true);
-  const updates = {
-    certNameConfirmed: true,  // backward compat (pp3 only)
-    [`courses.${currentCourseId}.certNameConfirmed`]: true
-  };
-  if(currentCourseId !== 'pp3') delete updates.certNameConfirmed;
-  await updateDoc(doc(db,'users',currentUser.uid), updates);
-  userData.certNameConfirmed = true;
-  if(!userData.courses) userData.courses = {};
-  if(!userData.courses[currentCourseId]) userData.courses[currentCourseId] = {};
-  userData.courses[currentCourseId].certNameConfirmed = true;
-  showLoading(false);
-  showPage('pageFeedback');
+  try {
+    if(currentUser){
+      const updates = {
+        certNameConfirmed: true,  // backward compat (pp3 only)
+        [`courses.${currentCourseId}.certNameConfirmed`]: true
+      };
+      if(currentCourseId !== 'pp3') delete updates.certNameConfirmed;
+      await updateDoc(doc(db,'users',currentUser.uid), updates);
+    }
+    userData.certNameConfirmed = true;
+    if(!userData.courses) userData.courses = {};
+    if(!userData.courses[currentCourseId]) userData.courses[currentCourseId] = {};
+    userData.courses[currentCourseId].certNameConfirmed = true;
+    showPage('pageFeedback');
+  } catch(e) {
+    console.error('confirmName error:', e);
+    showToast('⚠️ บันทึกไม่สำเร็จ: ' + (e.code || e.message));
+  } finally {
+    showLoading(false);
+  }
 };
 
 window.submitFeedback = async() => {
@@ -5258,6 +5273,25 @@ async function showCert() {
   const cbc = document.getElementById('certBreadcrumbCourse');
   if(cbc) cbc.textContent = course.shortName;
 
+  // ── โหมดแอดมินทดสอบ (ไม่ได้ login): แสดงใบตัวอย่าง ไม่กินเลขจริง ไม่เขียน Firestore ──
+  if(isAdmin && !currentUser) {
+    showLoading(false);
+    const now = new Date();
+    const thM = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+    const certDate = `${now.getDate()} ${thM[now.getMonth()]} พ.ศ. ${now.getFullYear()+543}`;
+    const fullName = `${userData.prefix||'นาย'}${userData.firstName||'ทดสอบ'} ${userData.lastName||'ระบบ'}`;
+    window._certData = { name: fullName, num: '0000/2569', date: certDate, courseId: currentCourseId };
+    const sn = document.getElementById('certSummaryName');
+    const sm = document.getElementById('certSummaryNum');
+    if(sn) sn.textContent = fullName + ' (ทดสอบ)';
+    if(sm) sm.textContent = 'เลขที่ 0000/2569 (ตัวอย่าง — ไม่ใช้เลขจริง)';
+    document.getElementById('certPendingBadge').style.display='none';
+    document.getElementById('btnRequestEdit').style.display='none';
+    showPage('pageCert');
+    return;
+  }
+
+  try {
   if(!prog.certNumber) {
     const certRef = doc(db, 'certNumbers', course.certCounterDoc);
     const snap = await getDoc(certRef);
@@ -5293,6 +5327,12 @@ async function showCert() {
   if(summaryName) summaryName.textContent = fullName;
   if(summaryNum) summaryNum.textContent = 'เลขที่ ' + certNum;
   showPage('pageCert');
+  } catch(e) {
+    console.error('showCert error:', e);
+    showToast('⚠️ เกิดข้อผิดพลาด: ' + (e.code || e.message));
+  } finally {
+    showLoading(false);
+  }
 }
 
 // เปิดหน้าพิมพ์เกียรติบัตร (cert.html แยก)
