@@ -5311,11 +5311,21 @@ async function showCert() {
   const updatedProg = getCourseProgress(userData, currentCourseId) || {};
   const certDate = updatedProg.certIssuedDate || '';
 
+  const _badge = document.getElementById('certPendingBadge');
   if(updatedProg.pendingEdit){
-    document.getElementById('certPendingBadge').style.display='block';
+    _badge.textContent='⏳ คำขอแก้ไขชื่ออยู่ระหว่างรอ Admin อนุมัติ';
+    _badge.style.background=''; _badge.style.color=''; _badge.style.borderColor='';
+    _badge.style.display='block';
     document.getElementById('btnRequestEdit').style.display='none';
   } else {
-    document.getElementById('certPendingBadge').style.display='none';
+    const apr = userData.nameEditApprovedAt;
+    if(apr && (Date.now() - new Date(apr).getTime()) < 7*24*3600*1000){
+      _badge.textContent='✅ Admin อนุมัติการแก้ไขชื่อของท่านเรียบร้อยแล้ว';
+      _badge.style.background='#d4edda'; _badge.style.color='#155724'; _badge.style.borderColor='#a3d9b1';
+      _badge.style.display='block';
+    } else {
+      _badge.style.display='none';
+    }
     document.getElementById('btnRequestEdit').style.display='block';
   }
 
@@ -5409,25 +5419,36 @@ async function loadAdminDashboard() {
   const total=allUsersCache.length, totalV=TRAINING.videos.length;
   const done=allUsersCache.filter(u=>(u.quizPassed||[]).length>=totalV).length;
   const partial=allUsersCache.filter(u=>(u.quizPassed||[]).length>0&&(u.quizPassed||[]).length<totalV).length;
-  const pending=allUsersCache.filter(u=>u.pendingEdit).length;
+  // รวมคำขอแก้ชื่อจากทุกคอร์ส (nested) + field เก่า (flat, เฉพาะที่ยังไม่ซ้ำกับ nested)
+  const pendingReqs=[];
+  allUsersCache.forEach(u=>{
+    const seen=new Set();
+    Object.keys(COURSES).forEach(cid=>{
+      const pe=u.courses&&u.courses[cid]&&u.courses[cid].pendingEdit;
+      if(pe){pendingReqs.push({u,courseId:cid,pe});seen.add(cid);}
+    });
+    if(u.pendingEdit && !seen.has((u.pendingEdit.courseId)||'pp3')){
+      pendingReqs.push({u,courseId:(u.pendingEdit.courseId)||'pp3',pe:u.pendingEdit});
+    }
+  });
+  const pending=pendingReqs.length;
   document.getElementById('statTotal').textContent=total;
   document.getElementById('statDone').textContent=done;
   document.getElementById('statPartial').textContent=partial;
   document.getElementById('statPending').textContent=pending;
   // Pending
   const pl=document.getElementById('pendingList');
-  const pendingUsers=allUsersCache.filter(u=>u.pendingEdit);
-  pl.innerHTML=pendingUsers.length===0?'<div class="empty-state">ไม่มีคำขอที่รออนุมัติ ✓</div>':
-    pendingUsers.map(u=>`<div class="pending-item" id="pending-${u.id}">
+  pl.innerHTML=pendingReqs.length===0?'<div class="empty-state">ไม่มีคำขอที่รออนุมัติ ✓</div>':
+    pendingReqs.map(({u,courseId,pe})=>`<div class="pending-item" id="pending-${u.id}-${courseId}">
       <div class="pending-info">
-        <div class="pending-name">${u.prefix}${u.firstName} ${u.lastName}</div>
+        <div class="pending-name">${u.prefix}${u.firstName} ${u.lastName} <span style="font-size:11px;background:var(--gold);color:var(--navy);padding:1px 8px;border-radius:8px;font-weight:600;vertical-align:middle;">${COURSES[courseId]?COURSES[courseId].shortName:courseId}</span></div>
         <div class="pending-detail">${u.position} | ${u.school} | @${u.username}</div>
-        <div class="pending-change"><span class="old">${u.pendingEdit.oldName||'-'}</span><span class="arrow">→</span><span class="new-name">${u.pendingEdit.prefix}${u.pendingEdit.firstName} ${u.pendingEdit.lastName}</span></div>
-        ${u.pendingEdit.reason?`<div style="font-size:12px;color:var(--muted);margin-top:4px">เหตุผล: ${u.pendingEdit.reason}</div>`:''}
+        <div class="pending-change"><span class="old">${pe.oldName||'-'}</span><span class="arrow">→</span><span class="new-name">${pe.prefix}${pe.firstName} ${pe.lastName}</span></div>
+        ${pe.reason?`<div style="font-size:12px;color:var(--muted);margin-top:4px">เหตุผล: ${pe.reason}</div>`:''}
       </div>
       <div class="pending-actions">
-        <button class="btn-approve" onclick="approveEdit('${u.id}','${u.pendingEdit.prefix}','${u.pendingEdit.firstName}','${u.pendingEdit.lastName}')">✓ อนุมัติ</button>
-        <button class="btn-reject" onclick="rejectEdit('${u.id}')">✕ ปฏิเสธ</button>
+        <button class="btn-approve" onclick="approveEdit('${u.id}','${courseId}','${pe.prefix}','${pe.firstName}','${pe.lastName}')">✓ อนุมัติ</button>
+        <button class="btn-reject" onclick="rejectEdit('${u.id}','${courseId}')">✕ ปฏิเสธ</button>
       </div></div>`).join('');
   // Pending Password Reset
   const prList=document.getElementById('pendingResetList');
@@ -5581,16 +5602,25 @@ window.rejectPasswordReset = async(uid) => {
   await updateDoc(doc(db,'users',uid),{pendingPasswordReset:null});
   showLoading(false); showToast('✕ ปฏิเสธแล้ว'); loadAdminDashboard();
 };
-window.approveEdit = async(uid,prefix,fn,ln) => {
+window.approveEdit = async(uid,courseId,prefix,fn,ln) => {
   showLoading(true);
-  await updateDoc(doc(db,'users',uid),{prefix,firstName:fn,lastName:ln,pendingEdit:null,nameEditApprovedAt:new Date().toISOString()});
-  showLoading(false); showToast('✓ อนุมัติแล้ว'); loadAdminDashboard();
+  try {
+    const updates={prefix,firstName:fn,lastName:ln,nameEditApprovedAt:new Date().toISOString(),
+      [`courses.${courseId}.pendingEdit`]: null};
+    updates.pendingEdit = null;  // ลบ field เก่าด้วยเสมอ (backward compat)
+    await updateDoc(doc(db,'users',uid),updates);
+    showToast('✓ อนุมัติแล้ว'); loadAdminDashboard();
+  } catch(e){ console.error('approveEdit error:',e); showToast('⚠️ '+(e.code||e.message)); }
+  finally { showLoading(false); }
 };
-window.rejectEdit = async(uid) => {
+window.rejectEdit = async(uid,courseId) => {
   if(!confirm('ปฏิเสธคำขอแก้ไขชื่อนี้?')) return;
   showLoading(true);
-  await updateDoc(doc(db,'users',uid),{pendingEdit:null});
-  showLoading(false); showToast('✕ ปฏิเสธแล้ว'); loadAdminDashboard();
+  try {
+    await updateDoc(doc(db,'users',uid),{pendingEdit:null,[`courses.${courseId}.pendingEdit`]:null});
+    showToast('✕ ปฏิเสธแล้ว'); loadAdminDashboard();
+  } catch(e){ console.error('rejectEdit error:',e); showToast('⚠️ '+(e.code||e.message)); }
+  finally { showLoading(false); }
 };
 
 // ── Export Excel ──
