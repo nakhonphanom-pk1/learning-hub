@@ -4522,19 +4522,10 @@ onAuthStateChanged(auth, async(user) => {
         return;
       }
 
-      // Routing logic — เช็คว่า "จบ ปพ.3" แล้วหรือยัง
-      if(hasCompletedCourse(userData, 'pp3')) {
-        // จบ ปพ.3 แล้ว → ไปหน้า Course Catalog
-        showCatalogPage();
-      } else if(quizPassed.size >= COURSES[currentCourseId].videos.length) {
-        // ผ่านข้อสอบครบ แต่ยังไม่มีเกียรติบัตร → continue flow เดิม
-        if(prog.certNameConfirmed){ showCert(); } else { showConfirmName(); }
-      } else {
-        // ยังไม่จบ → เข้า training ต่อ
-        let resume=0;
-        for(let i=0;i<COURSES[currentCourseId].videos.length;i++){ if(!quizPassed.has(i)){resume=i;break;} }
-        showPage('pageTraining'); loadVideo(resume); renderPlaylist();
-      }
+      // หลัง login ผ่านปุ่มกลาง (ไม่ได้เลือกคอร์สมา) → ไปหน้ารวมคอร์สเสมอ
+      // ให้ผู้ใช้เลือกเองว่าจะอบรมอะไร — การกดการ์ดคอร์ส (pendingCourseId)
+      // และการ F5 ระหว่างเรียน (activeCourseId) ถูกจัดการไปแล้วด้านบน
+      showCatalogPage();
     }
     showLoading(false);
   } else {
