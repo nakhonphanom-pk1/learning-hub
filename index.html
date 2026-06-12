@@ -6502,9 +6502,22 @@ function renderCommentList() {
   const countEl = document.getElementById('commentsCount');
   if(!list) return;
   
-  if(countEl) countEl.textContent = currentComments.length;
+  // แยก parent / replies — ตัด reply กำพร้า (parent ถูกลบไปแล้ว) ออก
+  // กันบัคตัวนับค้าง: doc reply ที่ parent หายจะไม่ถูกนับและไม่ถูกแสดง
+  const parents = currentComments.filter(c => !c.parentId);
+  const parentIds = new Set(parents.map(c => c.id));
+  const repliesByParent = {};
+  currentComments.filter(c => c.parentId && parentIds.has(c.parentId)).forEach(r => {
+    if(!repliesByParent[r.parentId]) repliesByParent[r.parentId] = [];
+    repliesByParent[r.parentId].push(r);
+  });
   
-  if(currentComments.length === 0) {
+  const visibleCount = parents.length
+    + Object.values(repliesByParent).reduce((s, arr) => s + arr.length, 0);
+  
+  if(countEl) countEl.textContent = visibleCount;
+  
+  if(visibleCount === 0) {
     list.innerHTML = `
       <div class="comment-empty">
         <div class="comment-empty-icon">💭</div>
@@ -6513,14 +6526,6 @@ function renderCommentList() {
     `;
     return;
   }
-  
-  // แยก parent / replies
-  const parents = currentComments.filter(c => !c.parentId);
-  const repliesByParent = {};
-  currentComments.filter(c => c.parentId).forEach(r => {
-    if(!repliesByParent[r.parentId]) repliesByParent[r.parentId] = [];
-    repliesByParent[r.parentId].push(r);
-  });
   // sort replies by time asc (เก่าก่อนใหม่ภายใต้ parent — flow การสนทนา)
   Object.keys(repliesByParent).forEach(pid => {
     repliesByParent[pid].sort((a, b) => {
@@ -6712,6 +6717,15 @@ window.deleteComment = async (commentId) => {
   if(!ok) return;
   
   try {
+    // ลบ reply ลูกทั้งหมดก่อน — กัน reply กำพร้าค้างใน Firestore (บัคตัวนับ)
+    try {
+      const replySnap = await getDocs(query(
+        collection(db, 'videoComments', key, 'comments'),
+        where('parentId', '==', commentId)
+      ));
+      await Promise.allSettled(replySnap.docs.map(d => deleteDoc(d.ref)));
+    } catch(re) { console.warn('cascade delete replies err:', re); }
+    
     await deleteDoc(doc(db, 'videoComments', key, 'comments', commentId));
     showToast('🗑️ ลบความคิดเห็นแล้ว');
   } catch(e) {
