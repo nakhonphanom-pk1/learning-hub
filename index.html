@@ -2753,7 +2753,7 @@ body{transition:background .8s ease;}
 <!-- CINEMATIC LOADER -->
 <div class="cinematic-loader" id="cinematicLoader">
   <img class="cinematic-wordmark" src="nkp1_logo.png" alt="NKP1 Learning Hub">
-  <div class="cinematic-subtitle">ศูนย์อบรมออนไลน์ สพป.นครพนม เขต ๑ <span style="display:inline-block;background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#451a03;font-size:10px;font-weight:800;padding:2px 8px;border-radius:6px;margin-left:6px;vertical-align:middle;letter-spacing:1.5px;">BETA</span></div>
+  <div class="cinematic-subtitle">ศูนย์อบรมออนไลน์ สพป.นครพนม เขต 1 <span style="display:inline-block;background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#451a03;font-size:10px;font-weight:800;padding:2px 8px;border-radius:6px;margin-left:6px;vertical-align:middle;letter-spacing:1.5px;">BETA</span></div>
   <div class="cinematic-bar"><div class="cinematic-bar-fill"></div></div>
 </div>
 
@@ -2872,15 +2872,15 @@ body{transition:background .8s ease;}
       <div class="marquee" id="topMarquee">
         <div class="marquee-track">
           <span class="marquee-item">NKP1 Learning Hub</span>
-          <span class="marquee-item"><span class="dot">●</span> ศูนย์อบรมออนไลน์ สพป.นครพนม เขต ๑</span>
-          <span class="marquee-item"><span class="dot">●</span> เปิดให้บริการตลอด ๒๔ ชั่วโมง</span>
+          <span class="marquee-item"><span class="dot">●</span> ศูนย์อบรมออนไลน์ สพป.นครพนม เขต 1</span>
+          <span class="marquee-item"><span class="dot">●</span> เปิดให้บริการตลอด 24 ชั่วโมง</span>
           <span class="marquee-item"><span class="dot">●</span> เกียรติบัตรอิเล็กทรอนิกส์</span>
-          <span class="marquee-item"><span class="dot">●</span> หลักสูตรประจำปี พ.ศ. ๒๕๖๙</span>
+          <span class="marquee-item"><span class="dot">●</span> หลักสูตรประจำปี พ.ศ. 2569</span>
           <span class="marquee-item">NKP1 Learning Hub</span>
-          <span class="marquee-item"><span class="dot">●</span> ศูนย์อบรมออนไลน์ สพป.นครพนม เขต ๑</span>
-          <span class="marquee-item"><span class="dot">●</span> เปิดให้บริการตลอด ๒๔ ชั่วโมง</span>
+          <span class="marquee-item"><span class="dot">●</span> ศูนย์อบรมออนไลน์ สพป.นครพนม เขต 1</span>
+          <span class="marquee-item"><span class="dot">●</span> เปิดให้บริการตลอด 24 ชั่วโมง</span>
           <span class="marquee-item"><span class="dot">●</span> เกียรติบัตรอิเล็กทรอนิกส์</span>
-          <span class="marquee-item"><span class="dot">●</span> หลักสูตรประจำปี พ.ศ. ๒๕๖๙</span>
+          <span class="marquee-item"><span class="dot">●</span> หลักสูตรประจำปี พ.ศ. 2569</span>
         </div>
       </div>
       
@@ -4931,7 +4931,7 @@ window.doAdminLogin = () => {
   document.getElementById('headerUser').innerHTML = `
     <div class="header-user-clickable" onclick="openProfilePage('admin')" title="ดูโปรไฟล์ Admin">
       <div class="header-user-avatar is-admin" id="headerUserAvatar">👑</div>
-      <div class="header-user-text"><strong>Admin</strong><small>สพป.นครพนม เขต ๑</small></div>
+      <div class="header-user-text"><strong>Admin</strong><small>สพป.นครพนม เขต 1</small></div>
     </div>
   `;
   showPage('pageAdmin'); loadAdminDashboard(); renderAdminHubStats(); loadAdminChats(); loadAdminAllComments();
@@ -7008,7 +7008,7 @@ window.openProfile = async (userId) => {
     if(!userDoc.exists()) {
       if(userId === 'admin') {
         // สร้าง admin profile doc ถ้ายังไม่มี
-        u = { prefix:'', firstName:'Admin', lastName:'', position:'ผู้ดูแลระบบ', school:'สพป.นครพนม เขต ๑', registeredAt: new Date().toISOString(), isAdmin:true };
+        u = { prefix:'', firstName:'Admin', lastName:'', position:'ผู้ดูแลระบบ', school:'สพป.นครพนม เขต 1', registeredAt: new Date().toISOString(), isAdmin:true };
         try { await setDoc(doc(db,'users','admin'), u); } catch(e) { console.warn('create admin doc err:', e); }
       } else {
         body.innerHTML = '<div class="profile-loading">❌ ไม่พบข้อมูลผู้ใช้</div>';
@@ -7811,8 +7811,8 @@ window.adminPostReply = async (parentId, videoKey, parentUserName) => {
   try {
     await addDoc(collection(db, 'videoComments', videoKey, 'comments'), {
       userId: 'admin',
-      userName: '👑 Admin (สพป.นครพนม เขต ๑)',
-      userSchool: 'สพป.นครพนม เขต ๑',
+      userName: '👑 Admin (สพป.นครพนม เขต 1)',
+      userSchool: 'สพป.นครพนม เขต 1',
       text: text,
       time: new Date(),
       isAdmin: true,
@@ -8230,7 +8230,7 @@ window.openProfilePage = async (userId) => {
     let u;
     if(!userDoc.exists()) {
       if(userId === 'admin') {
-        u = { prefix:'', firstName:'Admin', lastName:'', position:'ผู้ดูแลระบบ', school:'สพป.นครพนม เขต ๑', registeredAt: new Date().toISOString(), isAdmin:true };
+        u = { prefix:'', firstName:'Admin', lastName:'', position:'ผู้ดูแลระบบ', school:'สพป.นครพนม เขต 1', registeredAt: new Date().toISOString(), isAdmin:true };
         try { await setDoc(doc(db,'users','admin'), u); } catch(e) {}
       } else {
         heroEl.innerHTML = '<div style="color:white;text-align:center;padding:40px;">❌ ไม่พบข้อมูลผู้ใช้</div>';
@@ -8242,7 +8242,7 @@ window.openProfilePage = async (userId) => {
     
     // ดึง certs, enrolled (same logic as openProfile)
     const certs = [];
-    if(u.certNumber) certs.push({ courseId:'pp3', name:COURSES.pp3?.shortName||'ปพ.๓', certNum:u.certNumber, date:u.certIssuedDate });
+    if(u.certNumber) certs.push({ courseId:'pp3', name:COURSES.pp3?.shortName||'ปพ.3', certNum:u.certNumber, date:u.certIssuedDate });
     if(u.courses) {
       Object.entries(u.courses).forEach(([cid, c]) => {
         if(c && c.certNumber && !(cid==='pp3' && u.certNumber)) {
