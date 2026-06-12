@@ -1063,6 +1063,32 @@ button[class*="btn-"],.quiz-actions button{position:relative;overflow:hidden;}
 .profile-section{margin-bottom:18px;}
 .profile-section-title{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:8px;display:flex;align-items:center;gap:6px;border-bottom:1.5px solid var(--gold);padding-bottom:6px;}
 .profile-cert-item{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#fef3c7;border:1px solid #fde68a;border-radius:10px;margin-bottom:6px;font-size:13px;}
+.profile-cert-item.clickable,.profile-course-item.clickable{cursor:pointer;transition:transform .15s ease,box-shadow .15s ease;}
+.profile-cert-item.clickable:hover,.profile-course-item.clickable:hover{transform:translateX(3px);box-shadow:0 2px 8px rgba(0,0,0,.08);}
+.dash-empty{text-align:center;padding:18px;color:var(--muted);font-size:13px;}
+.dash-empty a{color:var(--navy);font-weight:600;}
+.dash-course{padding:14px 0;border-bottom:1px solid var(--border);}
+.dash-course:last-child{border-bottom:none;}
+.dash-course-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.dash-course-name{font-weight:700;font-size:14px;color:var(--navy);}
+.dash-course-state{font-size:13px;font-weight:700;color:var(--gold);}
+.dash-course-state.done{color:#16a34a;}
+.dash-progbar{height:8px;background:#eee9dd;border-radius:99px;overflow:hidden;margin-bottom:8px;}
+.dash-progfill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-light));border-radius:99px;transition:width .6s ease;}
+.dash-progfill.done{background:linear-gradient(90deg,#16a34a,#4ade80);}
+.dash-course-meta{font-size:12.5px;color:var(--muted);margin-bottom:10px;}
+.dash-course-actions{display:flex;gap:8px;}
+.dash-btn{padding:8px 18px;border:none;border-radius:9px;font-family:'Sarabun',sans-serif;font-size:13px;font-weight:600;cursor:pointer;background:var(--navy);color:white;}
+.dash-btn:hover{background:var(--navy-light);}
+.dash-btn.gold{background:var(--gold);color:#3a2e10;}
+.dash-btn.gold:hover{background:var(--gold-light);}
+.dash-score-course{margin-bottom:14px;}
+.dash-score-course:last-child{margin-bottom:0;}
+.dash-score-course-name{font-weight:700;font-size:13.5px;color:var(--navy);margin-bottom:6px;}
+.dash-score-row{display:flex;align-items:center;justify-content:space-between;padding:7px 12px;background:var(--cream);border-radius:8px;margin-bottom:5px;font-size:13px;}
+.dash-score-part{font-weight:600;color:var(--text);}
+.dash-score-val.pass{color:#16a34a;font-weight:600;}
+.dash-score-val.wait{color:var(--muted);}
 .profile-cert-name{font-weight:600;color:#92400e;display:flex;align-items:center;gap:6px;}
 .profile-cert-num{font-family:monospace;font-size:11.5px;color:#92400e;background:rgba(146,64,14,.1);padding:2px 8px;border-radius:6px;}
 .profile-course-item{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:white;border:1px solid var(--border);border-radius:10px;margin-bottom:6px;font-size:13px;}
@@ -3295,14 +3321,14 @@ body{transition:background .8s ease;}
     </div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
       <h2 style="font-family:'Noto Serif Thai',serif;font-size:20px;font-weight:700;color:var(--navy);">ความคืบหน้าของฉัน</h2>
-      <button class="btn-auth" style="width:auto;padding:8px 20px;font-size:13px;" onclick="goToTraining()">ดูต่อ →</button>
+      <button class="btn-auth" style="width:auto;padding:8px 20px;font-size:13px;" onclick="showCatalogPage()">🎓 หน้ารวมหลักสูตร →</button>
     </div>
     <div class="dashboard-card">
-      <h3>ภาพรวม</h3>
+      <h3>📚 ภาพรวมหลักสูตร</h3>
       <div id="dashboardParts"></div>
     </div>
     <div class="dashboard-card" id="dashboardScores">
-      <h3>คะแนนข้อสอบ</h3>
+      <h3>📝 คะแนนข้อสอบรายพาร์ต</h3>
       <div id="dashboardScoreList"></div>
     </div>
   </div>
@@ -5031,6 +5057,76 @@ function updateProgress() {
   document.getElementById('progressCount').textContent=`${quizPassed.size}/${TRAINING.videos.length}`;
 }
 
+// ══════════════════════════════════════
+// PROGRESS DASHBOARD (pageDashboard) — สรุปทุกหลักสูตร + ลิงก์ลัด
+// ══════════════════════════════════════
+window.renderProgressDashboard = () => {
+  const partsEl = document.getElementById('dashboardParts');
+  const scoresEl = document.getElementById('dashboardScoreList');
+  if(!partsEl || !scoresEl) return;
+
+  if(!currentUser || !userData || !Object.keys(userData).length) {
+    partsEl.innerHTML = '<div class="dash-empty">กรุณาเข้าสู่ระบบเพื่อดูความคืบหน้าของคุณ</div>';
+    scoresEl.innerHTML = '';
+    return;
+  }
+
+  let partsHtml = '', scoresHtml = '';
+  Object.keys(COURSES).forEach(cid => {
+    const course = COURSES[cid];
+    const prog = getCourseProgress(userData, cid);
+    if(!prog) return;   // ยังไม่เคยเริ่มหลักสูตรนี้
+
+    const totalParts = (course.videos || []).length;
+    const passedSet = new Set((prog.quizPassed || []).map(Number));
+    const scores = prog.quizScores || {};
+    const done = !!prog.certNumber;
+    const pct = totalParts ? Math.round(passedSet.size / totalParts * 100) : 0;
+    const cname = escapeHtml(course.shortName || course.name || cid);
+
+    partsHtml += `
+      <div class="dash-course">
+        <div class="dash-course-head">
+          <div class="dash-course-name">${course.icon || '📘'} ${cname}</div>
+          <div class="dash-course-state ${done ? 'done' : ''}">${done ? '✅ จบแล้ว' : pct + '%'}</div>
+        </div>
+        <div class="dash-progbar"><div class="dash-progfill ${done ? 'done' : ''}" style="width:${done ? 100 : pct}%;"></div></div>
+        <div class="dash-course-meta">
+          ${done
+            ? `🏆 เลขที่เกียรติบัตร <strong>${escapeHtml(String(prog.certNumber))}</strong>`
+            : `Quiz ผ่านแล้ว ${passedSet.size} / ${totalParts} Part`}
+        </div>
+        <div class="dash-course-actions">
+          ${done
+            ? `<button class="dash-btn gold" onclick="enterCourse('${cid}')">📜 ดูเกียรติบัตร</button>`
+            : `<button class="dash-btn" onclick="enterCourse('${cid}')">▶️ เรียนต่อ</button>`}
+        </div>
+      </div>`;
+
+    let rows = '';
+    for(let i = 0; i < totalParts; i++) {
+      const passed = passedSet.has(i);
+      const sc = (scores[i] !== undefined && scores[i] !== null) ? scores[i] : null;
+      rows += `
+        <div class="dash-score-row">
+          <div class="dash-score-part">Part ${i + 1}</div>
+          <div class="dash-score-val ${passed ? 'pass' : 'wait'}">
+            ${passed ? `✅ ผ่าน${sc !== null ? ` (${sc}%)` : ''}` : (sc !== null ? `❌ ล่าสุด ${sc}%` : '⏳ ยังไม่ได้สอบ')}
+          </div>
+        </div>`;
+    }
+    scoresHtml += `
+      <div class="dash-score-course">
+        <div class="dash-score-course-name">${course.icon || '📘'} ${cname}</div>
+        ${rows || '<div class="dash-empty">หลักสูตรนี้ไม่มีข้อสอบ</div>'}
+      </div>`;
+  });
+
+  partsEl.innerHTML = partsHtml ||
+    `<div class="dash-empty">ยังไม่ได้เริ่มเรียนหลักสูตรใด — <a href="#" onclick="event.preventDefault();showCatalogPage();">เลือกหลักสูตรที่นี่</a></div>`;
+  scoresEl.innerHTML = scoresHtml || '<div class="dash-empty">ยังไม่มีคะแนนข้อสอบ</div>';
+};
+
 window.goToTraining = () => {
   let resume=0;
   for(let i=0;i<TRAINING.videos.length;i++){ if(!quizPassed.has(i)){resume=i;break;} }
@@ -5754,6 +5850,7 @@ function showPage(id){
   document.getElementById(id).classList.add('active');
   window.scrollTo(0,0);
   if(id==='pageTraining'||id==='pageQuiz'){toggleAdminSkipBtns();}
+  if(id==='pageDashboard'){ try{ renderProgressDashboard(); }catch(e){ console.warn('dash render err:', e); } }
   // ✨ Cert celebration
   if(id==='pageCert') {
     setTimeout(() => {
@@ -6903,7 +7000,7 @@ window.openProfile = async (userId) => {
       ${((currentUser && currentUser.uid === userId) || (isAdmin && userId === 'admin')) ? `
         <div class="profile-edit-row">
           <button class="profile-action-btn" onclick="openEditProfileForm()">✏️ แก้ไขข้อมูล</button>
-          ${certs.length > 0 ? `<button class="profile-action-btn primary" onclick="closeProfileModal();showPage('pageDashboard');">📊 แดชบอร์ดเกียรติบัตร</button>` : ''}
+          <button class="profile-action-btn primary" onclick="closeProfileModal();showPage('pageDashboard');">📊 ความคืบหน้าของฉัน</button>
         </div>
         <div id="editProfileFormContainer"></div>
       ` : ''}
@@ -6930,9 +7027,9 @@ window.openProfile = async (userId) => {
         <div class="profile-section">
           <div class="profile-section-title">🏆 เกียรติบัตร</div>
           ${certs.map(c => `
-            <div class="profile-cert-item">
+            <div class="profile-cert-item${isOwn ? ' clickable' : ''}"${isOwn ? ` onclick="enterCourse('${c.courseId}')" title="คลิกเพื่อดูเกียรติบัตร"` : ''}>
               <div class="profile-cert-name">${COURSES[c.courseId]?.icon || '📘'} ${escapeHtml(c.name)}</div>
-              <div class="profile-cert-num">${escapeHtml(c.certNum)}</div>
+              <div class="profile-cert-num">${escapeHtml(c.certNum)}${isOwn ? ' ›' : ''}</div>
             </div>
           `).join('')}
         </div>
@@ -6941,9 +7038,9 @@ window.openProfile = async (userId) => {
       <div class="profile-section">
         <div class="profile-section-title">📚 หลักสูตรที่อบรม</div>
         ${enrolled.length > 0 ? enrolled.map(e => `
-          <div class="profile-course-item">
+          <div class="profile-course-item${isOwn ? ' clickable' : ''}"${isOwn ? ` onclick="enterCourse('${e.courseId}')" title="${e.done ? 'คลิกเพื่อดูเกียรติบัตร' : 'คลิกเพื่อเรียนต่อ'}"` : ''}>
             <div class="profile-course-name">${e.icon} ${escapeHtml(e.name)}</div>
-            <div class="profile-course-status ${e.done ? 'done' : 'in-progress'}">${e.done ? '✓ จบแล้ว' : '⏳ กำลังเรียน'}</div>
+            <div class="profile-course-status ${e.done ? 'done' : 'in-progress'}">${e.done ? '✓ จบแล้ว' : '⏳ กำลังเรียน'}${isOwn ? ' ›' : ''}</div>
           </div>
         `).join('') : '<div class="profile-empty-line">ยังไม่มีกิจกรรมในหลักสูตรใด</div>'}
       </div>
@@ -7268,8 +7365,12 @@ function renderMyDashboard(u, enrolled, certs) {
     const incompleteCourse = enrolled.find(e => !e.done);
     html += `<button class="dashboard-cta-btn primary" onclick="closeProfileModal();selectCourseFromLanding('${incompleteCourse.courseId}');">▶️ เรียนต่อ ${escapeHtml(incompleteCourse.name)}</button>`;
   }
-  if(certs.length > 0) {
-    html += `<button class="dashboard-cta-btn secondary" onclick="closeProfileModal();showPage('pageDashboard');">🏆 ดูเกียรติบัตร</button>`;
+  if(certs.length === 1) {
+    // มีเกียรติบัตรใบเดียว → พาไปดูเกียรติบัตรจริงเลย
+    html += `<button class="dashboard-cta-btn secondary" onclick="closeProfileModal();enterCourse('${certs[0].courseId}');">🏆 ดูเกียรติบัตร</button>`;
+  } else if(certs.length > 1) {
+    // หลายใบ → หน้าความคืบหน้า (มีปุ่มดูเกียรติบัตรรายหลักสูตร)
+    html += `<button class="dashboard-cta-btn secondary" onclick="closeProfileModal();showPage('pageDashboard');">🏆 เกียรติบัตรของฉัน</button>`;
   }
   html += '</div></div>';
   
@@ -8106,7 +8207,7 @@ window.openProfilePage = async (userId) => {
       ${isOwn ? `
         <div class="profile-edit-row">
           <button class="profile-action-btn" onclick="openEditProfileFormFull()">✏️ แก้ไขข้อมูล</button>
-          ${certs.length > 0 ? `<button class="profile-action-btn primary" onclick="showPage('pageDashboard');">📊 แดชบอร์ดเกียรติบัตร</button>` : ''}
+          <button class="profile-action-btn primary" onclick="showPage('pageDashboard');">📊 ความคืบหน้าของฉัน</button>
         </div>
         <div id="editProfileFormContainerFull"></div>
       ` : ''}
@@ -8119,9 +8220,9 @@ window.openProfilePage = async (userId) => {
         <div class="profile-section">
           <div class="profile-section-title">🏆 เกียรติบัตร</div>
           ${certs.map(c => `
-            <div class="profile-cert-item">
+            <div class="profile-cert-item${isOwn ? ' clickable' : ''}"${isOwn ? ` onclick="enterCourse('${c.courseId}')" title="คลิกเพื่อดูเกียรติบัตร"` : ''}>
               <div class="profile-cert-name">${COURSES[c.courseId]?.icon || '📘'} ${escapeHtml(c.name)}</div>
-              <div class="profile-cert-num">${escapeHtml(c.certNum)}</div>
+              <div class="profile-cert-num">${escapeHtml(c.certNum)}${isOwn ? ' ›' : ''}</div>
             </div>
           `).join('')}
         </div>
@@ -8130,9 +8231,9 @@ window.openProfilePage = async (userId) => {
       <div class="profile-section">
         <div class="profile-section-title">📚 หลักสูตรที่อบรม</div>
         ${enrolled.length > 0 ? enrolled.map(e => `
-          <div class="profile-course-item">
+          <div class="profile-course-item${isOwn ? ' clickable' : ''}"${isOwn ? ` onclick="enterCourse('${e.courseId}')" title="${e.done ? 'คลิกเพื่อดูเกียรติบัตร' : 'คลิกเพื่อเรียนต่อ'}"` : ''}>
             <div class="profile-course-name">${e.icon} ${escapeHtml(e.name)}</div>
-            <div class="profile-course-status ${e.done ? 'done' : 'in-progress'}">${e.done ? '✓ จบแล้ว' : '⏳ กำลังเรียน'}</div>
+            <div class="profile-course-status ${e.done ? 'done' : 'in-progress'}">${e.done ? '✓ จบแล้ว' : '⏳ กำลังเรียน'}${isOwn ? ' ›' : ''}</div>
           </div>
         `).join('') : '<div class="profile-empty-line">ยังไม่มีกิจกรรมในหลักสูตรใด</div>'}
       </div>
