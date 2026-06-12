@@ -1082,6 +1082,11 @@ button[class*="btn-"],.quiz-actions button{position:relative;overflow:hidden;}
 .dash-btn:hover{background:var(--navy-light);}
 .dash-btn.gold{background:var(--gold);color:#3a2e10;}
 .dash-btn.gold:hover{background:var(--gold-light);}
+.dash-btn.outline{background:transparent;color:var(--navy);border:1.5px solid var(--navy);}
+.dash-btn.outline:hover{background:var(--navy);color:white;}
+.btn-retake{background:transparent;color:var(--navy);border:1.5px dashed var(--navy);padding:11px;border-radius:10px;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s ease;}
+.btn-retake:hover{background:var(--navy);color:white;border-style:solid;}
+.profile-cert-item.historic{opacity:.65;background:#faf6ec;border-color:#e8dfc8;}
 .dash-score-course{margin-bottom:14px;}
 .dash-score-course:last-child{margin-bottom:0;}
 .dash-score-course-name{font-weight:700;font-size:13.5px;color:var(--navy);margin-bottom:6px;}
@@ -1399,6 +1404,13 @@ button[class*="btn-"],.quiz-actions button{position:relative;overflow:hidden;}
 .achievements-bar{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:14px 0 6px;}
 .achievement-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;background:linear-gradient(135deg,rgba(201,168,76,.15),rgba(232,201,122,.15));border:1px solid rgba(201,168,76,.4);border-radius:20px;font-size:11px;font-weight:700;color:var(--navy);position:relative;cursor:default;transition:all .2s ease;}
 .achievement-badge:hover{transform:translateY(-2px) scale(1.05);box-shadow:0 6px 18px rgba(201,168,76,.3);}
+.achievement-badge{position:relative;cursor:help;outline:none;}
+.achievement-badge::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 9px);left:50%;transform:translateX(-50%) translateY(4px);background:var(--navy);color:#fff;font-size:11.5px;font-weight:500;line-height:1.6;padding:8px 13px;border-radius:9px;border:1px solid var(--gold);width:max-content;max-width:235px;white-space:normal;text-align:center;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .18s ease,transform .18s ease;z-index:60;box-shadow:0 6px 18px rgba(0,0,0,.28);}
+.achievement-badge::before{content:'';position:absolute;bottom:calc(100% + 3px);left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:var(--gold);opacity:0;visibility:hidden;transition:opacity .18s ease;z-index:60;}
+.achievement-badge:hover::after,.achievement-badge:focus::after{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0);}
+.achievement-badge:hover::before,.achievement-badge:focus::before{opacity:1;visibility:visible;}
+.achievement-badge.locked::after{border-color:var(--muted);}
+.achievement-badge.locked::before{border-top-color:var(--muted);}
 .achievement-badge.locked{opacity:.35;filter:grayscale(.7);background:var(--cream);border-color:var(--border);}
 .achievement-icon{font-size:14px;}
 
@@ -2982,7 +2994,7 @@ body{transition:background .8s ease;}
           <span class="btn-back-icon">←</span> กลับ
         </button>
         <div class="breadcrumb">
-          <a href="#" onclick="event.preventDefault();showLandingPage();">🏠 หน้าหลัก</a>
+          <a href="#" onclick="event.preventDefault();goHomeFromLogo();">🏠 หน้าหลัก</a>
           <span class="sep">›</span>
           <span class="current" id="authBreadcrumbLabel">เข้าสู่ระบบ</span>
         </div>
@@ -3101,7 +3113,7 @@ body{transition:background .8s ease;}
           <span class="btn-back-icon">←</span> กลับ
         </button>
         <div class="breadcrumb" id="courseBreadcrumb">
-          <a href="#" onclick="event.preventDefault();showCatalogPage();">🏠 หน้าหลัก</a>
+          <a href="#" onclick="event.preventDefault();goHomeFromLogo();">🏠 หน้าหลัก</a>
           <span class="sep">›</span>
           <span class="current" id="breadcrumbCourseName">หลักสูตร</span>
         </div>
@@ -3270,7 +3282,7 @@ body{transition:background .8s ease;}
         <span class="btn-back-icon">←</span> กลับ
       </button>
       <div class="breadcrumb" id="certBreadcrumb">
-        <a href="#" onclick="event.preventDefault();showCatalogPage();">🏠 หน้าหลัก</a>
+        <a href="#" onclick="event.preventDefault();goHomeFromLogo();">🏠 หน้าหลัก</a>
         <span class="sep">›</span>
         <a href="#" onclick="event.preventDefault();showCatalogPage();" id="certBreadcrumbCourse">หลักสูตร</a>
         <span class="sep">›</span>
@@ -3290,6 +3302,7 @@ body{transition:background .8s ease;}
       <button onclick="showCatalogPage()" style="width:100%;margin-bottom:10px;background:var(--gold);color:var(--navy);border:none;padding:11px;border-radius:10px;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:600;cursor:pointer;">📚 ดูหลักสูตรอื่น</button>
       <div class="cert-pending-badge" id="certPendingBadge" style="display:none;margin-top:12px;">⏳ คำขอแก้ไขชื่ออยู่ระหว่างรอ Admin อนุมัติ</div>
       <button class="btn-request-edit" id="btnRequestEdit" onclick="toggleRequestEdit()" style="width:100%;margin-top:10px;">✏️ ขอแก้ไขชื่อ (ต้องรอ Admin)</button>
+      <button class="btn-retake" onclick="retakeCourse(currentCourseId)" style="width:100%;margin-top:10px;">🔄 เข้าอบรมอีกครั้ง (รับเกียรติบัตรใบใหม่)</button>
     </div>
     <div class="request-edit-form" id="requestEditForm" style="max-width:500px;margin:16px auto 0;">
       <div class="auth-error" id="requestEditError"></div>
@@ -3315,7 +3328,7 @@ body{transition:background .8s ease;}
       <button class="btn-back" onclick="goBack()" type="button">
         ← กลับ
       </button>
-      <a href="#" onclick="event.preventDefault();showLandingPage();">🏠 หน้าหลัก</a>
+      <a href="#" onclick="event.preventDefault();goHomeFromLogo();">🏠 หน้าหลัก</a>
       <span>›</span>
       <span style="color:var(--navy);font-weight:600;">📊 ความคืบหน้า</span>
     </div>
@@ -3342,7 +3355,7 @@ body{transition:background .8s ease;}
         <span class="btn-back-icon">←</span> กลับ
       </button>
       <div class="breadcrumb">
-        <a href="#" onclick="event.preventDefault();showLandingPage();">🏠 หน้าหลัก</a>
+        <a href="#" onclick="event.preventDefault();goHomeFromLogo();">🏠 หน้าหลัก</a>
         <span class="sep">›</span>
         <span class="current">⚙️ Admin Panel</span>
       </div>
@@ -4400,6 +4413,70 @@ window.backFromAdmin = () => {
   showPage('pageLanding');
 };
 
+// ══════════════════════════════════════
+// RETAKE — อบรมซ้ำ รับเกียรติบัตรใบใหม่ (เลขที่+วันที่ใหม่ ข้อความเดิม)
+// ══════════════════════════════════════
+window.retakeCourse = async (courseId) => {
+  if(!currentUser || !userData) return;
+  const course = COURSES[courseId];
+  if(!course) return;
+  const prog = getCourseProgress(userData, courseId);
+  if(!prog || !prog.certNumber) { showToast('⚠️ ต้องเรียนจบหลักสูตรนี้ก่อน จึงจะเข้าอบรมซ้ำได้'); return; }
+
+  const ok = await customConfirm(
+    `เริ่มอบรม "${course.shortName || course.name}" ใหม่ตั้งแต่ต้นหรือไม่?\n\n• ความคืบหน้าเดิม (การดูวิดีโอและข้อสอบ) จะถูกล้างทั้งหมด\n• เกียรติบัตรใบเดิม เลขที่ ${prog.certNumber} ยังถูกเก็บไว้ในประวัติ\n• เมื่อเรียนจบรอบใหม่ จะได้รับเกียรติบัตรใบใหม่ (เลขที่และวันที่ใหม่)`,
+    { title: 'เข้าอบรมอีกครั้ง', icon: '🔄', okText: 'เริ่มอบรมใหม่', cancelText: 'ยกเลิก' }
+  );
+  if(!ok) return;
+
+  try {
+    const history = Array.isArray(prog.certHistory) ? prog.certHistory.slice() : [];
+    history.push({ certNumber: prog.certNumber, certIssuedDate: prog.certIssuedDate || null, archivedAt: new Date().toISOString() });
+
+    const nVideos = (course.videos || []).length;
+    const updates = {
+      [`courses.${courseId}.completedVideos`]: [],
+      [`courses.${courseId}.quizPassed`]: [],
+      [`courses.${courseId}.quizScores`]: {},
+      [`courses.${courseId}.certNameConfirmed`]: false,
+      [`courses.${courseId}.certNumber`]: null,
+      [`courses.${courseId}.certIssuedDate`]: null,
+      [`courses.${courseId}.leaveCount`]: 0,
+      [`courses.${courseId}.certHistory`]: history,
+    };
+    for(let i = 0; i < nVideos; i++) updates[`courses.${courseId}.watchedSec_${i}`] = 0;
+    if(courseId === 'pp3') {
+      Object.assign(updates, {
+        completedVideos: [], quizPassed: [], quizScores: {},
+        certNameConfirmed: false, certNumber: null, certIssuedDate: null, leaveCount: 0
+      });
+      for(let i = 0; i < nVideos; i++) updates[`watchedSec_${i}`] = 0;
+    }
+    await updateDoc(doc(db,'users',currentUser.uid), updates);
+
+    if(!userData.courses) userData.courses = {};
+    userData.courses[courseId] = {
+      ...(userData.courses[courseId] || {}),
+      completedVideos: [], quizPassed: [], quizScores: {},
+      certNameConfirmed: false, certNumber: null, certIssuedDate: null,
+      leaveCount: 0, certHistory: history,
+    };
+    for(let i = 0; i < nVideos; i++) userData.courses[courseId]['watchedSec_' + i] = 0;
+    if(courseId === 'pp3') {
+      userData.completedVideos = []; userData.quizPassed = []; userData.quizScores = {};
+      userData.certNameConfirmed = false; userData.certNumber = null; userData.certIssuedDate = null;
+      userData.leaveCount = 0;
+      for(let i = 0; i < nVideos; i++) userData['watchedSec_' + i] = 0;
+    }
+
+    showToast('🔄 เริ่มการอบรมรอบใหม่แล้ว — ขอให้สนุกกับการเรียน!');
+    await enterCourse(courseId);
+  } catch(e) {
+    console.error('retakeCourse err:', e);
+    showToast('❌ เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง');
+  }
+};
+
 window.enterCourse = async (courseId) => {
   if(!isAdmin && (!currentUser || !userData)) return;   // admin เข้าได้แม้ไม่ได้ login
   if(!COURSES[courseId]) return;
@@ -5098,7 +5175,7 @@ window.renderProgressDashboard = () => {
         </div>
         <div class="dash-course-actions">
           ${done
-            ? `<button class="dash-btn gold" onclick="enterCourse('${cid}')">📜 ดูเกียรติบัตร</button>`
+            ? `<button class="dash-btn gold" onclick="enterCourse('${cid}')">📜 ดูเกียรติบัตร</button><button class="dash-btn outline" onclick="retakeCourse('${cid}')">🔄 อบรมอีกครั้ง</button>`
             : `<button class="dash-btn" onclick="enterCourse('${cid}')">▶️ เรียนต่อ</button>`}
         </div>
       </div>`;
@@ -6956,6 +7033,14 @@ window.openProfile = async (userId) => {
         }
       });
     }
+    // เกียรติบัตรรอบก่อนหน้า (กรณีเข้าอบรมซ้ำ)
+    if(u.courses) {
+      Object.entries(u.courses).forEach(([cid, c]) => {
+        (c?.certHistory || []).forEach(h => {
+          if(h && h.certNumber) certs.push({ courseId: cid, name: (COURSES[cid]?.shortName || cid) + ' — ใบก่อนหน้า', certNum: h.certNumber, date: h.certIssuedDate, historic: true });
+        });
+      });
+    }
     
     // หา courses (ลงทะเบียน + progress)
     const enrolled = [];
@@ -7027,9 +7112,9 @@ window.openProfile = async (userId) => {
         <div class="profile-section">
           <div class="profile-section-title">🏆 เกียรติบัตร</div>
           ${certs.map(c => `
-            <div class="profile-cert-item${isOwn ? ' clickable' : ''}"${isOwn ? ` onclick="enterCourse('${c.courseId}')" title="คลิกเพื่อดูเกียรติบัตร"` : ''}>
+            <div class="profile-cert-item${(isOwn && !c.historic) ? ' clickable' : ''}${c.historic ? ' historic' : ''}"${(isOwn && !c.historic) ? ` onclick="enterCourse('${c.courseId}')" title="คลิกเพื่อดูเกียรติบัตร"` : ''}>
               <div class="profile-cert-name">${COURSES[c.courseId]?.icon || '📘'} ${escapeHtml(c.name)}</div>
-              <div class="profile-cert-num">${escapeHtml(c.certNum)}${isOwn ? ' ›' : ''}</div>
+              <div class="profile-cert-num">${escapeHtml(c.certNum)}${(isOwn && !c.historic) ? ' ›' : ''}</div>
             </div>
           `).join('')}
         </div>
@@ -7858,12 +7943,12 @@ function applyTimeTheme() {
 // 5. Achievement badges renderer (เรียกได้จาก profile)
 window.renderAchievements = (u, certs, enrolled) => {
   const achievements = [
-    { id:'first_step', icon:'🌱', name:'ก้าวแรก', desc:'ลงทะเบียนเข้าระบบ', unlocked: !!u.registeredAt },
-    { id:'first_quiz', icon:'✏️', name:'นักทดสอบ', desc:'ผ่าน Quiz แรก', unlocked: (u.quizPassed||[]).length >= 1 || Object.values(u.courses||{}).some(c => (c.quizPassed||[]).length >= 1) },
-    { id:'first_cert', icon:'🏆', name:'นักเรียนยอดเยี่ยม', desc:'จบหลักสูตรแรก', unlocked: certs.length >= 1 },
-    { id:'multi_course', icon:'🎓', name:'นักศึกษาตลอดชีพ', desc:'เรียนหลายหลักสูตร', unlocked: enrolled.length >= 2 },
-    { id:'photo_set', icon:'📷', name:'มีตัวตน', desc:'อัปโหลดรูปโปรไฟล์', unlocked: !!u.photoBase64 },
-    { id:'commenter', icon:'💬', name:'นักสื่อสาร', desc:'ตอบ/ถามในระบบ', unlocked: false /* ต้อง track ในอนาคต */ },
+    { id:'first_step', icon:'🌱', name:'ก้าวแรก', desc:'สมัครสมาชิกและเข้าสู่ระบบครั้งแรกสำเร็จ', unlocked: !!u.registeredAt },
+    { id:'first_quiz', icon:'✏️', name:'นักทดสอบ', desc:'ทำข้อสอบท้ายบทเรียนผ่านเป็นครั้งแรก (อย่างน้อย 1 Part)', unlocked: (u.quizPassed||[]).length >= 1 || Object.values(u.courses||{}).some(c => (c.quizPassed||[]).length >= 1) },
+    { id:'first_cert', icon:'🏆', name:'นักเรียนยอดเยี่ยม', desc:'เรียนจบหลักสูตรแรกและได้รับเกียรติบัตร', unlocked: certs.length >= 1 },
+    { id:'multi_course', icon:'🎓', name:'นักศึกษาตลอดชีพ', desc:'เข้าเรียนตั้งแต่ 2 หลักสูตรขึ้นไป', unlocked: enrolled.length >= 2 },
+    { id:'photo_set', icon:'📷', name:'มีตัวตน', desc:'อัปโหลดรูปโปรไฟล์ของตัวเอง', unlocked: !!u.photoBase64 },
+    { id:'commenter', icon:'💬', name:'นักสื่อสาร', desc:'แสดงความคิดเห็นในบทเรียน — ระบบจะเริ่มนับเร็วๆ นี้', unlocked: false /* ต้อง track ในอนาคต */ },
   ];
   
   return `
@@ -7871,7 +7956,7 @@ window.renderAchievements = (u, certs, enrolled) => {
       <div class="profile-section-title">🏅 Achievements (${achievements.filter(a => a.unlocked).length}/${achievements.length})</div>
       <div class="achievements-bar">
         ${achievements.map(a => `
-          <span class="achievement-badge ${a.unlocked ? '' : 'locked'}" title="${a.desc}">
+          <span class="achievement-badge ${a.unlocked ? '' : 'locked'}" tabindex="0" data-tip="${a.unlocked ? '✅ ได้รับแล้ว: ' : '🔒 ปลดล็อกโดย: '}${a.desc}">
             <span class="achievement-icon">${a.icon}</span>${a.name}
           </span>
         `).join('')}
@@ -8165,6 +8250,14 @@ window.openProfilePage = async (userId) => {
         }
       });
     }
+    // เกียรติบัตรรอบก่อนหน้า (กรณีเข้าอบรมซ้ำ)
+    if(u.courses) {
+      Object.entries(u.courses).forEach(([cid, c]) => {
+        (c?.certHistory || []).forEach(h => {
+          if(h && h.certNumber) certs.push({ courseId: cid, name: (COURSES[cid]?.shortName || cid) + ' — ใบก่อนหน้า', certNum: h.certNumber, date: h.certIssuedDate, historic: true });
+        });
+      });
+    }
     const enrolled = [];
     Object.keys(COURSES).forEach(cid => {
       const c = u.courses?.[cid];
@@ -8220,9 +8313,9 @@ window.openProfilePage = async (userId) => {
         <div class="profile-section">
           <div class="profile-section-title">🏆 เกียรติบัตร</div>
           ${certs.map(c => `
-            <div class="profile-cert-item${isOwn ? ' clickable' : ''}"${isOwn ? ` onclick="enterCourse('${c.courseId}')" title="คลิกเพื่อดูเกียรติบัตร"` : ''}>
+            <div class="profile-cert-item${(isOwn && !c.historic) ? ' clickable' : ''}${c.historic ? ' historic' : ''}"${(isOwn && !c.historic) ? ` onclick="enterCourse('${c.courseId}')" title="คลิกเพื่อดูเกียรติบัตร"` : ''}>
               <div class="profile-cert-name">${COURSES[c.courseId]?.icon || '📘'} ${escapeHtml(c.name)}</div>
-              <div class="profile-cert-num">${escapeHtml(c.certNum)}${isOwn ? ' ›' : ''}</div>
+              <div class="profile-cert-num">${escapeHtml(c.certNum)}${(isOwn && !c.historic) ? ' ›' : ''}</div>
             </div>
           `).join('')}
         </div>
@@ -9299,7 +9392,7 @@ window.openProfileSmart = (userId) => {
   <div class="page-profile-hero">
     <div style="position:absolute;top:14px;left:14px;z-index:5;display:flex;gap:8px;">
       <button onclick="goBack()" style="background:rgba(255,255,255,.15);color:white;border:1px solid rgba(255,255,255,.3);padding:6px 12px;border-radius:8px;font-family:'Sarabun',sans-serif;font-size:12px;font-weight:600;cursor:pointer;backdrop-filter:blur(10px);">← กลับ</button>
-      <button onclick="showLandingPage()" style="background:rgba(255,255,255,.15);color:white;border:1px solid rgba(255,255,255,.3);padding:6px 12px;border-radius:8px;font-family:'Sarabun',sans-serif;font-size:12px;font-weight:600;cursor:pointer;backdrop-filter:blur(10px);">🏠 หน้าหลัก</button>
+      <button onclick="goHomeFromLogo()" style="background:rgba(255,255,255,.15);color:white;border:1px solid rgba(255,255,255,.3);padding:6px 12px;border-radius:8px;font-family:'Sarabun',sans-serif;font-size:12px;font-weight:600;cursor:pointer;backdrop-filter:blur(10px);">🏠 หน้าหลัก</button>
     </div>
     <div class="page-profile-container" id="pageProfileHeroContent">
       <div class="profile-loading" style="color:white;text-align:center;padding:40px;">⏳ กำลังโหลด...</div>
