@@ -4339,11 +4339,14 @@ window.selectCourseFromLanding = (courseId) => {
   if(!course) return;
   
   // ถ้าหลักสูตรยังไม่เปิด → แสดง toast บอก
-  if(course.status === 'coming_soon') {
+  if(course.status === 'coming_soon' && !isAdmin) {
     showToast('🚧 หลักสูตรนี้กำลังจัดทำเนื้อหา จะเปิดให้บริการเร็วๆ นี้');
     return;
   }
-  if(course.status !== 'active') return;
+  if(course.status !== 'active' && !isAdmin) return;
+  
+  // แอดมิน (โหมดทดสอบ): เข้าคอร์สได้เลย ไม่ต้อง login ไม่ต้องเด้ง popup
+  if(isAdmin) { enterCourse(courseId); return; }
   
   // เก็บ courseId ไว้ใช้หลัง login สำเร็จ (logic ใน onAuthStateChanged)
   sessionStorage.setItem('pendingCourseId', courseId);
