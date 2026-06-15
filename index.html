@@ -1082,6 +1082,9 @@ button[class*="btn-"],.quiz-actions button{position:relative;overflow:hidden;}
 .dash-btn:hover{background:var(--navy-light);}
 .dash-btn.gold{background:var(--gold);color:#3a2e10;}
 .dash-btn.gold:hover{background:var(--gold-light);}
+@keyframes adminPulse{0%,100%{transform:scale(1);box-shadow:0 4px 14px rgba(230,126,34,.4);}50%{transform:scale(1.02);box-shadow:0 6px 20px rgba(230,126,34,.6);}}
+.admin-pulse{animation:adminPulse 1.8s ease-in-out infinite;}
+.admin-pulse:hover{filter:brightness(1.08);}
 .dash-btn.outline{background:transparent;color:var(--navy);border:1.5px solid var(--navy);}
 .dash-btn.outline:hover{background:var(--navy);color:white;}
 .btn-retake{background:transparent;color:var(--navy);border:1.5px dashed var(--navy);padding:11px;border-radius:10px;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s ease;}
@@ -3106,6 +3109,9 @@ body{transition:background .8s ease;}
 </div>
 
 <!-- TRAINING -->
+<div id="adminTestBanner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:9999;background:linear-gradient(90deg,#e67e22,#d35400);color:white;text-align:center;padding:7px 12px;font-family:'Sarabun',sans-serif;font-size:13px;font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.25);">
+  🛠️ โหมดทดสอบระบบ (Admin) — ใช้ปุ่มสีส้ม "Admin Skip" เพื่อข้ามวิดีโอและข้อสอบได้ทันที • เกียรติบัตรที่ได้เป็นใบตัวอย่าง ไม่กินเลขจริง
+</div>
 <div class="page" id="pageTraining">
   <div class="training-layout">
     <div>
@@ -3151,7 +3157,7 @@ body{transition:background .8s ease;}
         <div class="status-timer" id="statusTimer"></div>
       </div>
       <button class="btn-next" id="btnNext"><span id="btnNextText">ถัดไป</span></button>
-      <button class="btn-skip-admin" id="btnSkipAdmin" style="display:none;width:100%;margin-top:6px;padding:8px;background:#e67e22;color:white;font-family:'Sarabun',sans-serif;font-size:13px;font-weight:600;border:none;border-radius:11px;cursor:pointer;" onclick="adminSkipVideo()">⚡ Admin Skip — ข้ามพาร์ทนี้</button>
+      <button class="btn-skip-admin admin-pulse" id="btnSkipAdmin" style="display:none;width:100%;margin-top:8px;padding:12px;background:linear-gradient(135deg,#e67e22,#d35400);color:white;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:700;border:none;border-radius:11px;cursor:pointer;box-shadow:0 4px 14px rgba(230,126,34,.4);" onclick="adminSkipVideo()">⚡ Admin Skip — ข้ามวิดีโอ ไปทำข้อสอบเลย</button>
     </div>
     <div>
       <div class="sidebar-title">รายการวิดีโอ</div>
@@ -3227,7 +3233,7 @@ body{transition:background .8s ease;}
       <div class="quiz-pass-note" id="quizPassNote">✏️ ต้องได้คะแนน 80% ขึ้นไปถึงจะผ่าน — ทำใหม่ได้ไม่จำกัดครั้ง</div>
       <div id="quizBody"></div>
       <div style="text-align:right;margin-top:8px;">
-        <button id="btnSkipQuiz" style="display:none;padding:8px 18px;background:#e67e22;color:white;font-family:'Sarabun',sans-serif;font-size:13px;font-weight:600;border:none;border-radius:9px;cursor:pointer;" onclick="adminSkipQuiz()">⚡ Skip ข้อสอบ</button>
+        <button id="btnSkipQuiz" class="admin-pulse" style="display:none;padding:11px 22px;background:linear-gradient(135deg,#e67e22,#d35400);color:white;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:700;border:none;border-radius:9px;cursor:pointer;box-shadow:0 4px 14px rgba(230,126,34,.4);" onclick="adminSkipQuiz()">⚡ Admin Skip — ข้ามข้อสอบ ผ่านเลย</button>
       </div>
     </div>
   </div>
@@ -5098,6 +5104,13 @@ function toggleAdminSkipBtns() {
   const q = document.getElementById('btnSkipQuiz');
   if(v) v.style.display = isAdmin ? 'block' : 'none';
   if(q) q.style.display = isAdmin ? 'inline-block' : 'none';
+  // แถบแจ้งโหมดทดสอบ — โชว์เฉพาะ admin และเฉพาะหน้าเรียน/ข้อสอบ
+  const banner = document.getElementById('adminTestBanner');
+  if(banner) {
+    const onLearnPage = ['pageTraining','pageQuiz'].some(id => document.getElementById(id)?.classList.contains('active'));
+    banner.style.display = (isAdmin && onLearnPage) ? 'block' : 'none';
+    document.body.style.paddingTop = (isAdmin && onLearnPage) ? '36px' : '';
+  }
 }
 function updateNextBtn() {
   const btn=document.getElementById('btnNext');
