@@ -3454,7 +3454,7 @@ body{transition:background .8s ease;}
       <div id="pendingList"><div class="empty-state">ไม่มีคำขอที่รออนุมัติ</div></div>
     </div>
     <div class="pending-list">
-      <div class="section-title">💬 ความคิดเห็นจากผู้เข้าอบรม</div>
+      <div class="section-title">💬 ความคิดเห็นจากผู้เข้าอบรม — <span id="feedbackCourseLabel" style="color:var(--gold-dark,#b8860b)">ปพ.3</span></div>
       <div id="feedbackList"><div class="empty-state">กำลังโหลด...</div></div>
     </div>
     <div>
@@ -5456,6 +5456,8 @@ window.submitFeedback = async() => {
         name: `${userData.prefix||''}${userData.firstName||''} ${userData.lastName||''}`.trim(),
         school: userData.school||'',
         text,
+        courseId: currentCourseId,
+        courseName: COURSES[currentCourseId]?.shortName || currentCourseId,
         createdAt: new Date().toISOString()
       });
     } catch(e){ console.error(e); }
@@ -5671,6 +5673,8 @@ window.onAdminCourseChange = () => {
   if(sel) adminCourseId = sel.value;
   const lbl = document.getElementById('certStatCourseLabel');
   if(lbl) lbl.textContent = COURSES[adminCourseId]?.shortName || adminCourseId;
+  const flbl = document.getElementById('feedbackCourseLabel');
+  if(flbl) flbl.textContent = COURSES[adminCourseId]?.shortName || adminCourseId;
   loadAdminDashboard();
 };
 
@@ -5732,6 +5736,7 @@ async function loadAdminDashboard() {
   const certStatEl = document.getElementById('certNumberStat');
   if(certStatEl) certStatEl.textContent = `เลขล่าสุด: ${usedCount > 0 ? lastUsed+'/2569' : '-'} | ใช้แล้ว ${usedCount} ใบ | เหลือ ${cEnd - lastUsed} ใบ`;
   const lblc = document.getElementById('certStatCourseLabel'); if(lblc) lblc.textContent = curCourse.shortName || adminCourseId;
+  const flblc = document.getElementById('feedbackCourseLabel'); if(flblc) flblc.textContent = curCourse.shortName || adminCourseId;
 
   const snap=await getDocs(collection(db,'users'));
   allUsersCache=snap.docs.map(d=>({id:d.id,...d.data()}));
@@ -5805,18 +5810,25 @@ async function loadAdminDashboard() {
     const fbSnap = await getDocs(query(collection(db,'feedback')));
     const fbList = document.getElementById('feedbackList');
     if(fbList){
-      if(fbSnap.empty){
-        fbList.innerHTML='<div class="empty-state">ยังไม่มีความคิดเห็น</div>';
+      let items = [];
+      fbSnap.forEach(d=>items.push({id:d.id,...d.data()}));
+      // กรองตามคอร์สที่เลือก — feedback เก่าที่ไม่มี courseId แสดงในทุกคอร์ส (ไม่ให้หาย)
+      items = items.filter(f => !f.courseId || f.courseId === adminCourseId);
+      items.sort((a,b)=>b.createdAt>a.createdAt?1:-1);
+      if(items.length === 0){
+        fbList.innerHTML='<div class="empty-state">ยังไม่มีความคิดเห็นในหลักสูตรนี้</div>';
       } else {
-        const items = [];
-        fbSnap.forEach(d=>items.push({id:d.id,...d.data()}));
-        items.sort((a,b)=>b.createdAt>a.createdAt?1:-1);
-        fbList.innerHTML = items.map(f=>`
+        fbList.innerHTML = items.map(f=>{
+          const tag = f.courseId
+            ? `<span style="font-size:10px;font-weight:700;background:var(--gold);color:var(--navy);padding:1px 8px;border-radius:8px;margin-left:6px;">${escapeHtml(f.courseName||f.courseId)}</span>`
+            : `<span style="font-size:10px;font-weight:600;background:#e5e7eb;color:#6b7280;padding:1px 8px;border-radius:8px;margin-left:6px;">ไม่ระบุหลักสูตร</span>`;
+          return `
           <div style="padding:12px 16px;border:1px solid var(--border);border-radius:10px;margin-bottom:10px;background:var(--cream);">
-            <div style="font-size:13px;font-weight:600;color:var(--navy);">${f.name||'ไม่ระบุชื่อ'} <span style="font-weight:400;color:var(--muted);">| ${f.school||'-'}</span></div>
-            <div style="margin-top:6px;font-size:14px;color:var(--text);line-height:1.6;">${f.text||''}</div>
+            <div style="font-size:13px;font-weight:600;color:var(--navy);">${escapeHtml(f.name||'ไม่ระบุชื่อ')} <span style="font-weight:400;color:var(--muted);">| ${escapeHtml(f.school||'-')}</span>${tag}</div>
+            <div style="margin-top:6px;font-size:14px;color:var(--text);line-height:1.6;">${escapeHtml(f.text||'')}</div>
             <div style="margin-top:4px;font-size:11px;color:var(--muted);">${f.createdAt?new Date(f.createdAt).toLocaleString('th-TH'):''}</div>
-          </div>`).join('');
+          </div>`;
+        }).join('');
       }
     }
   } catch(e){ console.error(e); }
