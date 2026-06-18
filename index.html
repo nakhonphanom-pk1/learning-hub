@@ -1082,6 +1082,8 @@ button[class*="btn-"],.quiz-actions button{position:relative;overflow:hidden;}
 .dash-btn:hover{background:var(--navy-light);}
 .dash-btn.gold{background:var(--gold);color:#3a2e10;}
 .dash-btn.gold:hover{background:var(--gold-light);}
+.btn-viewcert{background:#fef3c7;color:#92400e;border:1px solid #fde68a;padding:5px 11px;border-radius:7px;font-family:'Sarabun',sans-serif;font-size:11.5px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .15s ease;}
+.btn-viewcert:hover{background:var(--gold);color:var(--navy);transform:translateY(-1px);}
 @keyframes adminPulse{0%,100%{transform:scale(1);box-shadow:0 4px 14px rgba(230,126,34,.4);}50%{transform:scale(1.02);box-shadow:0 6px 20px rgba(230,126,34,.6);}}
 .admin-pulse{animation:adminPulse 1.8s ease-in-out infinite;}
 .admin-pulse:hover{filter:brightness(1.08);}
@@ -3415,7 +3417,7 @@ body{transition:background .8s ease;}
     <!-- ═══ SECTION 2: Course-specific (ปพ.3 ออนไลน์) ═══ -->
     <div class="admin-section-divider course-pp3">
       <div>
-        <div class="admin-section-divider-title">📋 หลักสูตร: ปพ.3 ออนไลน์</div>
+        <div class="admin-section-divider-title">📋 หลักสูตร: <select id="adminCourseSelect" onchange="onAdminCourseChange()" style="font-family:'Sarabun',sans-serif;font-size:15px;font-weight:700;color:var(--navy);border:1.5px solid var(--gold);border-radius:8px;padding:3px 10px;cursor:pointer;background:#fffdf7;"></select></div>
         <div class="admin-section-divider-desc">เลขเกียรติบัตร, ความก้าวหน้าผู้เรียน, ปุ่ม Bypass — เฉพาะหลักสูตรนี้</div>
       </div>
       <div class="admin-header-right">
@@ -3433,7 +3435,7 @@ body{transition:background .8s ease;}
       <div class="stat-card"><div class="stat-num" id="statPending">-</div><div class="stat-label">รออนุมัติแก้ไขชื่อ</div></div>
     </div>
     <div style="font-size:12px;color:#5a6075;margin-bottom:16px;padding:8px 12px;background:#f7edd8;border-radius:8px;border:1px solid #ddd4bc;">
-      🔢 <strong>เลขเกียรติบัตร ปพ.3:</strong> <span id="certNumberStat">กำลังโหลด...</span>
+      🔢 <strong>เลขเกียรติบัตร <span id="certStatCourseLabel">ปพ.3</span>:</strong> <span id="certNumberStat">กำลังโหลด...</span>
     </div>
     <!-- ═══ SECTION 3: Cross-course Requests ═══ -->
     <div class="admin-section-divider">
@@ -3464,7 +3466,7 @@ body{transition:background .8s ease;}
       </div>
       <div style="overflow-x:auto">
         <table class="user-table">
-          <thead><tr><th>#</th><th>ชื่อ-นามสกุล</th><th>ตำแหน่ง</th><th>โรงเรียน/หน่วยงาน</th><th>Username</th><th>ความคืบหน้า</th><th>คะแนนเฉลี่ย</th><th>ออกจากหน้า</th><th>วันสมัคร</th><th>🔧</th></tr></thead>
+          <thead><tr><th>#</th><th>ชื่อ-นามสกุล</th><th>ตำแหน่ง</th><th>โรงเรียน/หน่วยงาน</th><th>Username</th><th>ความคืบหน้า</th><th>คะแนนเฉลี่ย</th><th>ออกจากหน้า</th><th>วันสมัคร</th><th>เกียรติบัตร</th><th>🔧</th></tr></thead>
           <tbody id="userTableBody"><tr><td colspan="9" class="empty-state">กำลังโหลด...</td></tr></tbody>
         </table>
       </div>
@@ -5651,34 +5653,91 @@ window.submitRequestEdit = async() => {
 };
 
 // ── Admin ──
+let adminCourseId = 'pp3';
+
+function adminUserProg(u, cid) {
+  if(cid === 'pp3') {
+    const nested = u.courses && u.courses.pp3;
+    if(nested && (nested.quizPassed || nested.certNumber)) return nested;
+    return { quizPassed: u.quizPassed || [], quizScores: u.quizScores || {},
+             certNumber: u.certNumber, certIssuedDate: u.certIssuedDate,
+             certNameConfirmed: u.certNameConfirmed, leaveCount: u.leaveCount };
+  }
+  return (u.courses && u.courses[cid]) || {};
+}
+
+window.onAdminCourseChange = () => {
+  const sel = document.getElementById('adminCourseSelect');
+  if(sel) adminCourseId = sel.value;
+  const lbl = document.getElementById('certStatCourseLabel');
+  if(lbl) lbl.textContent = COURSES[adminCourseId]?.shortName || adminCourseId;
+  loadAdminDashboard();
+};
+
+function populateAdminCourseSelect() {
+  const sel = document.getElementById('adminCourseSelect');
+  if(!sel || sel.dataset.filled) return;
+  sel.innerHTML = Object.keys(COURSES).map(cid =>
+    `<option value="${cid}">${COURSES[cid].icon || ''} ${COURSES[cid].shortName || cid}</option>`).join('');
+  sel.value = adminCourseId;
+  sel.dataset.filled = '1';
+}
+
+window.adminPreviewCert = (uid, cid) => {
+  const u = allUsersCache.find(x => x.id === uid);
+  if(!u) { showToast('ไม่พบข้อมูลผู้ใช้'); return; }
+  const prog = adminUserProg(u, cid);
+  if(!prog.certNumber) { showToast('⚠️ ผู้เรียนคนนี้ยังไม่ได้รับเกียรติบัตรในหลักสูตรนี้'); return; }
+  const name = `${u.prefix||''}${u.firstName||''} ${u.lastName||''}`.trim();
+  const params = new URLSearchParams({ name, num: prog.certNumber, date: prog.certIssuedDate || '', course: cid });
+  window.open('cert.html?' + params.toString(), '_blank');
+};
+
+function buildBypassUpdates(cid) {
+  const n = (COURSES[cid]?.videos || []).length || 4;
+  const vids = Array.from({length:n}, (_,i)=>i);
+  const scores = {}; vids.forEach(i => scores[i] = 100);
+  const base = { completedVideos: vids, quizPassed: vids, quizScores: scores,
+                 certNameConfirmed: false, bypassedAt: new Date().toISOString(), bypassedByAdmin: true };
+  const updates = {};
+  Object.entries(base).forEach(([k,v]) => updates[`courses.${cid}.${k}`] = v);
+  if(cid === 'pp3') Object.assign(updates, base);
+  return updates;
+}
+
 async function loadAdminDashboard() {
   showLoading(true);
-  // โหลดข้อมูลเลขเกียรติบัตร
-  const certSnap = await getDoc(doc(db,'certNumbers','main'));
-  const lastUsed = certSnap.exists() ? (certSnap.data().lastUsed || CERT_START - 1) : CERT_START - 1;
-  const usedCount = lastUsed - CERT_START + 1;
+  populateAdminCourseSelect();
+  const curCourse = COURSES[adminCourseId] || COURSES.pp3;
+  const cStart = curCourse.certNumberRange?.start || CERT_START;
+  const cEnd = curCourse.certNumberRange?.end || CERT_END;
+  const cWarn = cEnd - 25;
+  const certSnap = await getDoc(doc(db,'certNumbers', curCourse.certCounterDoc || 'main'));
+  const lastUsed = certSnap.exists() ? (certSnap.data().lastUsed || cStart - 1) : cStart - 1;
+  const usedCount = lastUsed - cStart + 1;
   const certWarnEl = document.getElementById('certNumberWarning');
   if(certWarnEl) {
-    if(lastUsed >= CERT_END) {
+    if(lastUsed >= cEnd) {
       certWarnEl.style.display='block';
-      certWarnEl.innerHTML=`<strong>🚨 เลขเกียรติบัตรหมดแล้ว!</strong> ใช้ไปครบ ${usedCount} ใบ (${CERT_START}/2569 – ${CERT_END}/2569) — กรุณาติดต่อ สพฐ. เพื่อขอเลขเพิ่ม`;
+      certWarnEl.innerHTML=`<strong>🚨 เลขเกียรติบัตรหมดแล้ว!</strong> ใช้ไปครบ ${usedCount} ใบ (${cStart}/2569 – ${cEnd}/2569) — กรุณาติดต่อ สพฐ. เพื่อขอเลขเพิ่ม`;
       certWarnEl.style.background='#fef2f2'; certWarnEl.style.borderColor='#fca5a5'; certWarnEl.style.color='#b91c1c';
-    } else if(lastUsed >= CERT_WARN) {
+    } else if(lastUsed >= cWarn) {
       certWarnEl.style.display='block';
-      certWarnEl.innerHTML=`<strong>⚠️ แจ้งเตือน:</strong> ใช้เลขเกียรติบัตรไปแล้ว ${usedCount} ใบ (เหลืออีก ${CERT_END - lastUsed} ใบ) — ล็อตนี้ใช้ได้ถึงเลขที่ ${CERT_END}/2569 กรุณาเตรียมขอเลขเพิ่ม`;
+      certWarnEl.innerHTML=`<strong>⚠️ แจ้งเตือน:</strong> ใช้เลขเกียรติบัตรไปแล้ว ${usedCount} ใบ (เหลืออีก ${cEnd - lastUsed} ใบ) — ล็อตนี้ใช้ได้ถึงเลขที่ ${cEnd}/2569 กรุณาเตรียมขอเลขเพิ่ม`;
     } else {
       certWarnEl.style.display='none';
     }
   }
   // แสดงสถิติเลขเกียรติบัตร
   const certStatEl = document.getElementById('certNumberStat');
-  if(certStatEl) certStatEl.textContent = `เลขล่าสุด: ${usedCount > 0 ? lastUsed+'/2569' : '-'} | ใช้แล้ว ${usedCount} ใบ | เหลือ ${CERT_END - lastUsed} ใบ`;
+  if(certStatEl) certStatEl.textContent = `เลขล่าสุด: ${usedCount > 0 ? lastUsed+'/2569' : '-'} | ใช้แล้ว ${usedCount} ใบ | เหลือ ${cEnd - lastUsed} ใบ`;
+  const lblc = document.getElementById('certStatCourseLabel'); if(lblc) lblc.textContent = curCourse.shortName || adminCourseId;
 
   const snap=await getDocs(collection(db,'users'));
   allUsersCache=snap.docs.map(d=>({id:d.id,...d.data()}));
-  const total=allUsersCache.length, totalV=TRAINING.videos.length;
-  const done=allUsersCache.filter(u=>(u.quizPassed||[]).length>=totalV).length;
-  const partial=allUsersCache.filter(u=>(u.quizPassed||[]).length>0&&(u.quizPassed||[]).length<totalV).length;
+  const total=allUsersCache.length, totalV=curCourse.videos.length;
+  const done=allUsersCache.filter(u=>(adminUserProg(u,adminCourseId).quizPassed||[]).length>=totalV).length;
+  const partial=allUsersCache.filter(u=>{const q=(adminUserProg(u,adminCourseId).quizPassed||[]).length;return q>0&&q<totalV;}).length;
   // รวมคำขอแก้ชื่อจากทุกคอร์ส (nested) + field เก่า (flat, เฉพาะที่ยังไม่ซ้ำกับ nested)
   const pendingReqs=[];
   allUsersCache.forEach(u=>{
@@ -5728,16 +5787,18 @@ async function loadAdminDashboard() {
   }
   // Table
   const tbody=document.getElementById('userTableBody');
-  tbody.innerHTML=allUsersCache.length===0?'<tr><td colspan="9" class="empty-state">ยังไม่มีผู้ลงทะเบียน</td></tr>':
+  tbody.innerHTML=allUsersCache.length===0?'<tr><td colspan="10" class="empty-state">ยังไม่มีผู้ลงทะเบียน</td></tr>':
     allUsersCache.sort((a,b)=>a.registeredAt>b.registeredAt?1:-1).map((u,i)=>{
-      const qp=(u.quizPassed||[]).length;
-      const scores=u.quizScores||{};
-      const avgScore=Object.keys(scores).length>0?Math.round(Object.values(scores).reduce((a,b)=>a+b,0)/Object.keys(scores).length):'-';
+      const cp=adminUserProg(u,adminCourseId);
+      const qp=(cp.quizPassed||[]).length;
+      const scores=cp.quizScores||{};
+      const avgScore=Object.keys(scores).length>0?Math.round(Object.values(scores).reduce((a,b)=>a+Number(b),0)/Object.keys(scores).length):'-';
       const pillCls=qp>=totalV?'pill-done':qp>0?'pill-partial':'pill-none';
       const pillTxt=qp>=totalV?'✓ ผ่านแล้ว':qp>0?`${qp}/${totalV} Part`:'ยังไม่เริ่ม';
       const regDate=u.registeredAt?new Date(u.registeredAt).toLocaleDateString('th-TH'):'–';
-      const bypassBtn = qp>=totalV ? '' : `<button class="btn-bypass" onclick="adminBypassUser('${u.id}')" title="Bypass quiz ผ่านทั้งหมด">✓ Pass</button>`;
-      return `<tr><td>${i+1}</td><td>${u.prefix||''}${u.firstName} ${u.lastName}${u.pendingEdit?` <span style="font-size:10px;color:#856404">⏳</span>`:''}</td><td>${u.position||'–'}</td><td>${u.school||'–'}</td><td><code style="font-size:11px">${u.username||'–'}</code></td><td><span class="progress-pill ${pillCls}">${pillTxt}</span></td><td>${avgScore}${avgScore!=='-'?'%':''}</td><td style="color:${(u.leaveCount||0)>5?'var(--red)':'var(--muted)'}">${u.leaveCount||0}</td><td>${regDate}</td><td>${bypassBtn}</td></tr>`;
+      const bypassBtn = qp>=totalV ? '' : `<button class="btn-bypass" onclick="adminBypassUser('${u.id}')" title="Pass quiz หลักสูตรนี้ทั้งหมด">✓ Pass</button>`;
+      const certBtn = cp.certNumber ? `<button class="btn-viewcert" onclick="adminPreviewCert('${u.id}','${adminCourseId}')" title="ดูเกียรติบัตรจริง">📜 ${cp.certNumber}</button>` : '<span style="color:var(--muted);font-size:12px">–</span>';
+      return `<tr><td>${i+1}</td><td>${u.prefix||''}${u.firstName} ${u.lastName}${u.pendingEdit?` <span style="font-size:10px;color:#856404">⏳</span>`:''}</td><td>${u.position||'–'}</td><td>${u.school||'–'}</td><td><code style="font-size:11px">${u.username||'–'}</code></td><td><span class="progress-pill ${pillCls}">${pillTxt}</span></td><td>${avgScore}${avgScore!=='-'?'%':''}</td><td style="color:${(u.leaveCount||0)>5?'var(--red)':'var(--muted)'}">${u.leaveCount||0}</td><td>${regDate}</td><td>${certBtn}</td><td>${bypassBtn}</td></tr>`;
     }).join('');
   // โหลด feedback
   try {
@@ -5769,41 +5830,31 @@ const BYPASS_QUIZ_PASSED = [0,1,2,3];
 const BYPASS_SCORES = {0:100,1:100,2:100,3:100};
 
 window.adminBypassUser = async(uid) => {
-  if(!confirm('Bypass quiz ผ่านทั้งหมดสำหรับ user นี้?')) return;
+  const cname = COURSES[adminCourseId]?.shortName || adminCourseId;
+  if(!confirm(`Pass quiz หลักสูตร "${cname}" ผ่านทั้งหมดสำหรับผู้ใช้คนนี้?`)) return;
   showLoading(true);
   try {
-    await updateDoc(doc(db,'users',uid),{
-      completedVideos: BYPASS_ALL_VIDEOS,
-      quizPassed: BYPASS_QUIZ_PASSED,
-      quizScores: BYPASS_SCORES,
-      certNameConfirmed: false,
-      bypassedAt: new Date().toISOString(),
-      bypassedByAdmin: true
-    });
-    showLoading(false); showToast('✓ Bypass แล้ว'); loadAdminDashboard();
+    await updateDoc(doc(db,'users',uid), buildBypassUpdates(adminCourseId));
+    showLoading(false); showToast('✓ Pass แล้ว'); loadAdminDashboard();
   } catch(e) { showLoading(false); showToast('Error: '+e.message); }
 };
 
 window.adminBypassAll = async() => {
-  if(!confirm('Bypass quiz ผ่านทั้งหมด สำหรับทุกคนในระบบ? (ใช้สำหรับการทดสอบเท่านั้น)')) return;
+  const cname = COURSES[adminCourseId]?.shortName || adminCourseId;
+  const n = (COURSES[adminCourseId]?.videos || []).length || 4;
+  if(!confirm(`Pass quiz หลักสูตร "${cname}" ผ่านทั้งหมด สำหรับทุกคนในระบบ? (ใช้สำหรับการทดสอบเท่านั้น)`)) return;
   showLoading(true);
   try {
     const snap = await getDocs(collection(db,'users'));
+    const updates = buildBypassUpdates(adminCourseId);
     const batch_promises = snap.docs.map(d => {
       const u = d.data();
-      const qp = (u.quizPassed||[]).length;
-      if(qp >= 4) return Promise.resolve(); // ผ่านแล้ว ข้ามไป
-      return updateDoc(doc(db,'users',d.id),{
-        completedVideos: BYPASS_ALL_VIDEOS,
-        quizPassed: BYPASS_QUIZ_PASSED,
-        quizScores: BYPASS_SCORES,
-        certNameConfirmed: false,
-        bypassedAt: new Date().toISOString(),
-        bypassedByAdmin: true
-      });
+      const qp = ((adminCourseId==='pp3' ? (u.courses?.pp3?.quizPassed || u.quizPassed) : u.courses?.[adminCourseId]?.quizPassed) || []).length;
+      if(qp >= n) return Promise.resolve();
+      return updateDoc(doc(db,'users',d.id), updates);
     });
     await Promise.all(batch_promises);
-    showLoading(false); showToast('✓ Bypass ทุกคนแล้ว'); loadAdminDashboard();
+    showLoading(false); showToast('✓ Pass ทุกคนแล้ว'); loadAdminDashboard();
   } catch(e) { showLoading(false); showToast('Error: '+e.message); }
 };
 
