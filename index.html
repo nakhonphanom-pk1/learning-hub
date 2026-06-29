@@ -102,6 +102,11 @@
 .cc-btn.secondary:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(201,168,76,.5);}
 .cc-btn:disabled{background:#e5e7eb;color:#9ca3af;cursor:not-allowed;box-shadow:none;}
 .cc-btn:disabled:hover{transform:none;}
+.cc-btn-row{display:flex;flex-direction:column;gap:8px;}
+.cc-btn.retake{background:transparent;color:var(--navy);border:1.5px dashed rgba(26,39,68,.45);box-shadow:none;font-size:13.5px;padding:11px 18px;}
+.cc-btn.retake:hover{transform:translateY(-1px);background:var(--navy);color:#fff;border-style:solid;box-shadow:0 6px 16px rgba(26,39,68,.25);}
+.profile-retake-btn{background:transparent;border:1px solid rgba(26,39,68,.3);border-radius:7px;width:30px;height:30px;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s ease;flex-shrink:0;}
+.profile-retake-btn:hover{background:var(--navy);border-color:var(--navy);transform:rotate(180deg);}
 
 /* Landing CTA */
 .hub-cta{text-align:center;margin-top:48px;padding:36px 32px;background:rgba(255,255,255,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:24px;border:1px solid rgba(255,255,255,.6);box-shadow:0 8px 32px rgba(26,39,68,.08);}
@@ -4019,7 +4024,10 @@ function renderCourseCards(target) {
     } else if(isSoon) {
       btnHTML = '<button class="cc-btn primary" disabled>⏳ เปิดเร็วๆ นี้</button>';
     } else if(isCatalog && userStatus === 'completed') {
-      btnHTML = `<button class="cc-btn secondary" onclick="enterCourse('${course.id}')">📜 ดูเกียรติบัตร</button>`;
+      btnHTML = `<div class="cc-btn-row">
+        <button class="cc-btn secondary" onclick="enterCourse('${course.id}')">📜 ดูเกียรติบัตร</button>
+        <button class="cc-btn retake" onclick="event.stopPropagation();retakeCourse('${course.id}')" title="เริ่มอบรมใหม่ รับเกียรติบัตรอีกใบ">🔄 อบรมอีกครั้ง</button>
+      </div>`;
     } else if(isCatalog && userStatus === 'in_progress') {
       btnHTML = `<button class="cc-btn primary" onclick="enterCourse('${course.id}')">เรียนต่อ →</button>`;
     } else if(isCatalog) {
@@ -7218,7 +7226,10 @@ window.openProfile = async (userId) => {
         ${enrolled.length > 0 ? enrolled.map(e => `
           <div class="profile-course-item${isOwn ? ' clickable' : ''}"${isOwn ? ` onclick="enterCourse('${e.courseId}')" title="${e.done ? 'คลิกเพื่อดูเกียรติบัตร' : 'คลิกเพื่อเรียนต่อ'}"` : ''}>
             <div class="profile-course-name">${e.icon} ${escapeHtml(e.name)}</div>
-            <div class="profile-course-status ${e.done ? 'done' : 'in-progress'}">${e.done ? '✓ จบแล้ว' : '⏳ กำลังเรียน'}${isOwn ? ' ›' : ''}</div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              ${(isOwn && e.done) ? `<button class="profile-retake-btn" onclick="event.stopPropagation();retakeCourse('${e.courseId}')" title="อบรมอีกครั้ง รับเกียรติบัตรใบใหม่">🔄</button>` : ''}
+              <div class="profile-course-status ${e.done ? 'done' : 'in-progress'}">${e.done ? '✓ จบแล้ว' : '⏳ กำลังเรียน'}${isOwn ? ' ›' : ''}</div>
+            </div>
           </div>
         `).join('') : '<div class="profile-empty-line">ยังไม่มีกิจกรรมในหลักสูตรใด</div>'}
       </div>
@@ -8419,7 +8430,10 @@ window.openProfilePage = async (userId) => {
         ${enrolled.length > 0 ? enrolled.map(e => `
           <div class="profile-course-item${isOwn ? ' clickable' : ''}"${isOwn ? ` onclick="enterCourse('${e.courseId}')" title="${e.done ? 'คลิกเพื่อดูเกียรติบัตร' : 'คลิกเพื่อเรียนต่อ'}"` : ''}>
             <div class="profile-course-name">${e.icon} ${escapeHtml(e.name)}</div>
-            <div class="profile-course-status ${e.done ? 'done' : 'in-progress'}">${e.done ? '✓ จบแล้ว' : '⏳ กำลังเรียน'}${isOwn ? ' ›' : ''}</div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              ${(isOwn && e.done) ? `<button class="profile-retake-btn" onclick="event.stopPropagation();retakeCourse('${e.courseId}')" title="อบรมอีกครั้ง รับเกียรติบัตรใบใหม่">🔄</button>` : ''}
+              <div class="profile-course-status ${e.done ? 'done' : 'in-progress'}">${e.done ? '✓ จบแล้ว' : '⏳ กำลังเรียน'}${isOwn ? ' ›' : ''}</div>
+            </div>
           </div>
         `).join('') : '<div class="profile-empty-line">ยังไม่มีกิจกรรมในหลักสูตรใด</div>'}
       </div>
