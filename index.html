@@ -2750,6 +2750,20 @@ body{transition:background .8s ease;}
 /* === END LUXURY LAYER === */
 
 
+
+/* ═══ การ์ดน้ำจิ้ม: หลักสูตรที่กำลังจะเปิด (status: coming_soon) ═══ */
+.course-card.teaser{opacity:1;}
+.cc-banner.teaser img{filter:saturate(.55) brightness(.9);}
+.cc-teaser-veil{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:20px 22px;
+  background:linear-gradient(to top,rgba(6,78,59,.92) 0%,rgba(6,78,59,.55) 45%,rgba(6,78,59,.05) 100%);color:#fff;pointer-events:none;}
+.cc-teaser-pill{align-self:flex-start;display:inline-flex;align-items:center;gap:7px;padding:5px 12px;border-radius:999px;
+  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);font-size:12.5px;font-weight:600;margin-bottom:8px;}
+.cc-teaser-dot{width:7px;height:7px;border-radius:50%;background:#fcd34d;box-shadow:0 0 0 0 rgba(252,211,77,.7);animation:teaserPulse 1.8s ease-out infinite;}
+@keyframes teaserPulse{0%{box-shadow:0 0 0 0 rgba(252,211,77,.7);}100%{box-shadow:0 0 0 10px rgba(252,211,77,0);}}
+.cc-round-veil{background:linear-gradient(to top,rgba(6,78,59,.85) 0%,rgba(6,78,59,.35) 40%,transparent 70%);}
+.cc-teaser-round{font-family:'Noto Serif Thai',serif;font-size:15px;line-height:1.3;opacity:.92;}
+.cc-teaser-round b{display:block;font-size:34px;font-weight:700;letter-spacing:.5px;line-height:1.15;}
+@media (prefers-reduced-motion:reduce){.cc-teaser-dot{animation:none;}}
 </style>
 </head>
 <body>
@@ -3171,8 +3185,9 @@ body{transition:background .8s ease;}
       <div id="playlistEl"></div>
       <div class="sidebar-info">
         🔒 ต้องชมแต่ละตอน<strong>ครบตามเวลา</strong>ที่กำหนด<br>
-        📝 มีข้อสอบหลังจบแต่ละ Part<br>
-        ✅ ผ่านเมื่อได้คะแนน <strong>80% ขึ้นไป</strong><br>
+        <span id="sidebarQuizRules">📝 มีข้อสอบหลังจบแต่ละ Part<br>
+        ✅ ผ่านเมื่อได้คะแนน <strong>80% ขึ้นไป</strong><br></span>
+        <span id="sidebarNoQuizRules" style="display:none;">✅ ชมครบทุกตอน = จบหลักสูตร <strong>(ไม่มีแบบทดสอบ)</strong><br></span>
         <span class="warn-text" style="display:none">⛔ สลับแท็บ / ออก Browser = หยุดนับทันที</span><br>
         💾 ความคืบหน้า<strong>บันทึกอัตโนมัติ</strong>
       </div>
@@ -3405,8 +3420,7 @@ body{transition:background .8s ease;}
         <div class="admin-all-comments-title">💬 ความคิดเห็นจากผู้เรียน (รวมทุกคลิป)</div>
         <div class="admin-comments-toolbar">
           <button class="admin-comments-filter active" data-filter="all" onclick="setAdminCommentFilter('all')">🌐 ทั้งหมด</button>
-          <button class="admin-comments-filter" data-filter="pp3" onclick="setAdminCommentFilter('pp3')">📋 ปพ.3</button>
-          <button class="admin-comments-filter" data-filter="tzd" onclick="setAdminCommentFilter('tzd')">🎯 TZD</button>
+          <span id="adminCommentCourseFilters" style="display:contents;"></span>
           <button class="admin-comments-filter" data-filter="unanswered" onclick="setAdminCommentFilter('unanswered')">❓ ยังไม่ตอบ</button>
           <button onclick="loadAdminAllComments()" style="padding:6px 12px;background:var(--cream);border:1px solid var(--border);border-radius:8px;font-size:12px;cursor:pointer;color:var(--navy);">🔄</button>
         </div>
@@ -3668,7 +3682,9 @@ const TZD_INFOGRAPHICS = [
 // map หลักสูตร → ชุดอินโฟกราฟิก (เพิ่มคอร์สใหม่ที่นี่)
 const INFOGRAPHICS_BY_COURSE = {
   pp3: PP3_INFOGRAPHICS,
-  tzd: TZD_INFOGRAPHICS
+  tzd: TZD_INFOGRAPHICS,
+  tzd2: [],  // TODO: อินโฟกราฟิกของหลักสูตรที่ 2/2569 (ถ้าว่าง ส่วนคลังสื่อจะถูกซ่อน)
+  tzd3: []   // TODO: อินโฟกราฟิกของหลักสูตรที่ 3/2569
 };
 
 // คำอธิบายใต้หัวข้อคลังสื่อ แยกตามหลักสูตร
@@ -3682,6 +3698,25 @@ function getInfographics() {
 }
 
 // ══════════════════════════════════════
+// THEMES — ชุดสีของการ์ด/ป้าย ใช้ร่วมกันได้หลายหลักสูตร (เช่น TZD ทุกรุ่นใช้ theme 'tzd')
+// ══════════════════════════════════════
+const THEMES = {
+  pp3: { light:'#2d3f73', pale:'#f7edd8', pale2:'#fdf8f0', border:'#e8c97a55' },
+  tzd: { light:'#10b981', pale:'#d1fae5', pale2:'#ecfdf5', border:'#10b98155' }
+};
+function getTheme(course) {
+  return THEMES[(course && course.theme) || (course && course.id)] || THEMES.pp3;
+}
+// รูปการ์ด/แบนเนอร์: ถ้าหลักสูตรไม่มีรูปของตัวเอง ใช้รูปของ theme แทน
+// หลักสูตร/ตอนที่ไม่มีแบบทดสอบ → ชมครบตามเวลา = ผ่านตอนนั้น
+function partHasQuiz(course, i) {
+  if(!course || course.noQuiz) return false;
+  return ((course.videos[i] || {}).quiz || []).length > 0;
+}
+function getCardIcon(course)   { return CARD_ICONS[course.id]   || CARD_ICONS[course.theme]   || ''; }
+function getCardBanner(course) { return CARD_BANNERS[course.id] || CARD_BANNERS[course.theme] || ''; }
+
+// ══════════════════════════════════════
 // COURSES — หลายหลักสูตร (เริ่มจาก ปพ.3, รองรับเพิ่มในอนาคต)
 // ══════════════════════════════════════
 const COURSES = {
@@ -3692,6 +3727,7 @@ const COURSES = {
     description: 'เรียนรู้การใช้งานระบบ ปพ.3 ออนไลน์ ครบทุกขั้นตอน ตั้งแต่การลงทะเบียน การตั้งค่าผู้ใช้งาน การอัปโหลดข้อมูลและจัดการข้อผิดพลาด พร้อมรับเกียรติบัตรหลังจบหลักสูตร',
     icon: '📋',
     color: '#1a2744',
+    theme: 'pp3',
     status: 'active',
     courseName: 'ระบบอบรมการใช้งาน ปพ.3 ออนไลน์ โดย สพป.นครพนม เขต 1',
     totalHours: 'auto',  // คำนวณจาก videos[].minSeconds รวม
@@ -3760,11 +3796,13 @@ const COURSES = {
   },
   tzd: {
     id: 'tzd',
-    name: 'การรายงานสถานะนักเรียนในระบบ Thailand Zero Dropout (กสศ.)',
-    shortName: 'Thailand Zero Dropout',
+    name: 'การรายงานสถานะนักเรียนในระบบ Thailand Zero Dropout (กสศ.) หลักสูตรที่ 1/2569',
+    shortName: 'TZD หลักสูตรที่ 1/2569',
+    round: '1/2569',  // ⚠️ คง id 'tzd' ไว้เสมอ — progress/เลขเกียรติบัตรของผู้เรียนเดิมผูกกับ id นี้
     description: 'เรียนรู้วิธีการรายงานสถานะนักเรียนในระบบ Thailand Zero Dropout ของกองทุนเพื่อความเสมอภาคทางการศึกษา (กสศ.) สำหรับครู/บุคลากรในโรงเรียนสังกัด สพป.นครพนม เขต 1 เพื่อให้นักเรียนได้รับการพิจารณาจัดสรรเงินสนับสนุนจาก กสศ. พร้อมรับเกียรติบัตรหลังจบหลักสูตร',
     icon: '🎯',
     color: '#059669',
+    theme: 'tzd',
     status: 'active',  // เปิดใช้งานจริง 11 มิ.ย. 2569
     courseName: 'การรายงานสถานะนักเรียนในระบบ Thailand Zero Dropout โดย สพป.นครพนม เขต 1',
     totalHours: 'auto',
@@ -3802,6 +3840,61 @@ const COURSES = {
       ]
     }
     ]
+  },
+
+  // ─────────────────────────────────────────────────────────
+  // TZD หลักสูตรที่ 2/2569 และ 3/2569 — คลิป/ข้อสอบชุดใหม่ แยกจากหลักสูตรที่ 1
+  // ⚠️ id ห้ามมีเครื่องหมาย _ (ระบบความคิดเห็นแยก courseId จาก videoKey "tzd2_part0" ด้วย _)
+  // TODO ก่อนเปิด (status: 'active'):
+  //   1) ใส่ videos[] (title, vimeoId, hash ถ้ามี, minSeconds, durationLabel, quiz)
+  //   2) ใส่ certNumberRange ตามทะเบียนคุม (ห้ามซ้อนกับ pp3 11688–12187 และ tzd 16002–16478)
+  //   3) ใส่ภาพพื้นหลังเกียรติบัตรใน cert.html (<img id="bg-tzd2"> / <img id="bg-tzd3">)
+  // ─────────────────────────────────────────────────────────
+  tzd2: {
+    id: 'tzd2',
+    name: 'การรายงานสถานะนักเรียนในระบบ Thailand Zero Dropout (กสศ.) หลักสูตรที่ 2/2569',
+    shortName: 'TZD หลักสูตรที่ 2/2569',
+    round: '2/2569',
+    description: 'หลักสูตรที่ 2/2569 ของการรายงานสถานะนักเรียนในระบบ Thailand Zero Dropout (กสศ.) สำหรับครู/บุคลากรในโรงเรียนสังกัด สพป.นครพนม เขต 1 พร้อมรับเกียรติบัตรหลังจบหลักสูตร',
+    icon: '🎯',
+    color: '#059669',
+    theme: 'tzd',
+    status: 'coming_soon',
+    courseName: 'การรายงานสถานะนักเรียนในระบบ Thailand Zero Dropout หลักสูตรที่ 2/2569 โดย สพป.นครพนม เขต 1',
+    totalHours: 'auto',
+    passPercent: 80,
+    certCounterDoc: 'tzd2',  // certNumbers/tzd2
+    certNumberFormat: (n) => `${n}/2569`,
+    certNumberRange: null,   // TODO: { start: ?, end: ?, warn: ? }
+    noQuiz: true,            // ไม่มีแบบทดสอบ — ชมครบตามเวลาทุกตอน = ผ่าน
+    // การ์ดน้ำจิ้ม (แสดงเฉพาะตอน status: 'coming_soon') — แก้ข้อความได้ตามต้องการ
+    teaser: {
+      opensLabel: ''   // เช่น 'พฤศจิกายน 2569' → ป้ายบนแบนเนอร์จะเป็น "เปิดอบรม พฤศจิกายน 2569" (เว้นว่าง = "กำลังจะเปิดเร็วๆ นี้")
+    },
+    videos: []
+  },
+  tzd3: {
+    id: 'tzd3',
+    name: 'การรายงานสถานะนักเรียนในระบบ Thailand Zero Dropout (กสศ.) หลักสูตรที่ 3/2569',
+    shortName: 'TZD หลักสูตรที่ 3/2569',
+    round: '3/2569',
+    description: 'หลักสูตรที่ 3/2569 ของการรายงานสถานะนักเรียนในระบบ Thailand Zero Dropout (กสศ.) สำหรับครู/บุคลากรในโรงเรียนสังกัด สพป.นครพนม เขต 1 พร้อมรับเกียรติบัตรหลังจบหลักสูตร',
+    icon: '🎯',
+    color: '#059669',
+    theme: 'tzd',
+    status: 'coming_soon',
+    courseName: 'การรายงานสถานะนักเรียนในระบบ Thailand Zero Dropout หลักสูตรที่ 3/2569 โดย สพป.นครพนม เขต 1',
+    totalHours: 'auto',
+    passPercent: 80,
+    certCounterDoc: 'tzd3',  // certNumbers/tzd3
+    certNumberFormat: (n) => `${n}/2569`,
+    certNumberRange: null,   // TODO: { start: ?, end: ?, warn: ? }
+    noQuiz: true,            // ไม่มีแบบทดสอบ — ชมครบตามเวลาทุกตอน = ผ่าน
+    // การ์ดน้ำจิ้ม (แสดงเฉพาะตอน status: 'coming_soon') — แก้ข้อความได้ตามต้องการ
+    teaser: {
+      opensLabel: ''   // เช่น 'พฤศจิกายน 2569' → ป้ายบนแบนเนอร์จะเป็น "เปิดอบรม พฤศจิกายน 2569" (เว้นว่าง = "กำลังจะเปิดเร็วๆ นี้")
+    },
+    videos: []
   }
 };
 
@@ -3811,6 +3904,17 @@ let TRAINING = COURSES.pp3;
 
 // Course ปัจจุบันที่ user กำลังเรียน (default = pp3)
 let currentCourseId = 'pp3';
+
+// ปุ่มกรองความคิดเห็น (แอดมิน) + ลิงก์ footer — สร้างจาก COURSES อัตโนมัติ
+function renderCourseNavLinks() {
+  const filters = document.getElementById('adminCommentCourseFilters');
+  if(filters) filters.innerHTML = Object.values(COURSES).map(c =>
+    `<button class="admin-comments-filter" data-filter="${c.id}" onclick="setAdminCommentFilter('${c.id}')">${c.icon || '📘'} ${c.shortName || c.id}</button>`).join('');
+  const footer = document.getElementById('footerCourseLinks');
+  if(footer) footer.innerHTML = Object.values(COURSES).map(c =>
+    `<a href="#" onclick="event.preventDefault();selectCourseFromLanding('${c.id}');">${c.icon || '📘'} ${c.shortName || c.id}${c.status === 'coming_soon' ? ' (เร็วๆ นี้)' : ''}</a>`).join('');
+}
+renderCourseNavLinks();
 // ══════════════════════════════════════
 
 const app = initializeApp(firebaseConfig);
@@ -3948,10 +4052,8 @@ function renderCourseCards(target) {
     // กำหนดสี CSS variables ตาม course
     const colorVar = course.color;
     // แปลงสี hex เป็น lighter shade (เบา)
-    const colorPale = course.id === 'pp3' ? '#f7edd8' : (course.id === 'tzd' ? '#d1fae5' : '#f7edd8');
-    const colorPale2 = course.id === 'pp3' ? '#fdf8f0' : (course.id === 'tzd' ? '#ecfdf5' : '#fdf8f0');
-    const colorBorder = course.id === 'pp3' ? '#e8c97a55' : (course.id === 'tzd' ? '#10b98155' : '#e8c97a55');
-    const colorLight = course.id === 'pp3' ? '#2d3f73' : (course.id === 'tzd' ? '#10b981' : '#2d3f73');
+    const th = getTheme(course);
+    const colorPale = th.pale, colorPale2 = th.pale2, colorBorder = th.border, colorLight = th.light;
 
     // Badge
     let badgeHTML = '';
@@ -3992,16 +4094,19 @@ function renderCourseCards(target) {
           <div class="cc-stat-label">ระยะเวลา</div>
         </div>
         <div class="cc-stat">
-          <div class="cc-stat-num" data-count="${passPct}" data-suffix="%">${passPct}%</div>
-          <div class="cc-stat-label">เกณฑ์ผ่าน</div>
+          ${course.noQuiz
+            ? `<div class="cc-stat-num" style="font-size:15px;">ชมครบ</div>
+          <div class="cc-stat-label">ไม่มีแบบทดสอบ</div>`
+            : `<div class="cc-stat-num" data-count="${passPct}" data-suffix="%">${passPct}%</div>
+          <div class="cc-stat-label">เกณฑ์ผ่าน</div>`}
         </div>
-      </div>` : `
+      </div>` : (course.teaser ? '' : `
       <div class="cc-stats">
         <div class="cc-stat" style="flex:1;">
           <div class="cc-stat-num" style="font-size:14px;color:#92400e;">กำลังจัดทำเนื้อหา</div>
           <div class="cc-stat-label" style="margin-top:6px;">จะเปิดให้บริการเร็วๆ นี้</div>
         </div>
-      </div>`;
+      </div>`);
 
     // Cert info card (เฉพาะคนจบหลักสูตรแล้ว)
     let certInfoHTML = '';
@@ -4036,13 +4141,23 @@ function renderCourseCards(target) {
       btnHTML = `<button class="cc-btn primary" onclick="selectCourseFromLanding('${course.id}')">เข้าอบรม →</button>`;
     }
 
-    const cardClass = (isSoon && !isAdmin) ? 'course-card disabled' : 'course-card';
+    const isTeaser = isSoon && !!course.teaser;
+    const cardClass = ((isSoon && !isAdmin) ? 'course-card disabled' : 'course-card') + (isTeaser ? ' teaser' : '');
+    const teaserVeil = isTeaser ? `<div class="cc-teaser-veil">
+            <span class="cc-teaser-pill"><span class="cc-teaser-dot"></span>${course.teaser.opensLabel ? `เปิดอบรม ${course.teaser.opensLabel}` : 'กำลังจะเปิดเร็วๆ นี้'}</span>
+            ${course.round ? `<div class="cc-teaser-round">หลักสูตรที่<b>${course.round}</b></div>` : ''}
+          </div>` : (course.round
+      ? `<div class="cc-teaser-veil cc-round-veil"><div class="cc-teaser-round">หลักสูตรที่<b>${course.round}</b></div></div>` : '');
+    const bannerSrc = getCardBanner(course);
+    const bannerHTML = bannerSrc
+      ? `<div class="cc-banner${isTeaser ? ' teaser' : ''}"><img src="${bannerSrc}" alt="${course.shortName||course.name}" loading="lazy"><div class="cc-banner-overlay"></div>${teaserVeil}</div>`
+      : (teaserVeil ? `<div class="cc-banner${isTeaser ? ' teaser' : ''}">${teaserVeil}</div>` : '');
     return `
       <div class="${cardClass}" style="--cc-color:${colorVar};--cc-color-light:${colorLight};--cc-color-pale:${colorPale};--cc-color-pale-2:${colorPale2};--cc-color-border:${colorBorder};">
-        ${CARD_BANNERS[course.id] ? `<div class="cc-banner"><img src="${CARD_BANNERS[course.id]}" alt="${course.shortName||course.name}" loading="lazy"><div class="cc-banner-overlay"></div></div>` : ''}
+        ${bannerHTML}
         <div class="cc-accent"></div>
         <div class="cc-body">
-          <div class="cc-icon-wrap">${CARD_ICONS[course.id] ? `<img src="${CARD_ICONS[course.id]}" alt="${course.shortName||course.name}" loading="lazy">` : course.icon}</div>
+          <div class="cc-icon-wrap">${getCardIcon(course) ? `<img src="${getCardIcon(course)}" alt="${course.shortName||course.name}" loading="lazy">` : course.icon}</div>
           <div class="cc-meta">${badgeHTML}</div>
           <div class="cc-title">${course.name}</div>
           <div class="cc-desc">${course.description}</div>
@@ -4383,7 +4498,7 @@ window.selectCourseFromLanding = (courseId) => {
   // ใส่ icon + ชื่อ + สีตาม course
   icon.textContent = course.icon || '🎓';
   icon.style.setProperty('--cc-color', course.color || '#1a2744');
-  icon.style.setProperty('--cc-color-light', course.id === 'tzd' ? '#10b981' : '#2d3f73');
+  icon.style.setProperty('--cc-color-light', getTheme(course).light);
   name.textContent = course.name || course.shortName || 'หลักสูตร';
   
   modal.classList.add('show');
@@ -4514,10 +4629,14 @@ window.enterCourse = async (courseId) => {
   if(!isAdmin && (!currentUser || !userData)) return;   // admin เข้าได้แม้ไม่ได้ login
   if(!COURSES[courseId]) return;
   if(COURSES[courseId].status !== 'active' && !isAdmin) return;   // admin ยกเว้น coming_soon
+  if(!(COURSES[courseId].videos || []).length) { showToast('🚧 หลักสูตรนี้ยังไม่มีคลิปวิดีโอ — ใส่ videos[] ใน COURSES ก่อนทดสอบ'); return; }
   
   currentCourseId = courseId;
   sessionStorage.setItem('activeCourseId', courseId);  // จำคอร์สไว้ resume ตอน refresh (F5)
   TRAINING = COURSES[courseId];  // ให้ระบบเล่นวิดีโอ/แบบทดสอบ follow คอร์สนี้
+  { const nq = !!TRAINING.noQuiz;
+    const a = document.getElementById('sidebarQuizRules'), b = document.getElementById('sidebarNoQuizRules');
+    if(a) a.style.display = nq ? 'none' : ''; if(b) b.style.display = nq ? '' : 'none'; }
   
   // โหลด progress ของ course นี้
   const prog = getCourseProgress(userData, courseId) || {};
@@ -5029,7 +5148,7 @@ async function loadVideo(idx) {
   const v2=TRAINING.videos[idx];
   if(watchedSec>0){
     const rem=Math.max(0,v2.minSeconds-watchedSec);
-    const remTxt=rem>0?`เหลืออีก ${Math.floor(rem/60)}:${(rem%60).toString().padStart(2,'0')} นาที`:'✓ ดูครบแล้ว รอผลทำข้อสอบ';
+    const remTxt=rem>0?`เหลืออีก ${Math.floor(rem/60)}:${(rem%60).toString().padStart(2,'0')} นาที`:(partHasQuiz(TRAINING, idx) ? '✓ ดูครบแล้ว รอผลทำข้อสอบ' : '✓ ดูครบแล้ว');
     ov.innerHTML=`<div class="overlay-icon">⏩</div><div class="overlay-text">ดูค้างไว้ ${Math.floor(watchedSec/60)}:${(watchedSec%60).toString().padStart(2,'0')} นาทีแล้ว</div><div class="overlay-sub">${remTxt}<br>กดที่นี่แล้วกด Play เพื่อดูต่อ</div>`;
   } else {
     ov.innerHTML=`<div class="overlay-icon">▶️</div><div class="overlay-text">กดที่นี่ แล้วกด Play เพื่อเริ่มนับเวลา</div><div class="overlay-sub">ระบบจะเริ่มนับเวลาเมื่อคุณกดปุ่มนี้</div>`;
@@ -5060,9 +5179,12 @@ function startTimer() {
     // บันทึก watchedSec ทุก 30 วิ เพื่อให้ resume ได้เมื่อ logout กลับมา
     if(watchedSec%30===0) saveWatchedProgress();
     if(watchedSec>=v.minSeconds&&!completed.has(currentIdx)){
-      completed.add(currentIdx); saveProgress();
+      completed.add(currentIdx);
+      const hasQuiz = partHasQuiz(TRAINING, currentIdx);
+      if(!hasQuiz) quizPassed.add(currentIdx);   // ไม่มีข้อสอบ → ผ่านตอนนี้ทันที
+      saveProgress();
       document.getElementById('statusDot').className='status-dot done';
-      document.getElementById('statusText').textContent='✓ ชมครบแล้ว! กดปุ่มด้านล่างเพื่อทำข้อสอบ';
+      document.getElementById('statusText').textContent= hasQuiz ? '✓ ชมครบแล้ว! กดปุ่มด้านล่างเพื่อทำข้อสอบ' : '✓ ชมครบแล้ว! กดปุ่มด้านล่างเพื่อไปต่อ';
       updateNextBtn(); renderPlaylist(); updateProgress();
       clearInterval(timer); clearInterval(heartbeatTimer);
     }
@@ -5109,6 +5231,11 @@ window.adminSkipVideo = () => {
   clearInterval(timer); clearInterval(heartbeatTimer); isWatching=false;
   document.getElementById('vimeoPlayer').src='';
   completed.add(currentIdx);
+  if(!partHasQuiz(TRAINING, currentIdx)) {
+    quizPassed.add(currentIdx); saveProgress();
+    updateNextBtn(); renderPlaylist(); updateProgress();
+    return;
+  }
   saveProgress();
   startQuiz(currentIdx);
 };
@@ -5141,7 +5268,9 @@ function toggleAdminSkipBtns() {
 }
 function updateNextBtn() {
   const btn=document.getElementById('btnNext');
-  const done=completed.has(currentIdx), quizDone=quizPassed.has(currentIdx);
+  const done=completed.has(currentIdx);
+  if(done && !partHasQuiz(TRAINING, currentIdx) && !quizPassed.has(currentIdx)) { quizPassed.add(currentIdx); saveProgress(); }
+  const quizDone=quizPassed.has(currentIdx);
   if(quizDone){
     if(currentIdx>=TRAINING.videos.length-1){
       document.getElementById('btnNextText').textContent='📜 รับเกียรติบัตร';
@@ -5211,7 +5340,7 @@ window.renderProgressDashboard = () => {
         <div class="dash-course-meta">
           ${done
             ? `🏆 เลขที่เกียรติบัตร <strong>${escapeHtml(String(prog.certNumber))}</strong>`
-            : `Quiz ผ่านแล้ว ${passedSet.size} / ${totalParts} Part`}
+            : (course.noQuiz ? `ชมครบแล้ว ${passedSet.size} / ${totalParts} Part` : `Quiz ผ่านแล้ว ${passedSet.size} / ${totalParts} Part`)}
         </div>
         <div class="dash-course-actions">
           ${done
@@ -5221,7 +5350,7 @@ window.renderProgressDashboard = () => {
       </div>`;
 
     let rows = '';
-    for(let i = 0; i < totalParts; i++) {
+    if(!course.noQuiz) for(let i = 0; i < totalParts; i++) {
       const passed = passedSet.has(i);
       const sc = (scores[i] !== undefined && scores[i] !== null) ? scores[i] : null;
       rows += `
@@ -5503,6 +5632,7 @@ async function assignCertNumber() {
   if(prog && prog.certNumber) return prog.certNumber;
 
   const course = COURSES[currentCourseId];
+  if(!course.certNumberRange) { showToast('⚠️ หลักสูตรนี้ยังไม่ได้กำหนดช่วงเลขเกียรติบัตร กรุณาติดต่อผู้ดูแลระบบ'); return null; }
   const { start, end } = course.certNumberRange;
   const counterId = course.certCounterDoc;
 
@@ -5511,7 +5641,8 @@ async function assignCertNumber() {
     let assigned = null;
     await runTransaction(db, async(tx) => {
       const snap = await tx.get(certRef);
-      let last = snap.exists() ? (snap.data().lastUsed || start - 1) : start - 1;
+      // กันเลขต่ำกว่าช่วงที่กำหนด (กรณี counter ค้างค่าจากช่วงเก่า)
+      let last = Math.max(snap.exists() ? (snap.data().lastUsed || start - 1) : start - 1, start - 1);
       if(last >= end) throw new Error('CERT_FULL');
       assigned = last + 1;
       tx.set(certRef, { lastUsed: assigned }, { merge: true });
@@ -5579,10 +5710,15 @@ async function showCert() {
 
   try {
   if(!prog.certNumber) {
+    if(!course.certNumberRange) {
+      showLoading(false);
+      alert('⚠️ หลักสูตรนี้ยังไม่ได้กำหนดช่วงเลขเกียรติบัตร กรุณาติดต่อผู้ดูแลระบบ สพป.นครพนม เขต 1');
+      return;
+    }
     const certRef = doc(db, 'certNumbers', course.certCounterDoc);
     const snap = await getDoc(certRef);
     const { start, end } = course.certNumberRange;
-    const last = snap.exists() ? (snap.data().lastUsed || start - 1) : start - 1;
+    const last = Math.max(snap.exists() ? (snap.data().lastUsed || start - 1) : start - 1, start - 1);
     if(last >= end) {
       showLoading(false);
       alert('⚠️ เลขเกียรติบัตรครบจำนวนแล้ว กรุณาติดต่อผู้ดูแลระบบ สพป.นครพนม เขต 1');
@@ -5739,7 +5875,7 @@ async function loadAdminDashboard() {
   const cEnd = curCourse.certNumberRange?.end || CERT_END;
   const cWarn = cEnd - 25;
   const certSnap = await getDoc(doc(db,'certNumbers', curCourse.certCounterDoc || 'main'));
-  const lastUsed = certSnap.exists() ? (certSnap.data().lastUsed || cStart - 1) : cStart - 1;
+  const lastUsed = Math.max(certSnap.exists() ? (certSnap.data().lastUsed || cStart - 1) : cStart - 1, cStart - 1);
   const usedCount = lastUsed - cStart + 1;
   const certWarnEl = document.getElementById('certNumberWarning');
   if(certWarnEl) {
@@ -7816,7 +7952,7 @@ function renderAdminCommentItem(c, replies) {
   const partN = (partStr || '').replace('part', '');
   const courseLabel = COURSES[courseId]?.shortName || COURSES[courseId]?.name || courseId;
   const courseIcon = COURSES[courseId]?.icon || '📘';
-  const courseCls = courseId === 'tzd' ? 'tzd' : (courseId === 'pp3' ? 'pp3' : '');
+  const courseCls = COURSES[courseId] ? (COURSES[courseId].theme || courseId) : '';
   const initial = (c.userName || '?').charAt(0).toUpperCase();
   const t = c.time && c.time.toDate ? formatCommentTime(c.time.toDate()) : '';
   
@@ -9523,8 +9659,7 @@ window.openProfileSmart = (userId) => {
     </div>
     <div class="footer-col">
       <h4>📚 หลักสูตรในระบบ</h4>
-      <a href="#" onclick="event.preventDefault();selectCourseFromLanding('pp3');">📋 ปพ.3 ออนไลน์</a>
-      <a href="#" onclick="event.preventDefault();selectCourseFromLanding('tzd');">🛡️ TZD (Thailand Zero Dropout)</a>
+      <div id="footerCourseLinks"></div>
       <p style="margin-top:10px;font-size:11.5px;color:rgba(255,255,255,.45);">หลักสูตรอื่นๆ กำลังจัดทำเนื้อหา</p>
     </div>
     <div class="footer-col">
