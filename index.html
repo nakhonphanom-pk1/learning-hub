@@ -2764,6 +2764,18 @@ body{transition:background .8s ease;}
 .cc-teaser-round{font-family:'Noto Serif Thai',serif;font-size:15px;line-height:1.3;opacity:.92;}
 .cc-teaser-round b{display:block;font-size:34px;font-weight:700;letter-spacing:.5px;line-height:1.15;}
 @media (prefers-reduced-motion:reduce){.cc-teaser-dot{animation:none;}}
+
+/* หนังสืออ้างอิงบนการ์ดหลักสูตร */
+.cc-refs{margin:-6px 0 18px;border:1px solid var(--cc-color-border,#e8c97a55);border-radius:12px;background:var(--cc-color-pale-2,#fdf8f0);font-size:12.5px;}
+.cc-refs summary{cursor:pointer;padding:9px 14px;font-weight:600;color:var(--cc-color,#1a2744);list-style:none;display:flex;align-items:center;gap:6px;}
+.cc-refs summary::-webkit-details-marker{display:none;}
+.cc-refs summary::after{content:'▾';margin-left:auto;transition:transform .2s;}
+.cc-refs[open] summary::after{transform:rotate(180deg);}
+.cc-refs summary:focus-visible{outline:2px solid var(--cc-color,#059669);outline-offset:2px;border-radius:12px;}
+.cc-refs ul{margin:0;padding:2px 14px 10px 34px;color:var(--navy);line-height:1.7;}
+.cc-refs li span{display:block;color:var(--muted);font-size:11.5px;margin-top:-2px;}
+.cc-refs li+li{margin-top:4px;}
+@media (prefers-reduced-motion:reduce){.cc-refs summary::after{transition:none;}}
 </style>
 </head>
 <body>
@@ -3798,6 +3810,14 @@ const COURSES = {
     id: 'tzd',
     name: 'การรายงานสถานะนักเรียนในระบบ Thailand Zero Dropout (กสศ.) หลักสูตรที่ 1/2569',
     shortName: 'TZD หลักสูตรที่ 1/2569',
+    // หนังสือราชการที่หลักสูตรนี้ใช้ประกอบการดำเนินการ (แสดงบนการ์ดแบบกดเปิด/ปิด)
+    refDocs: [
+      { no: 'ศธ 04060/ว2286', date: '18 มิถุนายน 2569' },
+      { no: 'ศธ 04060/ว2287', date: '18 มิถุนายน 2569' },
+      { no: 'ศธ 04060/ว2985', date: '11 สิงหาคม 2569' },
+      { no: 'ศธ 04060/ว2986', date: '11 สิงหาคม 2569' },
+      { no: 'ศธ 04060/2988',  date: '11 สิงหาคม 2569' }   // ตามที่ได้รับมา (ไม่มี ว)
+    ],
     round: '1/2569',  // ⚠️ คง id 'tzd' ไว้เสมอ — progress/เลขเกียรติบัตรของผู้เรียนเดิมผูกกับ id นี้
     description: 'เรียนรู้วิธีการรายงานสถานะนักเรียนในระบบ Thailand Zero Dropout ของกองทุนเพื่อความเสมอภาคทางการศึกษา (กสศ.) สำหรับครู/บุคลากรในโรงเรียนสังกัด สพป.นครพนม เขต 1 เพื่อให้นักเรียนได้รับการพิจารณาจัดสรรเงินสนับสนุนจาก กสศ. พร้อมรับเกียรติบัตรหลังจบหลักสูตร',
     icon: '🎯',
@@ -4161,6 +4181,10 @@ function renderCourseCards(target) {
           <div class="cc-meta">${badgeHTML}</div>
           <div class="cc-title">${course.name}</div>
           <div class="cc-desc">${course.description}</div>
+          ${(course.refDocs||[]).length ? `<details class="cc-refs">
+            <summary>📄 ประกอบการดำเนินการตามหนังสือ สพป.นครพนม เขต 1 (${course.refDocs.length} ฉบับ)</summary>
+            <ul>${course.refDocs.map(d => `<li>ที่ ${d.no}<span>ลงวันที่ ${d.date}</span></li>`).join('')}</ul>
+          </details>` : ''}
           ${statsHTML}
           ${certInfoHTML}
           ${btnHTML}
