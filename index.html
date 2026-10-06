@@ -1033,6 +1033,44 @@ button[class*="btn-"],.quiz-actions button{position:relative;overflow:hidden;}
 
 
 
+
+/* ─── PRIOR STEP CHECK MODAL (ถามก่อนดูคลิปที่ 1) ─── */
+.prior-check-box{max-width:560px!important;text-align:left!important;max-height:92vh;overflow-y:auto;}
+.pc-step-title{font-weight:700;color:#065f46;margin-bottom:4px;}
+.pc-details{margin:0;padding-left:18px;font-size:13.5px;line-height:1.6;color:var(--text);}
+.pc-details li{background:none!important;border:none!important;padding:0!important;display:list-item!important;margin-bottom:2px;}
+.pc-q{border:1.5px solid var(--border);border-radius:12px;padding:12px;margin-bottom:10px;transition:border-color .2s,background .2s;}
+.pc-q.ans-yes{border-color:#34d399;background:#f0fdf4;}
+.pc-q.ans-no{border-color:#fca5a5;background:#fef2f2;}
+.pc-q-head{display:flex;gap:10px;align-items:flex-start;}
+.pc-q-text{font-size:14px;font-weight:600;line-height:1.55;color:var(--navy);}
+.pc-q-hint{font-size:12.5px;color:var(--muted);line-height:1.55;margin-top:3px;}
+.pc-q-btns{display:flex;gap:8px;margin:10px 0 0 32px;}
+.pc-pill{flex:1;padding:9px 10px;border-radius:9px;border:1.5px solid var(--border);background:#fff;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:700;cursor:pointer;color:var(--text);transition:all .15s;}
+.pc-q.ans-yes .pc-pill.yes{background:#059669;border-color:#059669;color:#fff;}
+.pc-q.ans-no .pc-pill.no{background:#dc2626;border-color:#dc2626;color:#fff;}
+#priorCheckSubmit:disabled{opacity:.55;cursor:not-allowed;}
+.pc-result{font-size:15px;font-weight:700;line-height:1.6;border-radius:12px;padding:14px;margin-bottom:12px;text-align:center;}
+.pc-result.ok{background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0;}
+.pc-result.no{background:#fff7ed;color:#9a3412;border:1px solid #fed7aa;}
+.pc-missing-title{font-size:13px;font-weight:700;color:var(--muted);margin-bottom:6px;}
+.pc-missing{margin:0 0 16px;padding-left:18px;font-size:13.5px;line-height:1.6;color:var(--text);}
+.pc-missing li{margin-bottom:4px;}
+@media (max-width:480px){.pc-q-btns{margin-left:0;}}
+.pc-question{font-size:16px;font-weight:700;line-height:1.7;color:var(--navy);background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:14px 16px;margin-bottom:10px;}
+.pc-hint{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:18px;}
+.pc-quick{font-size:14px;line-height:1.6;color:#1e3a8a;background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:10px 12px;margin-bottom:10px;font-weight:600;}
+.prior-check-box .confirm-modal-icon,.prior-check-box .confirm-modal-title{text-align:center;}
+.pc-intro{font-size:14px;color:var(--text);line-height:1.65;margin-bottom:10px;}
+.pc-steps{list-style:none;margin:0 0 14px;padding:0;display:flex;flex-direction:column;gap:8px;}
+.pc-steps li{display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.55;color:var(--text);background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:9px 12px;}
+.pc-num{flex:0 0 22px;height:22px;border-radius:50%;background:#059669;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px;}
+.pc-note{font-size:13px;color:var(--muted);line-height:1.6;background:var(--cream);border-radius:10px;padding:10px 12px;margin-bottom:18px;}
+.pc-actions{display:flex;flex-direction:column;gap:10px;}
+.pc-actions .confirm-modal-btn{width:100%;padding:13px 16px;font-size:15px;}
+.pc-done{background:#059669!important;color:#fff!important;}
+.pc-done:hover{background:#047857!important;}
+
 /* ─── USER PROFILE MODAL ─── */
 .profile-modal{display:none;position:fixed;inset:0;background:rgba(15,26,48,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:10005;align-items:center;justify-content:center;padding:20px;opacity:0;transition:opacity .25s ease;overflow-y:auto;}
 .profile-modal.show{display:flex;opacity:1;}
@@ -3887,6 +3925,16 @@ const COURSES = {
     certNumberFormat: (n) => `${n}/2569`,
     certNumberRange: null,   // TODO: { start: ?, end: ?, warn: ? }
     noQuiz: true,            // ไม่มีแบบทดสอบ — ชมครบตามเวลาทุกตอน = ผ่าน
+    // ถามก่อนเริ่มคลิปที่ 1 ว่าโรงเรียนดำเนินการตามคลิปนี้แล้วหรือยัง
+    // ตอบ "ดำเนินการแล้ว" → ข้ามคลิปที่ 1 (นับว่าผ่าน) ไปคลิปที่ 2 ได้เลย / ตอบ "ยังไม่ได้ดำเนินการ" → ดูคลิปที่ 1 ตามปกติ
+    priorStepCheck: {
+      partIdx: 0,   // คลิปที่ถามก่อนดู (0 = คลิปที่ 1)
+      title: 'ก่อนเริ่มเรียน',
+      question: 'โรงเรียนของท่านได้แต่งตั้งครูผู้สำรวจ ส่งข้อมูลให้ Admin เขตพื้นที่ฯ และครูผู้สำรวจลงทะเบียนจนเข้าสู่ระบบ Thailand Zero Dropout ด้วย ThaiID ได้แล้ว ใช่หรือไม่?',
+      hint: 'หากยังทำไม่ครบ หรือมีการเปลี่ยนตัวครูผู้สำรวจคนใหม่ ให้เลือก “ยังไม่ได้ดำเนินการ”',
+      doneText: '✅ ดำเนินการแล้ว — ไปคลิปที่ 2',
+      notYetText: '▶️ ยังไม่ได้ดำเนินการ — ดูคลิปที่ 1'
+    },
     // การ์ดน้ำจิ้ม (แสดงเฉพาะตอน status: 'coming_soon') — แก้ข้อความได้ตามต้องการ
     teaser: {
       opensLabel: ''   // เช่น 'พฤศจิกายน 2569' → ป้ายบนแบนเนอร์จะเป็น "เปิดอบรม พฤศจิกายน 2569" (เว้นว่าง = "กำลังจะเปิดเร็วๆ นี้")
@@ -3910,6 +3958,16 @@ const COURSES = {
     certNumberFormat: (n) => `${n}/2569`,
     certNumberRange: null,   // TODO: { start: ?, end: ?, warn: ? }
     noQuiz: true,            // ไม่มีแบบทดสอบ — ชมครบตามเวลาทุกตอน = ผ่าน
+    // ถามก่อนเริ่มคลิปที่ 1 ว่าโรงเรียนดำเนินการตามคลิปนี้แล้วหรือยัง
+    // ตอบ "ดำเนินการแล้ว" → ข้ามคลิปที่ 1 (นับว่าผ่าน) ไปคลิปที่ 2 ได้เลย / ตอบ "ยังไม่ได้ดำเนินการ" → ดูคลิปที่ 1 ตามปกติ
+    priorStepCheck: {
+      partIdx: 0,   // คลิปที่ถามก่อนดู (0 = คลิปที่ 1)
+      title: 'ก่อนเริ่มเรียน',
+      question: 'โรงเรียนของท่านได้แต่งตั้งครูผู้สำรวจ ส่งข้อมูลให้ Admin เขตพื้นที่ฯ และครูผู้สำรวจลงทะเบียนจนเข้าสู่ระบบ Thailand Zero Dropout ด้วย ThaiID ได้แล้ว ใช่หรือไม่?',
+      hint: 'หากยังทำไม่ครบ หรือมีการเปลี่ยนตัวครูผู้สำรวจคนใหม่ ให้เลือก “ยังไม่ได้ดำเนินการ”',
+      doneText: '✅ ดำเนินการแล้ว — ไปคลิปที่ 2',
+      notYetText: '▶️ ยังไม่ได้ดำเนินการ — ดูคลิปที่ 1'
+    },
     // การ์ดน้ำจิ้ม (แสดงเฉพาะตอน status: 'coming_soon') — แก้ข้อความได้ตามต้องการ
     teaser: {
       opensLabel: ''   // เช่น 'พฤศจิกายน 2569' → ป้ายบนแบนเนอร์จะเป็น "เปิดอบรม พฤศจิกายน 2569" (เว้นว่าง = "กำลังจะเปิดเร็วๆ นี้")
@@ -4615,6 +4673,8 @@ window.retakeCourse = async (courseId) => {
       [`courses.${courseId}.certIssuedDate`]: null,
       [`courses.${courseId}.leaveCount`]: 0,
       [`courses.${courseId}.certHistory`]: history,
+      [`courses.${courseId}.priorStepAnswer`]: null,
+      [`courses.${courseId}.skippedParts`]: [],
     };
     for(let i = 0; i < nVideos; i++) updates[`courses.${courseId}.watchedSec_${i}`] = 0;
     if(courseId === 'pp3') {
@@ -4631,7 +4691,7 @@ window.retakeCourse = async (courseId) => {
       ...(userData.courses[courseId] || {}),
       completedVideos: [], quizPassed: [], quizScores: {},
       certNameConfirmed: false, certNumber: null, certIssuedDate: null,
-      leaveCount: 0, certHistory: history,
+      leaveCount: 0, certHistory: history, priorStepAnswer: null, skippedParts: [],
     };
     for(let i = 0; i < nVideos; i++) userData.courses[courseId]['watchedSec_' + i] = 0;
     if(courseId === 'pp3') {
@@ -4647,6 +4707,74 @@ window.retakeCourse = async (courseId) => {
     console.error('retakeCourse err:', e);
     showToast('❌ เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง');
   }
+};
+
+// ══════════════════════════════════════
+// PRIOR STEP CHECK — ถามว่าโรงเรียนทำตามคลิปที่ 1 แล้วหรือยัง
+// ทำแล้ว → ข้ามคลิปนั้น (บันทึกว่าผ่าน) / ยังไม่ทำ → ดูคลิปตามปกติ
+// ถามครั้งเดียวต่อรอบการอบรม (เก็บคำตอบไว้ที่ courses.<id>.priorStepAnswer)
+// ══════════════════════════════════════
+function askPriorStepQuestion(cfg) {
+  return new Promise((resolve) => {
+    const modal = document.getElementById('priorCheckModal');
+    if(!modal) { const ok = window.confirm(cfg.question); resolve({ ans: ok ? 'done' : 'notyet', answers: [ok] }); return; }
+    document.getElementById('priorCheckTitle').textContent = cfg.title || 'ก่อนเริ่มเรียน';
+    document.getElementById('priorCheckQuestion').textContent = cfg.question || '';
+    const hint = document.getElementById('priorCheckHint');
+    hint.textContent = cfg.hint || ''; hint.style.display = cfg.hint ? '' : 'none';
+    const doneBtn = document.getElementById('priorCheckDone');
+    const notYetBtn = document.getElementById('priorCheckNotYet');
+    doneBtn.textContent = cfg.doneText || 'ดำเนินการแล้ว';
+    notYetBtn.textContent = cfg.notYetText || 'ยังไม่ได้ดำเนินการ';
+    const finish = (ok) => {
+      modal.classList.remove('show');
+      doneBtn.onclick = null; notYetBtn.onclick = null;
+      resolve({ ans: ok ? 'done' : 'notyet', answers: [ok] });
+    };
+    doneBtn.onclick = () => finish(true);
+    notYetBtn.onclick = () => finish(false);
+    modal.classList.add('show');
+  });
+}
+
+// คืนค่า true ถ้าข้ามแล้วทำให้ครบทุก Part (ให้ไปหน้ายืนยันชื่อรับเกียรติบัตร)
+async function runPriorStepCheck(courseId, prog) {
+  const course = COURSES[courseId];
+  const cfg = course && course.priorStepCheck;
+  if(!cfg || !currentUser) return false;
+  const p = Number(cfg.partIdx || 0);
+  if(p >= (course.videos || []).length) return false;
+  if(quizPassed.has(p)) return false;                 // ผ่านคลิปนี้แล้ว ไม่ต้องถาม
+  if(prog && prog.priorStepAnswer) return false;      // เคยตอบแล้วในรอบนี้
+  for(let i = 0; i < p; i++) if(!quizPassed.has(i)) return false;  // ยังไม่ถึงคลิปนี้
+
+  const { ans, answers } = await askPriorStepQuestion(cfg);
+  const now = new Date().toISOString();
+  if(!userData.courses) userData.courses = {};
+  userData.courses[courseId] = { ...(userData.courses[courseId] || {}), priorStepAnswer: ans, priorStepAnswers: answers, priorStepAnsweredAt: now };
+
+  if(ans === 'done') {
+    completed.add(p); quizPassed.add(p);
+    const skipped = Array.from(new Set([...(prog && prog.skippedParts || []), p])).map(Number);
+    userData.courses[courseId].skippedParts = skipped;
+    userData.courses[courseId].completedVideos = [...completed];
+    userData.courses[courseId].quizPassed = [...quizPassed];
+    await saveProgress();
+    await saveCourseProgress({ priorStepAnswer: 'done', priorStepAnswers: answers, priorStepAnsweredAt: now, skippedParts: skipped });
+    updateProgress();
+    showToast(`⏭ ข้ามคลิปที่ ${p + 1} แล้ว — หากต้องการทบทวน กดที่ Part ${p + 1} ในรายการวิดีโอได้`);
+    return quizPassed.size >= course.videos.length;
+  }
+  await saveCourseProgress({ priorStepAnswer: 'notyet', priorStepAnswers: answers, priorStepAnsweredAt: now });
+  return false;
+}
+
+// ดูคลิปที่ข้ามไว้ย้อนหลัง (ไม่บังคับนับเวลา เพราะนับว่าผ่านแล้ว)
+window.watchSkippedPart = (i) => {
+  const prog = getCourseProgress(userData, currentCourseId) || {};
+  if(!(prog.skippedParts || []).map(Number).includes(i)) return;
+  clearInterval(timer); clearInterval(heartbeatTimer); isWatching = false;
+  loadVideo(i); renderPlaylist();
 };
 
 window.enterCourse = async (courseId) => {
@@ -4680,6 +4808,9 @@ window.enterCourse = async (courseId) => {
     if(prog.certNameConfirmed){ showCert(); } else { showConfirmName(); }
   } else {
     // ยังไม่จบ → เข้า training
+    // ถามก่อนว่าโรงเรียนทำตามคลิปที่ 1 แล้วหรือยัง (เฉพาะหลักสูตรที่ตั้ง priorStepCheck ไว้)
+    const skippedAll = await runPriorStepCheck(courseId, prog);
+    if(skippedAll) { showConfirmName(); return; }
     let resume=0;
     for(let i=0;i<COURSES[courseId].videos.length;i++){ if(!quizPassed.has(i)){resume=i;break;} }
     showPage('pageTraining'); loadVideo(resume); renderPlaylist();
@@ -5314,9 +5445,14 @@ function updateNextBtn() {
 }
 
 function renderPlaylist() {
+  const skippedSet = new Set(((getCourseProgress(userData, currentCourseId) || {}).skippedParts || []).map(Number));
   document.getElementById('playlistEl').innerHTML=TRAINING.videos.map((v,i)=>{
     const isDone=quizPassed.has(i),isWatched=completed.has(i),isCur=i===currentIdx,isLock=!isDone&&i>currentIdx;
+    const isSkipped=skippedSet.has(i);
     const cls=isDone?'completed':isCur?'current':isLock?'locked':'';
+    if(isSkipped && isDone) {
+      return `<div class="playlist-item ${cls}" style="cursor:pointer;" title="ดำเนินการแล้ว — กดเพื่อดูทบทวน" onclick="watchSkippedPart(${i})"><div class="item-num">✓</div><div style="flex:1"><div class="item-name">Part ${i+1}</div><div class="item-dur">${v.durationLabel} · กดเพื่อดูทบทวน</div></div><span class="item-badge badge-done">⏭ ดำเนินการแล้ว</span></div>`;
+    }
     const badge=isDone?`<span class="item-badge badge-done">✓ ผ่าน</span>`:isWatched&&isCur?`<span class="item-badge badge-cur">ทำข้อสอบ</span>`:isCur?`<span class="item-badge badge-cur">กำลังดู</span>`:`<span class="item-badge badge-lock">${isLock?'🔒':'–'}</span>`;
     return `<div class="playlist-item ${cls}"><div class="item-num">${isDone?'✓':i+1}</div><div style="flex:1"><div class="item-name">Part ${i+1}</div><div class="item-dur">${v.durationLabel}</div></div>${badge}</div>`;
   }).join('');
@@ -5397,7 +5533,8 @@ window.renderProgressDashboard = () => {
   scoresEl.innerHTML = scoresHtml || '<div class="dash-empty">ยังไม่มีคะแนนข้อสอบ</div>';
 };
 
-window.goToTraining = () => {
+window.goToTraining = async () => {
+  if(await runPriorStepCheck(currentCourseId, getCourseProgress(userData, currentCourseId) || {})) { showConfirmName(); return; }
   let resume=0;
   for(let i=0;i<TRAINING.videos.length;i++){ if(!quizPassed.has(i)){resume=i;break;} }
   showPage('pageTraining'); loadVideo(resume); renderPlaylist();
@@ -9709,6 +9846,21 @@ window.openProfileSmart = (userId) => {
     <div class="confirm-modal-actions">
       <button class="confirm-modal-btn confirm-modal-cancel" id="confirmModalCancel">ยกเลิก</button>
       <button class="confirm-modal-btn confirm-modal-ok" id="confirmModalOk">ยืนยัน</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- PRIOR STEP CHECK MODAL — ถามคำถามเดียวก่อนดูคลิปที่ 1 (ต้องตอบ ปิดเองไม่ได้) -->
+<div class="confirm-modal" id="priorCheckModal">
+  <div class="confirm-modal-box prior-check-box">
+    <div class="confirm-modal-icon">🏫</div>
+    <div class="confirm-modal-title" id="priorCheckTitle"></div>
+    <div class="pc-question" id="priorCheckQuestion"></div>
+    <div class="pc-hint" id="priorCheckHint"></div>
+    <div class="pc-actions">
+      <button class="confirm-modal-btn pc-done" id="priorCheckDone"></button>
+      <button class="confirm-modal-btn confirm-modal-cancel" id="priorCheckNotYet"></button>
     </div>
   </div>
 </div>
