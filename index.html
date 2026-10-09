@@ -2776,6 +2776,21 @@ body{transition:background .8s ease;}
 .cc-refs li span{display:block;color:var(--muted);font-size:11.5px;margin-top:-2px;}
 .cc-refs li+li{margin-top:4px;}
 @media (prefers-reduced-motion:reduce){.cc-refs summary::after{transition:none;}}
+
+/* แผงทดลองเรียนของแอดมิน */
+.admin-preview-panel{background:linear-gradient(135deg,#fff7ed,#ffedd5);border:1.5px solid #fdba74;border-radius:14px;padding:16px 18px;margin-bottom:18px;}
+.admin-preview-title{font-weight:700;font-size:15px;color:#9a3412;}
+.admin-preview-desc{font-size:12.5px;color:#7c2d12;opacity:.85;margin-top:3px;line-height:1.6;}
+.admin-preview-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-top:12px;}
+.admin-preview-item{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #fed7aa;border-radius:11px;padding:10px 12px;cursor:pointer;text-align:left;font-family:'Sarabun',sans-serif;transition:transform .15s,box-shadow .15s;}
+.admin-preview-item:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(234,88,12,.15);}
+.admin-preview-item:focus-visible{outline:2px solid #ea580c;outline-offset:2px;}
+.admin-preview-item .api-icon{font-size:22px;}
+.admin-preview-item .api-name{font-size:13.5px;font-weight:700;color:var(--navy);line-height:1.35;}
+.admin-preview-item .api-meta{font-size:11.5px;color:var(--muted);margin-top:1px;}
+.admin-preview-item .api-tag{margin-left:auto;flex-shrink:0;font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;}
+.api-tag.soon{background:#fef3c7;color:#92400e;}
+.api-tag.live{background:#d1fae5;color:#065f46;}
 </style>
 </head>
 <body>
@@ -3402,6 +3417,17 @@ body{transition:background .8s ease;}
       </div>
     </div>
 
+    <!-- ═══ ทดลองเรียน (โหมด Admin) — เข้าได้ทุกหลักสูตร รวมถึงที่ยังไม่เปิด ═══ -->
+    <div class="admin-preview-panel">
+      <div class="admin-preview-head">
+        <div>
+          <div class="admin-preview-title">🧪 ทดลองเรียนหลักสูตร (โหมด Admin)</div>
+          <div class="admin-preview-desc">เข้าได้ทุกหลักสูตร รวมถึงหลักสูตรที่ยังไม่เปิด · มีปุ่มสีส้ม "Admin Skip" ข้ามคลิปและข้อสอบได้ · ไม่บันทึกความคืบหน้า ไม่ใช้เลขเกียรติบัตรจริง</div>
+        </div>
+      </div>
+      <div class="admin-preview-list" id="adminPreviewCourses"></div>
+    </div>
+
     <!-- ═══ SECTION 1: Hub Overview ═══ -->
     <div class="admin-section-divider">
       <div>
@@ -3982,6 +4008,28 @@ function renderCourseNavLinks() {
     `<a href="#" onclick="event.preventDefault();selectCourseFromLanding('${c.id}');">${c.icon || '📘'} ${c.shortName || c.id}${c.status === 'coming_soon' ? ' (เร็วๆ นี้)' : ''}</a>`).join('');
 }
 renderCourseNavLinks();
+
+// แผงทดลองเรียนของแอดมิน — กดแล้วเข้าหลักสูตรในโหมดทดสอบทันที
+function renderAdminPreviewCourses() {
+  const el = document.getElementById('adminPreviewCourses');
+  if(!el) return;
+  // หลักสูตรที่ยังไม่เปิดขึ้นก่อน
+  const list = Object.values(COURSES).sort((a,b) => (a.status==='coming_soon'?0:1) - (b.status==='coming_soon'?0:1));
+  el.innerHTML = list.map(c => {
+    const soon = c.status === 'coming_soon';
+    const n = (c.videos||[]).length;
+    const nq = (c.videos||[]).reduce((t,v) => t + ((v.quiz||[]).length), 0);
+    return `<button type="button" class="admin-preview-item" onclick="adminPreviewCourse('${c.id}')">
+      <span class="api-icon">${c.icon||'📘'}</span>
+      <span><div class="api-name">${c.shortName||c.name}</div><div class="api-meta">${n} ตอน · ข้อสอบ ${nq} ข้อ</div></span>
+      <span class="api-tag ${soon?'soon':'live'}">${soon?'ยังไม่เปิด':'เปิดแล้ว'}</span>
+    </button>`;
+  }).join('');
+}
+window.adminPreviewCourse = (courseId) => {
+  if(!isAdmin) return;
+  enterCourse(courseId);
+};
 // ══════════════════════════════════════
 
 const app = initializeApp(firebaseConfig);
@@ -5157,7 +5205,7 @@ window.doAdminLogin = () => {
       <div class="header-user-text"><strong>Admin</strong><small>สพป.นครพนม เขต 1</small></div>
     </div>
   `;
-  showPage('pageAdmin'); loadAdminDashboard(); renderAdminHubStats(); loadAdminChats(); loadAdminAllComments();
+  showPage('pageAdmin'); renderAdminPreviewCourses(); loadAdminDashboard(); renderAdminHubStats(); loadAdminChats(); loadAdminAllComments();
 };
 
 window.doLogout = async() => {
