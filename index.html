@@ -2791,6 +2791,18 @@ body{transition:background .8s ease;}
 .admin-preview-item .api-tag{margin-left:auto;flex-shrink:0;font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;}
 .api-tag.soon{background:#fef3c7;color:#92400e;}
 .api-tag.live{background:#d1fae5;color:#065f46;}
+
+/* ═══ โหมดทบทวน ═══ */
+.review-banner{background:linear-gradient(135deg,#e0f2fe,#ecfeff);border:1.5px solid #7dd3fc;color:#075985;border-radius:12px;padding:10px 14px;font-size:13.5px;font-weight:600;margin-bottom:12px;line-height:1.55;}
+.sidebar-info.review-info{background:#f0f9ff;border-color:#7dd3fc;color:#0c4a6e;}
+.playlist-item.reviewable{cursor:pointer;opacity:1;}
+.playlist-item.reviewable:hover{border-color:#38bdf8;transform:translateX(2px);}
+.playlist-item.reviewable:focus-visible{outline:2px solid #0284c7;outline-offset:2px;}
+.badge-review{background:#e0f2fe;color:#075985;}
+.cc-btn.review{background:#fff;color:#075985;border:1.5px solid #7dd3fc;box-shadow:none;font-size:14px;padding:12px 18px;}
+.cc-btn.review:hover{transform:translateY(-1px);background:#e0f2fe;box-shadow:0 6px 16px rgba(2,132,199,.18);}
+.btn-review-back{display:inline-block;margin-left:8px;padding:12px 22px;border-radius:10px;border:1.5px solid #7dd3fc;background:#fff;color:#075985;font-family:'Sarabun',sans-serif;font-size:14.5px;font-weight:700;cursor:pointer;}
+.btn-review-back:hover{background:#e0f2fe;}
 </style>
 </head>
 <body>
@@ -3173,6 +3185,7 @@ body{transition:background .8s ease;}
           <span class="current" id="breadcrumbCourseName">หลักสูตร</span>
         </div>
       </div>
+      <div class="review-banner" id="reviewBannerTraining" style="display:none;">📖 โหมดทบทวน — เลือกดู Part ไหนก็ได้ ไม่นับเวลา ไม่บันทึกความคืบหน้า และไม่ได้รับเกียรติบัตรใหม่</div>
       <div class="video-label" id="videoLabel">Part 1 จาก 4</div>
       <div class="video-title" id="videoTitle">กำลังโหลด...</div>
       <div class="video-wrapper">
@@ -3187,7 +3200,7 @@ body{transition:background .8s ease;}
           <div class="paused-icon">⏸</div>
           <div class="paused-title">⛔ การนับเวลาถูกหยุด</div>
           <div class="paused-sub">กรุณากดปุ่มด้านล่างเพื่อดำเนินการต่อ</div>
-          <div class="paused-warning">⚠️ การนับเวลาถูกหยุดชั่วคราว<br>กรุณากดปุ่ม "ดำเนินการต่อ" แล้วกด Play ในวิดีโอด้วย</div>
+          <div class="paused-warning">⚠️ การนับเวลาถูกหยุดชั่วคราว<br>กดปุ่มด้านล่างครั้งเดียว คลิปจะเล่นต่อและนับเวลาต่อทันที</div>
           <div class="paused-count" id="pausedCount"></div>
           <button class="btn-resume" onclick="resumeVideo()">▶ กดเพื่อดูต่อ</button>
         </div>
@@ -3197,11 +3210,11 @@ body{transition:background .8s ease;}
       <div id="videoClassroomWidget"></div>
       
       <div class="warning-banner" id="warningBanner">
-        ⚠️ ตรวจพบการออกจากหน้านี้ — การนับเวลาหยุดแล้ว กรุณากด ▶ เพื่อดูต่อ
+        ⚠️ ตรวจพบการออกจากหน้านี้ — การนับเวลาหยุดแล้ว กดปุ่ม "▶ กดเพื่อดูต่อ" บนวิดีโอ
       </div>
       <div class="video-status-bar">
         <div class="status-dot" id="statusDot"></div>
-        <div class="status-text" id="statusText">คลิกที่วิดีโอ แล้วกด ▶ เพื่อเริ่มนับเวลา</div>
+        <div class="status-text" id="statusText">กดที่วิดีโอเพื่อเริ่มดู</div>
         <div class="status-timer" id="statusTimer"></div>
       </div>
       <button class="btn-next" id="btnNext"><span id="btnNextText">ถัดไป</span></button>
@@ -3210,8 +3223,15 @@ body{transition:background .8s ease;}
     <div>
       <div class="sidebar-title">รายการวิดีโอ</div>
       <div id="playlistEl"></div>
-      <div class="sidebar-info">
-        🔒 ต้องชมแต่ละตอน<strong>ครบตามเวลา</strong>ที่กำหนด<br>
+      <div class="sidebar-info review-info" id="sidebarReviewInfo" style="display:none;">
+        📖 <strong>โหมดทบทวน</strong><br>
+        👆 กดเลือก Part ที่ต้องการดูได้เลย<br>
+        ⏩ ไม่นับเวลา เลื่อนข้ามช่วงในคลิปได้<br>
+        📝 ลองทำข้อสอบได้ <strong>ไม่บันทึกคะแนน</strong><br>
+        📜 ไม่ได้รับเกียรติบัตรใหม่ (ใบเดิมยังอยู่ครบ)
+      </div>
+      <div class="sidebar-info" id="sidebarNormalInfo">
+        🔒 ต้องชมแต่ละตอน<strong>ครบทั้งคลิป</strong> (นับเฉพาะตอนคลิปกำลังเล่น)<br>
         <span id="sidebarQuizRules">📝 มีข้อสอบหลังจบแต่ละ Part<br>
         ✅ ผ่านเมื่อได้คะแนน <strong>80% ขึ้นไป</strong><br></span>
         <span id="sidebarNoQuizRules" style="display:none;">✅ ชมครบทุกตอน = จบหลักสูตร <strong>(ไม่มีแบบทดสอบ)</strong><br></span>
@@ -3270,6 +3290,7 @@ body{transition:background .8s ease;}
 <!-- QUIZ -->
 <div class="page" id="pageQuiz">
   <div class="quiz-wrap">
+    <div class="review-banner" id="reviewBannerQuiz" style="display:none;">📖 โหมดทบทวน — ลองทำข้อสอบได้ คะแนนไม่ถูกบันทึก</div>
     <div class="quiz-card">
       <div class="quiz-progress-row">
         <span class="quiz-part" id="quizPartLabel">Part 1</span>
@@ -3739,7 +3760,7 @@ function getInfographics() {
 // TZD หลักสูตรที่ 2/2569 และ 3/2569 ใช้คลิปชุดเดียวกัน — กำหนดครั้งเดียว ใช้ทั้งสองหลักสูตร
 // ══════════════════════════════════════
 const TZD_R23_PART1 = {
-  title:'Part 1 : เตรียมความพร้อมและลงทะเบียนเข้าใช้งานระบบ Thailand Zero Dropout', vimeoId:'1234311805', minSeconds:250, durationLabel:'8:40 นาที',
+  title:'Part 1 : เตรียมความพร้อมและลงทะเบียนเข้าใช้งานระบบ Thailand Zero Dropout', vimeoId:'1234311805', minSeconds:520, durationLabel:'8:40 นาที',
   quiz:[
     {"q": "เว็บไซต์ของระบบ Thailand Zero Dropout คือข้อใด", "opts": ["thailandzerodropout.eef.or.th", "zerodropout.obec.go.th", "thaizerodropout.moe.go.th", "eef.or.th/zerodropout"], "ans": 0, "fb": ["ถูกต้อง ระบบนี้ดูแลโดย กสศ. (eef) เข้าได้ที่ thailandzerodropout.eef.or.th หรือค้นชื่อระบบใน Google ก็จะเจอเป็นลิงก์แรก", "ระบบ Thailand Zero Dropout ดูแลโดยกองทุนเพื่อความเสมอภาคทางการศึกษา (กสศ.) ไม่ใช่ สพฐ. หรือกระทรวงศึกษาธิการ เว็บไซต์ที่ถูกต้องคือ thailandzerodropout.eef.or.th", "ระบบ Thailand Zero Dropout ดูแลโดยกองทุนเพื่อความเสมอภาคทางการศึกษา (กสศ.) ไม่ใช่ สพฐ. หรือกระทรวงศึกษาธิการ เว็บไซต์ที่ถูกต้องคือ thailandzerodropout.eef.or.th", "ระบบ Thailand Zero Dropout ดูแลโดยกองทุนเพื่อความเสมอภาคทางการศึกษา (กสศ.) ไม่ใช่ สพฐ. หรือกระทรวงศึกษาธิการ เว็บไซต์ที่ถูกต้องคือ thailandzerodropout.eef.or.th"]},
     {"q": "ขั้นตอนที่ 1 ของการเตรียมความพร้อมและลงทะเบียน คือข้อใด", "opts": ["สมัครบัญชีผ่านแอป ThaiID", "แต่งตั้งคณะกรรมการดำเนินงาน โดยเฉพาะตำแหน่งครูผู้สำรวจ", "รายงานข้อมูลนักเรียนผ่านระบบ e-Learning", "ตั้งรหัสผ่านในหน้ายืนยันตัวตนผู้ใช้งาน"], "ans": 1, "fb": ["ตัวเลือกอื่นเป็นขั้นตอนที่มาทีหลังทั้งหมด การตั้งรหัสผ่านอยู่ขั้นที่ 4 การเข้าระบบด้วย ThaiID อยู่ขั้นที่ 5 และ e-Learning อยู่ขั้นที่ 6 ขั้นแรกสุดคือการแต่งตั้งคณะกรรมการและครูผู้สำรวจ", "ถูกต้อง ทุกอย่างเริ่มจากการแต่งตั้งคณะกรรมการดำเนินงานแก้ไขปัญหาเด็กและเยาวชนนอกระบบการศึกษา โดยเฉพาะตำแหน่ง \"ครูผู้สำรวจ\" เพราะครูผู้สำรวจคือคนที่จะได้บัญชีเข้าใช้ระบบ", "ตัวเลือกอื่นเป็นขั้นตอนที่มาทีหลังทั้งหมด การตั้งรหัสผ่านอยู่ขั้นที่ 4 การเข้าระบบด้วย ThaiID อยู่ขั้นที่ 5 และ e-Learning อยู่ขั้นที่ 6 ขั้นแรกสุดคือการแต่งตั้งคณะกรรมการและครูผู้สำรวจ", "ตัวเลือกอื่นเป็นขั้นตอนที่มาทีหลังทั้งหมด การตั้งรหัสผ่านอยู่ขั้นที่ 4 การเข้าระบบด้วย ThaiID อยู่ขั้นที่ 5 และ e-Learning อยู่ขั้นที่ 6 ขั้นแรกสุดคือการแต่งตั้งคณะกรรมการและครูผู้สำรวจ"]},
@@ -3793,7 +3814,7 @@ const COURSES = {
     certNumberFormat: (n) => `${n}/2569`,
     certNumberRange: { start: 11688, end: 12187, warn: 12088 },
     videos: [
-      { title:'Part 1 : การเตรียมความพร้อมและขั้นตอนการลงทะเบียนเข้าใช้งานระบบ ปพ.3 ออนไลน์', vimeoId:'1184846225', minSeconds:600, durationLabel:'12:39 นาที',
+      { title:'Part 1 : การเตรียมความพร้อมและขั้นตอนการลงทะเบียนเข้าใช้งานระบบ ปพ.3 ออนไลน์', vimeoId:'1184846225', minSeconds:759, durationLabel:'12:39 นาที',
       quiz:[
         {q:'ในคลิปวิดีโอ วิทยากรได้กล่าวถึงระบบ ปพ.3 ออนไลน์ว่ามีประวัติการใช้งานมาแล้วระยะหนึ่ง บริบทด้านเวลาใดที่อธิบายสถานการณ์การเข้าใช้งานของ "โรงเรียนประถมศึกษา" สังกัด สพป. ได้ถูกต้องที่สุด',opts:['โรงเรียนประถมศึกษาใช้งานระบบนี้มาตั้งแต่ปีการศึกษา 2563 อย่างต่อเนื่อง','โรงเรียนประถมศึกษาเพิ่งเริ่มถูกนำเข้าสู่ระบบ ปพ.3 ออนไลน์ หลังวันที่ 15 พฤศจิกายน ปีการศึกษา 2567','โรงเรียนประถมศึกษามีความคุ้นเคยกับระบบนี้มากกว่าโรงเรียนขยายโอกาส','ระบบนี้ถูกพัฒนาขึ้นใหม่ทั้งหมดในปีการศึกษา 2567'],ans:1,fb:['ระบบมีมาก่อน แต่โรงเรียนประถมยังไม่ได้เข้าใช้งาน','ถูกต้อง! เขตประถมเพิ่งเริ่มใช้หลังวันที่ 15 พ.ย. 2567','ตรงข้ามกับความจริง โรงเรียนขยายโอกาสคุ้นเคยมากกว่า','ระบบไม่ได้พัฒนาใหม่ทั้งหมด แต่ขยายผลมาสู่โรงเรียนประถม']},
         {q:'ตามโครงสร้างของระบบ ปพ.3 ออนไลน์ในปัจจุบัน คำสั่งแต่งตั้งคณะกรรมการวิชาการต้องประกอบด้วยตำแหน่งใดบ้าง',opts:['นายทะเบียน, ผู้ตรวจทาน, ผู้เขียน/ผู้พิมพ์','ผู้เขียน/ผู้พิมพ์, ผู้ทาน, นายทะเบียน, ผู้ตรวจทาน, ผู้อนุมัติ','นายทะเบียน, ผู้อำนวยการโรงเรียน, ผู้อนุมัติ','นายทะเบียน, ผู้ตรวจทาน, ผู้อนุมัติ'],ans:3,fb:['ตำแหน่งผู้เขียน/ผู้พิมพ์ถูกยกเลิกไปแล้ว','โครงสร้างแบบกระดาษเดิม 5 ตำแหน่ง ไม่ใช่ระบบออนไลน์','ขาดตำแหน่งผู้ตรวจทาน','ถูกต้อง! ปัจจุบันเหลือเพียง 3 ตำแหน่งหลัก']},
@@ -3809,7 +3830,7 @@ const COURSES = {
         {q:'ในการเข้าใช้งานระบบ ปพ.3 ออนไลน์ทุกครั้ง จะต้องใช้กลไกใดในการ Log in',opts:['กรอกเลขประจำตัวประชาชน 13 หลักและรหัสผ่าน','เข้าสู่ระบบผ่าน Single Sign-On ของ My OBEC','สแกนคิวอาร์โค้ดและยืนยันตัวตนผ่านแอปพลิเคชัน ThaiD','ยืนยันตัวตนด้วยรหัส OTP ทางอีเมล'],ans:2,fb:['ระบบ ปพ.3 ออนไลน์ไม่ได้ใช้รหัสผ่านแบบดั้งเดิม','แม้เป็นระบบ สพฐ. แต่การเข้าระบบ ปพ.3 มีช่องทางยืนยันตัวตนเฉพาะ','ถูกต้อง! ต้องยืนยันตัวตนผ่านแอปพลิเคชัน ThaiD ของกรมการปกครองทุกครั้ง','รหัส OTP ทางอีเมลไม่ใช่กลไกหลัก']}
       ]
     },
-    { title:'Part 2 : การตั้งค่าข้อมูลผู้ใช้งานและการจัดการลายมือชื่ออิเล็กทรอนิกส์ในระบบ ปพ.3 ออนไลน์', vimeoId:'1184847881', minSeconds:1050, durationLabel:'22:04 นาที',
+    { title:'Part 2 : การตั้งค่าข้อมูลผู้ใช้งานและการจัดการลายมือชื่ออิเล็กทรอนิกส์ในระบบ ปพ.3 ออนไลน์', vimeoId:'1184847881', minSeconds:1324, durationLabel:'22:04 นาที',
       quiz:[
         {q:'หลังจากนายทะเบียนเข้าสู่ระบบ ปพ.3 ออนไลน์ได้สำเร็จเป็นครั้งแรก ขั้นตอนแรกสุดที่ควรทำคืออะไร',opts:['เพิ่มรายชื่อผู้อำนวยการโรงเรียนเข้าระบบในฐานะผู้อนุมัติ','กรอกและตรวจสอบ "ข้อมูลส่วนบุคคล" ของตนเองให้ครบถ้วน','นำเข้าข้อมูลรายชื่อนักเรียน','สร้างบัญชีผู้ใช้งานและกำหนดสิทธิ์ให้ผู้ตรวจทานทันที'],ans:1,fb:['ทำในลำดับถัดไป หลังข้อมูลผู้ใช้งานหลักสมบูรณ์','ถูกต้อง! ควรตรวจสอบโปรไฟล์และข้อมูลส่วนบุคคลของตัวเองก่อน','เป็นกระบวนการถัดไปหลังตั้งค่าผู้ใช้งาน','ทำในลำดับถัดไป']},
         {q:'ในการเพิ่มรายชื่อผู้ตรวจทานและผู้อนุมัติ ข้อมูลใดสำคัญที่สุดที่ต้องระบุให้ถูกต้อง',opts:['เลขประจำตัวประชาชน 13 หลัก','อีเมลส่วนตัว','วันเดือนปีเกิดตามทะเบียนบ้าน','รหัสผ่านชั่วคราว 6 หลัก'],ans:0,fb:['ถูกต้อง! ระบบผูกกับ ThaiD ซึ่งใช้เลขประจำตัวประชาชน หากกรอกผิดจะล็อกอินไม่ได้','ไม่ใช่คีย์หลักในการเชื่อมโยงสิทธิ์','ไม่ใช่ข้อมูลหลักที่ใช้ในระบบ','ระบบนี้ไม่ใช้รหัสผ่านแบบดั้งเดิม']},
@@ -3825,7 +3846,7 @@ const COURSES = {
         {q:'หากอัปโหลดลายเซ็นที่ไม่ได้ตัดพื้นหลังออก จะเกิดปัญหาใดเมื่อระบบนำไปประทับลงเอกสาร',opts:['ระบบจะปฏิเสธการอัปโหลดทันที','ลายเซ็นจะเล็กเกินไป','จะเกิดกรอบสี่เหลี่ยมสีทึบทับตัวอักษรบนเอกสาร','ลายเซ็นจะกลายเป็นสีดำทั้งหมด'],ans:2,fb:['ระบบอาจยอมรับไฟล์ แต่ผลลัพธ์จะผิดพลาด','ขนาดปรับแต่งได้','ถูกต้อง! พื้นหลังกระดาษจะกลายเป็นกรอบสี่เหลี่ยมทับเส้นบรรทัดหรือข้อความ','สีขึ้นอยู่กับไฟล์ต้นฉบับ']}
       ]
     },
-    { title:'Part 3 : การอัปโหลดข้อมูลและการจัดการข้อผิดพลาดในระบบ ปพ.3 ออนไลน์', vimeoId:'1184848631', minSeconds:1300, durationLabel:'27:11 นาที',
+    { title:'Part 3 : การอัปโหลดข้อมูลและการจัดการข้อผิดพลาดในระบบ ปพ.3 ออนไลน์', vimeoId:'1184848631', minSeconds:1631, durationLabel:'27:11 นาที',
       quiz:[
         {q:'โรงเรียนประถมศึกษาที่ดำเนินการหลังวันที่ 15 พฤศจิกายน 2567 ต้องเลือกอัปโหลดในส่วนใด',opts:['อัปโหลดฝั่งซ้าย 100%','อัปโหลดผ่านระบบ SGS เท่านั้น','อัปโหลดฝั่งขวา 100% เพราะเป็นรูปแบบใหม่ที่บังคับใช้ตั้งแต่วันที่ 15 พฤศจิกายน 2567','อัปโหลดฝั่งใดก็ได้'],ans:2,fb:['ฝั่งซ้ายใช้สำหรับข้อมูลก่อนวันที่ 15 พ.ย. 2567','วิทยากรแนะนำ School Miss มากกว่า','ถูกต้อง! ตั้งแต่วันที่ 15 พ.ย. 2567 ต้องอัปโหลดฝั่งขวา 100%','ระบบบังคับแยกฝั่งตามช่วงเวลา']},
         {q:'เมื่อนายทะเบียนอัปโหลดข้อมูล ปพ.3 เสร็จแล้ว บุคคลใดต้องดำเนินการตรวจสอบในลำดับถัดไป',opts:['นายทะเบียนตรวจสอบซ้ำด้วยตนเอง','ผู้ตรวจทานเข้าสู่ระบบเพื่อตรวจสอบและดำเนินการต่อ','ผู้อำนวยการโรงเรียนลงนามอนุมัติทันที','แอดมินเขตพื้นที่รับข้อมูลไปประมวลผล'],ans:1,fb:['นายทะเบียนทำหน้าที่อัปโหลดข้อมูลแล้ว บทบาทนี้จบลงแล้วครับ','ถูกต้องครับ! หลังจากนายทะเบียนอัปโหลดเสร็จ ผู้ตรวจทานต้องเข้าสู่ระบบเพื่อตรวจสอบข้อมูลในลำดับถัดไป','ผู้อำนวยการจะดำเนินการในขั้นตอนหลังจากผู้ตรวจทานผ่านแล้วครับ','แอดมินเขตไม่ได้เข้ามาในขั้นตอนนี้ครับ']},
@@ -3837,7 +3858,7 @@ const COURSES = {
         {q:'วิทยากรให้ระดับความสำคัญ "10 คะแนน" แก่เมนูใด',opts:['เมนู "ดูข้อมูลการติดต่อสถานศึกษา"','เมนู "ตรวจสอบสถานะการอนุมัติ"','เมนู "ดาวน์โหลดเป็น Excel"','เมนู "ตรวจสอบข้อมูลนักเรียน" (ปุ่มไอคอนรูปนักเรียนรับปริญญา)'],ans:3,fb:['ปุ่มนี้ดูรายชื่อคณะกรรมการ','เมนูนี้เป็นปุ่มลับดูเหตุผลเวลาถูกตีกลับ','ปุ่มนี้สำหรับดาวน์โหลดเป็น Excel','ถูกต้อง! วิทยากรเรียกว่า "พระเอก" ใช้ดูและเจาะลึกข้อผิดพลาดทุกสี']}
       ]
     },
-    { title:'Part 4 : กรณีศึกษา ม.ต้น ขยายโอกาส และการทำงานของผู้ตรวจทาน', vimeoId:'1184852450', minSeconds:860, durationLabel:'17:52 นาที',
+    { title:'Part 4 : กรณีศึกษา ม.ต้น ขยายโอกาส และการทำงานของผู้ตรวจทาน', vimeoId:'1184852450', minSeconds:1072, durationLabel:'17:52 นาที',
       quiz:[
         {q:'หากนักเรียนจบไม่พร้อมรุ่น โดยอนุมัติจบวันที่ 20 เมษายน การรัน "เลขที่ ปพ.2" สำหรับรอบนี้ต้องทำอย่างไร',opts:['รันตัวเลขต่อเนื่องจากรอบ 31 มีนาคม','รันเริ่มต้นที่เลข 1 ใหม่เสมอ ตามรอบการอนุมัติจบนั้นๆ','ไม่ต้องกรอกเลขที่ ปพ.2','รวมนักเรียนทั้งสองรอบเป็นไฟล์เดียว'],ans:1,fb:['การรันเลข ปพ.2 ไม่รันต่อจากรุ่นก่อน','ถูกต้อง! เด็กจบไม่พร้อมรุ่น เลข ปพ.2 ต้องรันเริ่มที่เลข 1 ใหม่เสมอ','นักเรียนทุกคนต้องมีเลข ปพ.2','ไม่จำเป็นต้องรวมไฟล์']},
         {q:'ในการเตรียมไฟล์ Excel ก่อนอัปโหลดเข้าระบบ วิทยากรแนะนำให้ดำเนินการสิ่งใดเป็นอันดับแรกสุด "ก่อน" ที่จะเริ่มรันลำดับ "เลขที่ ปพ.2" เพื่อป้องกันระบบแจ้งเตือนข้อผิดพลาด',opts:['ตรวจสอบและแก้ไขคำนำหน้าชื่อของนักเรียนให้ตรงตามระดับชั้นก่อน','แยกรุ่นนักเรียนที่จบไม่พร้อมรุ่นออกไปทำอีกไฟล์หนึ่งทันที','เรียงลำดับ "เลขประจำตัวนักเรียน" จากน้อยไปมากให้เรียบร้อยก่อน','พิมพ์เลขศูนย์ (0) นำหน้าเลขที่ ปพ.2 เสมอเพื่อให้ระบบอ่านค่าได้ง่ายขึ้น'],ans:2,fb:['ผิดครับ แม้การตรวจสอบคำนำหน้าจะสำคัญ แต่ประเด็นหลักที่วิทยากรเน้นย้ำว่าต้องทำเป็นอันดับแรกก่อนรันเลข ปพ.2 คือเรื่องของการเรียงลำดับตัวเลขครับ','ผิดครับ นักเรียนที่จบไม่พร้อมรุ่นสามารถแยกอัปโหลดเป็นอีกไฟล์ได้ก็จริง แต่ไม่ใช่สิ่งที่ต้องทำเป็นอันดับแรกก่อนการรันเลข ปพ.2 ของนักเรียนในแต่ละรอบการจบครับ','ถูกต้องครับ! วิทยากรเน้นย้ำชัดเจนว่า ก่อนที่จะรันเลข ปพ.2 อันดับแรกเราควรต้อง "เรียงลำดับเลขประจำตัวนักเรียนจากน้อยไปมากก่อน" เสมอ แล้วจึงค่อยรันเลข ปพ.2 จากน้อยไปมากตามลงมา เพื่อให้ข้อมูลสอดคล้องกันและไม่เกิดข้อผิดพลาด','ผิดครับ วิทยากรอ่านเงื่อนไขของระบบให้ฟังอย่างชัดเจนว่า การกรอกเลขที่ ปพ.2 นั้น "ไม่ต้องกรอกศูนย์นำหน้า" ครับ']},
@@ -3876,7 +3897,7 @@ const COURSES = {
     certNumberFormat: (n) => `${n}/2569`,
     certNumberRange: { start: 16002, end: 16478, warn: 16450 },
     videos: [
-      { title:'Part 1 : การเตรียมความพร้อม การตั้งคณะกรรมการ และการลงทะเบียนเข้าใช้งานระบบ Thailand Zero Dropout', vimeoId:'1199678355', minSeconds:600, durationLabel:'12:39 นาที',
+      { title:'Part 1 : การเตรียมความพร้อม การตั้งคณะกรรมการ และการลงทะเบียนเข้าใช้งานระบบ Thailand Zero Dropout', vimeoId:'1199678355', minSeconds:759, durationLabel:'12:39 นาที',
       quiz:[
         {q:'ระบบ Thailand Zero Dropout ในการอบรมนี้ มีจุดประสงค์หลักเพื่อสิ่งใด',opts:['ประเมินวิทยฐานะของครูในโรงเรียน','รายงานข้อมูลสถานะนักเรียนที่เคยออกจากระบบไปแล้วและได้กลับเข้ามาในระบบการศึกษา','จัดสรรงบประมาณสำหรับซ่อมแซมอาคารเรียน','ลงทะเบียนนักเรียนใหม่เข้าเรียนในระดับชั้นประถมศึกษา'],ans:1,fb:['ระบบนี้ไม่เกี่ยวกับการประเมินวิทยฐานะของครู','ถูกต้อง! ระบบ TZD ใช้รายงานสถานะนักเรียนที่เคยหลุดออกจากระบบและกลับเข้ามา เพื่อให้ได้รับการพิจารณาช่วยเหลือ','ระบบไม่ได้ใช้จัดสรรงบประมาณซ่อมแซมอาคาร','ไม่ใช่ระบบลงทะเบียนนักเรียนใหม่']},
         {q:'ขั้นตอนแรกสุดของการดำเนินงานในระบบ Thailand Zero Dropout ตามที่วิทยากรแนะนำ คือข้อใด',opts:['การเข้าสู่ระบบด้วยแอปพลิเคชัน ThaID','การส่งข้อมูลให้แอดมินเขตผ่านทาง Line','การตั้งคณะกรรมการดำเนินงานของสถานศึกษา','การกรอกข้อมูลบัญชีธนาคารของโรงเรียน'],ans:2,fb:['การเข้าระบบ ThaID เป็นขั้นตอนหลังจากได้รับบัญชีผู้ใช้งานแล้ว','การส่งข้อมูลให้เขตทำหลังจากตั้งคณะกรรมการและจัดทำคำสั่งแล้ว','ถูกต้อง! ต้องตั้งคณะกรรมการดำเนินงานของสถานศึกษาเป็นขั้นตอนแรกสุด','ระบบ TZD ไม่ได้ใช้ข้อมูลบัญชีธนาคารของโรงเรียน']},
@@ -3890,7 +3911,7 @@ const COURSES = {
         {q:'หากในการเข้าใช้งานครั้งต่อๆ ไป ครูผู้สำรวจเลือกเข้าสู่ระบบด้วย Username และ Password (โดยไม่ใช้แอป ThaID) จะเกิดขั้นตอนใดขึ้น',opts:['ระบบจะส่งรหัส OTP ไปที่อีเมลของท่านทุกรอบ','ระบบจะส่งรหัส OTP ไปที่เบอร์โทรศัพท์มือถือ','ระบบจะให้ตอบคำถามรักษาความปลอดภัย','ระบบจะล็อกบัญชีและต้องแจ้งแอดมินเขต'],ans:0,fb:['ถูกต้อง! หากเข้าด้วย Username/Password โดยไม่ใช้ ThaID ระบบจะส่งรหัส OTP ไปที่อีเมลทุกรอบ','OTP ไม่ได้ส่งไปที่เบอร์โทรศัพท์','ระบบไม่ได้ใช้คำถามรักษาความปลอดภัย','ระบบไม่ได้ล็อกบัญชี']}
       ]
     },
-    { title:'Part 2 : การสำรวจและรายงานสถานะนักเรียน การรับและการเบิกจ่ายเงินจัดสรรจาก กสศ.', vimeoId:'1199671521', hash:'63d18a0fb7', minSeconds:680 /* 14:12 = 852 วิ × 80% */, durationLabel:'14:12 นาที',
+    { title:'Part 2 : การสำรวจและรายงานสถานะนักเรียน การรับและการเบิกจ่ายเงินจัดสรรจาก กสศ.', vimeoId:'1199671521', hash:'63d18a0fb7', minSeconds:852, durationLabel:'14:12 นาที',
       quiz:[
         {q:'เมนู "เพิ่มเด็กนอกระบบเพื่อการสำรวจ" สถานศึกษาในสังกัด สพฐ. ต้องดำเนินการอย่างไรตามคำแนะนำของวิทยากร',opts:['บันทึกข้อมูลเด็กนอกระบบทุกคนในพื้นที่','ไม่ต้องดำเนินการใดๆ ในเมนูนี้','อัปโหลดรายชื่อเด็กที่ต้องการเพิ่มลงในระบบ','พิมพ์แบบสำรวจไปแจกให้ผู้ปกครองในชุมชน'],ans:1,fb:['สถานศึกษา สพฐ. ไม่ต้องบันทึกเด็กนอกระบบทุกคนในเมนูนี้','ถูกต้อง! เมนูนี้สถานศึกษาในสังกัด สพฐ. ไม่ต้องดำเนินการใดๆ','ไม่ต้องอัปโหลดรายชื่อเด็กในเมนูนี้','ไม่ใช่การพิมพ์แบบสำรวจไปแจกผู้ปกครอง']},
         {q:'เมนูหลักที่ครูผู้สำรวจต้องใช้เพื่อเข้าไป "บันทึกสถานะล่าสุด" ของนักเรียนคือเมนูใด',opts:['ความก้าวหน้าการสำรวจ','จัดการข้อมูลบัญชีธนาคาร','เพิ่มเด็กนอกระบบเพื่อการสำรวจ','เด็ก/เยาวชนที่เคยอยู่ในระบบการศึกษา'],ans:3,fb:['เมนูนี้ใช้ดูความก้าวหน้า ไม่ใช่บันทึกสถานะ','เมนูนี้ใช้จัดการข้อมูลบัญชีธนาคาร','สถานศึกษา สพฐ. ไม่ต้องใช้เมนูนี้','ถูกต้อง! เมนู "เด็ก/เยาวชนที่เคยอยู่ในระบบการศึกษา" ใช้บันทึกสถานะล่าสุดของนักเรียน']},
@@ -3937,7 +3958,7 @@ const COURSES = {
     },
     videos: [
       TZD_R23_PART1,
-      { title:'Part 2 : การสำรวจเด็กและเยาวชนที่เคยอยู่ในระบบการศึกษา: สถานะเบื้องต้น แบบสำรวจฉบับสั้นและฉบับเต็ม', vimeoId:'1234312589', minSeconds:780, durationLabel:'27:07 นาที',
+      { title:'Part 2 : การสำรวจเด็กและเยาวชนที่เคยอยู่ในระบบการศึกษา: สถานะเบื้องต้น แบบสำรวจฉบับสั้นและฉบับเต็ม', vimeoId:'1234312589', minSeconds:1627, durationLabel:'27:07 นาที',
         quiz:[
           {"q": "การเพิ่มชื่อเด็กและเยาวชนกรณีโยกย้ายพื้นที่ เด็กคนนั้นต้องมีชื่ออยู่ในฐานข้อมูลใด", "opts": ["ฐานข้อมูล DMC 1/2569", "ฐานข้อมูล TZD68 เท่านั้น", "ฐานข้อมูลคัดกรองนักเรียนทุนเสมอภาค", "ฐานข้อมูลใดก็ได้ เพียงมีเลขประจำตัวประชาชน 13 หลัก"], "ans": 1, "fb": ["DMC 1/2569 ใช้กับเมนูกลุ่ม 1/2569 ที่ระบบดึงรายชื่อให้เอง ไม่ได้ใช้เพิ่มชื่อกรณีโยกย้าย", "ถูกต้อง! ระบบให้เพิ่มได้เฉพาะเด็กในฐาน TZD68 เมื่อกรอกเลข 13 หลักแล้วกดตรวจสอบ ถ้าไม่พบในฐานจะเพิ่มไม่ได้", "ระบบทุนเสมอภาคเกี่ยวกับบัญชีธนาคารของโรงเรียน ไม่ใช่ฐานสำหรับเพิ่มชื่อเด็ก", "มีเลข 13 หลักอย่างเดียวไม่พอ เลขนั้นต้องค้นเจอในฐาน TZD68 ด้วย"]},
           {"q": "การบันทึกในเมนู “สำรวจสถานะเบื้องต้น” ข้อใดถูกต้อง", "opts": ["เลือกสถานะได้ครั้งเดียว แก้ไขภายหลังไม่ได้", "แก้ไขสถานะได้เรื่อย ๆ จนกว่าเด็กคนนั้นจะถูกบันทึกแบบสำรวจ", "ต้องลงพื้นที่และแนบภาพถ่ายทุกครั้งก่อนเลือกสถานะ", "แก้ไขได้เฉพาะผู้อำนวยการโรงเรียน"], "ans": 1, "fb": ["สถานะเบื้องต้นไม่ได้ล็อกหลังเลือกครั้งแรก ยังเปิดให้แก้ไขได้", "ถูกต้อง! ครูเข้ามาเปลี่ยนสถานะได้เรื่อย ๆ จนกว่าเด็กคนนั้นจะถูกบันทึกแบบสำรวจ", "สถานะเบื้องต้นเลือกจากข้อมูลที่ครูมีอยู่ได้เลย ภาพถ่ายเป็นส่วนของแบบสำรวจฉบับสั้นหลังลงพื้นที่", "ครูผู้สำรวจแก้ไขสถานะเองได้ ไม่ต้องให้ผู้อำนวยการแก้"]},
@@ -3974,7 +3995,7 @@ const COURSES = {
     },
     videos: [
       TZD_R23_PART1,
-      { title:'Part 2 : การบันทึกข้อมูลเด็กและเยาวชนที่กลับเข้าสู่ระบบการศึกษา ภาคเรียนที่ 1/2569', vimeoId:'1234313281', minSeconds:460, durationLabel:'16:04 นาที',
+      { title:'Part 2 : การบันทึกข้อมูลเด็กและเยาวชนที่กลับเข้าสู่ระบบการศึกษา ภาคเรียนที่ 1/2569', vimeoId:'1234313281', minSeconds:964, durationLabel:'16:04 นาที',
         quiz:[
           {"q": "เมนู “เด็ก/เยาวชนที่กลับเข้าสู่ระบบการศึกษา 1/2569” แสดงรายชื่อเด็กกลุ่มใด", "opts": ["เด็กที่ครูเพิ่มชื่อเองกรณีโยกย้ายพื้นที่", "เด็กที่ไม่มีข้อมูลในระบบการศึกษาปี 2568 แต่พบรายชื่อในข้อมูล DMC 1/2569", "เด็กทุกคนในฐานข้อมูล TZD68", "เด็กที่เคยอยู่ในระบบการศึกษาปี 2567 และยังอยู่นอกระบบ"], "ans": 1, "fb": ["เด็กที่ครูเพิ่มเองอยู่ในเมนู “กรณีเพิ่มชื่อเด็ก/เยาวชนโยกย้ายพื้นที่” ไม่ใช่เมนูกลุ่ม 1/2569", "ถูกต้อง! เป็นเด็กที่ไม่มีข้อมูลในระบบการศึกษาปี 2568 แต่พบรายชื่อใน DMC 1/2569 ระบบดึงรายชื่อมาให้เอง", "ฐาน TZD68 ใช้กับการเพิ่มชื่อเด็กกรณีโยกย้าย ไม่ใช่ที่มาของกลุ่ม 1/2569", "เด็กที่เคยอยู่ในระบบปี 2567 คือกลุ่ม A ซึ่งเป็นกลุ่มเดิม"]},
           {"q": "หากเปิดเมนูกลุ่ม 1/2569 แล้วไม่พบรายชื่อเด็กของโรงเรียนเลย ควรทำอย่างไร", "opts": ["เพิ่มชื่อเด็กเข้าเมนูนี้เองด้วยเลขบัตร 13 หลัก", "แจ้งเขตพื้นที่ว่าระบบขัดข้อง", "ไม่ต้องตกใจ และไม่จำเป็นต้องกรอกข้อมูลในเมนูนี้", "ย้ายเด็กจากกลุ่มเดิมมาอยู่ในเมนูนี้"], "ans": 2, "fb": ["เมนูนี้ไม่มีช่องให้เพิ่มชื่อเอง รายชื่อมาจากการเทียบข้อมูลกับ DMC", "การไม่มีรายชื่อไม่ได้แปลว่าระบบขัดข้อง", "ถูกต้อง! ไม่มีรายชื่อแปลว่าการเทียบข้อมูลไม่พบเด็กของโรงเรียน จึงไม่ต้องกรอกอะไร", "ย้ายเด็กข้ามกลุ่มเองไม่ได้ ระบบเป็นผู้จัดกลุ่มตามที่มาของข้อมูล"]},
@@ -4037,6 +4058,7 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 let currentUser=null, userData={}, currentIdx=0;
+let reviewMode = false;   // โหมดทบทวน (ดูอิสระ ไม่นับเวลา ไม่บันทึก) — ประกาศไว้ต้นไฟล์ กัน TDZ
 let completed=new Set(), quizPassed=new Set(), quizScores={};
 let watchedSec=0, timer=null, isWatching=false;
 let leaveCount=0, heartbeatTimer=null;
@@ -4246,6 +4268,7 @@ function renderCourseCards(target) {
     } else if(isCatalog && userStatus === 'completed') {
       btnHTML = `<div class="cc-btn-row">
         <button class="cc-btn secondary" onclick="enterCourse('${course.id}')">📜 ดูเกียรติบัตร</button>
+        <button class="cc-btn review" onclick="event.stopPropagation();enterReview('${course.id}')" title="เลือกดูเฉพาะ Part ที่ต้องการ ไม่นับเวลา ไม่ได้รับเกียรติบัตรใหม่">📖 ทบทวนเนื้อหา (เลือกดูรายตอน)</button>
         <button class="cc-btn retake" onclick="event.stopPropagation();retakeCourse('${course.id}')" title="เริ่มอบรมใหม่ รับเกียรติบัตรอีกใบ">🔄 อบรมอีกครั้ง</button>
       </div>`;
     } else if(isCatalog && userStatus === 'in_progress') {
@@ -4577,12 +4600,14 @@ window.goHomeFromLogo = async () => {
 };
 
 window.showCatalogPage = () => {
+  exitReviewMode();
   sessionStorage.removeItem('activeCourseId');  // ออกจากคอร์สแล้ว ไม่ต้อง resume ตอน refresh
   renderCourseCards('catalog');
   showPage('pageCatalog');
 };
 
 window.showLandingPage = () => {
+  exitReviewMode();
   renderCourseCards('landing');
   showPage('pageLanding');
 };
@@ -4744,7 +4769,57 @@ window.retakeCourse = async (courseId) => {
   }
 };
 
+// ══════════════════════════════════════
+// โหมดทบทวน — สำหรับผู้ที่เรียนจบหลักสูตรนั้นแล้ว
+//   เลือกดู Part ไหนก็ได้ · ไม่นับเวลา · ลองทำข้อสอบได้แต่ไม่บันทึก
+//   ไม่แตะความคืบหน้า/คะแนน/เกียรติบัตรเดิม และไม่ใช้เลขเกียรติบัตรเพิ่ม
+// ══════════════════════════════════════
+function setReviewUI(on) {
+  const show = (id, v) => { const el = document.getElementById(id); if(el) el.style.display = v ? '' : 'none'; };
+  show('reviewBannerTraining', on);
+  show('reviewBannerQuiz', on);
+  show('sidebarReviewInfo', on);
+  show('sidebarNormalInfo', !on);
+}
+function exitReviewMode() {
+  if(!reviewMode) return;
+  reviewMode = false;
+  setReviewUI(false);
+  // คืนค่าความคืบหน้าจริงของหลักสูตรปัจจุบัน (โหมดทบทวนใช้ชุดจำลอง)
+  const prog = getCourseProgress(userData, currentCourseId) || {};
+  completed = new Set((prog.completedVideos||[]).map(Number));
+  quizPassed = new Set((prog.quizPassed||[]).map(Number));
+  quizScores = prog.quizScores||{};
+}
+window.enterReview = (courseId) => {
+  if(!currentUser || !userData) return;
+  const course = COURSES[courseId];
+  if(!course || !(course.videos||[]).length) return;
+  const prog = getCourseProgress(userData, courseId);
+  if(!prog || !prog.certNumber) { showToast('⚠️ โหมดทบทวนใช้ได้หลังเรียนจบหลักสูตรนี้แล้ว'); return; }
+  clearInterval(timer); clearInterval(heartbeatTimer); isWatching = false;
+  reviewMode = true;
+  currentCourseId = courseId;
+  TRAINING = course;
+  sessionStorage.removeItem('activeCourseId');   // F5 ระหว่างทบทวน → ไม่ resume เข้าโหมดเรียนจริง
+  // ชุดจำลอง: ทุก Part ถือว่าดูแล้ว/ผ่านแล้ว เพื่อปลดล็อกทั้งหมด (ไม่ถูกบันทึก — saveProgress ปิดไว้ในโหมดนี้)
+  const all = course.videos.map((_, i) => i);
+  completed = new Set(all);
+  quizPassed = new Set(all);
+  quizScores = { ...(prog.quizScores || {}) };
+  setReviewUI(true);
+  updateProgress();
+  setTimeout(() => { if(typeof renderInfographics === 'function') renderInfographics(); }, 100);
+  showPage('pageTraining'); loadVideo(0); renderPlaylist();
+};
+window.reviewOpenPart = (i) => {
+  if(!reviewMode || !TRAINING.videos[i]) return;
+  showPage('pageTraining'); loadVideo(i); renderPlaylist();
+  try { document.getElementById('vimeoPlayer').scrollIntoView({behavior:'smooth', block:'center'}); } catch(e) {}
+};
+
 window.enterCourse = async (courseId) => {
+  exitReviewMode();
   if(!isAdmin && (!currentUser || !userData)) return;   // admin เข้าได้แม้ไม่ได้ login
   if(!COURSES[courseId]) return;
   if(COURSES[courseId].status !== 'active' && !isAdmin) return;   // admin ยกเว้น coming_soon
@@ -4801,14 +4876,14 @@ function handleLeave(reason) {
   leaveCount++;
   saveLeaveCount();
   document.getElementById('statusDot').className='status-dot paused';
-  document.getElementById('statusText').textContent='⏸ หยุดนับเวลา — กดปุ่มในวิดีโอเพื่อดูต่อ';
+  document.getElementById('statusText').textContent='⏸ หยุดนับเวลา — กดปุ่ม "▶ กดเพื่อดูต่อ" บนวิดีโอ';
   document.getElementById('pausedOverlay').classList.add('show');
   document.getElementById('pausedCount').textContent='';
   document.getElementById('warningBanner').classList.add('show');
 }
 
 async function saveLeaveCount() {
-  if(!currentUser) return;
+  if(!currentUser || reviewMode) return;
   try {
     const updates = { [`courses.${currentCourseId}.leaveCount`]: leaveCount };
     if(currentCourseId === 'pp3') updates.leaveCount = leaveCount;
@@ -4835,14 +4910,12 @@ window.addEventListener('beforeunload', () => { if(isWatching) handleLeave('unlo
 window.addEventListener('pagehide', () => { if(isWatching) handleLeave('pagehide'); });
 
 window.resumeVideo = () => {
+  // กดครั้งเดียว: ปิดหน้าต่างเตือน + สั่งคลิปเล่นต่อ + นับเวลาต่อ
   document.getElementById('pausedOverlay').classList.remove('show');
   document.getElementById('warningBanner').classList.remove('show');
-  const ov = document.getElementById('videoOverlay');
-  ov.innerHTML = `<div class="overlay-icon">▶️</div><div class="overlay-text">กดที่นี่เพื่อเริ่มนับเวลาต่อ</div><div class="overlay-sub">แล้วกด Play ในวิดีโอด้วย</div>`;
-  ov.classList.remove('hidden');
-  ov.onclick = () => { ov.classList.add('hidden'); startTimer(); };
-  document.getElementById('statusDot').className = 'status-dot';
-  document.getElementById('statusText').textContent = 'กด ▶ ในวิดีโอแล้วคลิกที่นี่เพื่อนับเวลาต่อ';
+  document.getElementById('videoOverlay').classList.add('hidden');
+  vimeoPlay();
+  startTimer();
 };
 
 // ── Auth state ──
@@ -5220,8 +5293,124 @@ window.doLogout = async() => {
 };
 
 // ── Video ──
+// ══════════════════════════════════════
+// เวลาชมขั้นต่ำ = 100% ของความยาวคลิป
+//   ใช้ความยาวจริงจาก Vimeo (ได้มาตอนคลิปโหลด) ถ้ายังไม่ได้ใช้ durationLabel
+//   เผื่อท้ายคลิป WATCH_TOLERANCE_SEC วินาที กันกรณีวินาทีสุดท้ายนับไม่ทัน
+// ══════════════════════════════════════
+const WATCH_TOLERANCE_SEC = 3;
+function parseDurLabel(s) { const m = String(s||'').match(/(\d+):(\d{2})/); return m ? (+m[1])*60 + (+m[2]) : 0; }
+function requiredSec(v) {
+  const d = (v && (v._vimeoDur || parseDurLabel(v.durationLabel) || v.minSeconds)) || 0;
+  return Math.max(1, Math.floor(d) - WATCH_TOLERANCE_SEC);
+}
+function fmtMMSS(sec) { sec = Math.max(0, Math.round(sec)); return `${Math.floor(sec/60)}:${(sec%60).toString().padStart(2,'0')}`; }
+
+// ══════════════════════════════════════
+// VIMEO BRIDGE — ฟังสถานะจากตัวเล่น Vimeo โดยตรง (postMessage API)
+//   นับเวลาเฉพาะตอนคลิป "กำลังเล่นจริง" (เวลาในคลิปเดินหน้า)
+//   กดหยุด / คลิปค้างโหลด / คลิปจบ → หยุดนับ
+//   ถ้าเบราว์เซอร์ไม่ส่งสัญญาณจาก Vimeo เลยภายใน 8 วิ → กลับไปนับแบบเดิม (กันผู้เรียนติด)
+// ══════════════════════════════════════
+const VIMEO_ORIGIN = 'https://player.vimeo.com';
+let vimeoReady = false, vimeoPendingPlay = false, vimeoEnded = false;
+let vimeoLastProgressAt = 0, vimeoLastSec = -1, vimeoLoadedAt = 0;
+function vimeoPost(method, value) {
+  try {
+    const f = document.getElementById('vimeoPlayer');
+    if(f && f.contentWindow) f.contentWindow.postMessage(JSON.stringify(value === undefined ? {method} : {method, value}), VIMEO_ORIGIN);
+  } catch(e) {}
+}
+function vimeoPlay() { if(vimeoReady) vimeoPost('play'); else vimeoPendingPlay = true; }
+function resetVimeoState() {
+  vimeoReady = false; vimeoPendingPlay = false; vimeoEnded = false;
+  vimeoLastProgressAt = 0; vimeoLastSec = -1; vimeoLoadedAt = Date.now();
+}
+function vimeoIsPlayingNow() {
+  if(vimeoReady) return (Date.now() - vimeoLastProgressAt) < 1600;
+  return (Date.now() - vimeoLoadedAt) > 8000;   // fallback: ไม่มีสัญญาณจาก Vimeo เลย
+}
+window.addEventListener('message', (e) => {
+  if(e.origin !== VIMEO_ORIGIN) return;
+  const f = document.getElementById('vimeoPlayer');
+  if(!f || e.source !== f.contentWindow) return;
+  let d = e.data;
+  if(typeof d === 'string') { try { d = JSON.parse(d); } catch(_) { return; } }
+  if(!d || typeof d !== 'object') return;
+  if(d.event === 'ready') {
+    vimeoReady = true;
+    ['play','pause','ended','timeupdate','playbackratechange'].forEach(ev => vimeoPost('addEventListener', ev));
+    vimeoPost('getDuration');
+    if(vimeoPendingPlay) { vimeoPendingPlay = false; vimeoPost('play'); }
+    return;
+  }
+  if(d.method === 'getDuration' && d.value > 0) { setVimeoDuration(d.value); return; }
+  const data = d.data || {};
+  switch(d.event) {
+    case 'timeupdate': {
+      if(data.duration > 0) setVimeoDuration(data.duration);
+      const sec = data.seconds;
+      if(typeof sec === 'number') {
+        // เดินหน้าทีละนิด = กำลังเล่นจริง (กระโดดไกล = ผู้ใช้เลื่อนคลิป ไม่นับเป็นการเล่น)
+        if(vimeoLastSec >= 0 && sec > vimeoLastSec && sec - vimeoLastSec < 2.5) vimeoLastProgressAt = Date.now();
+        vimeoLastSec = sec;
+      }
+      break;
+    }
+    case 'play': onVimeoPlay(); break;
+    case 'pause': onVimeoPause(); break;
+    case 'ended': onVimeoEnded(); break;
+    case 'playbackratechange': {
+      const rate = data.playbackRate;
+      if(!reviewMode && rate && rate !== 1) {
+        vimeoPost('setPlaybackRate', 1);
+        showToast('⏱ ระหว่างนับเวลาเรียน ระบบใช้ความเร็วปกติ (1x)');
+      }
+      break;
+    }
+  }
+});
+function setVimeoDuration(dur) {
+  const v = TRAINING && TRAINING.videos && TRAINING.videos[currentIdx];
+  if(!v || !(dur > 0) || v._vimeoDur === dur) return;
+  v._vimeoDur = dur;
+  if(!reviewMode && !completed.has(currentIdx)) {
+    const rem = requiredSec(v) - watchedSec;
+    document.getElementById('statusTimer').textContent = rem > 0 ? `เหลือ ${fmtMMSS(rem)}` : '';
+  }
+}
+function onVimeoPlay() {
+  vimeoEnded = false;
+  if(reviewMode) return;
+  if(!document.getElementById('pageTraining')?.classList.contains('active')) return;
+  // ผู้ใช้กด Play ในคลิปเอง → ปิดหน้าต่างทับ และเริ่มนับทันที ไม่ต้องกดอะไรเพิ่ม
+  document.getElementById('videoOverlay').classList.add('hidden');
+  document.getElementById('pausedOverlay').classList.remove('show');
+  document.getElementById('warningBanner').classList.remove('show');
+  startTimer();
+}
+function onVimeoPause() {
+  if(isWatching && !reviewMode) saveWatchedProgress();
+}
+function onVimeoEnded() {
+  vimeoEnded = true;
+  if(isWatching && !reviewMode) saveWatchedProgress();
+}
+let _lastWatchStatus = '';
+function setWatchStatus(playing) {
+  let key, dot, text;
+  if(playing) { key='play'; dot='status-dot watching'; text='กำลังนับเวลา... โปรดอยู่ในหน้านี้ตลอดเวลา'; }
+  else if(vimeoEnded) { key='ended'; dot='status-dot paused'; text='คลิปจบแล้ว แต่เวลาชมยังไม่ครบ (อาจเพราะเลื่อนข้ามช่วง) — กด ▶ เพื่อดูช่วงที่เหลือ'; }
+  else { key='pause'; dot='status-dot paused'; text='⏸ คลิปหยุดอยู่ — หยุดนับเวลา กด ▶ ในวิดีโอเพื่อดูต่อ'; }
+  if(key === _lastWatchStatus) return;
+  _lastWatchStatus = key;
+  document.getElementById('statusDot').className = dot;
+  document.getElementById('statusText').textContent = text;
+}
+
 async function loadVideo(idx) {
   currentIdx=idx; watchedSec=0; isWatching=false; clearInterval(timer); clearInterval(heartbeatTimer);
+  resetVimeoState(); _lastWatchStatus = '';
   // refresh comments เมื่อเปลี่ยน video
   setTimeout(() => { 
     if(typeof renderCommentsForCurrentVideo === 'function') renderCommentsForCurrentVideo(); 
@@ -5244,7 +5433,7 @@ async function loadVideo(idx) {
   document.getElementById('warningBanner').classList.remove('show');
   document.getElementById('pausedOverlay').classList.remove('show');
   // fetch จาก Firestore สดๆ เพื่อโหลด watchedSec ที่บันทึกไว้ล่าสุด
-  if(currentUser && !completed.has(idx)){
+  if(currentUser && !reviewMode && !completed.has(idx)){
     try {
       const fresh = await getDoc(doc(db,'users',currentUser.uid));
       if(fresh.exists()){
@@ -5265,39 +5454,48 @@ async function loadVideo(idx) {
   document.getElementById('vimeoPlayer').src=`https://player.vimeo.com/video/${v.vimeoId}?title=0&byline=0&portrait=0${hashParam}${startAt}`;
   const ov=document.getElementById('videoOverlay');
   const v2=TRAINING.videos[idx];
-  if(watchedSec>0){
-    const rem=Math.max(0,v2.minSeconds-watchedSec);
-    const remTxt=rem>0?`เหลืออีก ${Math.floor(rem/60)}:${(rem%60).toString().padStart(2,'0')} นาที`:(partHasQuiz(TRAINING, idx) ? '✓ ดูครบแล้ว รอผลทำข้อสอบ' : '✓ ดูครบแล้ว');
-    ov.innerHTML=`<div class="overlay-icon">⏩</div><div class="overlay-text">ดูค้างไว้ ${Math.floor(watchedSec/60)}:${(watchedSec%60).toString().padStart(2,'0')} นาทีแล้ว</div><div class="overlay-sub">${remTxt}<br>กดที่นี่แล้วกด Play เพื่อดูต่อ</div>`;
+  const isDoneHere = completed.has(idx);
+  if(reviewMode || isDoneHere){
+    ov.innerHTML=`<div class="overlay-icon">▶️</div><div class="overlay-text">กดที่นี่เพื่อเล่นคลิป</div><div class="overlay-sub">${reviewMode ? 'โหมดทบทวน — ดูได้อิสระ ไม่นับเวลา' : 'ชมครบแล้ว ดูซ้ำได้'}</div>`;
+  } else if(watchedSec>0){
+    const rem=Math.max(0,requiredSec(v2)-watchedSec);
+    const remTxt=rem>0?`เหลืออีก ${fmtMMSS(rem)} นาที`:(partHasQuiz(TRAINING, idx) ? '✓ ดูครบแล้ว รอผลทำข้อสอบ' : '✓ ดูครบแล้ว');
+    ov.innerHTML=`<div class="overlay-icon">⏩</div><div class="overlay-text">ดูค้างไว้ ${fmtMMSS(watchedSec)} นาทีแล้ว</div><div class="overlay-sub">${remTxt}<br>กดที่นี่เพื่อดูต่อ</div>`;
   } else {
-    ov.innerHTML=`<div class="overlay-icon">▶️</div><div class="overlay-text">กดที่นี่ แล้วกด Play เพื่อเริ่มนับเวลา</div><div class="overlay-sub">ระบบจะเริ่มนับเวลาเมื่อคุณกดปุ่มนี้</div>`;
+    ov.innerHTML=`<div class="overlay-icon">▶️</div><div class="overlay-text">กดที่นี่เพื่อเริ่มดูคลิป</div><div class="overlay-sub">ระบบนับเวลาเฉพาะตอนคลิปกำลังเล่น ต้องชมให้ครบทั้งคลิป</div>`;
   }
   ov.classList.remove('hidden');
-  ov.onclick=()=>{ ov.classList.add('hidden'); startTimer(); };
+  // กดครั้งเดียว: ปิดหน้าต่างทับ + สั่งคลิปเล่น + เริ่มนับ (นับจริงเมื่อคลิปเล่นแล้วเท่านั้น)
+  ov.onclick=()=>{ ov.classList.add('hidden'); vimeoPlay(); if(!reviewMode && !completed.has(currentIdx)) startTimer(); };
   document.getElementById('pausedOverlay').classList.remove('show');
   document.getElementById('warningBanner').classList.remove('show');
   document.getElementById('statusDot').className='status-dot';
-  document.getElementById('statusText').textContent='คลิกที่วิดีโอ แล้วกด ▶ เพื่อเริ่มนับเวลา';
-  document.getElementById('statusTimer').textContent='';
+  document.getElementById('statusText').textContent= reviewMode ? '📖 โหมดทบทวน — ดูได้อิสระ เลื่อนข้ามได้ ไม่นับเวลา' : (isDoneHere ? '✓ ชมครบแล้ว' : 'กดที่วิดีโอเพื่อเริ่มดู — ระบบนับเวลาเฉพาะตอนคลิปกำลังเล่น');
+  { const rem = requiredSec(v2) - watchedSec;
+    document.getElementById('statusTimer').textContent = (!reviewMode && !isDoneHere && rem > 0) ? `เหลือ ${fmtMMSS(rem)}` : ''; }
   updateNextBtn();
   toggleAdminSkipBtns();
 }
 
 function startTimer() {
-  if(isWatching) return;
+  if(isWatching || reviewMode || completed.has(currentIdx)) return;
   isWatching=true;
   startHeartbeat();
-  document.getElementById('statusDot').className='status-dot watching';
-  document.getElementById('statusText').textContent='กำลังนับเวลา... โปรดอยู่ในหน้านี้ตลอดเวลา';
+  _lastWatchStatus = '';
+  clearInterval(timer);
   const v=TRAINING.videos[currentIdx];
   timer=setInterval(()=>{
     if(!isWatching) return;
+    // นับเฉพาะวินาทีที่คลิปกำลังเล่นจริง
+    const playing = vimeoIsPlayingNow();
+    setWatchStatus(playing);
+    if(!playing) return;
     watchedSec++;
-    const rem=Math.max(0,v.minSeconds-watchedSec);
-    document.getElementById('statusTimer').textContent=rem>0?`เหลือ ${Math.floor(rem/60)}:${(rem%60).toString().padStart(2,'0')}`:'✓ ครบแล้ว';
+    const rem=Math.max(0,requiredSec(v)-watchedSec);
+    document.getElementById('statusTimer').textContent=rem>0?`เหลือ ${fmtMMSS(rem)}`:'✓ ครบแล้ว';
     // บันทึก watchedSec ทุก 30 วิ เพื่อให้ resume ได้เมื่อ logout กลับมา
     if(watchedSec%30===0) saveWatchedProgress();
-    if(watchedSec>=v.minSeconds&&!completed.has(currentIdx)){
+    if(watchedSec>=requiredSec(v)&&!completed.has(currentIdx)){
       completed.add(currentIdx);
       const hasQuiz = partHasQuiz(TRAINING, currentIdx);
       if(!hasQuiz) quizPassed.add(currentIdx);   // ไม่มีข้อสอบ → ผ่านตอนนี้ทันที
@@ -5311,7 +5509,7 @@ function startTimer() {
 }
 
 async function saveProgress() {
-  if(!currentUser) return;
+  if(!currentUser || reviewMode) return;
   try {
     const completedArr = [...completed].map(Number);
     const passedArr = [...quizPassed].map(Number);
@@ -5332,7 +5530,7 @@ async function saveProgress() {
 }
 
 async function saveWatchedProgress() {
-  if(!currentUser) return;
+  if(!currentUser || reviewMode) return;
   try {
     const key='watchedSec_'+currentIdx;
     const updates = {
@@ -5387,6 +5585,21 @@ function toggleAdminSkipBtns() {
 }
 function updateNextBtn() {
   const btn=document.getElementById('btnNext');
+  if(reviewMode){
+    const last = currentIdx >= TRAINING.videos.length-1;
+    if(partHasQuiz(TRAINING, currentIdx)){
+      document.getElementById('btnNextText').textContent='📝 ลองทำข้อสอบ Part นี้ (ไม่บันทึกคะแนน)';
+      btn.onclick=window.goToQuiz;
+    } else if(!last){
+      document.getElementById('btnNextText').textContent=`ถัดไป: Part ${currentIdx+2} →`;
+      btn.onclick=()=>{ loadVideo(currentIdx+1); renderPlaylist(); };
+    } else {
+      document.getElementById('btnNextText').textContent='✓ จบการทบทวน — กลับหน้าหลักสูตร';
+      btn.onclick=()=>{ document.getElementById('vimeoPlayer').src=''; showCatalogPage(); };
+    }
+    btn.classList.add('ready');
+    return;
+  }
   const done=completed.has(currentIdx);
   if(done && !partHasQuiz(TRAINING, currentIdx) && !quizPassed.has(currentIdx)) { quizPassed.add(currentIdx); saveProgress(); }
   const quizDone=quizPassed.has(currentIdx);
@@ -5409,6 +5622,13 @@ function updateNextBtn() {
 }
 
 function renderPlaylist() {
+  if(reviewMode){
+    document.getElementById('playlistEl').innerHTML=TRAINING.videos.map((v,i)=>{
+      const isCur=i===currentIdx;
+      return `<div class="playlist-item reviewable ${isCur?'current':''}" role="button" tabindex="0" onclick="reviewOpenPart(${i})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();reviewOpenPart(${i});}" title="${(v.title||'').replace(/"/g,'&quot;')}"><div class="item-num">${i+1}</div><div style="flex:1"><div class="item-name">Part ${i+1}</div><div class="item-dur">${v.durationLabel}</div></div><span class="item-badge ${isCur?'badge-cur':'badge-review'}">${isCur?'กำลังดู':'📖 เปิดดู'}</span></div>`;
+    }).join('');
+    return;
+  }
   document.getElementById('playlistEl').innerHTML=TRAINING.videos.map((v,i)=>{
     const isDone=quizPassed.has(i),isWatched=completed.has(i),isCur=i===currentIdx,isLock=!isDone&&i>currentIdx;
     const cls=isDone?'completed':isCur?'current':isLock?'locked':'';
@@ -5503,7 +5723,9 @@ function startQuiz(videoIdx) {
   toggleAdminSkipBtns();
   quizVideoIdx=videoIdx; quizIdx=0; selectedOpt=null; answered=false; wrongAnswers=[]; allAnswers=[];
   document.getElementById('quizPartLabel').textContent=`Part ${videoIdx+1}`;
-  document.getElementById('quizPassNote').textContent=`✏️ ต้องได้คะแนน ${TRAINING.passPercent}% ขึ้นไปถึงจะผ่าน — ทำใหม่ได้ไม่จำกัดครั้ง`;
+  document.getElementById('quizPassNote').textContent= reviewMode
+    ? `📖 ลองทำเพื่อทบทวน — เกณฑ์ ${TRAINING.passPercent}% · คะแนนไม่ถูกบันทึก`
+    : `✏️ ต้องได้คะแนน ${TRAINING.passPercent}% ขึ้นไปถึงจะผ่าน — ทำใหม่ได้ไม่จำกัดครั้ง`;
   showPage('pageQuiz'); renderQuestion();
 }
 
@@ -5622,7 +5844,7 @@ function showQuizResult() {
   const score=total-wrongs.length;
   const pct=Math.round(score/total*100);
   const passed=pct>=TRAINING.passPercent;
-  if(passed){
+  if(passed && !reviewMode){
     quizPassed.add(quizVideoIdx);
     quizScores[quizVideoIdx]=pct;
     saveProgress(); updateProgress(); renderPlaylist();
@@ -5644,10 +5866,17 @@ function showQuizResult() {
     <p>${passed?`ได้คะแนน ${pct}% ผ่านเกณฑ์ ${TRAINING.passPercent}%`:`ต้องได้ ${TRAINING.passPercent}% ขึ้นไป คุณได้ ${pct}% (${score}/${total} ข้อ)`}</p>
     <div class="score-badge ${passed?'score-pass':'score-fail'}">${score}/${total} คะแนน (${pct}%)</div>
     <div class="review-list">${reviewHtml}</div>
-    ${passed?`<button class="btn-proceed" onclick="afterQuiz()">ดำเนินการต่อ →</button>`:`<button class="btn-retry" onclick="retryQuiz()">ทำใหม่อีกครั้ง</button>`}
+    ${reviewMode
+      ? `<div style="font-size:13px;color:var(--muted);margin:6px 0 12px;">📖 โหมดทบทวน — คะแนนนี้ไม่ถูกบันทึก</div><button class="btn-retry" onclick="retryQuiz()">ลองทำอีกครั้ง</button><button class="btn-review-back" onclick="backToReview()">← กลับไปทบทวน</button>`
+      : (passed?`<button class="btn-proceed" onclick="afterQuiz()">ดำเนินการต่อ →</button>`:`<button class="btn-retry" onclick="retryQuiz()">ทำใหม่อีกครั้ง</button>`)}
   </div>`;
 }
 
+window.backToReview = () => {
+  if(typeof stopQuizSound==='function') stopQuizSound();
+  if(!reviewMode) return;
+  showPage('pageTraining'); loadVideo(quizVideoIdx); renderPlaylist();
+};
 window.afterQuiz = () => {
   if(quizVideoIdx>=TRAINING.videos.length-1){ showConfirmName(); }
   else { showPage('pageTraining'); loadVideo(quizVideoIdx+1); renderPlaylist(); }
