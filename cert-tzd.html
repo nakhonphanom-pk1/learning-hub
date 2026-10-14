@@ -31,6 +31,9 @@ body { font-family:'CertSans',sans-serif; display:flex; flex-direction:column; a
 .btns { margin-top:18px; display:flex; gap:10px; }
 .btns button { font-family:'CertSans',sans-serif; font-size:16px; font-weight:600; padding:10px 22px; border-radius:10px; border:none; background:#0b2166; color:#fff; cursor:pointer; }
 .btns button.sec { background:#555; }
+.btns button.pdf { background:#a3262a; }
+.btns button:disabled { opacity:.6; cursor:wait; }
+.btns { flex-wrap:wrap; justify-content:center; }
 .tester { margin-top:16px; width:min(1122px, calc(100vw - 32px)); box-sizing:border-box; background:#fff; border:1.5px solid #c9d3ee; border-radius:14px; padding:16px 18px; }
 .tester h2 { margin:0 0 4px; font-size:17px; color:#0b2166; }
 .tester p { margin:0 0 12px; font-size:13px; color:#666; }
@@ -84,7 +87,8 @@ body { font-family:'CertSans',sans-serif; display:flex; flex-direction:column; a
   </div>
 </div>
 <div class="btns">
-  <button onclick="window.print()">🖨️ พิมพ์ / บันทึกเป็น PDF</button>
+  <button onclick="window.print()">🖨️ พิมพ์</button>
+  <button class="pdf" id="btnPdf" onclick="savePdf()">📄 บันทึกเป็นไฟล์ PDF</button>
   <button class="sec" onclick="window.close()">✕ ปิด</button>
 </div>
 <div class="tester" id="tester" hidden>
@@ -99,7 +103,7 @@ body { font-family:'CertSans',sans-serif; display:flex; flex-direction:column; a
   </div>
   <div class="samples" id="samples"></div>
 </div>
-<div class="note">พิมพ์บนกระดาษ A4 แนวนอน · ในหน้าต่างพิมพ์ให้ตั้ง "ขอบกระดาษ: ไม่มี" และเปิด "กราฟิกพื้นหลัง"</div>
+<div class="note">พิมพ์: ใช้กระดาษ A4 แนวนอน ตั้ง "ขอบกระดาษ: ไม่มี" และเปิด "กราฟิกพื้นหลัง" · บันทึกเป็นไฟล์ PDF: ได้ไฟล์ A4 ความละเอียดสูง พร้อมส่งต่อหรือพิมพ์ภายหลัง</div>
 
 <script>
 /* qrcode-generator v2.0.4 — Kazuhiko Arase — MIT License */
@@ -2567,6 +2571,37 @@ function fitName() {
   brush.style.left = left + 'px'; brush.style.width = width + 'px';
 }
 function layout() { fitStage(); render(); }
+
+// ── บันทึกเป็นไฟล์ PDF (ดาวน์โหลดไฟล์จริง ไม่ผ่านหน้าต่างพิมพ์) ──
+// ใช้เบราว์เซอร์วาดภาพแผ่นเกียรติบัตรที่ ๓๐๐ dpi (ตัวอักษรไทยถูกต้องตามที่เห็นบนจอ) แล้วใส่ลง PDF ขนาด A4 แนวนอน
+function loadScript(src) {
+  return new Promise((ok, fail) => { const s = document.createElement('script'); s.src = src; s.onload = ok; s.onerror = () => fail(new Error('โหลดไม่สำเร็จ: ' + src)); document.head.appendChild(s); });
+}
+async function savePdf() {
+  const btn = document.getElementById('btnPdf'), label = btn.textContent;
+  btn.disabled = true; btn.textContent = '⏳ กำลังสร้างไฟล์ PDF…';
+  const sheet = document.getElementById('sheet'), prevW = sheet.style.width, prevShadow = sheet.style.boxShadow;
+  try {
+    if (!window.htmlToImage) await loadScript('https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js');
+    if (!window.jspdf) await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+    if (document.fonts && document.fonts.ready) await document.fonts.ready;
+    sheet.style.width = '1491px'; sheet.style.boxShadow = 'none'; fitStage(); render();
+    await new Promise(r => setTimeout(r, 120));
+    const url = await htmlToImage.toJpeg(sheet, { quality: 0.93, pixelRatio: 3508 / 1491, width: 1491, height: 1055, backgroundColor: '#ffffff' });
+    const pdf = new jspdf.jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4', compress: true });
+    pdf.addImage(url, 'JPEG', 0, 0, 297, 210);
+    pdf.setProperties({ title: 'เกียรติบัตร - ' + cleanName(state.name), subject: 'สพป.นครพนม เขต ๑ · NKP๑ Learning Hub' });
+    const safe = s => String(s).replace(/[\\/:*?"<>|]+/g, '-').trim();
+    pdf.save(`เกียรติบัตร_${safe(cleanName(state.name))}_${safe(state.num).replace('/', '-')}.pdf`);
+  } catch (e) {
+    console.error(e);
+    alert('สร้างไฟล์ PDF ไม่สำเร็จ กรุณาตรวจสอบอินเทอร์เน็ต แล้วลองใหม่อีกครั้ง\nหรือใช้ปุ่ม "พิมพ์" แล้วเลือกปลายทางเป็น "บันทึกเป็น PDF"');
+  } finally {
+    sheet.style.width = prevW; sheet.style.boxShadow = prevShadow; fitStage(); render();
+    btn.disabled = false; btn.textContent = label;
+  }
+}
+window.savePdf = savePdf;
 window.addEventListener('resize', fitStage);
 window.addEventListener('beforeprint', () => { document.getElementById('stage').style.transform = `scale(${(297*96/25.4)/1491})`; });
 window.addEventListener('afterprint', fitStage);

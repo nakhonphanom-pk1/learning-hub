@@ -5324,13 +5324,25 @@ function vimeoPost(method, value) {
     if(f && f.contentWindow) f.contentWindow.postMessage(JSON.stringify(value === undefined ? {method} : {method, value}), VIMEO_ORIGIN);
   } catch(e) {}
 }
-function vimeoPlay() { if(vimeoReady) vimeoPost('play'); else vimeoPendingPlay = true; }
+const VIMEO_EVENTS = ['play','playing','pause','ended','timeupdate','playbackratechange'];
+function vimeoListen() { VIMEO_EVENTS.forEach(ev => vimeoPost('addEventListener', ev)); }
+// กดเล่นต่อ: ลงทะเบียนฟัง event ใหม่ทุกครั้ง (กันกรณีเบราว์เซอร์พักแท็บแล้ว event หาย)
+function vimeoPlay() { if(vimeoReady) { vimeoListen(); vimeoPost('play'); } else vimeoPendingPlay = true; }
+// บันทึกความคืบหน้าจากเวลาในคลิป (ใช้ทั้ง timeupdate และการถามเวลาตรงๆ)
+function noteVimeoTime(sec) {
+  if(typeof sec !== 'number') return;
+  if(vimeoLastSec >= 0 && sec > vimeoLastSec && sec - vimeoLastSec < 2.5) vimeoLastProgressAt = Date.now();
+  vimeoLastSec = sec;
+}
 function resetVimeoState() {
   vimeoReady = false; vimeoPendingPlay = false; vimeoEnded = false;
   vimeoLastProgressAt = 0; vimeoLastSec = -1; vimeoLoadedAt = Date.now();
 }
+// ถามเวลาปัจจุบันจากคลิปทุก 0.5 วิ ระหว่างนับเวลา — ไม่พึ่ง event อย่างเดียว
+// (บางเบราว์เซอร์หยุดส่ง timeupdate หลังสลับแท็บ ทำให้คลิปเล่นอยู่แต่ตัวนับไม่เดิน)
+setInterval(() => { if(isWatching && vimeoReady) vimeoPost('getCurrentTime'); }, 500);
 function vimeoIsPlayingNow() {
-  if(vimeoReady) return (Date.now() - vimeoLastProgressAt) < 1600;
+  if(vimeoReady) return (Date.now() - vimeoLastProgressAt) < 2500;
   return (Date.now() - vimeoLoadedAt) > 8000;   // fallback: ไม่มีสัญญาณจาก Vimeo เลย
 }
 window.addEventListener('message', (e) => {
@@ -5342,25 +5354,21 @@ window.addEventListener('message', (e) => {
   if(!d || typeof d !== 'object') return;
   if(d.event === 'ready') {
     vimeoReady = true;
-    ['play','pause','ended','timeupdate','playbackratechange'].forEach(ev => vimeoPost('addEventListener', ev));
+    vimeoListen();
     vimeoPost('getDuration');
     if(vimeoPendingPlay) { vimeoPendingPlay = false; vimeoPost('play'); }
     return;
   }
   if(d.method === 'getDuration' && d.value > 0) { setVimeoDuration(d.value); return; }
+  if(d.method === 'getCurrentTime') { noteVimeoTime(d.value); return; }
   const data = d.data || {};
   switch(d.event) {
     case 'timeupdate': {
       if(data.duration > 0) setVimeoDuration(data.duration);
-      const sec = data.seconds;
-      if(typeof sec === 'number') {
-        // เดินหน้าทีละนิด = กำลังเล่นจริง (กระโดดไกล = ผู้ใช้เลื่อนคลิป ไม่นับเป็นการเล่น)
-        if(vimeoLastSec >= 0 && sec > vimeoLastSec && sec - vimeoLastSec < 2.5) vimeoLastProgressAt = Date.now();
-        vimeoLastSec = sec;
-      }
+      noteVimeoTime(data.seconds);
       break;
     }
-    case 'play': onVimeoPlay(); break;
+    case 'play': case 'playing': onVimeoPlay(); break;
     case 'pause': onVimeoPause(); break;
     case 'ended': onVimeoEnded(); break;
     case 'playbackratechange': {
