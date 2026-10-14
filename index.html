@@ -3949,9 +3949,10 @@ const COURSES = {
     courseName: 'การรายงานสถานะนักเรียนในระบบ Thailand Zero Dropout หลักสูตรที่ 2/2569 โดย สพป.นครพนม เขต 1',
     totalHours: 'auto',
     passPercent: 80,
-    certCounterDoc: 'tzd2',  // certNumbers/tzd2
+    certCounterDoc: 'tzd23', // certNumbers/tzd23 — ใช้ร่วมกับหลักสูตร 3/2569 (ช่วงเลขเดียวกัน)
+    certPage: 'cert-tzd.html',
     certNumberFormat: (n) => `${n}/2569`,
-    certNumberRange: null,   // TODO: { start: ?, end: ?, warn: ? }
+    certNumberRange: { start: 29886, end: 30135, warn: 30110 },   // ตามบันทึกขอเลข ต.ค. ๒๕๖๙ — ๒๕๐ ฉบับ ใช้ร่วม ๒/๒๕๖๙ + ๓/๒๕๖๙
     // การ์ดน้ำจิ้ม (แสดงเฉพาะตอน status: 'coming_soon') — แก้ข้อความได้ตามต้องการ
     teaser: {
       opensLabel: ''   // เช่น 'พฤศจิกายน 2569' → ป้ายบนแบนเนอร์จะเป็น "เปิดอบรม พฤศจิกายน 2569" (เว้นว่าง = "กำลังจะเปิดเร็วๆ นี้")
@@ -3986,9 +3987,10 @@ const COURSES = {
     courseName: 'การรายงานสถานะนักเรียนในระบบ Thailand Zero Dropout หลักสูตรที่ 3/2569 โดย สพป.นครพนม เขต 1',
     totalHours: 'auto',
     passPercent: 80,
-    certCounterDoc: 'tzd3',  // certNumbers/tzd3
+    certCounterDoc: 'tzd23', // certNumbers/tzd23 — ใช้ร่วมกับหลักสูตร 2/2569 (ช่วงเลขเดียวกัน)
+    certPage: 'cert-tzd.html',
     certNumberFormat: (n) => `${n}/2569`,
-    certNumberRange: null,   // TODO: { start: ?, end: ?, warn: ? }
+    certNumberRange: { start: 29886, end: 30135, warn: 30110 },   // ตามบันทึกขอเลข ต.ค. ๒๕๖๙ — ๒๕๐ ฉบับ ใช้ร่วม ๒/๒๕๖๙ + ๓/๒๕๖๙
     // การ์ดน้ำจิ้ม (แสดงเฉพาะตอน status: 'coming_soon') — แก้ข้อความได้ตามต้องการ
     teaser: {
       opensLabel: ''   // เช่น 'พฤศจิกายน 2569' → ป้ายบนแบนเนอร์จะเป็น "เปิดอบรม พฤศจิกายน 2569" (เว้นว่าง = "กำลังจะเปิดเร็วๆ นี้")
@@ -4733,6 +4735,7 @@ window.retakeCourse = async (courseId) => {
       [`courses.${courseId}.certNameConfirmed`]: false,
       [`courses.${courseId}.certNumber`]: null,
       [`courses.${courseId}.certIssuedDate`]: null,
+      [`courses.${courseId}.certVerifyId`]: null,   // ใบเดิมยังตรวจสอบได้ (certVerify ไม่ถูกลบ) ใบใหม่จะได้รหัสใหม่
       [`courses.${courseId}.leaveCount`]: 0,
       [`courses.${courseId}.certHistory`]: history,
     };
@@ -4750,7 +4753,7 @@ window.retakeCourse = async (courseId) => {
     userData.courses[courseId] = {
       ...(userData.courses[courseId] || {}),
       completedVideos: [], quizPassed: [], quizScores: {},
-      certNameConfirmed: false, certNumber: null, certIssuedDate: null,
+      certNameConfirmed: false, certNumber: null, certIssuedDate: null, certVerifyId: null,
       leaveCount: 0, certHistory: history,
     };
     for(let i = 0; i < nVideos; i++) userData.courses[courseId]['watchedSec_' + i] = 0;
@@ -5974,6 +5977,35 @@ const CERT_START = COURSES.pp3.certNumberRange.start;
 const CERT_END   = COURSES.pp3.certNumberRange.end;
 const CERT_WARN  = COURSES.pp3.certNumberRange.warn;
 
+// รหัสตรวจสอบเกียรติบัตร (ใส่ใน QR) — สุ่ม 10 ตัว เดาไม่ได้
+function newVerifyId() {
+  const a = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789';
+  const r = crypto.getRandomValues(new Uint8Array(10));
+  return Array.from(r, x => a[x % a.length]).join('');
+}
+// บันทึกรหัสตรวจสอบ + ข้อมูลเกียรติบัตรลง certVerify/{id} ให้หน้า verify.html อ่านได้
+async function ensureVerifyId(courseId) {
+  const course = COURSES[courseId];
+  if(!course || !course.certPage || !currentUser) return '';
+  const prog = getCourseProgress(userData, courseId) || {};
+  if(!prog.certNumber) return '';
+  if(prog.certVerifyId) return prog.certVerifyId;
+  const vid = newVerifyId();
+  const fullName = `${userData.prefix||''}${userData.firstName||''} ${userData.lastName||''}`.trim();
+  try {
+    await setDoc(doc(db, 'certVerify', vid), {
+      name: fullName, num: prog.certNumber, date: prog.certIssuedDate || '',
+      course: courseId, courseName: course.name || '', uid: currentUser.uid, issuedAt: new Date().toISOString()
+    });
+    await updateDoc(doc(db,'users',currentUser.uid), { [`courses.${courseId}.certVerifyId`]: vid });
+    userData.courses[courseId].certVerifyId = vid;
+    return vid;
+  } catch(e) {
+    console.warn('ensureVerifyId — ตรวจ Firestore rules ของ certVerify:', e);
+    return '';
+  }
+}
+
 async function assignCertNumber() {
   // เช็คว่า course นี้มี cert อยู่แล้วไหม
   const prog = getCourseProgress(userData, currentCourseId);
@@ -6099,8 +6131,9 @@ async function showCert() {
     document.getElementById('btnRequestEdit').style.display='block';
   }
 
-  // เก็บ data ไว้ใน window สำหรับปุ่มพิมพ์
-  window._certData = { name: fullName, num: certNum, date: certDate, courseId: currentCourseId };
+  // เก็บ data ไว้ใน window สำหรับปุ่มพิมพ์ (หลักสูตรแบบใหม่มีรหัสตรวจสอบสำหรับ QR)
+  const verifyId = await ensureVerifyId(currentCourseId);
+  window._certData = { name: fullName, num: certNum, date: certDate, courseId: currentCourseId, v: verifyId };
   // แสดงชื่อและเลขใน summary card
   const summaryName = document.getElementById('certSummaryName');
   const summaryNum = document.getElementById('certSummaryNum');
@@ -6118,9 +6151,12 @@ async function showCert() {
 // เปิดหน้าพิมพ์เกียรติบัตร (cert.html แยก)
 window.openCertPrint = () => {
   if(!window._certData) return;
-  const { name, num, date, courseId } = window._certData;
-  const params = new URLSearchParams({ name, num, date, course: courseId || 'pp3' });
-  window.open('cert.html?' + params.toString(), '_blank');
+  const { name, num, date, courseId, v } = window._certData;
+  const cid = courseId || 'pp3';
+  const page = (COURSES[cid] && COURSES[cid].certPage) || 'cert.html';   // tzd2/tzd3 ใช้แบบใหม่ (cert-tzd.html)
+  const params = new URLSearchParams({ name, num, date, course: cid });
+  if(v) params.set('v', v);
+  window.open(page + '?' + params.toString(), '_blank');
 };
 
 window.toggleRequestEdit = () => {

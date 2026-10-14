@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="th"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ตรวจสอบเกียรติบัตร · NKP1 Learning Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#16244a;--ink:#3a4360;--gold:#8a6a1f;--line:#e4dccb;--ok:#0f7a4f;--bad:#b42318;--bg:#f6f3ec}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:var(--bg);font-family:'Noto Sans Thai',sans-serif;color:var(--navy);display:flex;align-items:flex-start;justify-content:center;padding:32px 16px}
+.card{width:100%;max-width:560px;background:#fffdf8;border:1px solid var(--line);border-radius:18px;box-shadow:0 10px 30px rgba(22,36,74,.08);overflow:hidden}
+.head{background:var(--navy);color:#fff;padding:18px 22px;display:flex;align-items:center;gap:12px}
+.head img{width:40px;height:auto}
+.head b{display:block;font-size:16px}
+.head span{font-size:13px;opacity:.8}
+.body{padding:24px 22px 26px}
+.status{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;margin-bottom:18px}
+.status .dot{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:18px;flex:none}
+.ok .dot{background:var(--ok)} .ok{color:var(--ok)}
+.bad .dot{background:var(--bad)} .bad{color:var(--bad)}
+.wait{color:var(--ink);font-weight:600}
+dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:10px 16px;font-size:15px}
+dt{color:var(--ink)} dd{margin:0;font-weight:600}
+dd.name{font-size:20px;font-weight:800}
+.note{margin-top:20px;padding-top:14px;border-top:1px solid var(--line);font-size:13px;color:var(--ink);line-height:1.7}
+a{color:var(--navy)}
+</style></head><body>
+<main class="card">
+  <div class="head"><div><b>ตรวจสอบเกียรติบัตร</b><span>สำนักงานเขตพื้นที่การศึกษาประถมศึกษานครพนม เขต ๑ · NKP๑ Learning Hub</span></div></div>
+  <div class="body" id="out"><p class="wait">กำลังตรวจสอบ…</p></div>
+</main>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyCKi7pa9SIaBOsxxHaUwLGhiGBYpwzJTLM",
+  authDomain: "training-2568.firebaseapp.com",
+  projectId: "training-2568",
+  storageBucket: "training-2568.firebasestorage.app",
+  messagingSenderId: "166470680458",
+  appId: "1:166470680458:web:fbbf904b0d4f9a156d5273"
+};
+// เกียรติบัตรคณะกรรมการ/วิทยากร ที่ออกเป็นชุด (คำสั่ง ๕๗๗/๒๕๖๙ และ ๘๐๙/๒๕๖๙)
+const REGISTRY = {"1DLDCHbOin": {"c": "nkp-committee", "name": "นางกฤติยา สิทธิกานต์", "role": "ที่ปรึกษา", "num": "29843/2569", "date": "๑๖ มิถุนายน พ.ศ. ๒๕๖๙"}, "id6UZc1tu-": {"c": "nkp-committee", "name": "นางสาวภัทรมาศ ภะวะศิริกุล", "role": "ที่ปรึกษา", "num": "29844/2569", "date": "๑๖ มิถุนายน พ.ศ. ๒๕๖๙"}, "YnZxdL1MFd": {"c": "nkp-committee", "name": "นายสัญญา สิทธิเสนา", "role": "ที่ปรึกษา", "num": "29845/2569", "date": "๑๖ มิถุนายน พ.ศ. ๒๕๖๙"}, "1ihSLgAzay": {"c": "nkp-committee", "name": "นางลัคนา มั่นธรณ์", "role": "ที่ปรึกษา", "num": "29846/2569", "date": "๑๖ มิถุนายน พ.ศ. ๒๕๖๙"}, "_Ee6Ywbh05": {"c": "nkp-committee", "name": "นางสาววรินดา บริบาล", "role": "ที่ปรึกษา", "num": "29847/2569", "date": "๑๖ มิถุนายน พ.ศ. ๒๕๖๙"}, "l2z52FYya5": {"c": "nkp-committee", "name": "นางสาวสถาพร แก้วเคน", "role": "ที่ปรึกษา", "num": "29848/2569", "date": "๑๖ มิถุนายน พ.ศ. ๒๕๖๙"}, "rAiLBp4QQU": {"c": "nkp-committee", "name": "นายวิทวินทร์ ประทังคติ", "role": "ที่ปรึกษา", "num": "29849/2569", "date": "๑๖ มิถุนายน พ.ศ. ๒๕๖๙"}, "IorPNqZH3O": {"c": "nkp-committee", "name": "นางสาวพัชรินทร์ ธงยศ", "role": "ที่ปรึกษา", "num": "29850/2569", "date": "๑๖ มิถุนายน พ.ศ. ๒๕๖๙"}, "7BAaBgcUwI": {"c": "nkp-committee", "name": "นายประจบ ดีพรม", "role": "ประธานกรรมการ", "num": "29851/2569", "date": "๑๖ มิถุนายน พ.ศ. ๒๕๖๙"}, "lBbUb0WUV6": {"c": "nkp-committee", "name": "นางรุ่งนภา สุภา", "role": "กรรมการ", "num": "29852/2569", "date": "๑๖ มิถุนายน พ.ศ. ๒๕๖๙"}, "z4Zwr8wEF_": {"c": "nkp-committee", "name": "นางสาวประภาพร เจริญทัศน์", "role": "กรรมการ", "num": "29853/2569", "date": "๑๖ มิถุนายน พ.ศ. ๒๕๖๙"}, "A_kd7jho2I": {"c": "nkp-committee", "name": "นายเมธี นาอุดม", "role": "กรรมการ", "num": "29854/2569", "date": "๑๖ มิถุนายน พ.ศ. ๒๕๖๙"}, "92NaTRU1lp": {"c": "nkp-committee", "name": "นางศิรินทิพย์ นึกได้", "role": "กรรมการ", "num": "29855/2569", "date": "๑๖ มิถุนายน พ.ศ. ๒๕๖๙"}, "OuE6KKdK8z": {"c": "nkp-committee", "name": "นางสาวนันทิยา สุภนัตร", "role": "กรรมการ", "num": "29856/2569", "date": "๑๖ มิถุนายน พ.ศ. ๒๕๖๙"}, "ESBeECjFxU": {"c": "nkp-committee", "name": "นายพนมศักดิ์ ดีลา", "role": "กรรมการ", "num": "29857/2569", "date": "๑๖ มิถุนายน พ.ศ. ๒๕๖๙"}, "nhcjPy-9s5": {"c": "nkp-committee", "name": "นางสาวรัชนก วิจารณ์จักร", "role": "กรรมการ", "num": "29858/2569", "date": "๑๖ มิถุนายน พ.ศ. ๒๕๖๙"}, "RfqiCWzU3D": {"c": "nkp-committee", "name": "นายชัชชัย สุริยนต์", "role": "กรรมการ", "num": "29859/2569", "date": "๑๖ มิถุนายน พ.ศ. ๒๕๖๙"}, "JXiC6UFZsU": {"c": "nkp-committee", "name": "นางสาวปาริชาติ ไพลดำ", "role": "กรรมการ", "num": "29860/2569", "date": "๑๖ มิถุนายน พ.ศ. ๒๕๖๙"}, "hNTbdD3JGl": {"c": "nkp-committee", "name": "นายสุรสิทธิ์ ไชยสุระ", "role": "กรรมการ", "num": "29861/2569", "date": "๑๖ มิถุนายน พ.ศ. ๒๕๖๙"}, "mVZ0UivJ5e": {"c": "nkp-committee", "name": "นางอมรรัตน์ สุทธิสาร", "role": "กรรมการและเลขานุการ", "num": "29862/2569", "date": "๑๖ มิถุนายน พ.ศ. ๒๕๖๙"}, "3V-xVO4sp-": {"c": "nkp-committee", "name": "นายรชต สุวรรณไตรย์", "role": "กรรมการและผู้ช่วยเลขานุการ", "num": "29863/2569", "date": "๑๖ มิถุนายน พ.ศ. ๒๕๖๙"}, "tzDir1kQ7m": {"c": "committee", "name": "นางกฤติยา สิทธิกานต์", "role": "ที่ปรึกษา", "num": "29864/2569", "date": "๗ ตุลาคม พ.ศ. ๒๕๖๙"}, "gEiAL4zdfp": {"c": "committee", "name": "นางสาวภัทรมาศ ภะวะศิริกุล", "role": "ที่ปรึกษา", "num": "29865/2569", "date": "๗ ตุลาคม พ.ศ. ๒๕๖๙"}, "p08V9h8FW9": {"c": "committee", "name": "นายสัญญา สิทธิเสนา", "role": "ที่ปรึกษา", "num": "29866/2569", "date": "๗ ตุลาคม พ.ศ. ๒๕๖๙"}, "-tQD6_c2_m": {"c": "committee", "name": "นางลัคนา มั่นธรณ์", "role": "ที่ปรึกษา", "num": "29867/2569", "date": "๗ ตุลาคม พ.ศ. ๒๕๖๙"}, "Ibj6TZ-Lhp": {"c": "committee", "name": "นางรุ่งนภา สุภา", "role": "ที่ปรึกษา", "num": "29868/2569", "date": "๗ ตุลาคม พ.ศ. ๒๕๖๙"}, "31rgsx8VLT": {"c": "committee", "name": "นางสาววรินดา บริบาล", "role": "ที่ปรึกษา", "num": "29869/2569", "date": "๗ ตุลาคม พ.ศ. ๒๕๖๙"}, "F76ErwZEVE": {"c": "committee", "name": "นางสาวสถาพร แก้วเคน", "role": "ที่ปรึกษา", "num": "29870/2569", "date": "๗ ตุลาคม พ.ศ. ๒๕๖๙"}, "K6WdPsjljr": {"c": "committee", "name": "นางสาวปริศนา พุทธบาล", "role": "ที่ปรึกษา", "num": "29871/2569", "date": "๗ ตุลาคม พ.ศ. ๒๕๖๙"}, "8WjZJkzI9l": {"c": "committee", "name": "นายวิทวินทร์ ประทังคติ", "role": "ที่ปรึกษา", "num": "29872/2569", "date": "๗ ตุลาคม พ.ศ. ๒๕๖๙"}, "HUULxIEXdy": {"c": "committee", "name": "นางสาวพัชรินทร์ ธงยศ", "role": "ที่ปรึกษา", "num": "29873/2569", "date": "๗ ตุลาคม พ.ศ. ๒๕๖๙"}, "4jVF-K8VeO": {"c": "committee", "name": "นายประจบ ดีพรม", "role": "ประธานกรรมการ", "num": "29874/2569", "date": "๗ ตุลาคม พ.ศ. ๒๕๖๙"}, "Ejj2GUSrS7": {"c": "committee", "name": "นางสาวประภาพร เจริญทัศน์", "role": "กรรมการ", "num": "29875/2569", "date": "๗ ตุลาคม พ.ศ. ๒๕๖๙"}, "etdEAFN5EI": {"c": "committee", "name": "นางศิรินทิพย์ นึกได้", "role": "กรรมการ", "num": "29876/2569", "date": "๗ ตุลาคม พ.ศ. ๒๕๖๙"}, "s7wWW05C30": {"c": "committee", "name": "นางสาวนันทิยา สุภนัตร", "role": "กรรมการ", "num": "29877/2569", "date": "๗ ตุลาคม พ.ศ. ๒๕๖๙"}, "bjs55D3j5C": {"c": "committee", "name": "นายพนมศักดิ์ ดีลา", "role": "กรรมการ", "num": "29878/2569", "date": "๗ ตุลาคม พ.ศ. ๒๕๖๙"}, "AG1oyt7oJf": {"c": "committee", "name": "นางสาวรัชนก วิจารณ์จักร", "role": "กรรมการ", "num": "29879/2569", "date": "๗ ตุลาคม พ.ศ. ๒๕๖๙"}, "WfNDeFs1RS": {"c": "committee", "name": "นางสาวปาริชาติ ไพลดำ", "role": "กรรมการ", "num": "29880/2569", "date": "๗ ตุลาคม พ.ศ. ๒๕๖๙"}, "z7fUrgF0Yu": {"c": "committee", "name": "นางสาววรรณสิริ ประยงค์รัตน์", "role": "กรรมการ", "num": "29881/2569", "date": "๗ ตุลาคม พ.ศ. ๒๕๖๙"}, "EXofTdHyiu": {"c": "committee", "name": "นายสุรสิทธิ์ ไชยสุระ", "role": "กรรมการ", "num": "29882/2569", "date": "๗ ตุลาคม พ.ศ. ๒๕๖๙"}, "3Ueb_AjBzR": {"c": "committee", "name": "นางอมรรัตน์ สุทธิสาร", "role": "กรรมการและเลขานุการ", "num": "29883/2569", "date": "๗ ตุลาคม พ.ศ. ๒๕๖๙"}, "SxJXn30DAM": {"c": "committee", "name": "นายรชต สุวรรณไตรย์", "role": "กรรมการและผู้ช่วยเลขานุการ", "num": "29884/2569", "date": "๗ ตุลาคม พ.ศ. ๒๕๖๙"}, "Tcj4HwHHOr": {"c": "speaker", "name": "นายรชต สุวรรณไตรย์", "role": "วิทยากร", "num": "29885/2569", "date": "๗ ตุลาคม พ.ศ. ๒๕๖๙"}};
+const LABEL = {
+  'nkp-committee': 'คณะกรรมการพัฒนาและดูแลระบบศูนย์อบรมออนไลน์ NKP๑ Learning Hub (คำสั่งที่ ๕๗๗/๒๕๖๙)',
+  'committee': 'คณะกรรมการจัดทำและพัฒนาหลักสูตรการรายงานสถานะนักเรียนในระบบ Thailand Zero Dropout หลักสูตรที่ ๒/๒๕๖๙ และ ๓/๒๕๖๙ (คำสั่งที่ ๘๐๙/๒๕๖๙)',
+  'speaker': 'วิทยากร หลักสูตรการรายงานสถานะนักเรียนในระบบ Thailand Zero Dropout หลักสูตรที่ ๒/๒๕๖๙ และ ๓/๒๕๖๙',
+  'tzd2': 'ผ่านการอบรมหลักสูตรการรายงานสถานะนักเรียนในระบบ Thailand Zero Dropout (กสศ.) หลักสูตรที่ ๒/๒๕๖๙ สำหรับกลไก สพฐ. กลุ่ม A',
+  'tzd3': 'ผ่านการอบรมหลักสูตรการรายงานสถานะนักเรียนในระบบ Thailand Zero Dropout (กสศ.) หลักสูตรที่ ๓/๒๕๖๙ สำหรับกลไก สพฐ. กลุ่ม B',
+};
+const TH='๐๑๒๓๔๕๖๗๘๙', th=s=>String(s||'').replace(/[0-9]/g,d=>TH[+d]);
+const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const out=document.getElementById('out');
+const p=new URLSearchParams(location.search), v=(p.get('v')||'').trim();
+const NOTE='<div class="note">หน้านี้แสดงข้อมูลตามทะเบียนเกียรติบัตรของ สพป.นครพนม เขต ๑ หากข้อมูลบนเกียรติบัตรไม่ตรงกับหน้านี้ แสดงว่าเอกสารอาจถูกแก้ไข สอบถาม: กลุ่มส่งเสริมการจัดการศึกษา โทร. ๐ ๔๒๕๑ ๑๒๓๘</div>';
+function showOk(r){
+  out.innerHTML=`<div class="status ok"><span class="dot">✓</span>เกียรติบัตรนี้ออกโดย สพป.นครพนม เขต ๑ จริง</div>
+  <dl><dt>ชื่อ-สกุล</dt><dd class="name">${esc(r.name)}</dd>
+  ${r.role?`<dt>บทบาท</dt><dd>${esc(r.role)}</dd>`:''}
+  <dt>ประเภท</dt><dd>${esc(LABEL[r.c]||r.courseName||'')}</dd>
+  <dt>เลขที่</dt><dd>${esc(th(r.num))}</dd>
+  <dt>ลงวันที่</dt><dd>${esc(th(r.date))}</dd></dl>`+NOTE;
+}
+function showBad(msg){ out.innerHTML=`<div class="status bad"><span class="dot">✕</span>${msg}</div>`+NOTE; }
+(async()=>{
+  if(p.get('demo')){ out.innerHTML='<div class="status wait">นี่คือ QR ของเกียรติบัตรตัวอย่าง ยังไม่ได้ออกให้บุคคลใด</div>'+NOTE; return; }
+  if(!/^[A-Za-z0-9_-]{6,20}$/.test(v)){ showBad('ไม่พบรหัสตรวจสอบในลิงก์นี้'); return; }
+  if(REGISTRY[v]){ showOk(REGISTRY[v]); return; }
+  try{
+    const db=getFirestore(initializeApp(firebaseConfig));
+    const s=await getDoc(doc(db,'certVerify',v));
+    if(s.exists()){ const d=s.data(); showOk({c:d.course,name:d.name,num:d.num,date:d.date,courseName:d.courseName}); }
+    else showBad('ไม่พบเกียรติบัตรนี้ในทะเบียน');
+  }catch(e){ console.error(e); showBad('ตรวจสอบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง'); }
+})();
+</script></body></html>
