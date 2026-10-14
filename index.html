@@ -310,7 +310,14 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
 .header-brand:hover .header-wordmark{filter:brightness(1.12);}
 .header-wordmark{height:54px;width:auto;display:block;transition:height .3s ease,filter .2s ease;}
 .header-text p{font-size:11px;color:rgba(255,255,255,.5);line-height:1.5;border-left:1px solid rgba(255,255,255,.18);padding-left:14px;}
-@media(max-width:640px){.header-wordmark{height:42px;}.header-text{display:none;}}
+@media(max-width:640px){.header-wordmark{height:42px;}.header-text{display:none;}
+  /* มือถือ: เดิมแถบขวาล้นจอ ปุ่มออกจากระบบหลุดขอบ */
+  .header-inner{padding:10px 14px;gap:10px;}
+  .header-right{gap:8px;min-width:0;}
+  .progress-wrap{display:none!important;}
+  .header-user-text{display:none;}
+  .btn-logout{padding:5px 9px;white-space:nowrap;}}
+@media(max-width:380px){.header-wordmark{height:36px;}}
 .header-right{margin-left:auto;display:flex;align-items:center;gap:12px;}
 .header-user{font-size:13px;color:rgba(255,255,255,.7);}
 .header-user strong{color:var(--gold-light);}
@@ -770,6 +777,7 @@ body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text);
 
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--navy);color:white;padding:11px 22px;border-radius:9px;font-size:14px;font-weight:500;z-index:999;transition:transform .3s;white-space:nowrap;}
 .toast.show{transform:translateX(-50%) translateY(0);}
+@media(max-width:640px){.toast{bottom:92px;box-sizing:border-box;white-space:normal;width:max-content;max-width:calc(100vw - 32px);text-align:center;line-height:1.5;padding:10px 16px;}}
 .loading-overlay{position:fixed;inset:0;background:rgba(255,255,255,.85);display:none;align-items:center;justify-content:center;z-index:9999;font-size:16px;color:var(--navy);font-weight:500;}
 .loading-overlay.show{display:flex;}
 
@@ -3666,7 +3674,9 @@ import { getFirestore, doc, setDoc, getDoc, updateDoc, addDoc, deleteDoc, query,
 // ══════════════════════════════════════
 // CONFIG
 // ══════════════════════════════════════
-const ADMIN_PASSWORD = 'npk1admin2569';
+// บัญชี Admin อยู่ใน Firebase Authentication — ในโค้ดมีแค่อีเมล ไม่มีรหัสผ่าน
+// (โดเมน @admin.training-npk1.local แยกจากผู้เรียน @training-npk1.local → สมัครชนกันไม่ได้)
+const ADMIN_EMAIL = 'nkp1admin@admin.training-npk1.local';
 const TRAINING_URL = 'https://nakhonphanom-pk1.github.io/learning-hub';
 
 const firebaseConfig = {
@@ -5054,6 +5064,12 @@ window.resumeVideo = () => {
 
 // ── Auth state ──
 onAuthStateChanged(auth, async(user) => {
+  // บัญชี Admin: เข้าโหมดผู้ดูแล (ไม่ใช่ผู้เรียน → currentUser คงเป็น null เหมือนเดิม)
+  if(user && user.email === ADMIN_EMAIL) {
+    currentUser=null; userData={};
+    enterAdminUI(); showLoading(false);
+    return;
+  }
   if(user) {
     currentUser=user; showLoading(true);
     const snap = await getDoc(doc(db,'users',user.uid));
@@ -5398,11 +5414,24 @@ window.doResetPassword = async() => {
   }
 };
 
-window.doAdminLogin = () => {
+window.doAdminLogin = async () => {
   const pass=document.getElementById('adminPassword').value;
   const err=document.getElementById('adminError');
   err.classList.remove('show');
-  if(pass!==ADMIN_PASSWORD){err.textContent='รหัส Admin ไม่ถูกต้อง';err.classList.add('show');return;}
+  if(!pass){err.textContent='กรุณากรอกรหัส Admin';err.classList.add('show');return;}
+  showLoading(true);
+  try {
+    // ตรวจรหัสกับ Firebase โดยตรง — สำเร็จแล้ว onAuthStateChanged จะเรียก enterAdminUI() ให้เอง
+    await signInWithEmailAndPassword(auth, ADMIN_EMAIL, pass);
+    document.getElementById('adminPassword').value='';
+  } catch(e) {
+    showLoading(false);
+    const code = (e && e.code) || '';
+    err.textContent = code==='auth/too-many-requests' ? 'ลองผิดหลายครั้งเกินไป กรุณารอสักครู่แล้วลองใหม่' : 'รหัส Admin ไม่ถูกต้อง';
+    err.classList.add('show');
+  }
+};
+function enterAdminUI() {
   isAdmin=true;
   document.getElementById('headerRight').style.display='flex';
   document.getElementById('headerProgress').style.display='none';
@@ -5422,7 +5451,7 @@ window.doLogout = async() => {
   sessionStorage.removeItem('pendingCourseId');
   currentCourseId = 'pp3';  // reset
   TRAINING = COURSES.pp3;   // reset alias
-  if(isAdmin){isAdmin=false;document.getElementById('headerRight').style.display='none';renderCourseCards('landing');showPage('pageLanding');return;}
+  if(isAdmin){isAdmin=false;document.getElementById('headerRight').style.display='none';renderCourseCards('landing');showPage('pageLanding');}
   await signOut(auth);
 };
 
@@ -6253,7 +6282,7 @@ async function showCert() {
   showLoading(false);
   if(!certNum) return;
 
-  const fullName = `${userData.prefix}${userData.firstName} ${userData.lastName}`;
+  const fullName = `${userData.prefix||''}${userData.firstName||''} ${userData.lastName||''}`.trim();
   const updatedProg = getCourseProgress(userData, currentCourseId) || {};
   const certDate = updatedProg.certIssuedDate || '';
 
@@ -6616,6 +6645,12 @@ window.approveEdit = async(uid,courseId,prefix,fn,ln) => {
   try {
     const updates={prefix,firstName:fn,lastName:ln,nameEditApprovedAt:new Date().toISOString(),
       [`courses.${courseId}.pendingEdit`]: null};
+    // ชื่อเปลี่ยน → ล้างรหัส QR เดิมของหลักสูตรที่ใช้ระบบตรวจสอบ ให้ระบบออกรหัสใหม่ (ชื่อใหม่) ตอนผู้เรียนเปิดเกียรติบัตรครั้งถัดไป
+    // (QR ของใบเดิมยังสแกนได้ตามชื่อเดิม เพราะไม่ลบ certVerify เดิม)
+    const _u = (allUsersCache||[]).find(x => x.id === uid);
+    Object.keys((_u && _u.courses) || {}).forEach(cid => {
+      if(COURSES[cid] && COURSES[cid].certPage && _u.courses[cid] && _u.courses[cid].certVerifyId) updates[`courses.${cid}.certVerifyId`] = null;
+    });
     updates.pendingEdit = null;  // ลบ field เก่าด้วยเสมอ (backward compat)
     await updateDoc(doc(db,'users',uid),updates);
     showToast('✓ อนุมัติแล้ว'); loadAdminDashboard();
@@ -7757,6 +7792,7 @@ window.customConfirm = (message, options = {}) => {
 // ══════════════════════════════════════
 window.openProfile = async (userId) => {
   if(!userId) return;
+  const isOwn = (currentUser && currentUser.uid === userId) || (isAdmin && userId === 'admin');   // ใช้ในการ์ดเกียรติบัตร/หลักสูตร (เดิมไม่ได้ประกาศ → โปรไฟล์ขึ้น "โหลดข้อมูลไม่สำเร็จ")
   const modal = document.getElementById('profileModal');
   const body = document.getElementById('profileBody');
   if(!modal || !body) return;
