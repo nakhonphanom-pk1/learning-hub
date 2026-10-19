@@ -3977,10 +3977,7 @@ const COURSES = {
   // ─────────────────────────────────────────────────────────
   // TZD หลักสูตรที่ 2/2569 และ 3/2569 — คลิป/ข้อสอบชุดใหม่ แยกจากหลักสูตรที่ 1
   // ⚠️ id ห้ามมีเครื่องหมาย _ (ระบบความคิดเห็นแยก courseId จาก videoKey "tzd2_part0" ด้วย _)
-  // TODO ก่อนเปิด (status: 'active'):
-  //   1) ใส่ videos[] (title, vimeoId, hash ถ้ามี, minSeconds, durationLabel, quiz)
-  //   2) ใส่ certNumberRange ตามทะเบียนคุม (ห้ามซ้อนกับ pp3 11688–12187 และ tzd 16002–16478)
-  //   3) ใส่ภาพพื้นหลังเกียรติบัตรใน cert.html (<img id="bg-tzd2"> / <img id="bg-tzd3">)
+  // เปิดอบรม 19 ต.ค. 2569 · เลขเกียรติบัตรใช้ร่วมกัน 29886–30135 (certNumbers/tzd23) · เกียรติบัตร cert-tzd.html
   // ─────────────────────────────────────────────────────────
   tzd2: {
     id: 'tzd2',
@@ -3991,7 +3988,7 @@ const COURSES = {
     icon: '🎯',
     color: '#059669',
     theme: 'tzd',
-    status: 'coming_soon',
+    status: 'active',   // เปิดอบรมจริง 19 ต.ค. 2569
     courseName: 'การรายงานสถานะนักเรียนในระบบ Thailand Zero Dropout หลักสูตรที่ 2/2569 โดย สพป.นครพนม เขต 1',
     totalHours: 'auto',
     passPercent: 80,
@@ -4039,7 +4036,7 @@ const COURSES = {
     icon: '🎯',
     color: '#059669',
     theme: 'tzd',
-    status: 'coming_soon',
+    status: 'active',   // เปิดอบรมจริง 19 ต.ค. 2569
     courseName: 'การรายงานสถานะนักเรียนในระบบ Thailand Zero Dropout หลักสูตรที่ 3/2569 โดย สพป.นครพนม เขต 1',
     totalHours: 'auto',
     passPercent: 80,

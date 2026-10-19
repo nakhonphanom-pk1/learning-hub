@@ -2484,7 +2484,7 @@ const state = {
   course: DESIGNS[p.get('course')] ? p.get('course') : 'tzd2',
   name: (p.get('name') || 'นางอมรรัตน์ สุทธิสาร'),
   num:  p.get('num')  || '00000/2569',
-  date: p.get('date') || '2026-10-12',
+  date: p.get('date') || new Date().toISOString().slice(0,10),
   vid:  p.get('v')    || '',
   role: p.get('role') || '',
 };
