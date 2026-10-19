@@ -3788,14 +3788,17 @@ const TZD_INFOGRAPHICS = [
 const INFOGRAPHICS_BY_COURSE = {
   pp3: PP3_INFOGRAPHICS,
   tzd: TZD_INFOGRAPHICS,
-  tzd2: [],  // TODO: อินโฟกราฟิกของหลักสูตรที่ 2/2569 (ถ้าว่าง ส่วนคลังสื่อจะถูกซ่อน)
-  tzd3: []   // TODO: อินโฟกราฟิกของหลักสูตรที่ 3/2569
+  // หลักสูตรที่ 2/2569 และ 3/2569: ชุดเดียวกับ 1/2569 แต่ไม่มี QR แบบฟอร์มขอส่งคืนเงิน
+  tzd2: TZD_INFOGRAPHICS.filter(x => x.filename !== 'tzd_refund_form_qr.png'),
+  tzd3: TZD_INFOGRAPHICS.filter(x => x.filename !== 'tzd_refund_form_qr.png')
 };
 
 // คำอธิบายใต้หัวข้อคลังสื่อ แยกตามหลักสูตร
 const INFO_SUBTITLES = {
   pp3: 'Infographic สรุปประเด็นสำคัญของระบบ ปพ.3 ออนไลน์ — คลิกเพื่อดูภาพขยาย',
-  tzd: 'Infographic ขั้นตอนการรายงานสถานะนักเรียนในระบบ Thailand Zero Dropout — คลิกเพื่อดูภาพขยาย'
+  tzd: 'Infographic ขั้นตอนการรายงานสถานะนักเรียนในระบบ Thailand Zero Dropout — คลิกเพื่อดูภาพขยาย',
+  tzd2: 'Infographic ขั้นตอนการรายงานสถานะนักเรียนในระบบ Thailand Zero Dropout — คลิกเพื่อดูภาพขยาย',
+  tzd3: 'Infographic ขั้นตอนการรายงานสถานะนักเรียนในระบบ Thailand Zero Dropout — คลิกเพื่อดูภาพขยาย'
 };
 
 function getInfographics() {
@@ -3995,6 +3998,7 @@ const COURSES = {
     certCounterDoc: 'tzd23', // certNumbers/tzd23 — ใช้ร่วมกับหลักสูตร 3/2569 (ช่วงเลขเดียวกัน)
     certPage: 'cert-tzd.html',
     certNumberFormat: (n) => `${n}/2569`,
+    certFixedDate: '20 ตุลาคม พ.ศ. 2569',   // ทุกคนได้เกียรติบัตรลงวันที่เดียวกันตามที่หัวหน้ากำหนด (ลบบรรทัดนี้ = ใช้วันที่เรียนจบจริง)
     certNumberRange: { start: 29886, end: 30135, warn: 30110 },   // ตามบันทึกขอเลข ต.ค. ๒๕๖๙ — ๒๕๐ ฉบับ ใช้ร่วม ๒/๒๕๖๙ + ๓/๒๕๖๙
     // การ์ดน้ำจิ้ม (แสดงเฉพาะตอน status: 'coming_soon') — แก้ข้อความได้ตามต้องการ
     // ถามก่อนเริ่มคลิปที่ 1 ว่าโรงเรียนดำเนินการตามคลิปนี้แล้วหรือยัง
@@ -4043,6 +4047,7 @@ const COURSES = {
     certCounterDoc: 'tzd23', // certNumbers/tzd23 — ใช้ร่วมกับหลักสูตร 2/2569 (ช่วงเลขเดียวกัน)
     certPage: 'cert-tzd.html',
     certNumberFormat: (n) => `${n}/2569`,
+    certFixedDate: '20 ตุลาคม พ.ศ. 2569',   // ทุกคนได้เกียรติบัตรลงวันที่เดียวกันตามที่หัวหน้ากำหนด (ลบบรรทัดนี้ = ใช้วันที่เรียนจบจริง)
     certNumberRange: { start: 29886, end: 30135, warn: 30110 },   // ตามบันทึกขอเลข ต.ค. ๒๕๖๙ — ๒๕๐ ฉบับ ใช้ร่วม ๒/๒๕๖๙ + ๓/๒๕๖๙
     // การ์ดน้ำจิ้ม (แสดงเฉพาะตอน status: 'coming_soon') — แก้ข้อความได้ตามต้องการ
     // ถามก่อนเริ่มคลิปที่ 1 ว่าโรงเรียนดำเนินการตามคลิปนี้แล้วหรือยัง
@@ -6200,7 +6205,7 @@ async function assignCertNumber() {
     const certNumStr = course.certNumberFormat(assigned);
     const now = new Date();
     const thM = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
-    const certDate = `${now.getDate()} ${thM[now.getMonth()]} พ.ศ. ${now.getFullYear()+543}`;
+    const certDate = course.certFixedDate || `${now.getDate()} ${thM[now.getMonth()]} พ.ศ. ${now.getFullYear()+543}`;
 
     const updates = {
       [`courses.${currentCourseId}.certNumber`]: certNumStr,
